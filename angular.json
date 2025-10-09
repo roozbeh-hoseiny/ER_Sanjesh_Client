@@ -7,7 +7,8 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "standalone": false
+          "standalone": false,
+          "style": "scss"
         },
         "@schematics/angular:directive": {
           "standalone": false
@@ -24,10 +25,14 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "loader": {
+              ".png": "file",
+              ".jpg": "file",
+              ".webp": "file",
+              ".svg": "text"
+            },
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
@@ -35,7 +40,7 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/assets/styles.scss"
             ]
           },
           "configurations": {
@@ -84,11 +89,8 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
             "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
@@ -96,7 +98,7 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/assets/styles.scss"
             ],
             "karmaConfig": "karma.conf.js"
           }
