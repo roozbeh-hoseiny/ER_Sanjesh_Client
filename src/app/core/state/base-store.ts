@@ -1,14 +1,15 @@
 import { Signal, WritableSignal, computed, signal } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Maybe } from '../types';
+import { Maybe } from '../models';
 
 /**
  * Base interface for all state objects
  */
-export interface BaseState {
+export interface BaseState<T = any> {
   loading: boolean;
   error: Maybe<string>;
-  lastUpdated: Maybe<number>;
+  lastId?: string;
+  items?: T;
   meta?: Record<string, any>;
 }
 
@@ -73,7 +74,6 @@ export abstract class BaseStore<T extends BaseState> {
   readonly state: Signal<T>;
   readonly loading: Signal<boolean>;
   readonly error: Signal<Maybe<string>>;
-  readonly lastUpdated: Signal<Maybe<number>>;
 
   // Observable for RxJS compatibility
   readonly state$: Observable<T>;
@@ -86,7 +86,6 @@ export abstract class BaseStore<T extends BaseState> {
     this.state = this._state.asReadonly();
     this.loading = computed(() => this._state().loading);
     this.error = computed(() => this._state().error);
-    this.lastUpdated = computed(() => this._state().lastUpdated);
 
     // Observable for RxJS compatibility
     this.state$ = this._stateSubject.asObservable();
@@ -108,7 +107,6 @@ export abstract class BaseStore<T extends BaseState> {
     const newState = {
       ...currentState,
       ...partialState,
-      lastUpdated: Date.now(),
     };
     this.setState(newState);
   }

@@ -1,4 +1,4 @@
-import { AppLayout } from '@/layout/component/app.layout';
+import { AppLayout } from '@/layout/component/app.layout.component';
 import { Routes } from '@angular/router';
 import { AuthGuard, RoleGuard } from '../../core/guards';
 import { NamedRoutes, UserRole } from '../../core/models';
@@ -16,7 +16,7 @@ export const graderNamedRoutes: NamedRoutes<GraderRouteNames> = {
     path: 'dashboard',
     loadComponent: () =>
       import('./pages/dashboard/grader-dashboard.component').then(
-        (m) => m.GraderDashboardComponent
+        (m) => m.GraderDashboardComponent,
       ),
   },
 };

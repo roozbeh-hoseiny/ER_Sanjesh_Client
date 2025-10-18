@@ -2,9 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, of, tap } from 'rxjs';
-import { AuthResponse, LoginCredentials, User, UserRole } from '../../../core/models';
+import { AuthResponse, LoginCredentials, Maybe, User, UserRole } from '../../../core/models';
 import { BaseState, BaseStore } from '../../../core/state/base-store';
-import { Maybe } from '../../../core/types';
 
 /**
  * Authentication state
@@ -50,7 +49,6 @@ export class AuthStore extends BaseStore<AuthState> {
     super({
       loading: false,
       error: null,
-      lastUpdated: null,
       user: null,
       token: null,
       refreshToken: null,
@@ -133,7 +131,7 @@ export class AuthStore extends BaseStore<AuthState> {
       catchError((error) => {
         this.handleAuthError(error);
         return of(null);
-      })
+      }),
     );
   }
 
@@ -191,7 +189,7 @@ export class AuthStore extends BaseStore<AuthState> {
         console.error('Token refresh failed:', error);
         this.logout();
         return of(null);
-      })
+      }),
     );
   }
 
@@ -386,7 +384,6 @@ export class AuthStore extends BaseStore<AuthState> {
     this.setState({
       loading: false,
       error: null,
-      lastUpdated: null,
       user: null,
       token: null,
       refreshToken: null,

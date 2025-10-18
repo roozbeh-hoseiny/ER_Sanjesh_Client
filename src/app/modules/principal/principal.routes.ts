@@ -1,4 +1,4 @@
-import { AppLayout } from '@/layout/component/app.layout';
+import { AppLayout } from '@/layout/component/app.layout.component';
 import { Routes } from '@angular/router';
 import { AuthGuard, RoleGuard } from '../../core/guards';
 import { NamedRoutes, UserRole } from '../../core/models';
@@ -10,7 +10,7 @@ export const principalNamedRoutes: NamedRoutes<PrincipalRouteNames> = {
     path: 'dashboard',
     loadComponent: () =>
       import('./pages/dashboard/principal-dashboard.component').then(
-        (m) => m.PrincipalDashboardComponent
+        (m) => m.PrincipalDashboardComponent,
       ),
   },
 };

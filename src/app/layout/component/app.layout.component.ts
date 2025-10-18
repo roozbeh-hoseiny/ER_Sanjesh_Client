@@ -3,15 +3,15 @@ import { Component, Renderer2, ViewChild } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { LayoutService } from '../service/layout.service';
-import { AppFooter } from './app.footer';
-import { AppSidebar } from './app.sidebar';
-import { AppTopbar } from './app.topbar';
+import { AppFooter } from './app.footer.component';
+import { AppSidebar } from './app.sidebar.component';
+import { AppTopbar } from './app.topbar.component';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
   imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter],
-  templateUrl: './app.layout.html',
+  templateUrl: './app.layout.component.html',
 })
 export class AppLayout {
   overlayMenuOpenSubscription: Subscription;
@@ -25,7 +25,7 @@ export class AppLayout {
   constructor(
     public layoutService: LayoutService,
     public renderer: Renderer2,
-    public router: Router
+    public router: Router,
   ) {
     this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
       if (!this.menuOutsideClickListener) {
@@ -87,7 +87,7 @@ export class AppLayout {
     } else {
       document.body.className = document.body.className.replace(
         new RegExp('(^|\\b)' + 'blocked-scroll'.split(' ').join('|') + '(\\b|$)', 'gi'),
-        ' '
+        ' ',
       );
     }
   }

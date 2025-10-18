@@ -7,7 +7,7 @@ import {
   PaginatedState,
   PaginatedStore,
 } from '../../../core/state/base-store';
-import { Maybe } from '../../../core/types';
+import { Maybe } from '@/core';
 
 /**
  * Exam interface
@@ -152,7 +152,6 @@ export class StudentExamsStore extends PaginatedStore<Exam, StudentExamsState> {
     super({
       loading: false,
       error: null,
-      lastUpdated: null,
       items: [],
       totalCount: 0,
       currentPage: 1,
@@ -199,7 +198,7 @@ export class StudentExamsStore extends PaginatedStore<Exam, StudentExamsState> {
         catchError((error) => {
           this.setError('خطا در بارگذاری آزمون‌ها');
           return of(null);
-        })
+        }),
       );
   }
 
@@ -214,7 +213,7 @@ export class StudentExamsStore extends PaginatedStore<Exam, StudentExamsState> {
       catchError((error) => {
         console.error('Error loading upcoming exams:', error);
         return of([]);
-      })
+      }),
     );
   }
 
@@ -229,7 +228,7 @@ export class StudentExamsStore extends PaginatedStore<Exam, StudentExamsState> {
       catchError((error) => {
         console.error('Error loading active exams:', error);
         return of([]);
-      })
+      }),
     );
   }
 
@@ -269,7 +268,7 @@ export class StudentExamsStore extends PaginatedStore<Exam, StudentExamsState> {
         catchError((error) => {
           this.setError('خطا در شروع آزمون');
           return of(null);
-        })
+        }),
       );
   }
 
@@ -291,7 +290,7 @@ export class StudentExamsStore extends PaginatedStore<Exam, StudentExamsState> {
         catchError((error) => {
           this.setError('خطا در ارسال آزمون');
           return of(null);
-        })
+        }),
       );
   }
 
@@ -317,7 +316,6 @@ export class StudentExamsStore extends PaginatedStore<Exam, StudentExamsState> {
     this.setState({
       loading: false,
       error: null,
-      lastUpdated: null,
       items: [],
       totalCount: 0,
       currentPage: 1,
@@ -349,7 +347,6 @@ export class StudentResultsStore extends PaginatedStore<StudentResult, StudentRe
     super({
       loading: false,
       error: null,
-      lastUpdated: null,
       items: [],
       totalCount: 0,
       currentPage: 1,
@@ -417,7 +414,7 @@ export class StudentResultsStore extends PaginatedStore<StudentResult, StudentRe
         catchError((error) => {
           this.setError('خطا در بارگذاری نتایج');
           return of(null);
-        })
+        }),
       );
   }
 
@@ -437,7 +434,7 @@ export class StudentResultsStore extends PaginatedStore<StudentResult, StudentRe
         catchError((error) => {
           console.error('Error loading chart data:', error);
           return of(null);
-        })
+        }),
       );
   }
 
@@ -461,7 +458,6 @@ export class StudentResultsStore extends PaginatedStore<StudentResult, StudentRe
     this.setState({
       loading: false,
       error: null,
-      lastUpdated: null,
       items: [],
       totalCount: 0,
       currentPage: 1,
@@ -497,7 +493,6 @@ export class StudentProfileStore extends EntityStore<StudentProfile, StudentProf
     super({
       loading: false,
       error: null,
-      lastUpdated: null,
       entities: {},
       selectedId: null,
       ids: [],
@@ -525,7 +520,7 @@ export class StudentProfileStore extends EntityStore<StudentProfile, StudentProf
       catchError((error) => {
         this.setError('خطا در بارگذاری پروفایل');
         return of(null);
-      })
+      }),
     );
   }
 
@@ -540,7 +535,7 @@ export class StudentProfileStore extends EntityStore<StudentProfile, StudentProf
       catchError((error) => {
         console.error('Error loading student stats:', error);
         return of(null);
-      })
+      }),
     );
   }
 
@@ -559,7 +554,7 @@ export class StudentProfileStore extends EntityStore<StudentProfile, StudentProf
         this.patchState({ isUpdating: false });
         this.setError('خطا در به‌روزرسانی پروفایل');
         return of(null);
-      })
+      }),
     );
   }
 
@@ -570,7 +565,6 @@ export class StudentProfileStore extends EntityStore<StudentProfile, StudentProf
     this.setState({
       loading: false,
       error: null,
-      lastUpdated: null,
       entities: {},
       selectedId: null,
       ids: [],

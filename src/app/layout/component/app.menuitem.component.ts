@@ -12,20 +12,20 @@ import { LayoutService } from '../service/layout.service';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: '[app-menuitem]',
   imports: [CommonModule, RouterModule, RippleModule],
-  templateUrl: './app.menuitem.html',
+  templateUrl: './app.menuitem.component.html',
   animations: [
     trigger('children', [
       state(
         'collapsed',
         style({
           height: '0',
-        })
+        }),
       ),
       state(
         'expanded',
         style({
           height: '*',
-        })
+        }),
       ),
       transition('collapsed <=> expanded', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)')),
     ]),
@@ -51,7 +51,7 @@ export class AppMenuitem {
 
   constructor(
     public router: Router,
-    private layoutService: LayoutService
+    private layoutService: LayoutService,
   ) {
     this.menuSourceSubscription = this.layoutService.menuSource$.subscribe((value) => {
       Promise.resolve(null).then(() => {

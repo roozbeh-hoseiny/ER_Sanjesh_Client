@@ -87,7 +87,6 @@ export class GlobalStore extends BaseStore<GlobalState> {
     super({
       loading: false,
       error: null,
-      lastUpdated: null,
       sidebarCollapsed: false,
       theme: 'light',
       language: 'fa',
@@ -123,7 +122,7 @@ export class GlobalStore extends BaseStore<GlobalState> {
   readonly isOnline = this.computed((state) => state.isOnline);
   readonly notifications = this.computed((state) => state.notifications);
   readonly unreadNotifications = this.computed((state) =>
-    state.notifications.filter((n) => !n.read)
+    state.notifications.filter((n) => !n.read),
   );
   readonly breadcrumbs = this.computed((state) => state.breadcrumbs);
   readonly preferences = this.computed((state) => state.preferences);
@@ -250,7 +249,7 @@ export class GlobalStore extends BaseStore<GlobalState> {
    */
   markNotificationRead(id: string): void {
     const notifications = this._state().notifications.map((n) =>
-      n.id === id ? { ...n, read: true } : n
+      n.id === id ? { ...n, read: true } : n,
     );
     this.patchState({ notifications });
   }
@@ -303,7 +302,6 @@ export class GlobalStore extends BaseStore<GlobalState> {
     this.setState({
       loading: false,
       error: null,
-      lastUpdated: null,
       sidebarCollapsed: false,
       theme: 'light',
       language: 'fa',

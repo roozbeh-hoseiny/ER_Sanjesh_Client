@@ -1,5 +1,5 @@
+import { adminNamedRoutes } from '@/modules/admin/constants';
 import { Routes } from '@angular/router';
-import { adminNamedRoutes } from 'modules/admin/admin.routes';
 import { authNamedRoutes } from 'modules/auth/auth.routes';
 import { graderNamedRoutes } from 'modules/grader/grader.routes';
 import { principalNamedRoutes } from 'modules/principal/principal.routes';

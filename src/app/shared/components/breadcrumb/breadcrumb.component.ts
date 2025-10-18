@@ -5,7 +5,7 @@ import { BreadcrumbService } from '../../services/breadcrumb.service';
 @Component({
   selector: 'app-breadcrumb',
   standalone: true,
-  imports: [RouterLink],
+  // imports: [RouterLink],
   template: `
     <!-- <nav class="flex items-center gap-2 text-sm">
       @for (breadcrumb of breadcrumbs(); track breadcrumb.url; let isLast = $last) {

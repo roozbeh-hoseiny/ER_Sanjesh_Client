@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { buildRoutePath } from '../../core/models';
 
 // Import the strongly typed route definitions
-import { AdminRouteNames, adminNamedRoutes } from '../../modules/admin/admin.routes';
+
 import { AuthRouteNames, authNamedRoutes } from '../../modules/auth/auth.routes';
 import { StudentRouteNames, studentNamedRoutes } from '../../modules/student/student.routes';
+import { adminNamedRoutes, AdminRouteNames } from '@/modules/admin/constants';
 
 /**
  * Strongly Typed Navigation Service
@@ -96,7 +97,7 @@ export class TypedNavigationService {
    */
   navigateToStudentWithParams(
     routeName: StudentRouteNames,
-    queryParams?: Record<string, any>
+    queryParams?: Record<string, any>,
   ): Promise<boolean> {
     const path = buildRoutePath('/student', studentNamedRoutes, routeName);
     return this.router.navigate([path], { queryParams });

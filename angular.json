@@ -41,7 +41,8 @@
             ],
             "styles": [
               "src/assets/styles.scss"
-            ]
+            ],
+            "fileReplacements": []
           },
           "configurations": {
             "production": {
@@ -57,7 +58,25 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "staging": {
+              "optimization": true,
+              "extractLicenses": true,
+              "sourceMap": false,
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.staging.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
@@ -72,6 +91,9 @@
           "configurations": {
             "production": {
               "buildTarget": "er_sanjesh_client.client:build:production"
+            },
+            "staging": {
+              "buildTarget": "er_sanjesh_client.client:build:staging"
             },
             "development": {
               "buildTarget": "er_sanjesh_client.client:build:development"

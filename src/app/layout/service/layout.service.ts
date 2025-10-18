@@ -1,4 +1,5 @@
 import { Injectable, computed, effect, signal } from '@angular/core';
+import { MenuItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 
 export interface layoutConfig {
@@ -54,6 +55,8 @@ export class LayoutService {
 
   private resetSource = new Subject();
 
+  public menuItems = signal<MenuItem[]>([]);
+
   menuSource$ = this.menuSource.asObservable();
 
   resetSource$ = this.resetSource.asObservable();
@@ -65,7 +68,7 @@ export class LayoutService {
   theme = computed(() => (this.layoutConfig()?.darkTheme ? 'light' : 'dark'));
 
   isSidebarActive = computed(
-    () => this.layoutState().overlayMenuActive || this.layoutState().staticMenuMobileActive
+    () => this.layoutState().overlayMenuActive || this.layoutState().staticMenuMobileActive,
   );
 
   isDarkTheme = computed(() => this.layoutConfig().darkTheme);
@@ -185,5 +188,9 @@ export class LayoutService {
 
   reset() {
     this.resetSource.next(true);
+  }
+
+  setMenuItems(items: MenuItem[]) {
+    this.menuItems.set(items);
   }
 }

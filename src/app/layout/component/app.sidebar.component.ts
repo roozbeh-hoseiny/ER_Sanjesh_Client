@@ -1,11 +1,11 @@
 import { Component, ElementRef } from '@angular/core';
-import { AppMenu } from './app.menu';
+import { AppMenu } from './app.menu.component';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
   imports: [AppMenu],
-  templateUrl: './app.sidebar.html',
+  templateUrl: './app.sidebar.component.html',
 })
 export class AppSidebar {
   constructor(public el: ElementRef) {}
