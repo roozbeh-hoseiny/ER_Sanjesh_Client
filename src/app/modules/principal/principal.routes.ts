@@ -12,6 +12,9 @@ export const principalNamedRoutes: NamedRoutes<PrincipalRouteNames> = {
       import('./pages/dashboard/principal-dashboard.component').then(
         (m) => m.PrincipalDashboardComponent,
       ),
+    meta: {
+      title: 'داشبورد مدیر مدرسه',
+    },
   },
 };
 

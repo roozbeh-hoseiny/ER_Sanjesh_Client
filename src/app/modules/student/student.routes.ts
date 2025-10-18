@@ -12,21 +12,33 @@ export const studentNamedRoutes: NamedRoutes<StudentRouteNames> = {
       import('./pages/dashboard/student-dashboard.component').then(
         (m) => m.StudentDashboardComponent,
       ),
+    meta: {
+      title: 'داشبورد دانش‌آموز',
+    },
   },
   exams: {
     path: 'exams',
     loadComponent: () =>
       import('./pages/exams/student-exams.component').then((m) => m.StudentExamsComponent),
+    meta: {
+      title: 'آزمون‌ها',
+    },
   },
   results: {
     path: 'results',
     loadComponent: () =>
       import('./pages/results/student-results.component').then((m) => m.StudentResultsComponent),
+    meta: {
+      title: 'نتایج آزمون‌ها',
+    },
   },
   profile: {
     path: 'profile',
     loadComponent: () =>
       import('./pages/profile/student-profile.component').then((m) => m.StudentProfileComponent),
+    meta: {
+      title: 'پروفایل من',
+    },
   },
 };
 

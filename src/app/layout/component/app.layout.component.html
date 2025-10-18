@@ -1,11 +1,14 @@
 <div class="layout-wrapper" [ngClass]="containerClass">
-    <app-topbar></app-topbar>
-    <app-sidebar></app-sidebar>
-    <div class="layout-main-container">
-        <div class="layout-main">
-            <router-outlet></router-outlet>
-        </div>
-        <app-footer></app-footer>
+  <app-topbar></app-topbar>
+  <app-sidebar></app-sidebar>
+  <div class="layout-main-container">
+    <div class="layout-main flex flex-col gap-4">
+      <app-breadcrumb class="rounded-md overflow-hidden shrink-0" />
+      <div class="bg-surface-overlay rounded-md overflow-hidden flex flex-col grow p-4">
+        <router-outlet></router-outlet>
+      </div>
     </div>
-    <div class="layout-mask animate-fadein"></div>
+    <app-footer></app-footer>
+  </div>
+  <div class="layout-mask animate-fadein"></div>
 </div>

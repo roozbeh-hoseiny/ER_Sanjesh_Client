@@ -1,0 +1,25 @@
+<!-- Table Header Cell -->
+@if (type === "th") {
+  <th [class]="widthClass" class="text-center">عملیات</th>
+}
+
+<!-- Table Body Cell -->
+@if (type === "td") {
+  <td [class]="widthClass" class="text-center flex items-center gap-1">
+    @if (showEdit) {
+      <p-button (click)="edit.emit()" title="ویرایش">
+        <i class="pi pi-pencil"></i>
+      </p-button>
+    }
+    @if (showDelete) {
+      <p-button (click)="delete.emit()" title="حذف">
+        <i class="pi pi-trash"></i>
+      </p-button>
+    }
+    @if (showDetails) {
+      <p-button (click)="details.emit()" title="جزئیات">
+        <i class="pi pi-info-circle"></i>
+      </p-button>
+    }
+  </td>
+}

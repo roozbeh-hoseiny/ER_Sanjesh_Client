@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { EducationLevelsService, EducationalLevel } from './educationLevels.service';
+import { BreadcrumbService } from '@/core/services';
+import { adminNamedRoutes } from '@/modules/admin/constants';
 
 @Component({
   selector: 'educational-levels',
@@ -12,11 +14,14 @@ import { EducationLevelsService, EducationalLevel } from './educationLevels.serv
 })
 export class EducationalLevelsComponent implements OnInit {
   private educationLevelsService = inject(EducationLevelsService);
+  private breadcrumbService = inject(BreadcrumbService);
 
   educationalLevels = signal<EducationalLevel[]>([]);
   selectedLevel = signal<EducationalLevel | null>(null);
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
+
+  ngBeforeMount(): void {}
 
   ngOnInit(): void {
     this.loadEducationalLevels();

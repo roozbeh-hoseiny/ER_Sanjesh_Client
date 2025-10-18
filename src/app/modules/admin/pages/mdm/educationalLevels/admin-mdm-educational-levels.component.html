@@ -1,3 +1,43 @@
-<div class="grader-dashboard">
-  <h1 class="text-primary">داشبورد مدیریت</h1>
+<div class="grow flex flex-col gap-4">
+  <div class="flex items-center shrink-0">
+    <h4>مدیریت پایه های تحصیلی</h4>
+    <p-button
+      class="mr-auto"
+      label="افزودن پایه تحصیلی جدید"
+      icon="pi pi-plus"
+      (click)="openNewEducationalLevelDialog()"
+    ></p-button>
+  </div>
+  <p-table [columns]="columns" [value]="educationalLevels()" [loading]="loading()" stripedRows class="grow">
+    <ng-template #header let-columns>
+      <tr>
+        <th *ngFor="let col of columns">{{ col.header }}</th>
+        <th type="th" class="w-[6.75rem]"></th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-educationalLevel>
+      <tr>
+        <td>{{ educationalLevel.level }}</td>
+        <td>{{ educationalLevel.title }}</td>
+        <td
+          table-action-row
+          type="td"
+          [showDelete]="true"
+          [showEdit]="true"
+          (edit)="edit(educationalLevel)"
+          (delete)="remove(educationalLevel)"
+        ></td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <div class="h-full">
+        <uikit-empty-state
+          title="هیچ پایه تحصیلی یافت نشد"
+          description="برای افزودن پایه تحصیلی جدید، روی دکمه زیر کلیک کنید."
+          ctaLabel="افزودن پایه تحصیلی جدید"
+        />
+      </div>
+    </ng-template>
+  </p-table>
 </div>

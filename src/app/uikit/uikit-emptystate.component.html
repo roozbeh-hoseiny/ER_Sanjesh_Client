@@ -1,0 +1,16 @@
+<div class="flex flex-col items-center justify-center py-12 text-center bg-surface-overlay">
+  <ng-container>
+    <i [class]="icon + ' !text-6xl mb-6 text-surface-500'" aria-hidden="true"></i>
+  </ng-container>
+  <h3 class="text-xl font-semibold mb-2">{{ title }}</h3>
+  @if (description) {
+    <p class="text-surface-500 mb-8 inline-block">{{ description }}</p>
+  }
+  <ng-content select="[cta]" #cta></ng-content>
+  @if (!hasCtaContent && ctaLabel) {
+    <p-button (click)="ctaClick.emit()">
+      <i class="pi pi-plus" pButtonIcon></i>
+      {{ ctaLabel }}
+    </p-button>
+  }
+</div>

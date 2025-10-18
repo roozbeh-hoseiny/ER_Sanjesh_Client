@@ -1,0 +1,33 @@
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ContentChild,
+  AfterContentInit,
+  ElementRef,
+} from '@angular/core';
+
+import { CommonModule } from '@angular/common';
+import { Button } from 'primeng/button';
+
+@Component({
+  selector: 'uikit-empty-state',
+  standalone: true,
+  imports: [CommonModule, Button],
+  templateUrl: './uikit-emptystate.component.html',
+})
+export class UikitEmptyStateComponent implements AfterContentInit {
+  @ContentChild('cta', { static: false, read: ElementRef }) ctaContent?: ElementRef;
+  hasCtaContent = false;
+
+  @Input() title: string = 'متاسفانه موردی یافت نشد';
+  @Input() description?: string;
+  @Input() icon: string = 'pi pi-database';
+  @Input() ctaLabel?: string;
+  @Output() ctaClick = new EventEmitter<void>();
+
+  ngAfterContentInit() {
+    this.hasCtaContent = !!this.ctaContent;
+  }
+}

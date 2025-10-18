@@ -1,11 +1,36 @@
-@import 'tailwindcss';
-@import 'tailwindcss-primeui';
+@import "tailwindcss";
+@import "tailwindcss-primeui";
 @custom-variant dark (&:where(.app-dark, .app-dark *));
 
 @theme {
-    --breakpoint-sm: 576px;
-    --breakpoint-md: 768px;
-    --breakpoint-lg: 992px;
-    --breakpoint-xl: 1200px;
-    --breakpoint-2xl: 1920px;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-2xl: 1920px;
+}
+
+@theme {
+  --color-primary-color: var(--primary-color);
+  --color-primary-contrast-color: var(--primary-contrast-color);
+  --color-text-color: var(--text-color);
+  --color-text-color-secondary: var(--text-color-secondary);
+  --color-surface-border: var(--surface-border);
+  --color-surface-card: var(--surface-card);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-overlay: var(--surface-overlay);
+  --color-transition-duration: var(--transition-duration);
+  --color-maskbg: var(--maskbg);
+  --color-content-border-radius: var(--content-border-radius);
+  --layout-section-transition-duration: 0.2s;
+  --color-element-transition-duration: var(--element-transition-duration);
+  --color-focus-ring-width: var(--focus-ring-width);
+  --color-focus-ring-style: var(--focus-ring-style);
+  --color-focus-ring-color: var(--focus-ring-color);
+  --color-focus-ring-offset: var(--focus-ring-offset);
+  --color-focus-ring-shadow: var(--focus-ring-shadow);
+  --color-surface-ground: var(--surface-ground);
+  --color-code-background: var(--code-background);
+  --color-code-color: var(--code-color);
+  --p-inputtext-padding-y: 1rem !important;
 }

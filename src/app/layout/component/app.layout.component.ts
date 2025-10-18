@@ -6,11 +6,12 @@ import { LayoutService } from '../service/layout.service';
 import { AppFooter } from './app.footer.component';
 import { AppSidebar } from './app.sidebar.component';
 import { AppTopbar } from './app.topbar.component';
+import { BreadcrumbComponent } from '@/shared/components';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter],
+  imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter, BreadcrumbComponent],
   templateUrl: './app.layout.component.html',
 })
 export class AppLayout {

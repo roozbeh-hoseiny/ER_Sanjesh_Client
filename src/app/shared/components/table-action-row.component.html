@@ -1,0 +1,11 @@
+<td class="text-center flex items-center gap-1">
+  @if (showEdit) {
+    <p-button icon="pi pi-pencil" variant="outlined" severity="primary" (click)="edit.emit()" title="ویرایش" />
+  }
+  @if (showDelete) {
+    <p-button icon="pi pi-trash" variant="outlined" severity="danger" (click)="delete.emit()" title="حذف" />
+  }
+  @if (showDetails) {
+    <p-button icon="pi pi-info-circle" variant="outlined" (click)="details.emit()" title="جزئیات" />
+  }
+</td>
