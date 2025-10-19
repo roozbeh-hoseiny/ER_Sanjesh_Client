@@ -1,2 +1,2 @@
-export * from './uikit.module';
-// Optionally, you can export individual components if you want to use them directly
+export * from './uikit-label.component';
+export * from './uikit-emptystate.component';

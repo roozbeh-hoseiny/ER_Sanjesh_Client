@@ -69,7 +69,7 @@ export class ErrorHandlerService {
       severity: 'error',
       summary: 'خطای اتصال',
       detail: message,
-      sticky: true, // Don't auto-close network errors
+      sticky: true,
     });
   }
 

@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, finalize, tap } from 'rxjs/operators';
 import { AuthResponse, LoginCredentials, Maybe, User, UserRole } from '../models';
+import { CaptchaService } from './captcha.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ import { AuthResponse, LoginCredentials, Maybe, User, UserRole } from '../models
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
+  private captchaService = inject(CaptchaService);
 
   private readonly currentUserSubject = new BehaviorSubject<Maybe<User>>(null);
   private readonly isLoadingSubject = new BehaviorSubject<boolean>(false);
@@ -34,7 +36,8 @@ export class AuthService {
     permissions: [],
   });
   readonly isLoading = signal<boolean>(false);
-  readonly isAuthenticated = computed(() => !!this.currentUser());
+  readonly token = signal<Maybe<string>>(null);
+  readonly isAuthenticated = computed(() => Boolean(this.token));
   readonly userRole = computed(() => this.currentUser()?.role);
 
   constructor() {
@@ -43,12 +46,13 @@ export class AuthService {
 
   private initializeAuth(): void {
     const token = localStorage.getItem('auth_token');
-    const userData = localStorage.getItem('user_data');
+    // const userData = localStorage.getItem('user_data');
+    const userData = this.currentUser();
 
     if (token && userData) {
       try {
-        const user = JSON.parse(userData) as User;
-        this.setCurrentUser(user);
+        // const user = JSON.parse(userData) as User;
+        // this.setCurrentUser(user);
       } catch (error) {
         console.error('Error parsing stored user data:', error);
         this.logout();
@@ -56,22 +60,42 @@ export class AuthService {
     }
   }
 
-  login(credentials: LoginCredentials): Observable<AuthResponse> {
+  login(credentials: LoginCredentials, loginApiUrl: string): Observable<AuthResponse> {
+    const { username, password, captcha } = credentials;
     this.isLoading.set(true);
     this.isLoadingSubject.next(true);
+    const baseHeaders = this.captchaService.buildCaptchaHeaders({}, captcha);
 
-    // TODO: Replace with actual API endpoint
-    return this.http.post<AuthResponse>('/api/auth/login', credentials).pipe(
-      tap((response) => {
-        this.handleAuthSuccess(response);
-      }),
-      catchError((error) => {
-        console.error('Login error:', error);
-        this.isLoading.set(false);
-        this.isLoadingSubject.next(false);
-        throw error;
-      })
-    );
+    console.log('asdasdasdasdzxczxczxczxcxzcxzcxzcxz', {
+      loginApiUrl,
+      username,
+      password,
+      baseHeaders,
+    });
+
+    return this.http
+      .post<AuthResponse>(
+        loginApiUrl,
+        { username, password },
+        {
+          headers: baseHeaders,
+        },
+      )
+      .pipe(
+        tap((response) => {
+          console.log('asdasdasdasasdasds');
+
+          this.handleAuthSuccess(response);
+        }),
+        catchError((error) => {
+          console.error('Login error:', error);
+          this.isLoadingSubject.next(false);
+          throw error;
+        }),
+        finalize(() => {
+          this.isLoading.set(false);
+        }),
+      );
   }
 
   logout(): void {
@@ -98,7 +122,7 @@ export class AuthService {
         console.error('Token refresh error:', error);
         this.logout();
         return throwError(() => error);
-      })
+      }),
     );
   }
 
@@ -166,7 +190,7 @@ export class AuthService {
     if (!user) return false;
 
     return user.permissions.some(
-      (p) => p.name === permission || `${p.resource}:${p.action}` === permission
+      (p) => p.name === permission || `${p.resource}:${p.action}` === permission,
     );
   }
 
@@ -186,15 +210,15 @@ export class AuthService {
 
   private handleAuthSuccess(response: AuthResponse): void {
     localStorage.setItem('auth_token', response.token);
-    localStorage.setItem('refresh_token', response.refreshToken);
-    localStorage.setItem('user_data', JSON.stringify(response.user));
+    // localStorage.setItem('refresh_token', response.refreshToken);
+    // localStorage.setItem('user_data', JSON.stringify(response.user));
 
-    this.setCurrentUser(response.user);
-    this.isLoading.set(false);
+    // this.setCurrentUser(response.user);
+    // this.isLoading.set(false);
     this.isLoadingSubject.next(false);
 
     // Navigate based on user role
-    this.navigateByRole(response.user.role);
+    // this.navigateByRole(response.user.role);
   }
 
   private setCurrentUser(user: Maybe<User>): void {

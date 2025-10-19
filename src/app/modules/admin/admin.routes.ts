@@ -6,6 +6,10 @@ import { adminNamedRoutes } from './constants';
 
 export const ADMIN_ROUTES: Routes = [
   {
+    path: 'login',
+    children: [adminNamedRoutes.login],
+  },
+  {
     path: '',
     component: AdminLayoutComponent,
     canActivate: [AuthGuard, RoleGuard],

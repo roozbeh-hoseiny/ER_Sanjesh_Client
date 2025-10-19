@@ -1,13 +1,14 @@
 import { NamedRoutes } from '@/core';
+import { adminSchoolNamedRoutes, type TAdminSchoolsRouteNames } from './routes/schools.const';
+import { adminMDMNamedRoutes, TAdminMDMRouteNames } from './routes';
 
 export type AdminRouteNames =
   | 'root'
   | 'login'
   | 'dashboard'
   | 'users'
-  | 'mdm'
-  | 'mdmEducationalLevels'
-  | 'mdmFieldOfStudies';
+  | TAdminSchoolsRouteNames
+  | TAdminMDMRouteNames;
 
 export const adminNamedRoutes: NamedRoutes<AdminRouteNames> = {
   login: {
@@ -42,31 +43,20 @@ export const adminNamedRoutes: NamedRoutes<AdminRouteNames> = {
       title: 'کاربران',
     },
   },
-  mdm: {
-    path: 'mdm',
-    redirectTo: 'mdm/educational-levels',
-    meta: {
-      title: 'مدیریت داده‌های مرجع',
-    },
-  },
-  mdmEducationalLevels: {
-    path: 'mdm/educational-levels',
-    loadComponent: () =>
-      import('../pages/mdm/educationalLevels/admin-mdm-educational-levels.component').then(
-        (m) => m.AdminMdmEducationalLevelsComponent,
-      ),
-    meta: {
-      title: 'سطوح تحصیلی',
-    },
-  },
-  mdmFieldOfStudies: {
-    path: 'mdm/field-of-studies',
-    loadComponent: () =>
-      import('../pages/mdm/fieldOfStudies/admin-mdm-field-of-studies.component').then(
-        (m) => m.AdminMdmFieldOfStudiesComponent,
-      ),
-    meta: {
-      title: 'رشته‌های تحصیلی',
-    },
-  },
+  ...adminMDMNamedRoutes,
+  ...adminSchoolNamedRoutes,
 };
+
+export const ADMIN_ROUTES = Object.entries(adminNamedRoutes).reduce(
+  (acc, [name, route]) => {
+    const { path, meta } = route;
+    return {
+      ...acc,
+      [name]: {
+        path: `/admin/${path}`,
+        meta,
+      },
+    };
+  },
+  {} as Record<AdminRouteNames, { path: string; meta: any }>,
+);

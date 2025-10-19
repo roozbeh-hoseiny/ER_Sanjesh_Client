@@ -1,13 +1,11 @@
 import { adminNamedRoutes } from '@/modules/admin/constants';
 import { Routes } from '@angular/router';
-import { authNamedRoutes } from 'modules/auth/auth.routes';
 import { graderNamedRoutes } from 'modules/grader/grader.routes';
 import { principalNamedRoutes } from 'modules/principal/principal.routes';
 import { studentNamedRoutes } from 'modules/student/student.routes';
 import { superadminNamedRoutes } from 'modules/superadmin/superadmin.routes';
 
 export const namedRoutes = {
-  auth: authNamedRoutes,
   student: studentNamedRoutes,
   grader: graderNamedRoutes,
   admin: adminNamedRoutes,
@@ -16,14 +14,6 @@ export const namedRoutes = {
 };
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/auth/login' },
-
-  // Authentication routes
-  {
-    path: 'auth',
-    loadChildren: () => import('modules/auth/auth.routes').then((m) => m.AUTH_ROUTES),
-  },
-
   // Role-based module routes
   {
     path: 'student',
