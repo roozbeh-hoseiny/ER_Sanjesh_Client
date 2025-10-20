@@ -7,23 +7,15 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
       {
         label: 'داشبورد',
         icon: 'pi pi-fw pi-home',
-        routerLink: [adminNamedRoutes.dashboard.path],
+        routerLink: [adminNamedRoutes.root.path],
       },
-    ],
-  },
-  {
-    items: [
       {
         label: 'مدیریت مدارس',
         icon: 'pi pi-fw pi-warehouse',
         routerLink: [adminNamedRoutes.schools.path],
       },
-    ],
-  },
-  {
-    items: [
       {
-        label: 'مدیریت کاربران',
+        label: 'مدیریت دانش‌اموزان',
         icon: 'pi pi-fw pi-users',
         routerLink: [adminNamedRoutes.users.path],
       },
@@ -31,22 +23,27 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
   },
 
   {
-    label: 'مدیریت اطلاعات',
+    label: 'مدیریت اطلاعات پایه',
     items: [
       {
         label: 'اطلاعات پایه دانش‌آموزان',
-        items: [
-          {
-            label: 'پایه‌ی تحصیلی دانش‌آموزان',
-            icon: 'pi pi-fw pi-users',
-            routerLink: [adminNamedRoutes.mdmEducationalLevels.path],
-          },
-          {
-            label: 'رشته‌های تحصیلی دانش‌آموزان',
-            icon: 'pi pi-fw pi-users',
-            routerLink: [adminNamedRoutes.mdmFieldOfStudies.path],
-          },
-        ],
+        icon: 'pi pi-fw pi-users',
+        routerLink: [adminNamedRoutes.mdmEducationalLevels.path],
+      },
+      {
+        label: 'رشته‌های تحصیلی دانش‌آموزان',
+        icon: 'pi pi-fw pi-users',
+        routerLink: [adminNamedRoutes.mdmFieldOfStudies.path],
+      },
+      {
+        label: 'مناطق',
+        icon: 'pi pi-fw pi-users',
+        routerLink: [adminNamedRoutes.mdmRegions.path],
+      },
+      {
+        label: 'استان‌ها',
+        icon: 'pi pi-fw pi-users',
+        routerLink: [adminNamedRoutes.mdmStates.path],
       },
     ],
   },

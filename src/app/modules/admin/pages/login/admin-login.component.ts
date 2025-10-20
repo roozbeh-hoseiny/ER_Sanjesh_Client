@@ -2,8 +2,7 @@ import { LoginComponent } from '@/modules/auth/pages/login/login.component';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ADMIN_API_ROUTES } from '../../constants/admin.api.routes.const';
-import { ADMIN_ROUTES, adminNamedRoutes } from '../../constants';
+import { ADMIN_API_ROUTES, ADMIN_ROUTES } from '../../constants';
 
 @Component({
   selector: 'admin-login',
@@ -13,5 +12,5 @@ import { ADMIN_ROUTES, adminNamedRoutes } from '../../constants';
 })
 export class AdminLoginComponent {
   readonly loginApiUrl = ADMIN_API_ROUTES.login();
-  readonly redirectUrl = ADMIN_ROUTES.dashboard.path;
+  readonly redirectUrl = ADMIN_ROUTES.root.path;
 }

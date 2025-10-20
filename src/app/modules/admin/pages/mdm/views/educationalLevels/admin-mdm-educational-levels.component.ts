@@ -1,35 +1,23 @@
 import { BreadcrumbService } from '@/core/services';
 import { adminNamedRoutes } from '@/modules/admin/constants';
-import { UikitEmptyStateComponent } from '@/uikit/uikit-emptystate.component';
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { Button } from 'primeng/button';
-import { AdminEducationalLevelsFakeService } from '@/modules/admin/services/admin-educational-levels-fake.service';
-import { TableActionRowComponent } from '@/shared/components/table-action-row.component';
-
-interface Column {
-  field: string;
-  header: string;
-}
+import { EducationLevelsService } from '@/shared/cataloge/MDM/educationalLevels/educationLevels.service';
+import {
+  IColumn,
+  PageDataListComponent,
+} from '@/shared/components/pageDataList/page-data-list.component';
+import { AdminMDMService } from '@/modules/admin/services';
 
 @Component({
   selector: 'app-admin-mdm-educational-levels',
   templateUrl: './admin-mdm-educational-levels.component.html',
-  imports: [CommonModule, TableModule, UikitEmptyStateComponent, Button, TableActionRowComponent],
-  styles: [
-    `
-      :host {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-      }
-    `,
-  ],
+  imports: [CommonModule, TableModule, PageDataListComponent],
 })
 export class AdminMdmEducationalLevelsComponent {
   private breadcrumbService = inject(BreadcrumbService);
-  private educationalLevelsService = inject(AdminEducationalLevelsFakeService);
+  private adminMDMServices = inject(AdminMDMService);
 
   educationalLevels = signal<any[]>([]);
   loading = signal<boolean>(true);
@@ -43,12 +31,12 @@ export class AdminMdmEducationalLevelsComponent {
       field: 'level',
       header: 'پایه',
     },
-  ] as Column[];
+  ] as IColumn[];
 
   ngOnInit(): void {
     this.breadcrumbService.setItems([
       {
-        ...adminNamedRoutes.dashboard.meta,
+        ...adminNamedRoutes.root.meta,
       },
       {
         ...adminNamedRoutes.mdm.meta,
@@ -60,7 +48,7 @@ export class AdminMdmEducationalLevelsComponent {
 
     this.loading.set(true);
 
-    this.educationalLevelsService.getEducationalLevels().subscribe((data) => {
+    this.adminMDMServices.getEducationalLevels().subscribe((data) => {
       this.educationalLevels.set(data);
       this.loading.set(false);
     });

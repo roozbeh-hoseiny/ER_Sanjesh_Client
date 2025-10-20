@@ -1,0 +1,14 @@
+<app-page-data-list
+  pageTitle="مدیریت مناطق"
+  [loading]="loading()"
+  [columns]="columns"
+  [items]="items()"
+  addNewCtaLabel="افزودن منطقه جدید"
+  emptyPlaceholderTitle="هیچ منطقه‌ای یافت نشد"
+  emptyPlaceholderDescription="برای افزودن منطقه جدید، روی دکمه زیر کلیک کنید."
+  emptyPlaceholderCtaLabel="افزودن منطقه جدید"
+  (onAdd)="openNewEducationalLevelDialog()"
+  (onEdit)="edit($event)"
+  (onDelete)="remove($event)"
+>
+</app-page-data-list>

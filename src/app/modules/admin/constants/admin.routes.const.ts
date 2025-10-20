@@ -5,14 +5,13 @@ import { adminMDMNamedRoutes, TAdminMDMRouteNames } from './routes';
 export type AdminRouteNames =
   | 'root'
   | 'login'
-  | 'dashboard'
   | 'users'
   | TAdminSchoolsRouteNames
   | TAdminMDMRouteNames;
 
 export const adminNamedRoutes: NamedRoutes<AdminRouteNames> = {
   login: {
-    path: 'login',
+    path: '',
     meta: {
       title: 'لاگین',
     },
@@ -23,14 +22,6 @@ export const adminNamedRoutes: NamedRoutes<AdminRouteNames> = {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full',
-    meta: {
-      title: 'داشبورد',
-    },
-  },
-  dashboard: {
-    path: 'dashboard',
-    loadComponent: () =>
-      import('../pages/root/admin-root.component').then((m) => m.AdminDashboardComponent),
     meta: {
       title: 'داشبورد',
     },

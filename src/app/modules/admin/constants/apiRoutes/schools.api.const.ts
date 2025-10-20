@@ -1,5 +1,3 @@
-const baseUrl = '/school';
-
 export const adminSchoolsApiRoutes = (baseUrl: string) => {
   const schoolsBaseUrl = `${baseUrl}/school`;
   return {

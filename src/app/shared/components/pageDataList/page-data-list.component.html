@@ -1,0 +1,73 @@
+<div class="grow flex flex-col gap-4">
+  <p-table [columns]="columns" [value]="items" [loading]="loading" stripedRows [showFirstLastIcon]="false" class="grow">
+    <ng-template pTemplate="caption">
+      <div class="flex justify-between items-center mb-5">
+        <h4>{{ pageTitle }}</h4>
+        <p-button label="{{ addNewCtaLabel }}" icon="pi pi-plus" (click)="openAddForm()"></p-button>
+      </div>
+    </ng-template>
+
+    <ng-template #header let-columns>
+      <tr>
+        @for (col of columns; track col.header) {
+          <th>{{ col.header }}</th>
+        }
+        @if (items.length > 0 && (showDelete || showEdit)) {
+          <th type="th" class="w-[6.75rem]"></th>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-item>
+      <tr>
+        @for (col of columns; track col.field) {
+          <td>{{ item[col.field] }}</td>
+        }
+        @if (showDelete || showEdit) {
+          <td
+            table-action-row
+            type="td"
+            [showDelete]="showDelete"
+            [showEdit]="showEdit"
+            (edit)="edit(item)"
+            (delete)="remove(item)"
+          ></td>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr class="h-full">
+        <td [colSpan]="columns.length.toString()" class="w-full">
+          <uikit-empty-state
+            [title]="emptyPlaceholderTitle"
+            [description]="emptyPlaceholderDescription"
+            [ctaLabel]="emptyPlaceholderCtaLabel"
+          ></uikit-empty-state>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #loadingbody let-columns>
+      @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i) {
+        <tr style="height: 46px">
+          @for (col of columns; track col) {
+            <td>
+              <p-skeleton></p-skeleton>
+            </td>
+          }
+        </tr>
+      }
+    </ng-template>
+  </p-table>
+  @if (showPaginator) {
+    <div class="flex items-center justify-center p-10">
+      <p-paginator
+        (onPageChange)="onPage($event)"
+        [rows]="10"
+        [totalRecords]="totalRecords"
+        [showFirstLastIcon]="false"
+      />
+    </div>
+  }
+</div>

@@ -1,0 +1,12 @@
+<app-page-data-list
+  [pageTitle]="'مدیریت مدارس'"
+  [addNewCtaLabel]="'افزودن مدرسه جدید'"
+  [columns]="columns"
+  [items]="activePageItems()"
+  [loading]="loading()"
+  [totalRecords]="totalRecords()"
+  [lazy]="true"
+  (pageChange)="onPageChange($event)"
+  (onAdd)="openAddSchoolForm()"
+>
+</app-page-data-list>

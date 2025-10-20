@@ -1,0 +1,14 @@
+<app-page-data-list
+  pageTitle="مدیریت رشته‌های تحصیلی"
+  [loading]="loading()"
+  [columns]="columns"
+  [items]="fieldOfStudies()"
+  addNewCtaLabel="افزودن رشته‌ تحصیلی جدید"
+  emptyPlaceholderTitle="هیچ رشته‌ تحصیلی یافت نشد"
+  emptyPlaceholderDescription="برای افزودن رشته‌ تحصیلی جدید، روی دکمه زیر کلیک کنید."
+  emptyPlaceholderCtaLabel="افزودن رشته‌ تحصیلی جدید"
+  (onAdd)="openNewFormDialog()"
+  (onEdit)="edit($event)"
+  (onDelete)="remove($event)"
+>
+</app-page-data-list>

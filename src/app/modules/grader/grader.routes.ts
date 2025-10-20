@@ -30,9 +30,6 @@ export const graderNamedRoutes: NamedRoutes<GraderRouteNames> = {
 export const GRADER_ROUTES: Routes = [
   {
     ...graderNamedRoutes.root,
-    children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      graderNamedRoutes.dashboard,
-    ],
+    children: [{ path: '', redirectTo: 'dashboard', pathMatch: 'full' }, graderNamedRoutes.root],
   },
 ];
