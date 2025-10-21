@@ -6,6 +6,8 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     byCategories: () => `${schoolsBaseUrl}/GetByCategories`,
     byName: () => `${schoolsBaseUrl}/GetByName`,
     byRegion: () => `${schoolsBaseUrl}/GetByRegion`,
+    activate: () => `${schoolsBaseUrl}/ActivateSchool`,
+    deactivate: () => `${schoolsBaseUrl}/DeactivateSchool`,
     single: () => `${schoolsBaseUrl}/GetOne`,
   };
 };

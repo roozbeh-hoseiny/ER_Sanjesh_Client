@@ -10,9 +10,9 @@
     <ng-template #header let-columns>
       <tr>
         @for (col of columns; track col.header) {
-          <th>{{ col.header }}</th>
+          <th [style]="{ width: col.width }">{{ col.header }}</th>
         }
-        @if (items.length > 0 && (showDelete || showEdit)) {
+        @if (showDelete || showEdit) {
           <th type="th" class="w-[6.75rem]"></th>
         }
       </tr>
@@ -21,7 +21,18 @@
     <ng-template #body let-item>
       <tr>
         @for (col of columns; track col.field) {
-          <td>{{ item[col.field] }}</td>
+          <td>
+            @if (getTemplate(col)) {
+              <ng-container
+                [ngTemplateOutlet]="getTemplate(col)"
+                [ngTemplateOutletContext]="{ $implicit: item }"
+              ></ng-container>
+            } @else {
+              <span>
+                {{ getCell(item, col) }}
+              </span>
+            }
+          </td>
         }
         @if (showDelete || showEdit) {
           <td
@@ -56,6 +67,11 @@
               <p-skeleton></p-skeleton>
             </td>
           }
+          @if (showDelete || showEdit) {
+            <td>
+              <p-skeleton></p-skeleton>
+            </td>
+          }
         </tr>
       }
     </ng-template>
@@ -71,3 +87,8 @@
     </div>
   }
 </div>
+
+<!-- Hidden references for dynamic components so the compiler recognizes them as used -->
+<ng-container *ngIf="false">
+  <app-school-genders-tag></app-school-genders-tag>
+</ng-container>

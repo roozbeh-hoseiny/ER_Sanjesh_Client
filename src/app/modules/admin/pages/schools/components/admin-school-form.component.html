@@ -1,1 +1,68 @@
-<div></div>
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  header="ایجاد مدرسه"
+  [style]="{ width: '600px' }"
+  (onHide)="visibleChange.emit(false)"
+>
+  <form (ngSubmit)="submit()" [formGroup]="form" class="grid grid-cols-1 gap-4">
+    <div class="grid grid-cols-2 gap-4">
+      <uikit-field label="نام مدرسه" for="name">
+        <input pInputText formControlName="name" />
+      </uikit-field>
+    </div>
+    <div class="grid grid-cols-1 gap-4">
+      <div formGroupName="address">
+        <p-divider align="center"> آدرس </p-divider>
+        <div class="grid grid-cols-1 gap-4">
+          <uikit-field label="آدرس" for="address">
+            <textarea pTextarea formControlName="address" rows="2"></textarea>
+          </uikit-field>
+          <div class="grid grid-cols-2 gap-4">
+            <uikit-field label="شهر" for="cityName">
+              <input pInputText formControlName="cityName" />
+            </uikit-field>
+            <div>
+              <uikit-field label="استان" for="cityName">
+                <input pInputText formControlName="stateName" />
+              </uikit-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p-divider align="center"> مدیریت </p-divider>
+      <div formGroupName="managerInfo" class="grid grid-cols-1 gap-4">
+        <div class="grid grid-cols-2 gap-4">
+          <uikit-field label="نام مدیر" for="firstName">
+            <input pInputText formControlName="firstName" />
+          </uikit-field>
+          <uikit-field label="نام خانوادگی" for="lastName">
+            <input pInputText formControlName="lastName" />
+          </uikit-field>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <uikit-field label="موبایل" for="mobile">
+            <input pInputText formControlName="mobile" />
+          </uikit-field>
+          <uikit-field label="ایمیل" for="email">
+            <input pInputText formControlName="email" />
+          </uikit-field>
+        </div>
+      </div>
+
+      <p-divider align="center"> اطلاعات کاربری </p-divider>
+      <div class="grid grid-cols-2 gap-4">
+        <uikit-field label="نام کاربری" for="username">
+          <input pInputText formControlName="username" />
+        </uikit-field>
+        <uikit-field label="رمز عبور" for="password">
+          <input pInputText formControlName="password" />
+        </uikit-field>
+      </div>
+      <div class="flex gap-2 justify-end mt-4">
+        <button pButton type="button" class="p-button-secondary" (click)="close()">انصراف</button>
+        <button pButton type="submit" [disabled]="form.invalid" class="p-button-primary">ذخیره</button>
+      </div>
+    </div>
+  </form>
+</p-dialog>

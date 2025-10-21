@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, of, tap } from 'rxjs';
 import { BaseState, BaseStore } from '@/core/state';
-import { IEducationalLevelItem } from '../types';
+import { IEducationalLevelItem } from '../models';
 
 /**
  * Student results state

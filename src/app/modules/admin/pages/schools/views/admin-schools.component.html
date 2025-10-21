@@ -5,8 +5,28 @@
   [items]="activePageItems()"
   [loading]="loading()"
   [totalRecords]="totalRecords()"
-  [lazy]="true"
+  [showEdit]="true"
   (pageChange)="onPageChange($event)"
   (onAdd)="openAddSchoolForm()"
+  (onEdit)="openEditForm($event)"
 >
+  <ng-template #boyOrGirl let-item>
+    <app-school-genders-tag [genderId]="item.boyOrGirl"></app-school-genders-tag>
+  </ng-template>
+  <ng-template #status let-item>
+    <p-button
+      [severity]="item.isActive ? 'success' : 'danger'"
+      size="small"
+      [loading]="schoolsChangeStatusSchedules()[item.id]"
+      (click)="toggleStatus(item, !item.isActive)"
+    >
+      {{ item.isActive ? "فعال" : "غیرفعال" }}
+    </p-button>
+  </ng-template>
 </app-page-data-list>
+
+<app-admin-school-form
+  [visible]="isAddSchoolFormVisible()"
+  (visibleChange)="isAddSchoolFormVisible.set($event)"
+  (save)="onSchoolFormSave($event)"
+/>

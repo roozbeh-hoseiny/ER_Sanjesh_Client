@@ -66,13 +66,6 @@ export class AuthService {
     this.isLoadingSubject.next(true);
     const baseHeaders = this.captchaService.buildCaptchaHeaders({}, captcha);
 
-    console.log('asdasdasdasdzxczxczxczxcxzcxzcxzcxz', {
-      loginApiUrl,
-      username,
-      password,
-      baseHeaders,
-    });
-
     return this.http
       .post<AuthResponse>(
         loginApiUrl,
@@ -83,8 +76,6 @@ export class AuthService {
       )
       .pipe(
         tap((response) => {
-          console.log('asdasdasdasasdasds');
-
           this.handleAuthSuccess(response);
         }),
         catchError((error) => {

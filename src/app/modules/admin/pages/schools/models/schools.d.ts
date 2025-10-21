@@ -37,3 +37,11 @@ interface Address {
   cityName: string;
   districtName: string;
 }
+
+export interface ISchoolRequest {
+  name: string;
+  address: AddressRequest;
+  managerInfo: ManagerInfoRequest;
+  username: string;
+  password: string;
+}

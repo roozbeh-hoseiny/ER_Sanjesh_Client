@@ -18,4 +18,11 @@ export class AdminSchoolsService {
       lastSeen,
     });
   }
+
+  updateSchoolStatus(schoolId: string, isActive: boolean): Observable<any> {
+    const endpoint = isActive
+      ? this.apiRoutes.schools.activate()
+      : this.apiRoutes.schools.deactivate();
+    return this.http.post<any>(endpoint, { id: schoolId });
+  }
 }
