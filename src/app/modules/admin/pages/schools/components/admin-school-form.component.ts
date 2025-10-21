@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+  OnChanges,
+  SimpleChanges,
+  computed,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
@@ -9,6 +18,9 @@ import { ButtonModule } from 'primeng/button';
 
 import { ISchoolRequest } from '../models/schools';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
+import { Maybe } from '@/core';
+import { AdminSchoolsService } from '@/modules/admin/services';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-admin-school-form',
@@ -29,9 +41,12 @@ export class AdminSchoolFormComponent {
   private fb = inject(FormBuilder);
 
   @Input() visible = false;
-  @Input() defaultValues?: Partial<ISchoolRequest>;
+  @Input() defaultValues?: Maybe<Partial<ISchoolRequest>>;
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() save = new EventEmitter<ISchoolRequest>();
+
+  adminSchoolsService = inject(AdminSchoolsService);
+  messageService = inject(MessageService);
 
   form = this.fb.group({
     name: [this.defaultValues?.name || '', [Validators.required]],
@@ -51,20 +66,55 @@ export class AdminSchoolFormComponent {
     password: [this.defaultValues?.password || '', [Validators.required, Validators.minLength(6)]],
   });
 
-  open() {
-    this.visible = true;
-    this.visibleChange.emit(this.visible);
+  editMode = computed(() => Boolean(this.defaultValues));
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['visible'] && changes['visible'].currentValue === true) {
+      this.applyDefaultValues();
+    }
+  }
+
+  private applyDefaultValues() {
+    if (this.defaultValues) {
+      // patch nested groups safely
+      const { name, address, managerInfo, username, password } = this.defaultValues;
+      this.form.patchValue({
+        name: name ?? '',
+        address: {
+          address: address?.address ?? '',
+          postalCode: address?.postalCode ?? '',
+          cityName: address?.cityName ?? '',
+          stateName: address?.stateName ?? '',
+        },
+        managerInfo: {
+          firstName: managerInfo?.firstName ?? '',
+          lastName: managerInfo?.lastName ?? '',
+          mobile: managerInfo?.mobile ?? '',
+          email: managerInfo?.email ?? '',
+        },
+        username: username ?? '',
+        password: password ?? '',
+      });
+    } else {
+      this.form.reset();
+    }
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
 
   close() {
+    this.form.reset();
     this.visible = false;
     this.visibleChange.emit(this.visible);
   }
 
   submit() {
     if (this.form.invalid) return;
-    const payload: ISchoolRequest = this.form.value as ISchoolRequest;
-    this.save.emit(payload);
-    this.close();
+    const payload = this.form.value as ISchoolRequest;
+    this.adminSchoolsService.addSchool(payload).subscribe(() => {
+      this.messageService.add({ severity: 'success', detail: 'مدرسه با موفقیت اضافه شد.' });
+      this.save.emit(payload);
+      this.close();
+    });
   }
 }

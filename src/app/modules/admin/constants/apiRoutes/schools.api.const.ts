@@ -9,5 +9,6 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     activate: () => `${schoolsBaseUrl}/ActivateSchool`,
     deactivate: () => `${schoolsBaseUrl}/DeactivateSchool`,
     single: () => `${schoolsBaseUrl}/GetOne`,
+    add: () => `${schoolsBaseUrl}/AddSchool`,
   };
 };

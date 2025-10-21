@@ -27,6 +27,7 @@
 
 <app-admin-school-form
   [visible]="isAddSchoolFormVisible()"
+  [defaultValues]="selectedSchoolForEdit()"
   (visibleChange)="isAddSchoolFormVisible.set($event)"
   (save)="onSchoolFormSave($event)"
 />

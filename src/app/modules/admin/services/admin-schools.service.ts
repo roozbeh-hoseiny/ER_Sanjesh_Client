@@ -4,7 +4,7 @@ import { ADMIN_API_ROUTES } from '../constants/apiRoutes';
 import { Injectable } from '@angular/core';
 import { paginatedQueryDefaultValues } from '@/core/constants';
 import { IPaginatedResponse } from '@/core/models/service.model';
-import { ISchoolResponse } from '../pages/schools/models/schools';
+import { ISchoolRequest, ISchoolResponse } from '../pages/schools/models/schools';
 
 @Injectable({ providedIn: 'root' })
 export class AdminSchoolsService {
@@ -17,6 +17,10 @@ export class AdminSchoolsService {
       ...paginatedQueryDefaultValues,
       lastSeen,
     });
+  }
+
+  addSchool(data?: ISchoolRequest): Observable<ISchoolResponse> {
+    return this.http.post<ISchoolResponse>(this.apiRoutes.schools.add(), data);
   }
 
   updateSchoolStatus(schoolId: string, isActive: boolean): Observable<any> {

@@ -14,6 +14,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { AdminSchoolFormComponent } from '../components/admin-school-form.component';
 import { Button } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
+import { Maybe } from '@/core';
 
 @Component({
   selector: 'admin-schools',
@@ -49,6 +50,8 @@ export class AdminSchoolsComponent {
   isAddSchoolFormVisible = signal<boolean>(false);
 
   schoolsChangeStatusSchedules = signal<Record<string, boolean>>({});
+
+  selectedSchoolForEdit = signal<Maybe<ISchoolResponse>>(null);
 
   activePageItems = computed(() => {
     const pageIndex = this.activePageIndex();
@@ -112,10 +115,12 @@ export class AdminSchoolsComponent {
   };
 
   openAddSchoolForm() {
+    this.selectedSchoolForEdit.set(null);
     this.isAddSchoolFormVisible.set(true);
   }
 
   openEditForm(item: ISchoolResponse) {
+    this.selectedSchoolForEdit.set(item);
     this.isAddSchoolFormVisible.set(true);
   }
 
@@ -124,8 +129,6 @@ export class AdminSchoolsComponent {
     this.services.updateSchoolStatus(item.id, checked).subscribe(() => {
       const updatedSchedules = { ...this.schoolsChangeStatusSchedules() };
       delete updatedSchedules[item.id];
-      console.log(updatedSchedules);
-
       this.schoolsChangeStatusSchedules.update(() => updatedSchedules);
       item.isActive = checked;
     });
