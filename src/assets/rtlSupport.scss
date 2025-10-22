@@ -2,6 +2,19 @@
   transform: rotate(180deg);
 }
 
+.p-breadcrumb-separator > svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
 .p-datatable-mask {
   display: none !important;
+}
+
+.p-datatable-thead > tr > th {
+  font-size: 0.875rem;
+}
+
+input.p-inputtext {
+  font-size: 0.875rem;
 }

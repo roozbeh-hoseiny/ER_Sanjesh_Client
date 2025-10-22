@@ -19,6 +19,28 @@ export class AdminSchoolsService {
     });
   }
 
+  getSchoolsByName(
+    name: string,
+    lastSeen?: string,
+  ): Observable<IPaginatedResponse<ISchoolResponse>> {
+    return this.http.post<IPaginatedResponse<ISchoolResponse>>(this.apiRoutes.schools.byName(), {
+      ...paginatedQueryDefaultValues,
+      lastSeen,
+      name,
+    });
+  }
+
+  getSchoolsByGender(
+    boyOrGirl: number,
+    lastSeen?: string,
+  ): Observable<IPaginatedResponse<ISchoolResponse>> {
+    return this.http.post<IPaginatedResponse<ISchoolResponse>>(this.apiRoutes.schools.byGender(), {
+      ...paginatedQueryDefaultValues,
+      lastSeen,
+      boyOrGirl,
+    });
+  }
+
   addSchool(data?: ISchoolRequest): Observable<ISchoolResponse> {
     return this.http.post<ISchoolResponse>(this.apiRoutes.schools.add(), data);
   }

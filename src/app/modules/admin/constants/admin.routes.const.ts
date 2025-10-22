@@ -11,7 +11,7 @@ export type AdminRouteNames =
 
 export const adminNamedRoutes: NamedRoutes<AdminRouteNames> = {
   login: {
-    path: '',
+    path: 'login',
     meta: {
       title: 'لاگین',
     },

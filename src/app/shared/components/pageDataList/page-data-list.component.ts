@@ -8,6 +8,8 @@ import {
   Injector,
   inject,
   InjectionToken,
+  ViewChild,
+  ContentChild,
 } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -62,6 +64,9 @@ export class PageDataListComponent<I> {
 
   // injector to be used as parent when creating dynamic components
   private parentInjector = inject(Injector);
+
+  // capture projected template from parent components
+  @ContentChild('filter', { static: true }) filter!: TemplateRef<any> | null;
 
   @Output() onEdit = new EventEmitter<I>();
   @Output() onDelete = new EventEmitter<I>();

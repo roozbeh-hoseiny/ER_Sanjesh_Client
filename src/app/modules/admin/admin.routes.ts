@@ -6,7 +6,7 @@ import { adminNamedRoutes } from './constants';
 
 export const ADMIN_ROUTES: Routes = [
   {
-    path: 'login',
+    path: '',
     children: [adminNamedRoutes.login],
   },
   {

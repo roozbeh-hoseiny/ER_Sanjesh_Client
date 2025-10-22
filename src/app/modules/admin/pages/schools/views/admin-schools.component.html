@@ -5,11 +5,14 @@
   [items]="activePageItems()"
   [loading]="loading()"
   [totalRecords]="totalRecords()"
-  [showEdit]="true"
   (pageChange)="onPageChange($event)"
   (onAdd)="openAddSchoolForm()"
   (onEdit)="openEditForm($event)"
 >
+  <ng-template #filter let-columns>
+    <app-admin-schools-filter (onSearch)="onSearch($event)" (onGenderFilter)="onGenderFilter($event)" />
+  </ng-template>
+
   <ng-template #boyOrGirl let-item>
     <app-school-genders-tag [genderId]="item.boyOrGirl"></app-school-genders-tag>
   </ng-template>

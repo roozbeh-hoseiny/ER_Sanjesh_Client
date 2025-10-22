@@ -19,9 +19,9 @@ export class UikitLabelComponent {
   @Input() className?: string;
 
   private sizeMap: Record<PSize, string> = {
-    small: 'text-sm',
-    normal: 'text-base',
-    large: 'text-lg',
+    small: 'text-xs',
+    normal: 'text-sm',
+    large: 'text-md',
   };
 
   get computedClass(): string {

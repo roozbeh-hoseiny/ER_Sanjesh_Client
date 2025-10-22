@@ -15,6 +15,9 @@ import { AdminSchoolFormComponent } from '../components/admin-school-form.compon
 import { Button } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { Maybe } from '@/core';
+import { AdminSchoolsFilterComponent } from '../components/admin-schools-filter.component';
+
+type TGetDataMode = 'all' | 'search' | 'gender';
 
 @Component({
   selector: 'admin-schools',
@@ -29,6 +32,7 @@ import { Maybe } from '@/core';
     AdminSchoolFormComponent,
     Button,
     FormsModule,
+    AdminSchoolsFilterComponent,
   ],
 })
 export class AdminSchoolsComponent {
@@ -48,10 +52,13 @@ export class AdminSchoolsComponent {
   activePageIndex = signal<number>(0);
 
   isAddSchoolFormVisible = signal<boolean>(false);
-
   schoolsChangeStatusSchedules = signal<Record<string, boolean>>({});
-
   selectedSchoolForEdit = signal<Maybe<ISchoolResponse>>(null);
+
+  getDataMode = signal<TGetDataMode>('all');
+
+  private searchQuery = signal<string>('');
+  private selectedGender = signal<Maybe<number>>(null);
 
   activePageItems = computed(() => {
     const pageIndex = this.activePageIndex();
@@ -59,8 +66,16 @@ export class AdminSchoolsComponent {
     return pages[pageIndex] || [];
   });
 
-  ngOnInit() {
+  constructor() {
     this.breadcrumbService.setItems([adminNamedRoutes.root.meta, adminNamedRoutes.schools.meta]);
+    this.getData();
+  }
+
+  ngOnInit(): void {
+    this.setColumns();
+  }
+
+  private setColumns() {
     this.columns = [
       { field: 'name', header: 'نام مدرسه' },
       { field: 'boyOrGirl', header: 'جنسیت', customDataModel: this.boyOrGirlTpl, width: '10rem' },
@@ -86,21 +101,19 @@ export class AdminSchoolsComponent {
         width: '8rem',
       },
     ];
-    this.getData();
   }
 
-  getData() {
+  private getData() {
     this.loading.set(true);
-    this.services.getSchools(this.lastSeen()).subscribe((schools) => {
-      if (!this.paginatedItems.length) {
-        this.totalRecords.set(schools.totalCount);
-      }
-      this.paginatedItems.update((prev) => {
-        return [...prev, schools.items];
-      });
-      this.lastSeen.set(schools.lastSeen || '');
-      this.loading.set(false);
-    });
+
+    switch (this.getDataMode()) {
+      case 'search':
+        return this.getByName();
+      case 'gender':
+        return this.getByGender();
+      default:
+        return this.getAll();
+    }
   }
 
   onPageChange = (event: any) => {
@@ -135,4 +148,92 @@ export class AdminSchoolsComponent {
   }
 
   onSchoolFormSave($event: any) {}
+
+  onSearch(search: string) {
+    if (!search) {
+      this.changeGetDataMode('all');
+      return this.getData();
+    }
+    if (this.getDataMode() !== 'search') {
+      this.changeGetDataMode('search');
+    }
+    if (this.searchQuery() !== search) {
+      this.resetPaginateInfo();
+      this.searchQuery.set(search);
+    }
+    this.getByName();
+  }
+
+  onGenderFilter(genderType: number) {
+    if (!genderType) {
+      this.changeGetDataMode('all');
+      return this.getData();
+    }
+    if (this.getDataMode() !== 'gender') {
+      this.changeGetDataMode('gender');
+    }
+    if (this.selectedGender() !== genderType) {
+      this.resetPaginateInfo();
+      this.selectedGender.set(genderType);
+    }
+    this.getByGender();
+  }
+
+  private changeGetDataMode(mode: TGetDataMode) {
+    this.getDataMode.set(mode);
+    this.resetPaginateInfo();
+  }
+
+  private resetPaginateInfo() {
+    this.lastSeen.set('');
+    this.paginatedItems.set([]);
+    this.totalRecords.set(0);
+    this.activePageIndex.set(0);
+  }
+
+  private getAll() {
+    this.services.getSchools(this.lastSeen()).subscribe((schools) => {
+      if (!this.paginatedItems.length) {
+        this.totalRecords.set(schools.totalCount);
+      }
+      this.paginatedItems.update((prev) => {
+        return [...prev, schools.items];
+      });
+      this.lastSeen.set(schools.lastSeen || '');
+      this.loading.set(false);
+    });
+  }
+
+  private getByName() {
+    this.loading.set(true);
+    this.services.getSchoolsByName(this.searchQuery(), this.lastSeen()).subscribe((schools) => {
+      if (!this.paginatedItems.length) {
+        this.totalRecords.set(schools.totalCount);
+      }
+      this.paginatedItems.update((prev) => {
+        return [...prev, schools.items];
+      });
+      this.lastSeen.set(schools.lastSeen || '');
+      this.loading.set(false);
+    });
+  }
+
+  private getByGender() {
+    this.loading.set(true);
+    if (!this.selectedGender()) {
+      return;
+    }
+    this.services
+      .getSchoolsByGender(this.selectedGender()!, this.lastSeen())
+      .subscribe((schools) => {
+        if (!this.paginatedItems.length) {
+          this.totalRecords.set(schools.totalCount);
+        }
+        this.paginatedItems.update((prev) => {
+          return [...prev, schools.items];
+        });
+        this.lastSeen.set(schools.lastSeen || '');
+        this.loading.set(false);
+      });
+  }
 }

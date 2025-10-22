@@ -4,8 +4,7 @@ html {
   font-family: "Vazirmatn";
 }
 
-span,
-p {
+body {
   font-size: 14px;
 }
 
@@ -58,4 +57,8 @@ p {
   &:last-child {
     margin-bottom: 0;
   }
+}
+
+.p-button-label {
+  font-size: 0.875rem;
 }

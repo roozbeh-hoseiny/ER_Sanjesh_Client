@@ -1,9 +1,17 @@
 <div class="grow flex flex-col gap-4">
   <p-table [columns]="columns" [value]="items" [loading]="loading" stripedRows [showFirstLastIcon]="false" class="grow">
     <ng-template pTemplate="caption">
-      <div class="flex justify-between items-center mb-5">
-        <h4>{{ pageTitle }}</h4>
-        <p-button label="{{ addNewCtaLabel }}" icon="pi pi-plus" (click)="openAddForm()"></p-button>
+      <div class="mb-4">
+        <div class="flex justify-between items-center">
+          <h5 class="font-bold">{{ pageTitle }}</h5>
+          <p-button label="{{ addNewCtaLabel }}" icon="pi pi-plus" (click)="openAddForm()"></p-button>
+        </div>
+        @if (filter) {
+          <div class="mt-3">
+            <ng-container [ngTemplateOutlet]="filter" [ngTemplateOutletContext]="{ $implicit: columns }">
+            </ng-container>
+          </div>
+        }
       </div>
     </ng-template>
 
@@ -13,7 +21,7 @@
           <th [style]="{ width: col.width }">{{ col.header }}</th>
         }
         @if (showDelete || showEdit) {
-          <th type="th" class="w-[6.75rem]"></th>
+          <th type="th" class="w-[5rem]"></th>
         }
       </tr>
     </ng-template>

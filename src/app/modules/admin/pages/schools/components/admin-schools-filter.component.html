@@ -1,0 +1,19 @@
+<div class="flex items-center gap-4">
+  <p-inputgroup class="max-w-xs w-full">
+    <input pInputText [(ngModel)]="search" placeholder="جستجوی نام مدرسه" (ngModelChange)="onFilterChange($event)" />
+    <p-inputgroup-addon>
+      <p-button icon="pi pi-times" severity="secondary" (onClick)="clearSearch()"></p-button>
+    </p-inputgroup-addon>
+  </p-inputgroup>
+
+  <div class="flex items-center gap-3">
+    @for (item of schoolGenders; track item.id) {
+      <p-button
+        [label]="item.title"
+        [severity]="item.color"
+        [outlined]="selectedGender() !== item.id"
+        (onClick)="onGenderChange(item.id)"
+      ></p-button>
+    }
+  </div>
+</div>
