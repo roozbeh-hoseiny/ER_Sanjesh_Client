@@ -3,7 +3,7 @@ import { adminNamedRoutes } from '@/modules/admin/constants';
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { EducationLevelsService } from '@/shared/cataloge/MDM/educationalLevels/educationLevels.service';
+import { EducationLevelsService } from '@/shared/catalog/MDM/educationalLevels/educationLevels.service';
 import {
   IColumn,
   PageDataListComponent,

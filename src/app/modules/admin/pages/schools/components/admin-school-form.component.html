@@ -18,16 +18,10 @@
           <uikit-field label="آدرس" for="address">
             <textarea pTextarea formControlName="address" rows="2"></textarea>
           </uikit-field>
-          <div class="grid grid-cols-2 gap-4">
-            <uikit-field label="شهر" for="cityName">
-              <input pInputText formControlName="cityName" />
-            </uikit-field>
-            <div>
-              <uikit-field label="استان" for="cityName">
-                <input pInputText formControlName="stateName" />
-              </uikit-field>
-            </div>
-          </div>
+          <app-states-select
+            [stateFormControlName]="addressStateControl"
+            [cityFormControlName]="addressCityControl"
+          ></app-states-select>
         </div>
       </div>
       <p-divider align="center"> مدیریت </p-divider>

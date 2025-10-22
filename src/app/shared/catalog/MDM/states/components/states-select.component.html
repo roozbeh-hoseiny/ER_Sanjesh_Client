@@ -1,0 +1,22 @@
+<div class="grid grid-cols-2 gap-4">
+  <uikit-field label="استان" for="state">
+    <p-select
+      formControlName="state"
+      [options]="states() || []"
+      optionLabel="title"
+      optionValue="id"
+      [loading]="getStatesLoading()"
+      (onChange)="onStateSelect($event.value)"
+    />
+  </uikit-field>
+  <uikit-field label="شهر" for="city">
+    <p-select
+      formControlName="city"
+      optionLabel="title"
+      optionValue="id"
+      [options]="cities() || []"
+      [loading]="getStatesLoading()"
+      [disabled]="!selectedStateId()"
+    />
+  </uikit-field>
+</div>

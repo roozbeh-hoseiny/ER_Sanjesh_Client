@@ -8,7 +8,7 @@ import {
   computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
@@ -20,6 +20,7 @@ import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Maybe } from '@/core';
 import { AdminSchoolsService } from '@/modules/admin/services';
 import { MessageService } from 'primeng/api';
+import { StatesSelectComponent } from '@/shared/catalog';
 
 @Component({
   selector: 'app-admin-school-form',
@@ -33,6 +34,7 @@ import { MessageService } from 'primeng/api';
     TextareaModule,
     UikitFieldComponent,
     DividerModule,
+    StatesSelectComponent,
   ],
   templateUrl: './admin-school-form.component.html',
 })
@@ -64,6 +66,15 @@ export class AdminSchoolFormComponent {
     username: [this.defaultValues?.username || '', [Validators.required]],
     password: [this.defaultValues?.password || '', [Validators.required, Validators.minLength(6)]],
   });
+
+  // typed accessors for template bindings
+  get addressStateControl(): FormControl<Maybe<number>> {
+    return this.form.get('address.stateName') as FormControl<Maybe<number>>;
+  }
+
+  get addressCityControl(): FormControl<Maybe<number>> {
+    return this.form.get('address.cityName') as FormControl<Maybe<number>>;
+  }
 
   editMode = computed(() => Boolean(this.defaultValues));
 

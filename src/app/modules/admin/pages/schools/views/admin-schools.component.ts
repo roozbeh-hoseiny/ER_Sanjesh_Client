@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal, ViewChild, TemplateRef } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AdminSchoolsService } from '../../../services';
-import { SchoolGendersTag } from '@/shared/cataloge/schoolsGender/app-school-genders-tag.component';
+import { SchoolGendersTag } from '@/shared/catalog/schoolsGender/app-school-genders-tag.component';
 import {
   IColumn,
   PageDataListComponent,

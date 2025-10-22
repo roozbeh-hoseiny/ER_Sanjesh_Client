@@ -30,15 +30,9 @@ export class AdminMdmStatesComponent {
 
   ngOnInit(): void {
     this.breadcrumbService.setItems([
-      {
-        ...adminNamedRoutes.root.meta,
-      },
-      {
-        ...adminNamedRoutes.mdm.meta,
-      },
-      {
-        ...adminNamedRoutes.mdmRegions.meta,
-      },
+      adminNamedRoutes.root.meta,
+      adminNamedRoutes.mdm.meta,
+      adminNamedRoutes.mdmRegions.meta,
     ]);
 
     this.loading.set(true);

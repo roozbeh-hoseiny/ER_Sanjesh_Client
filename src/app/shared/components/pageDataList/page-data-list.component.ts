@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
-import { SchoolGendersTag } from '@/shared/cataloge/schoolsGender/app-school-genders-tag.component';
+import { SchoolGendersTag } from '@/shared/catalog/schoolsGender/app-school-genders-tag.component';
 import { TableActionRowComponent } from '../table-action-row.component';
 import { UikitEmptyStateComponent } from '@/uikit';
 import { TableModule } from 'primeng/table';

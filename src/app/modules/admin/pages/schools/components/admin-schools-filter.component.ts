@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { Button } from 'primeng/button';
-import { schoolGenders } from '@/shared/cataloge/schoolsGender';
+import { schoolGenders } from '@/shared/catalog/schoolsGender';
 import { Maybe } from '@/core';
 
 @Component({
