@@ -50,6 +50,7 @@ export class AdminSchoolsComponent {
   loading = signal<boolean>(true);
   lastSeen = signal<string>('');
   activePageIndex = signal<number>(0);
+  perPage = signal<number>(10);
 
   isAddSchoolFormVisible = signal<boolean>(false);
   schoolsChangeStatusSchedules = signal<Record<string, boolean>>({});
@@ -78,6 +79,11 @@ export class AdminSchoolsComponent {
   private setColumns() {
     this.columns = [
       { field: 'name', header: 'نام مدرسه' },
+      {
+        field: 'uniqueId',
+        header: 'شناسه',
+        width: '5rem',
+      },
       { field: 'boyOrGirl', header: 'جنسیت', customDataModel: this.boyOrGirlTpl, width: '10rem' },
       {
         field: 'state',
@@ -116,10 +122,8 @@ export class AdminSchoolsComponent {
     }
   }
 
-  onPageChange = (event: any) => {
-    const page = event.page;
-
-    this.activePageIndex.set(page);
+  onPageChange = (page: number) => {
+    this.activePageIndex.set(page - 1);
     if (this.paginatedItems().length > page) {
       return;
     }

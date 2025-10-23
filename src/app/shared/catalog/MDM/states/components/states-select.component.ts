@@ -31,12 +31,16 @@ export class StatesSelectComponent {
     });
   }
 
-  onStateSelect = (state: IStateResponse) => {
+  onStateSelect = (state: any) => {
     this.selectedStateId.set(state.id);
     this.stateFormControlName.setValue(state.id);
     if (this.cityFormControlName) {
       this.cityFormControlName.setValue(null);
     }
     this.cities.set(state.children);
+  };
+
+  onCitySelect = (city: ICity) => {
+    this.cityFormControlName?.setValue(city.id);
   };
 }

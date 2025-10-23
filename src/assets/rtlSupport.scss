@@ -18,3 +18,10 @@
 input.p-inputtext {
   font-size: 0.875rem;
 }
+
+.p-datatable-header {
+  flex-shrink: 0;
+}
+.p-datatable-table-container {
+  flex-grow: 1;
+}

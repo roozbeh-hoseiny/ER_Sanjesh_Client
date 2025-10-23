@@ -8,14 +8,15 @@ import {
   Injector,
   inject,
   InjectionToken,
-  ViewChild,
   ContentChild,
+  computed,
+  signal,
 } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { SchoolGendersTag } from '@/shared/catalog/schoolsGender/app-school-genders-tag.component';
 import { TableActionRowComponent } from '../table-action-row.component';
-import { UikitEmptyStateComponent } from '@/uikit';
+import { PaginatorComponent, UikitEmptyStateComponent } from '@/uikit';
 import { TableModule } from 'primeng/table';
 import { SkeletonModule } from 'primeng/skeleton';
 import { PaginatorModule } from 'primeng/paginator';
@@ -27,10 +28,9 @@ export interface IColumn {
   customDataModel?: TemplateRef<any> | ((item: any) => string | number | boolean);
 }
 
-export const ROW_ITEM = new InjectionToken<any>('ROW_ITEM');
-
 @Component({
   selector: 'app-page-data-list',
+  exportAs: '',
   templateUrl: './page-data-list.component.html',
   imports: [
     CommonModule,
@@ -41,6 +41,7 @@ export const ROW_ITEM = new InjectionToken<any>('ROW_ITEM');
     SkeletonModule,
     PaginatorModule,
     SchoolGendersTag,
+    PaginatorComponent,
   ],
 })
 export class PageDataListComponent<I> {
@@ -54,26 +55,17 @@ export class PageDataListComponent<I> {
   @Input() emptyPlaceholderCtaLabel?: string = 'افزودن نمونه‌ی جدید';
   @Input() totalRecords!: number;
   @Input() perPage?: number = 10;
+  @Input() currentPage?: number = 1;
   @Input() showEdit: boolean = false;
   @Input() showDelete: boolean = false;
   @Input() lazy: boolean = false;
-  // customDataModels may contain TemplateRef (full template), a function (formatter) or a plain string
-  @Input() customDataModels?: Record<string, TemplateRef<any> | ((item: any) => any) | string>;
-  // allow passing a component class to render for a specific field
-  @Input() componentDataModels?: Record<string, Type<any>>;
 
-  // injector to be used as parent when creating dynamic components
-  private parentInjector = inject(Injector);
-
-  // capture projected template from parent components
   @ContentChild('filter', { static: true }) filter!: TemplateRef<any> | null;
 
   @Output() onEdit = new EventEmitter<I>();
   @Output() onDelete = new EventEmitter<I>();
   @Output() onAdd = new EventEmitter<void>();
   @Output() pageChange = new EventEmitter<any>();
-
-  constructor() {}
 
   edit = (item: I) => {
     this.onEdit.emit(item);
@@ -88,7 +80,7 @@ export class PageDataListComponent<I> {
     this.pageChange.emit($event);
   };
 
-  get showPaginator(): boolean {
+  get showPaginator() {
     return !!(this.totalRecords && this.perPage && this.totalRecords > this.perPage);
   }
 
@@ -129,13 +121,5 @@ export class PageDataListComponent<I> {
     }
     if (typeof v === 'string') return v;
     return null;
-  }
-
-  // create an injector that provides the current row item under the token 'rowItem'
-  createRowInjector(item: any): Injector {
-    return Injector.create({
-      providers: [{ provide: ROW_ITEM, useValue: item }],
-      parent: this.parentInjector,
-    });
   }
 }

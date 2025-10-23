@@ -1,5 +1,4 @@
-import { Component, Input, signal, inject, OnInit } from '@angular/core';
-import { ROW_ITEM } from '@/shared/components/pageDataList/page-data-list.component';
+import { Component, Input, signal, OnInit } from '@angular/core';
 import { schoolGenders } from './schoolGenders.const';
 import { TagModule } from 'primeng/tag';
 import { ISchoolGender } from './schoolsGender';

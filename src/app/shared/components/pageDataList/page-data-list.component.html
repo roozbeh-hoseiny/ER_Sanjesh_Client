@@ -1,5 +1,14 @@
-<div class="grow flex flex-col gap-4">
-  <p-table [columns]="columns" [value]="items" [loading]="loading" stripedRows [showFirstLastIcon]="false" class="grow">
+<div class="h-full flex flex-col gap-4">
+  <p-table
+    [columns]="columns"
+    [scrollable]="true"
+    [value]="items"
+    [loading]="loading"
+    columnResizeMode="fit"
+    stripedRows
+    [showFirstLastIcon]="false"
+    class="grow !flex flex-col overflow-hidden"
+  >
     <ng-template pTemplate="caption">
       <div class="mb-4">
         <div class="flex justify-between items-center">
@@ -85,14 +94,12 @@
     </ng-template>
   </p-table>
   @if (showPaginator) {
-    <div class="flex items-center justify-center p-10">
-      <p-paginator
-        (onPageChange)="onPage($event)"
-        [rows]="10"
-        [totalRecords]="totalRecords"
-        [showFirstLastIcon]="false"
-      />
-    </div>
+    <app-paginator
+      [currentPage]="currentPage || 1"
+      [totalRecords]="totalRecords"
+      [perPage]="perPage || 10"
+      (onChange)="onPage($event)"
+    />
   }
 </div>
 

@@ -84,7 +84,7 @@ export class CaptchaService {
   private startTtlTimer(seconds: number) {
     this.clearTtlTimer();
     this.ttlTimerSub = timer(seconds * 1000).subscribe(() => {
-      this._captchaId.set(null);
+      this.requestNewCaptcha();
       this.ttlTimerSub = null;
     });
   }

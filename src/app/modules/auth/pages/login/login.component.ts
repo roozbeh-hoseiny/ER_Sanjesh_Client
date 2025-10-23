@@ -82,6 +82,7 @@ export class LoginComponent {
           this.router.navigateByUrl(this.redirectUrl);
         },
         error: (error) => {
+          this.resetCaptcha();
           this.errorMessage.set('نام کاربری یا رمز عبور اشتباه است');
           console.error('Login failed:', error);
         },
