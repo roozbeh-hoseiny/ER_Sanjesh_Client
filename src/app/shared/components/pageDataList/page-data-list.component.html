@@ -12,17 +12,23 @@
     <ng-template pTemplate="caption">
       <div class="flex justify-between items-center gap-4">
         <h5 class="font-bold">{{ pageTitle }}</h5>
-        <div class="flex items-center gap-2">
-          <p-button
-            label="فیلتر"
-            icon="pi pi-filter"
-            variant="outlined"
-            badgeSeverity="info"
-            [badge]="isFiltered ? '1' : undefined"
-            (click)="openFilter()"
-          ></p-button>
-          <p-button label="{{ addNewCtaLabel }}" icon="pi pi-plus" (click)="openAddForm()"></p-button>
-        </div>
+        @if (showAdd || filter) {
+          <div class="flex items-center gap-2">
+            @if (filter) {
+              <p-button
+                label="فیلتر"
+                icon="pi pi-filter"
+                variant="outlined"
+                badgeSeverity="info"
+                [badge]="isFiltered ? '1' : undefined"
+                (click)="openFilter()"
+              ></p-button>
+            }
+            @if (showAdd) {
+              <p-button label="{{ addNewCtaLabel }}" icon="pi pi-plus" (click)="openAddForm()"></p-button>
+            }
+          </div>
+        }
       </div>
     </ng-template>
 

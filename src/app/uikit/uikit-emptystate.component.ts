@@ -25,6 +25,7 @@ export class UikitEmptyStateComponent implements AfterContentInit {
   @Input() description?: string;
   @Input() icon: string = 'pi pi-database';
   @Input() ctaLabel?: string;
+
   @Output() ctaClick = new EventEmitter<void>();
 
   ngAfterContentInit() {

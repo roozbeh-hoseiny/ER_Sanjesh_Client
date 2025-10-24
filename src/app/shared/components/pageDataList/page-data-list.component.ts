@@ -53,6 +53,7 @@ export class PageDataListComponent<I> {
   @Input() currentPage?: number = 1;
   @Input() showEdit: boolean = false;
   @Input() showDelete: boolean = false;
+  @Input() showAdd: boolean = false;
   @Input() isFiltered: boolean = false;
 
   @ContentChild('filter', { static: true }) filter!: TemplateRef<any> | null;

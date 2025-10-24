@@ -2,7 +2,7 @@
   <p-message severity="info" icon="pi pi-info-circle" class="mb-5">
     یکی از فیلتر‌ها در لحظه قابل انتخاب هستند
   </p-message>
-  <uikit-field label="جستجو نام مدرسه" for="search" class="w-full">
+  <uikit-field label="بر اساس نام مدرسه" for="search" class="w-full">
     <p-inputgroup class="w-full">
       <input pInputText [(ngModel)]="search" placeholder="جستجوی نام مدرسه" (ngModelChange)="onFilterChange($event)" />
       <p-inputgroup-addon>
@@ -14,7 +14,7 @@
   <hr />
 
   <div class="flex flex-col gap-3">
-    <uikit-label> جنسیت مدرسه </uikit-label>
+    <uikit-label> بر اساس جنسیت </uikit-label>
     <div class="flex items-center gap-3">
       @for (item of schoolGenders; track item.id) {
         <p-button
