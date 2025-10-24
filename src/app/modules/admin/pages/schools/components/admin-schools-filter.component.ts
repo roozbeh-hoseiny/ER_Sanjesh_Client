@@ -1,11 +1,14 @@
+import { Maybe } from '@/core';
+import { schoolGenders } from '@/shared/catalog/schoolsGender';
+import { UikitLabelComponent } from '@/uikit';
+import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Component, EventEmitter, Output, signal } from '@angular/core';
-import { InputText, InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
+import { Button } from 'primeng/button';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { Button } from 'primeng/button';
-import { schoolGenders } from '@/shared/catalog/schoolsGender';
-import { Maybe } from '@/core';
+import { InputText, InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-admin-schools-filter',
@@ -17,6 +20,9 @@ import { Maybe } from '@/core';
     InputGroupModule,
     InputGroupAddonModule,
     Button,
+    UikitFieldComponent,
+    UikitLabelComponent,
+    MessageModule,
   ],
 })
 export class AdminSchoolsFilterComponent {

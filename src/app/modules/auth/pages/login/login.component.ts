@@ -1,18 +1,18 @@
 import { AuthService } from '@/core';
-import { CaptchaService } from 'src/app/core/services/captcha.service';
+import { LoginCredentials } from '@/core/models';
+import { UikitLabelComponent } from '@/uikit';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Button } from 'primeng/button';
 import { Checkbox } from 'primeng/checkbox';
+import { ImageModule } from 'primeng/image';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
-import { ImageModule } from 'primeng/image';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CaptchaService } from 'src/app/core/services/captcha.service';
 import images from 'src/assets/images';
-import { LoginCredentials } from '@/core/models';
-import { UikitLabelComponent } from '@/uikit';
 
 @Component({
   selector: 'app-login',
@@ -40,7 +40,7 @@ export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly captchaService = inject(CaptchaService);
 
-  readonly isLoading = this.authService.isLoading;
+  readonly isLoading = this.authService.isLoading();
   readonly errorMessage = signal<string>('');
   readonly hidePassword = signal<boolean>(true);
   readonly isCaptchaExpired = this.captchaService.captchaIsExpired;
@@ -65,6 +65,7 @@ export class LoginComponent {
   }
 
   resetCaptcha(): void {
+    this.fb.control('captcha').setValue('');
     this.captchaService.requestNewCaptcha();
   }
 
@@ -73,6 +74,8 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
+    console.log('first');
+
     if (this.loginForm.valid && !!this.captchaService.captchaId()) {
       const credentials: LoginCredentials = this.loginForm.value as LoginCredentials;
 

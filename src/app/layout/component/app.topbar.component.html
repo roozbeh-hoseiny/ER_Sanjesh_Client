@@ -5,7 +5,7 @@
     </button>
     <a class="layout-topbar-logo" routerLink="/">
       <img [src]="logo" width="32" />
-      <span>مرکز آزمون آنلاین سنجش</span>
+      <span class="text-xl">مرکز آزمون آنلاین سنجش</span>
     </a>
   </div>
 
@@ -13,9 +13,10 @@
     <div class="layout-config-menu">
       <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
         <i
-          [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
+          [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"
+        ></i>
       </button>
-      <div class="relative">
+      <!-- <div class="relative">
         <button
           class="layout-topbar-action layout-topbar-action-highlight"
           pStyleClass="@next"
@@ -23,11 +24,12 @@
           enterActiveClass="animate-scalein"
           leaveToClass="hidden"
           leaveActiveClass="animate-fadeout"
-          [hideOnOutsideClick]="true">
+          [hideOnOutsideClick]="true"
+        >
           <i class="pi pi-palette"></i>
         </button>
         <app-configurator></app-configurator>
-      </div>
+      </div> -->
     </div>
 
     <button
@@ -37,19 +39,16 @@
       enterActiveClass="animate-scalein"
       leaveToClass="hidden"
       leaveActiveClass="animate-fadeout"
-      [hideOnOutsideClick]="true">
+      [hideOnOutsideClick]="true"
+    >
       <i class="pi pi-ellipsis-v"></i>
     </button>
 
     <div class="layout-topbar-menu hidden lg:block">
       <div class="layout-topbar-menu-content">
         <button type="button" class="layout-topbar-action">
-          <i class="pi pi-inbox"></i>
-          <span>Messages</span>
-        </button>
-        <button type="button" class="layout-topbar-action">
           <i class="pi pi-user"></i>
-          <span>Profile</span>
+          <span>پروفایل</span>
         </button>
       </div>
     </div>

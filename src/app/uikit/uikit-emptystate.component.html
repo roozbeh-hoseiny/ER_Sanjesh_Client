@@ -8,7 +8,7 @@
   }
   <ng-content select="[cta]" #cta class="mt-4"></ng-content>
   @if (!hasCtaContent && ctaLabel) {
-    <p-button class="mt-8" size="small" (click)="ctaClick.emit()">
+    <p-button class="mt-2" size="small" (click)="ctaClick.emit()">
       {{ ctaLabel }}
       <i class="pi pi-plus" pButtonIcon></i>
     </p-button>

@@ -1,36 +1,31 @@
+import { PaginatorComponent, UikitEmptyStateComponent } from '@/uikit';
+import { CommonModule } from '@angular/common';
 import {
   Component,
+  ContentChild,
   EventEmitter,
   Input,
   Output,
-  TemplateRef,
-  Type,
-  Injector,
-  inject,
-  InjectionToken,
-  ContentChild,
-  computed,
   signal,
+  TemplateRef,
 } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { CommonModule } from '@angular/common';
-import { SchoolGendersTag } from '@/shared/catalog/schoolsGender/app-school-genders-tag.component';
-import { TableActionRowComponent } from '../table-action-row.component';
-import { PaginatorComponent, UikitEmptyStateComponent } from '@/uikit';
-import { TableModule } from 'primeng/table';
-import { SkeletonModule } from 'primeng/skeleton';
+import { DrawerModule } from 'primeng/drawer';
 import { PaginatorModule } from 'primeng/paginator';
+import { SkeletonModule } from 'primeng/skeleton';
+import { TableModule } from 'primeng/table';
+import { TableActionRowComponent } from '../table-action-row.component';
 
 export interface IColumn {
   field: string;
   header: string;
   width?: string;
+  minWidth?: string;
   customDataModel?: TemplateRef<any> | ((item: any) => string | number | boolean);
 }
 
 @Component({
   selector: 'app-page-data-list',
-  exportAs: '',
   templateUrl: './page-data-list.component.html',
   imports: [
     CommonModule,
@@ -40,7 +35,7 @@ export interface IColumn {
     ButtonModule,
     SkeletonModule,
     PaginatorModule,
-    SchoolGendersTag,
+    DrawerModule,
     PaginatorComponent,
   ],
 })
@@ -58,7 +53,7 @@ export class PageDataListComponent<I> {
   @Input() currentPage?: number = 1;
   @Input() showEdit: boolean = false;
   @Input() showDelete: boolean = false;
-  @Input() lazy: boolean = false;
+  @Input() isFiltered: boolean = false;
 
   @ContentChild('filter', { static: true }) filter!: TemplateRef<any> | null;
 
@@ -67,15 +62,28 @@ export class PageDataListComponent<I> {
   @Output() onAdd = new EventEmitter<void>();
   @Output() pageChange = new EventEmitter<any>();
 
+  filterDrawerVisible = signal<boolean>(false);
+
   edit = (item: I) => {
     this.onEdit.emit(item);
   };
+
   remove = (item: I) => {
     this.onDelete.emit(item);
   };
+
   openAddForm = () => {
     this.onAdd.emit();
   };
+
+  openFilter = () => {
+    this.filterDrawerVisible.set(true);
+  };
+
+  closeFilter = () => {
+    this.filterDrawerVisible.set(false);
+  };
+
   onPage = ($event: any) => {
     this.pageChange.emit($event);
   };
@@ -88,7 +96,9 @@ export class PageDataListComponent<I> {
     if (!item || !column) return '';
     try {
       const { field } = column;
-      if (column.customDataModel) return this.renderCustom(column, item);
+      if (column.customDataModel) {
+        return this.renderCustom(column, item);
+      }
       const data = item[field];
       if (data === undefined || data === null) {
         return '-';
@@ -96,9 +106,9 @@ export class PageDataListComponent<I> {
       if (typeof data === 'object') {
         return data.title || '-';
       }
-      return data;
+      return data || '-';
     } catch (e) {
-      return '';
+      return '-';
     }
   }
 
@@ -111,12 +121,14 @@ export class PageDataListComponent<I> {
   renderCustom(column: IColumn, item: any): any {
     const v = column.customDataModel;
 
-    if (!v) return null;
+    if (!v) {
+      return null;
+    }
     if (typeof v === 'function') {
       try {
         return (v as (item: any) => any)(item);
       } catch {
-        return '';
+        return '-';
       }
     }
     if (typeof v === 'string') return v;

@@ -1,26 +1,13 @@
 import { NamedRoutes } from '@/core';
-import { adminSchoolNamedRoutes, type TAdminSchoolsRouteNames } from './routes/schools.const';
 import { adminMDMNamedRoutes, TAdminMDMRouteNames } from './routes';
+import { adminSchoolNamedRoutes, type TAdminSchoolsRouteNames } from './routes/schools.const';
 
-export type AdminRouteNames =
-  | 'root'
-  | 'login'
-  | 'users'
-  | TAdminSchoolsRouteNames
-  | TAdminMDMRouteNames;
+export type AdminRouteNames = 'root' | 'users' | TAdminSchoolsRouteNames | TAdminMDMRouteNames;
 
 export const adminNamedRoutes: NamedRoutes<AdminRouteNames> = {
-  login: {
-    path: 'login',
-    meta: {
-      title: 'لاگین',
-    },
-    loadComponent: () =>
-      import('../pages/login/admin-login.component').then((m) => m.AdminLoginComponent),
-  },
   root: {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: adminSchoolNamedRoutes.schools.path,
     pathMatch: 'full',
     meta: {
       title: 'داشبورد',

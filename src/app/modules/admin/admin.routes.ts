@@ -7,13 +7,17 @@ import { adminNamedRoutes } from './constants';
 export const ADMIN_ROUTES: Routes = [
   {
     path: '',
-    children: [adminNamedRoutes.login],
-  },
-  {
-    path: '',
     component: AdminLayoutComponent,
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: [UserRole.ADMIN] },
     children: Object.values(adminNamedRoutes),
+  },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./pages/login/admin-login.component').then((m) => m.AdminLoginComponent),
+    // meta: {
+    //   title: 'لاگین',
+    // },
   },
 ];

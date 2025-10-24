@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
 import { UikitLabelComponent } from './uikit-label.component';
 
 type PSize = 'small' | 'normal' | 'large';

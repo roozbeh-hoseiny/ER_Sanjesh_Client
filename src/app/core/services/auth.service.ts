@@ -10,6 +10,12 @@ import { CaptchaService } from './captcha.service';
   providedIn: 'root',
 })
 export class AuthService {
+  constructor() {
+    console.log('initializing auth service');
+    this.initializeAuth();
+    console.log('initialized');
+  }
+
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
   private captchaService = inject(CaptchaService);
@@ -37,15 +43,15 @@ export class AuthService {
   });
   readonly isLoading = signal<boolean>(false);
   readonly token = signal<Maybe<string>>(null);
-  readonly isAuthenticated = computed(() => Boolean(this.token));
+  readonly isAuthenticated = computed(() => {
+    console.log('computed');
+    return Boolean(this.token());
+  });
   readonly userRole = computed(() => this.currentUser()?.role);
-
-  constructor() {
-    this.initializeAuth();
-  }
 
   private initializeAuth(): void {
     const token = localStorage.getItem('auth_token');
+    this.token.set(token);
     // const userData = localStorage.getItem('user_data');
     const userData = this.currentUser();
 
@@ -215,17 +221,5 @@ export class AuthService {
   private setCurrentUser(user: Maybe<User>): void {
     this.currentUser.set(user);
     this.currentUserSubject.next(user);
-  }
-
-  private navigateByRole(role: UserRole): void {
-    const roleRoutes = {
-      [UserRole.STUDENT]: '/student',
-      [UserRole.GRADER]: '/grader',
-      [UserRole.ADMIN]: '/admin',
-      [UserRole.PRINCIPAL]: '/principal',
-      [UserRole.SUPERADMIN]: '/superadmin',
-    };
-
-    this.router.navigate([roleRoutes[role]]);
   }
 }

@@ -1,21 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal, ViewChild, TemplateRef } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { AdminSchoolsService } from '../../../services';
+import { Maybe } from '@/core';
+import { BreadcrumbService } from '@/core/services';
+import { adminNamedRoutes } from '@/modules/admin/constants';
 import { SchoolGendersTag } from '@/shared/catalog/schoolsGender/app-school-genders-tag.component';
 import {
   IColumn,
   PageDataListComponent,
 } from '@/shared/components/pageDataList/page-data-list.component';
-import { ISchoolResponse } from '../models/schools';
-import { BreadcrumbService } from '@/core/services';
-import { adminNamedRoutes } from '@/modules/admin/constants';
-import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { AdminSchoolFormComponent } from '../components/admin-school-form.component';
+import { CommonModule } from '@angular/common';
+import { Component, computed, inject, signal, TemplateRef, ViewChild } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Button } from 'primeng/button';
-import { FormsModule } from '@angular/forms';
-import { Maybe } from '@/core';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { AdminSchoolsService } from '../../../services';
+import { AdminSchoolFormComponent } from '../components/admin-school-form.component';
 import { AdminSchoolsFilterComponent } from '../components/admin-schools-filter.component';
+import { ISchoolResponse } from '../models/schools';
 
 type TGetDataMode = 'all' | 'search' | 'gender';
 
@@ -58,6 +57,10 @@ export class AdminSchoolsComponent {
 
   getDataMode = signal<TGetDataMode>('all');
 
+  get isFiltered() {
+    return this.getDataMode() !== 'all';
+  }
+
   private searchQuery = signal<string>('');
   private selectedGender = signal<Maybe<number>>(null);
 
@@ -78,22 +81,32 @@ export class AdminSchoolsComponent {
 
   private setColumns() {
     this.columns = [
-      { field: 'name', header: 'نام مدرسه' },
+      { field: 'name', header: 'نام مدرسه', minWidth: '15rem' },
       {
         field: 'uniqueId',
         header: 'شناسه',
         width: '5rem',
+        minWidth: '5rem',
       },
-      { field: 'boyOrGirl', header: 'جنسیت', customDataModel: this.boyOrGirlTpl, width: '10rem' },
+      {
+        field: 'boyOrGirl',
+        header: 'جنسیت',
+        customDataModel: this.boyOrGirlTpl,
+        width: '10rem',
+        minWidth: '10rem',
+      },
       {
         field: 'state',
         header: 'استان',
         customDataModel: (item: ISchoolResponse) => item?.address?.stateName ?? '-',
-        width: '12rem',
+        width: '8rem',
+        minWidth: '8rem',
       },
       {
         field: 'managerInfo',
         header: 'مدیریت',
+        width: '10rem',
+        minWidth: '10rem',
         customDataModel: (item: ISchoolResponse) => {
           const { firstName, lastName } = item.managerInfo;
           const fullName = [firstName, lastName].filter(Boolean).join(' ');
@@ -104,7 +117,8 @@ export class AdminSchoolsComponent {
         field: 'status',
         header: 'وضعیت',
         customDataModel: this.statusTpl,
-        width: '8rem',
+        width: '6rem',
+        minWidth: '6rem',
       },
     ];
   }
@@ -151,7 +165,9 @@ export class AdminSchoolsComponent {
     });
   }
 
-  onSchoolFormSave($event: any) {}
+  onSchoolFormSave($event: any) {
+    console.log($event);
+  }
 
   onSearch(search: string) {
     if (!search) {

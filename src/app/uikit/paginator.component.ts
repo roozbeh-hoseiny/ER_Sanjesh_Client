@@ -10,6 +10,7 @@ export class PaginatorComponent {
   @Input() totalRecords!: number;
   @Input() currentPage: number = 1;
   @Input() perPage: number = 10;
+  @Input() loading: boolean = false;
   @Output() onChange = new EventEmitter<number>();
 
   totalPages = signal<number>(0);

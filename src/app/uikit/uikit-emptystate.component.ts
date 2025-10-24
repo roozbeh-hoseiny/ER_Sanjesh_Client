@@ -1,11 +1,11 @@
 import {
+  AfterContentInit,
   Component,
+  ContentChild,
+  ElementRef,
+  EventEmitter,
   Input,
   Output,
-  EventEmitter,
-  ContentChild,
-  AfterContentInit,
-  ElementRef,
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -21,7 +21,7 @@ export class UikitEmptyStateComponent implements AfterContentInit {
   @ContentChild('cta', { static: false, read: ElementRef }) ctaContent?: ElementRef;
   hasCtaContent = false;
 
-  @Input() title: string = 'متاسفانه موردی یافت نشد';
+  @Input() title: string = 'متاسفانه موردی یافت نشد.';
   @Input() description?: string;
   @Input() icon: string = 'pi pi-database';
   @Input() ctaLabel?: string;
