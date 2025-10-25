@@ -1,0 +1,13 @@
+<uikit-field label="منطقه" for="state">
+  <p-cascadeselect
+    name="state"
+    [options]="states()"
+    optionLabel="title"
+    optionGroupLabel="title"
+    [showClear]="true"
+    [loading]="getStatesLoading()"
+    [optionGroupChildren]="['children']"
+    (onChange)="onStateSelect($event.value)"
+    appendTo="body"
+  />
+</uikit-field>

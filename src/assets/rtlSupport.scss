@@ -29,3 +29,7 @@ input.p-inputtext {
 .p-datatable-table-container {
   flex-grow: 1;
 }
+
+.p-cascadeselect-option-active > .p-cascadeselect-option-list {
+  inset-inline-start: -100%;
+}

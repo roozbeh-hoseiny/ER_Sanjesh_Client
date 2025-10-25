@@ -1,0 +1,12 @@
+<uikit-field label="رشته تحصیلی" [for]="name">
+  <p-select
+    [name]="name"
+    [(ngModel)]="formControlName.value"
+    [options]="items()"
+    optionLabel="title"
+    placeholder="یکی از رشته‌های تحصیلی را انتخاب کنید"
+    [loading]="loading()"
+    [disabled]="loading()"
+    (onChange)="onSelectItem($event.value)"
+  />
+</uikit-field>

@@ -2,26 +2,26 @@ import { Maybe } from '@/core';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Component, inject, Input, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Select } from 'primeng/select';
-import { ICity, IStateResponse } from '../models';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
+import { TableModule } from 'primeng/table';
 import { StatesService } from '../services';
 
 @Component({
-  selector: 'app-states-select',
-  templateUrl: './states-select.component.html',
-  imports: [UikitFieldComponent, Select],
+  selector: 'app-states-cascade',
+  templateUrl: './states-cascade.component.html',
+  imports: [UikitFieldComponent, CascadeSelectModule, TableModule],
 })
-export class StatesSelectComponent {
+export class StatesCascadeComponent {
   @Input() stateFormControlName!: FormControl<Maybe<number>>;
   @Input() onlyState?: boolean = false;
   @Input() cityFormControlName?: FormControl<Maybe<number>>;
 
   statesService = inject(StatesService);
 
-  states = signal<Maybe<IStateResponse[]>>(null);
+  states = signal<any[]>([]);
   getStatesLoading = signal<boolean>(true);
   selectedStateId = signal<Maybe<number>>(null);
-  cities = signal<Maybe<ICity[]>>(null);
+  cities = signal<Maybe<any[]>>(null);
 
   constructor() {
     this.getStatesLoading.set(true);
@@ -40,7 +40,7 @@ export class StatesSelectComponent {
     this.cities.set(state.children);
   };
 
-  onCitySelect = (city: ICity) => {
+  onCitySelect = (city: any) => {
     this.cityFormControlName?.setValue(city.id);
   };
 }

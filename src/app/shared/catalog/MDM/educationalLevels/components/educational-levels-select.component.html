@@ -1,0 +1,12 @@
+<uikit-field label="پایه تحصیلی" for="educational-level">
+  <p-select
+    name="educational-level"
+    [(ngModel)]="formControlName.value"
+    [options]="educationalLevels()"
+    optionLabel="title"
+    placeholder="یکی از پایه‌های تحصیلی را انتخاب کنید"
+    [loading]="loading()"
+    [disabled]="loading()"
+    (onChange)="onLevelSelect($event)"
+  />
+</uikit-field>

@@ -1,14 +1,1 @@
-<app-page-data-list
-  pageTitle="مدیریت پایه های تحصیلی"
-  [loading]="loading()"
-  [columns]="columns"
-  [items]="educationalLevels()"
-  addNewCtaLabel="افزودن پایه تحصیلی جدید"
-  emptyPlaceholderTitle="هیچ پایه تحصیلی یافت نشد"
-  emptyPlaceholderDescription="برای افزودن پایه تحصیلی جدید، روی دکمه زیر کلیک کنید."
-  emptyPlaceholderCtaLabel="افزودن پایه تحصیلی جدید"
-  (onAdd)="openNewEducationalLevelDialog()"
-  (onEdit)="edit($event)"
-  (onDelete)="remove($event)"
->
-</app-page-data-list>
+<educational-levels-list [canAdd]="true" />

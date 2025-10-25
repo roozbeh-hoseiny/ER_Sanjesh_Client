@@ -1,4 +1,5 @@
 import { Maybe } from '@/core';
+import { StatesCascadeComponent } from '@/shared/catalog';
 import { schoolGenders } from '@/shared/catalog/schoolsGender';
 import { UikitLabelComponent } from '@/uikit';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
@@ -23,6 +24,7 @@ import { MessageModule } from 'primeng/message';
     UikitFieldComponent,
     UikitLabelComponent,
     MessageModule,
+    StatesCascadeComponent,
   ],
 })
 export class AdminSchoolsFilterComponent {

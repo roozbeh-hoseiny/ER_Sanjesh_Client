@@ -7,17 +7,12 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
       {
         label: 'داشبورد',
         icon: 'pi pi-fw pi-home',
-        routerLink: [adminNamedRoutes.root.path],
+        routerLink: '/admin',
       },
       {
         label: 'مدیریت مدارس',
         icon: 'pi pi-fw pi-warehouse',
         routerLink: [adminNamedRoutes.schools.path],
-      },
-      {
-        label: 'مدیریت دانش‌اموزان',
-        icon: 'pi pi-fw pi-users',
-        routerLink: [adminNamedRoutes.users.path],
       },
     ],
   },

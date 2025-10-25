@@ -5,12 +5,11 @@ import { MenuItem } from 'primeng/api';
 import { StyleClassModule } from 'primeng/styleclass';
 import images from 'src/assets/images';
 import { LayoutService } from '../service/layout.service';
-import { AppConfigurator } from './app.configurator.component';
 
 @Component({
   selector: 'app-topbar',
   standalone: true,
-  imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator],
+  imports: [RouterModule, CommonModule, StyleClassModule],
   templateUrl: './app.topbar.component.html',
 })
 export class AppTopbar {

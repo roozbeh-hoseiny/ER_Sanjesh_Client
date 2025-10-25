@@ -1,2 +1,4 @@
 export * from './educationalLevels';
-export * from './states/components';
+export * from './fieldOfStudies';
+export * from './lessons';
+export * from './states';
