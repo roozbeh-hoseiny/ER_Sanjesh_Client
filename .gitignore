@@ -47,3 +47,4 @@ testem.log
 Thumbs.db
 /obj/Debug
 /.vscode
+/obj/*
