@@ -3,14 +3,14 @@ import { Routes } from '@angular/router';
 import { AuthGuard, RoleGuard } from '../../core/guards';
 import { NamedRoutes, UserRole } from '../../core/models';
 
-export type PrincipalRouteNames = 'dashboard';
+export type TSchoolsRouteNames = 'dashboard';
 
-export const principalNamedRoutes: NamedRoutes<PrincipalRouteNames> = {
+export const SchoolsNamedRoutes: NamedRoutes<TSchoolsRouteNames> = {
   dashboard: {
     path: 'dashboard',
     loadComponent: () =>
-      import('./pages/dashboard/principal-dashboard.component').then(
-        (m) => m.PrincipalDashboardComponent,
+      import('./pages/dashboard/schools-dashboard.component').then(
+        (m) => m.SchoolsDashboardComponent,
       ),
     meta: {
       title: 'داشبورد مدیر مدرسه',
@@ -18,15 +18,15 @@ export const principalNamedRoutes: NamedRoutes<PrincipalRouteNames> = {
   },
 };
 
-export const PRINCIPAL_ROUTES: Routes = [
+export const SCHOOLS_ROUTES: Routes = [
   {
     path: '',
     component: AppLayout,
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: [UserRole.PRINCIPAL] },
+    data: { roles: [UserRole.SCHOOLS] },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      principalNamedRoutes.dashboard,
+      SchoolsNamedRoutes.dashboard,
     ],
   },
 ];

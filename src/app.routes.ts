@@ -1,7 +1,7 @@
 import { adminNamedRoutes } from '@/modules/admin/constants';
+import { SchoolsNamedRoutes } from '@/modules/schools/schools.routes';
 import { Routes } from '@angular/router';
 import { graderNamedRoutes } from 'modules/grader/grader.routes';
-import { principalNamedRoutes } from 'modules/principal/principal.routes';
 import { studentNamedRoutes } from 'modules/student/student.routes';
 import { superadminNamedRoutes } from 'modules/superadmin/superadmin.routes';
 
@@ -9,7 +9,7 @@ export const namedRoutes = {
   student: studentNamedRoutes,
   grader: graderNamedRoutes,
   admin: adminNamedRoutes,
-  principal: principalNamedRoutes,
+  principal: SchoolsNamedRoutes,
   superadmin: superadminNamedRoutes,
 };
 
@@ -28,9 +28,8 @@ export const routes: Routes = [
     loadChildren: () => import('modules/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
   {
-    path: 'principal',
-    loadChildren: () =>
-      import('modules/principal/principal.routes').then((m) => m.PRINCIPAL_ROUTES),
+    path: 'schools',
+    loadChildren: () => import('@/modules/schools/schools.routes').then((m) => m.SCHOOLS_ROUTES),
   },
   {
     path: 'superadmin',

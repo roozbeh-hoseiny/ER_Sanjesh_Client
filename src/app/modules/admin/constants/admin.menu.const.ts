@@ -14,6 +14,11 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
         icon: 'pi pi-fw pi-warehouse',
         routerLink: [adminNamedRoutes.schools.path],
       },
+      {
+        label: 'مدیریت دبیران',
+        icon: 'pi pi-fw pi-warehouse',
+        routerLink: [adminNamedRoutes.teachers.path],
+      },
     ],
   },
 

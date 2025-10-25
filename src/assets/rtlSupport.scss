@@ -31,5 +31,5 @@ input.p-inputtext {
 }
 
 .p-cascadeselect-option-active > .p-cascadeselect-option-list {
-  inset-inline-start: -100%;
+  inset-inline-start: -100% !important;
 }
