@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.2752196">
+﻿<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.2752196">
   <PropertyGroup>
     <StartupCommand>npm start</StartupCommand>
     <JavaScriptTestFramework>Jasmine</JavaScriptTestFramework>
@@ -7,4 +7,11 @@
     <!-- Folder where production build objects will be placed -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\er_sanjesh_client.client\browser\</BuildOutputFolder>
   </PropertyGroup>
+  
+  <Target Name="RunNpmInstall" BeforeTargets="Build">
+    <Message Importance="high" Text="Running custom npm install..." />
+    <Exec WorkingDirectory="$(PackageJsonDirectory)" Command="npm install --force">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCodeNpmInstall" />
+    </Exec>
+  </Target>
 </Project>
