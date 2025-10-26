@@ -357,7 +357,7 @@ export class AuthStore extends BaseStore<AuthState> {
       [UserRole.STUDENT]: '/student',
       [UserRole.GRADER]: '/grader',
       [UserRole.ADMIN]: '/admin',
-      [UserRole.PRINCIPAL]: '/principal',
+      [UserRole.SCHOOLS]: '/schools',
       [UserRole.SUPERADMIN]: '/superadmin',
     };
 

@@ -1,5 +1,5 @@
 import { adminNamedRoutes } from '@/modules/admin/constants';
-import { SchoolsNamedRoutes } from '@/modules/schools/schools.routes';
+import { schoolsNamedRoutes } from '@/modules/schools/constants';
 import { Routes } from '@angular/router';
 import { graderNamedRoutes } from 'modules/grader/grader.routes';
 import { studentNamedRoutes } from 'modules/student/student.routes';
@@ -9,7 +9,7 @@ export const namedRoutes = {
   student: studentNamedRoutes,
   grader: graderNamedRoutes,
   admin: adminNamedRoutes,
-  principal: SchoolsNamedRoutes,
+  schools: schoolsNamedRoutes,
   superadmin: superadminNamedRoutes,
 };
 

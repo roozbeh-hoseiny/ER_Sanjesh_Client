@@ -1,32 +1,25 @@
-import { AppLayout } from '@/layout/component/app.layout.component';
 import { Routes } from '@angular/router';
 import { AuthGuard, RoleGuard } from '../../core/guards';
-import { NamedRoutes, UserRole } from '../../core/models';
-
-export type TSchoolsRouteNames = 'dashboard';
-
-export const SchoolsNamedRoutes: NamedRoutes<TSchoolsRouteNames> = {
-  dashboard: {
-    path: 'dashboard',
-    loadComponent: () =>
-      import('./pages/dashboard/schools-dashboard.component').then(
-        (m) => m.SchoolsDashboardComponent,
-      ),
-    meta: {
-      title: 'داشبورد مدیر مدرسه',
-    },
-  },
-};
+import { UserRole } from '../../core/models';
+// import the named route definitions that contain Angular route objects (with loadComponent)
+import { schoolsNamedRoutes } from './constants';
+import { SchoolsLayoutComponent } from './schools-layout.component';
 
 export const SCHOOLS_ROUTES: Routes = [
   {
     path: '',
-    component: AppLayout,
+    component: SchoolsLayoutComponent,
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: [UserRole.SCHOOLS] },
-    children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      SchoolsNamedRoutes.dashboard,
-    ],
+    children: Object.values(schoolsNamedRoutes),
+  },
+
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./pages/login/schools-login.component').then((m) => m.SchoolsLoginComponent),
+    // meta: {
+    //   title: 'لاگین',
+    // },
   },
 ];

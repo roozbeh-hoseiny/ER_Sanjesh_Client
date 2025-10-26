@@ -7,8 +7,9 @@
 >
   <form (ngSubmit)="submit()" [formGroup]="form" class="grid grid-cols-1 gap-4">
     <div class="grid grid-cols-2 gap-4">
-      <uikit-field label="نام مدرسه" for="name">
-        <input pInputText formControlName="name" />
+      <uikit-field label="نام مدرسه" for="name" [invalid]="form.get('name')?.invalid && form.get('name')?.touched">
+        <input pInputText formControlName="name" required />
+        {{ form.errors }}
       </uikit-field>
     </div>
     <div class="grid grid-cols-1 gap-4">
@@ -18,10 +19,7 @@
           <uikit-field label="آدرس" for="address">
             <textarea pTextarea formControlName="address" rows="2"></textarea>
           </uikit-field>
-          <app-states-select
-            [stateFormControlName]="addressStateControl"
-            [cityFormControlName]="addressCityControl"
-          ></app-states-select>
+          <app-states-select [stateFormControlName]="addressRegionControl"></app-states-select>
         </div>
       </div>
       <p-divider align="center"> مدیریت </p-divider>
@@ -42,6 +40,16 @@
             <input pInputText formControlName="email" />
           </uikit-field>
         </div>
+        <uikit-field label="جنسیت" for="gender">
+          <p-select
+            [options]="[
+              { label: 'مرد', id: true },
+              { label: 'زن', id: false },
+            ]"
+            [optionValue]="'id'"
+            formControlName="gender"
+          ></p-select>
+        </uikit-field>
       </div>
 
       <p-divider align="center"> اطلاعات کاربری </p-divider>
@@ -55,7 +63,7 @@
       </div>
       <div class="flex gap-2 justify-end mt-4">
         <button pButton type="button" class="p-button-secondary" (click)="close()">انصراف</button>
-        <button pButton type="submit" [disabled]="form.invalid" class="p-button-primary">ذخیره</button>
+        <button pButton type="submit" class="p-button-primary">ذخیره</button>
       </div>
     </div>
   </form>

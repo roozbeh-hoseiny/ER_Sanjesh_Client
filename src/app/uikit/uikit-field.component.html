@@ -1,6 +1,9 @@
 <div class="flex flex-col gap-1">
-  <uikit-label>
+  <uikit-label [for]="for">
     {{ label }}
   </uikit-label>
   <ng-content></ng-content>
+  @if (invalid) {
+    <p-message severity="error" size="small" variant="simple">Username is required.</p-message>
+  }
 </div>

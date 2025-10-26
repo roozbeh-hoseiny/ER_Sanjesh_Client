@@ -105,7 +105,7 @@ export class NavigationService {
       ],
     },
     {
-      role: UserRole.PRINCIPAL,
+      role: UserRole.SCHOOLS,
       menuItems: [
         {
           key: 'dashboard',

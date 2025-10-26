@@ -38,9 +38,18 @@ interface Address {
   districtName: string;
 }
 
+interface IAddressRequestPayload {
+  regionId: number;
+  address: string;
+  postalCode: string;
+  number: string;
+  latitude: string;
+  longitude: string;
+}
+
 export interface ISchoolRequest {
   name: string;
-  address: AddressRequest;
+  address: IAddressRequestPayload;
   managerInfo: ManagerInfoRequest;
   username: string;
   password: string;

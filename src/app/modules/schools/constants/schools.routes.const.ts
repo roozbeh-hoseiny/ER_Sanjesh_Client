@@ -6,13 +6,17 @@ export const schoolsNamedRoutes: NamedRoutes<TSchoolsRouteNames> = {
   root: {
     path: '',
     pathMatch: 'full',
+    loadComponent: () =>
+      import('../pages/dashboard/schools-dashboard.component').then(
+        (m) => m.SchoolsDashboardComponent,
+      ),
     meta: {
       title: 'داشبورد',
     },
   },
 };
 
-export const ADMIN_ROUTES = Object.entries(schoolsNamedRoutes).reduce(
+export const SCHOOLS_ROUTES = Object.entries(schoolsNamedRoutes).reduce(
   (acc, [name, route]) => {
     const { path, meta } = route;
     return {

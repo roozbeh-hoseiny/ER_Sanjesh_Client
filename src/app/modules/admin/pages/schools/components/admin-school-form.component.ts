@@ -1,26 +1,27 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   EventEmitter,
   Input,
   Output,
-  inject,
   SimpleChanges,
   computed,
+  inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { DividerModule } from 'primeng/divider';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { DividerModule } from 'primeng/divider';
-import { ButtonModule } from 'primeng/button';
 
-import { ISchoolRequest } from '../models/schools';
-import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Maybe } from '@/core';
 import { AdminSchoolsService } from '@/modules/admin/services';
-import { MessageService } from 'primeng/api';
 import { StatesSelectComponent } from '@/shared/catalog';
+import { UikitFieldComponent } from '@/uikit/uikit-field.component';
+import { MessageService } from 'primeng/api';
+import { SelectModule } from 'primeng/select';
+import { ISchoolRequest } from '../models/schools';
 
 @Component({
   selector: 'app-admin-school-form',
@@ -35,6 +36,7 @@ import { StatesSelectComponent } from '@/shared/catalog';
     UikitFieldComponent,
     DividerModule,
     StatesSelectComponent,
+    SelectModule,
   ],
   templateUrl: './admin-school-form.component.html',
 })
@@ -52,28 +54,27 @@ export class AdminSchoolFormComponent {
   form = this.fb.group({
     name: [this.defaultValues?.name || '', [Validators.required]],
     address: this.fb.group({
-      address: [this.defaultValues?.address?.address || ''],
-      postalCode: [this.defaultValues?.address?.postalCode || ''],
-      cityName: [this.defaultValues?.address?.cityName || ''],
-      stateName: [this.defaultValues?.address?.stateName || ''],
+      address: [this.defaultValues?.address?.address || '', [Validators.required]],
+      postalCode: [this.defaultValues?.address?.postalCode || '', [Validators.required]],
+      regionId: [this.defaultValues?.address?.regionId || null, [Validators.required]],
     }),
     managerInfo: this.fb.group({
       firstName: [this.defaultValues?.managerInfo?.firstName || '', [Validators.required]],
       lastName: [this.defaultValues?.managerInfo?.lastName || '', [Validators.required]],
-      mobile: [this.defaultValues?.managerInfo?.mobile || ''],
-      email: [this.defaultValues?.managerInfo?.email || ''],
+      mobile: [this.defaultValues?.managerInfo?.mobile || '', [Validators.required]],
+      email: [
+        this.defaultValues?.managerInfo?.email || '',
+        [Validators.required, Validators.email],
+      ],
+      gender: [this.defaultValues?.managerInfo?.gender || '', [Validators.required]],
     }),
     username: [this.defaultValues?.username || '', [Validators.required]],
     password: [this.defaultValues?.password || '', [Validators.required, Validators.minLength(6)]],
   });
 
   // typed accessors for template bindings
-  get addressStateControl(): FormControl<Maybe<number>> {
-    return this.form.get('address.stateName') as FormControl<Maybe<number>>;
-  }
-
-  get addressCityControl(): FormControl<Maybe<number>> {
-    return this.form.get('address.cityName') as FormControl<Maybe<number>>;
+  get addressRegionControl(): FormControl<Maybe<number>> {
+    return this.form.get('address.regionId') as FormControl<Maybe<number>>;
   }
 
   editMode = computed(() => Boolean(this.defaultValues));
@@ -93,14 +94,14 @@ export class AdminSchoolFormComponent {
         address: {
           address: address?.address ?? '',
           postalCode: address?.postalCode ?? '',
-          cityName: address?.cityName ?? '',
-          stateName: address?.stateName ?? '',
+          regionId: address?.regionId ?? null,
         },
         managerInfo: {
           firstName: managerInfo?.firstName ?? '',
           lastName: managerInfo?.lastName ?? '',
           mobile: managerInfo?.mobile ?? '',
           email: managerInfo?.email ?? '',
+          gender: managerInfo?.gender ?? '',
         },
         username: username ?? '',
         password: password ?? '',

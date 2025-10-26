@@ -10,7 +10,6 @@ import {
 
 export type AdminRouteNames =
   | 'root'
-  | 'users'
   | TAdminSchoolsRouteNames
   | TAdminMDMRouteNames
   | TAdminTeachersRouteNames;
@@ -22,14 +21,6 @@ export const adminNamedRoutes: NamedRoutes<AdminRouteNames> = {
     pathMatch: 'full',
     meta: {
       title: 'داشبورد',
-    },
-  },
-  users: {
-    path: 'users',
-    loadComponent: () =>
-      import('../pages/root/admin-root.component').then((m) => m.AdminDashboardComponent),
-    meta: {
-      title: 'کاربران',
     },
   },
   ...adminMDMNamedRoutes,
