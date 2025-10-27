@@ -6,7 +6,6 @@ import { Component, EventEmitter, inject, Input, Output, signal } from '@angular
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Button } from 'primeng/button';
-import { Checkbox } from 'primeng/checkbox';
 import { ImageModule } from 'primeng/image';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
@@ -21,7 +20,6 @@ import images from 'src/assets/images';
     CommonModule,
     ReactiveFormsModule,
     Button,
-    Checkbox,
     Password,
     InputText,
     ImageModule,

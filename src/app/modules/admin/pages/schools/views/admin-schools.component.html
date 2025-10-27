@@ -28,14 +28,28 @@
     <app-school-genders-tag [genderId]="item.boyOrGirl"></app-school-genders-tag>
   </ng-template>
   <ng-template #status let-item>
-    <p-button
+    @if (schoolsChangeStatusSchedules()[item.id]) {
+      <p-progressSpinner
+        strokeWidth="4"
+        fill="transparent"
+        animationDuration="1s"
+        [style]="{ width: '24px', height: '24px' }"
+      ></p-progressSpinner>
+    } @else {
+      <p-toggleSwitch
+        [disabled]="schoolsChangeStatusSchedules()[item.id]"
+        [ngModel]="item.isActive"
+        (onChange)="toggleStatus(item, $event.checked)"
+      ></p-toggleSwitch>
+    }
+    <!-- <p-button
       [severity]="item.isActive ? 'success' : 'danger'"
       size="small"
       [loading]="schoolsChangeStatusSchedules()[item.id]"
       (click)="toggleStatus(item, !item.isActive)"
     >
       {{ item.isActive ? "فعال" : "غیرفعال" }}
-    </p-button>
+    </p-button> -->
   </ng-template>
 </app-page-data-list>
 

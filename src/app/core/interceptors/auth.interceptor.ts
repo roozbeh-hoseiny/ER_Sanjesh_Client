@@ -35,7 +35,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       return throwError(() => error);
-    })
+    }),
   );
 };
 
@@ -60,7 +60,6 @@ function handleTokenRefresh(authService: AuthService, req: any, next: any): Obse
       switchMap((response) => {
         isRefreshing.next(false);
 
-        // Retry original request with new token
         const newAuthReq = req.clone({
           headers: req.headers.set('Authorization', `Bearer ${response.token}`),
         });
@@ -71,7 +70,7 @@ function handleTokenRefresh(authService: AuthService, req: any, next: any): Obse
         isRefreshing.next(false);
         authService.logout();
         return throwError(() => refreshError);
-      })
+      }),
     );
   } else {
     // Wait for refresh to complete, then retry request
@@ -87,7 +86,7 @@ function handleTokenRefresh(authService: AuthService, req: any, next: any): Obse
           : req;
 
         return next(newAuthReq);
-      })
+      }),
     );
   }
 }

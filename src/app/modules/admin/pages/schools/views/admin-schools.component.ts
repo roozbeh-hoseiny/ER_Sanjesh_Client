@@ -10,7 +10,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal, TemplateRef, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Button } from 'primeng/button';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { AdminSchoolsService } from '../../../services';
 import { AdminSchoolFormComponent } from '../components/admin-school-form.component';
@@ -28,11 +28,11 @@ type TGetDataMode = 'all' | 'search' | 'gender' | 'category' | 'region';
     ReactiveFormsModule,
     PageDataListComponent,
     SchoolGendersTag,
-    ToggleSwitchModule,
     AdminSchoolFormComponent,
-    Button,
     FormsModule,
+    ToggleSwitchModule,
     AdminSchoolsFilterComponent,
+    ProgressSpinnerModule,
   ],
 })
 export class AdminSchoolsComponent {
@@ -164,11 +164,22 @@ export class AdminSchoolsComponent {
 
   toggleStatus(item: ISchoolResponse, checked: boolean) {
     this.schoolsChangeStatusSchedules.update((prev) => ({ ...prev, [item.id]: true }));
-    this.services.updateSchoolStatus(item.id, checked).subscribe(() => {
-      const updatedSchedules = { ...this.schoolsChangeStatusSchedules() };
-      delete updatedSchedules[item.id];
-      this.schoolsChangeStatusSchedules.update(() => updatedSchedules);
-      item.isActive = checked;
+    this.services.updateSchoolStatus(item.id, checked).subscribe({
+      next: () => {
+        item.isActive = checked;
+        const updatedSchedules = { ...this.schoolsChangeStatusSchedules() };
+        delete updatedSchedules[item.id];
+        this.schoolsChangeStatusSchedules.update(() => updatedSchedules);
+      },
+      error: () => {
+        const updatedSchedules = { ...this.schoolsChangeStatusSchedules() };
+        delete updatedSchedules[item.id];
+        this.schoolsChangeStatusSchedules.update(() => updatedSchedules);
+        item.isActive = !checked;
+      },
+      complete: () => {
+        console.log('comple');
+      },
     });
   }
 
