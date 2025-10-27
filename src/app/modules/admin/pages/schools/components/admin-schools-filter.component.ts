@@ -10,6 +10,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputText, InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
+import { SchoolsCategoriesCascadeComponent } from './admin-schools-categories-cascade.component';
 
 @Component({
   selector: 'app-admin-schools-filter',
@@ -25,20 +26,27 @@ import { MessageModule } from 'primeng/message';
     UikitLabelComponent,
     MessageModule,
     StatesCascadeComponent,
+    SchoolsCategoriesCascadeComponent,
   ],
 })
 export class AdminSchoolsFilterComponent {
   @Output() onSearch = new EventEmitter<string>();
-  @Output() onGenderFilter = new EventEmitter<number>();
+  @Output() onGenderFilter = new EventEmitter<Maybe<number>>();
+  @Output() onCategoryFilter = new EventEmitter<Maybe<number>>();
+  @Output() onRegionFilter = new EventEmitter<Maybe<number>>();
 
   readonly schoolGenders = schoolGenders;
 
   search = signal<string>('');
   selectedGender = signal<Maybe<number>>(null);
+  selectedCategory = signal<Maybe<number>>(null);
+  selectedRegion = signal<Maybe<number>>(null);
   private debounceTimer: any;
 
   onFilterChange = (search: string) => {
+    this.selectedCategory.set(null);
     this.selectedGender.set(null);
+    this.selectedRegion.set(null);
 
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
@@ -48,14 +56,36 @@ export class AdminSchoolsFilterComponent {
       this.onSearch.emit(search);
     }, 300);
   };
+
   clearSearch = () => {
     clearTimeout(this.debounceTimer);
     this.search.update(() => '');
     this.onSearch.emit('');
   };
-  onGenderChange(genderId: number) {
-    this.search.set('');
+
+  onGenderChange(genderId: Maybe<number> = null) {
+    this.resetFilters();
     this.selectedGender.set(genderId);
     this.onGenderFilter.emit(genderId);
   }
+
+  onCategoryChange(categoryId: Maybe<number> = null) {
+    this.resetFilters();
+    this.selectedCategory.set(categoryId);
+    this.onCategoryFilter.emit(categoryId);
+  }
+
+  onRegionChange(regionId: Maybe<number> = null) {
+    console.log('first', regionId);
+
+    this.resetFilters();
+    this.selectedRegion.set(regionId);
+    this.onRegionFilter.emit(regionId);
+  }
+
+  resetFilters = () => {
+    this.search.set('');
+    this.selectedGender.set(null);
+    this.selectedCategory.set(null);
+  };
 }

@@ -1,10 +1,14 @@
-import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { ADMIN_API_ROUTES } from '../constants/apiRoutes';
-import { Injectable } from '@angular/core';
 import { paginatedQueryDefaultValues } from '@/core/constants';
 import { IPaginatedResponse } from '@/core/models/service.model';
-import { ISchoolRequest, ISchoolResponse } from '../pages/schools/models/schools';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ADMIN_API_ROUTES } from '../constants/apiRoutes';
+import {
+  ICategoryFullTree,
+  ISchoolRequest,
+  ISchoolResponse,
+} from '../pages/schools/models/schools';
 
 @Injectable({ providedIn: 'root' })
 export class AdminSchoolsService {
@@ -41,6 +45,31 @@ export class AdminSchoolsService {
     });
   }
 
+  getSchoolsByCategories(
+    categoryIds: number[],
+    lastSeen?: string,
+  ): Observable<IPaginatedResponse<ISchoolResponse>> {
+    return this.http.post<IPaginatedResponse<ISchoolResponse>>(
+      this.apiRoutes.schools.byCategories(),
+      {
+        ...paginatedQueryDefaultValues,
+        lastSeen,
+        categoryIds,
+      },
+    );
+  }
+
+  getSchoolsByRegion(
+    regionId: number,
+    lastSeen?: string,
+  ): Observable<IPaginatedResponse<ISchoolResponse>> {
+    return this.http.post<IPaginatedResponse<ISchoolResponse>>(this.apiRoutes.schools.byRegion(), {
+      ...paginatedQueryDefaultValues,
+      lastSeen,
+      regionId,
+    });
+  }
+
   addSchool(data?: ISchoolRequest): Observable<ISchoolResponse> {
     return this.http.post<ISchoolResponse>(this.apiRoutes.schools.add(), data);
   }
@@ -50,5 +79,9 @@ export class AdminSchoolsService {
       ? this.apiRoutes.schools.activate()
       : this.apiRoutes.schools.deactivate();
     return this.http.post<any>(endpoint, { id: schoolId });
+  }
+
+  categories(): Observable<ICategoryFullTree[]> {
+    return this.http.get<ICategoryFullTree[]>(this.apiRoutes.schools.categories());
   }
 }

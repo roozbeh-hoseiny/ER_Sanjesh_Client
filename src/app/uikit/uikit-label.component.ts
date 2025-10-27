@@ -17,6 +17,7 @@ export class UikitLabelComponent {
   @Input() for?: string;
   @Input() pSize: PSize = 'normal';
   @Input() className?: string;
+  @Input() invalid?: boolean;
 
   private sizeMap: Record<PSize, string> = {
     small: 'text-xs',
@@ -28,6 +29,7 @@ export class UikitLabelComponent {
     // default styling used elsewhere in the app for labels
     const base = 'block text-muted-color font-medium';
     const size = this.sizeMap[this.pSize] ?? this.sizeMap.normal;
-    return `${base} ${size}`;
+    const errorClass = this.invalid ? 'text-red-600' : '';
+    return `${base} ${size} ${errorClass}`;
   }
 }

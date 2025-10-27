@@ -13,7 +13,11 @@
 
   <hr />
 
-  <app-states-cascade />
+  <app-states-cascade (selectionChange)="onRegionChange($event)" (selectionClear)="onRegionChange()" />
+
+  <hr />
+
+  <app-schools-categories-cascade (selectionChange)="onCategoryChange($event)" (selectionClear)="onCategoryChange()" />
   <!-- <p-inputgroup class="w-full">
     <p-inputgroup-addon>
       <p-button icon="pi pi-times" severity="secondary" (onClick)="clearSearch()"></p-button>

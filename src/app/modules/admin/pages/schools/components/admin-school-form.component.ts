@@ -7,6 +7,7 @@ import {
   SimpleChanges,
   computed,
   inject,
+  signal,
 } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -50,6 +51,8 @@ export class AdminSchoolFormComponent {
 
   adminSchoolsService = inject(AdminSchoolsService);
   messageService = inject(MessageService);
+
+  onSubmitLoading = signal<boolean>(false);
 
   form = this.fb.group({
     name: [this.defaultValues?.name || '', [Validators.required]],
@@ -121,6 +124,7 @@ export class AdminSchoolFormComponent {
 
   submit() {
     if (this.form.invalid) return;
+    this.onSubmitLoading.set(true);
     const payload = this.form.value as ISchoolRequest;
     this.adminSchoolsService.addSchool(payload).subscribe(() => {
       this.messageService.add({ severity: 'success', detail: 'مدرسه با موفقیت اضافه شد.' });

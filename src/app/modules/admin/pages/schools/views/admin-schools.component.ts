@@ -1,4 +1,5 @@
 import { Maybe } from '@/core';
+import { IPaginatedResponse } from '@/core/models/service.model';
 import { BreadcrumbService } from '@/core/services';
 import { adminNamedRoutes } from '@/modules/admin/constants';
 import { SchoolGendersTag } from '@/shared/catalog/schoolsGender/app-school-genders-tag.component';
@@ -16,7 +17,7 @@ import { AdminSchoolFormComponent } from '../components/admin-school-form.compon
 import { AdminSchoolsFilterComponent } from '../components/admin-schools-filter.component';
 import { ISchoolResponse } from '../models/schools';
 
-type TGetDataMode = 'all' | 'search' | 'gender';
+type TGetDataMode = 'all' | 'search' | 'gender' | 'category' | 'region';
 
 @Component({
   selector: 'admin-schools',
@@ -63,6 +64,8 @@ export class AdminSchoolsComponent {
 
   private searchQuery = signal<string>('');
   private selectedGender = signal<Maybe<number>>(null);
+  private selectedRegion = signal<Maybe<number>>(null);
+  private selectedCategories = signal<Maybe<number>>(null);
 
   activePageItems = computed(() => {
     const pageIndex = this.activePageIndex();
@@ -131,6 +134,10 @@ export class AdminSchoolsComponent {
         return this.getByName();
       case 'gender':
         return this.getByGender();
+      case 'category':
+        return this.getByCategories();
+      case 'region':
+        return this.getByRegion();
       default:
         return this.getAll();
     }
@@ -170,13 +177,7 @@ export class AdminSchoolsComponent {
   }
 
   onSearch(search: string) {
-    if (!search) {
-      this.changeGetDataMode('all');
-      return this.getData();
-    }
-    if (this.getDataMode() !== 'search') {
-      this.changeGetDataMode('search');
-    }
+    this.validateFilterData(search, 'search');
     if (this.searchQuery() !== search) {
       this.resetPaginateInfo();
       this.searchQuery.set(search);
@@ -184,19 +185,41 @@ export class AdminSchoolsComponent {
     this.getByName();
   }
 
-  onGenderFilter(genderType: number) {
-    if (!genderType) {
-      this.changeGetDataMode('all');
-      return this.getData();
-    }
-    if (this.getDataMode() !== 'gender') {
-      this.changeGetDataMode('gender');
-    }
+  onGenderFilter(genderType: Maybe<number>) {
+    this.validateFilterData(genderType, 'gender');
     if (this.selectedGender() !== genderType) {
       this.resetPaginateInfo();
       this.selectedGender.set(genderType);
     }
     this.getByGender();
+  }
+
+  onCategoriesFilter(categoryId: Maybe<number>) {
+    this.validateFilterData(categoryId, 'category');
+    if (this.selectedCategories() !== categoryId) {
+      this.resetPaginateInfo();
+      this.selectedCategories.set(categoryId);
+    }
+    this.getByCategories();
+  }
+
+  onRegionFilter(regionId: Maybe<number>) {
+    this.validateFilterData(regionId, 'region');
+    if (this.selectedRegion() !== regionId) {
+      this.resetPaginateInfo();
+      this.selectedRegion.set(regionId);
+    }
+    this.getByRegion();
+  }
+
+  validateFilterData(value: Maybe<string | number>, mode: TGetDataMode) {
+    if (!value) {
+      this.changeGetDataMode('all');
+      return this.getData();
+    }
+    if (this.getDataMode() !== mode) {
+      this.changeGetDataMode(mode);
+    }
   }
 
   private changeGetDataMode(mode: TGetDataMode) {
@@ -212,21 +235,47 @@ export class AdminSchoolsComponent {
   }
 
   private getAll() {
-    this.services.getSchools(this.lastSeen()).subscribe((schools) => {
-      if (!this.paginatedItems.length) {
-        this.totalRecords.set(schools.totalCount);
-      }
-      this.paginatedItems.update((prev) => {
-        return [...prev, schools.items];
-      });
-      this.lastSeen.set(schools.lastSeen || '');
-      this.loading.set(false);
-    });
+    this.services.getSchools(this.lastSeen()).subscribe({ ...this.onResponse });
   }
 
   private getByName() {
     this.loading.set(true);
-    this.services.getSchoolsByName(this.searchQuery(), this.lastSeen()).subscribe((schools) => {
+    this.services
+      .getSchoolsByName(this.searchQuery(), this.lastSeen())
+      .subscribe({ ...this.onResponse });
+  }
+
+  private getByGender() {
+    if (!this.selectedGender()) {
+      return;
+    }
+    this.loading.set(true);
+    this.services
+      .getSchoolsByGender(this.selectedGender()!, this.lastSeen())
+      .subscribe({ ...this.onResponse });
+  }
+  private getByCategories() {
+    if (!this.selectedCategories()) {
+      return;
+    }
+    this.loading.set(true);
+    this.services
+      .getSchoolsByCategories([this.selectedCategories()!], this.lastSeen())
+      .subscribe({ ...this.onResponse });
+  }
+
+  private getByRegion() {
+    if (!this.selectedRegion()) {
+      return;
+    }
+    this.loading.set(true);
+    this.services
+      .getSchoolsByRegion(this.selectedRegion()!, this.lastSeen())
+      .subscribe({ ...this.onResponse });
+  }
+
+  private onResponse = {
+    next: (schools: IPaginatedResponse<ISchoolResponse>) => {
       if (!this.paginatedItems.length) {
         this.totalRecords.set(schools.totalCount);
       }
@@ -234,26 +283,9 @@ export class AdminSchoolsComponent {
         return [...prev, schools.items];
       });
       this.lastSeen.set(schools.lastSeen || '');
+    },
+    complete: () => {
       this.loading.set(false);
-    });
-  }
-
-  private getByGender() {
-    this.loading.set(true);
-    if (!this.selectedGender()) {
-      return;
-    }
-    this.services
-      .getSchoolsByGender(this.selectedGender()!, this.lastSeen())
-      .subscribe((schools) => {
-        if (!this.paginatedItems.length) {
-          this.totalRecords.set(schools.totalCount);
-        }
-        this.paginatedItems.update((prev) => {
-          return [...prev, schools.items];
-        });
-        this.lastSeen.set(schools.lastSeen || '');
-        this.loading.set(false);
-      });
-  }
+    },
+  };
 }

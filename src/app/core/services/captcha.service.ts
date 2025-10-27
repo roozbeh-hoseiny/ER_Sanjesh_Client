@@ -1,9 +1,14 @@
-import { computed, Injectable, signal, Signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { timer, Subscription } from 'rxjs';
-import { tap, finalize } from 'rxjs/operators';
+import { computed, Injectable, signal, Signal } from '@angular/core';
+import { Subscription, timer } from 'rxjs';
+import { finalize, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Maybe } from '../models';
+
+interface ICaptchaResponse {
+  id: string;
+  expiry: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class CaptchaService {
@@ -33,14 +38,14 @@ export class CaptchaService {
     this.clearTtlTimer();
 
     this.http
-      .get<string>(url)
+      .get<ICaptchaResponse>(url)
       .pipe(
         tap((res) => {
           if (!res) {
             throw new Error('Invalid captcha response');
           }
 
-          this._captchaId.set(res);
+          this._captchaId.set(res.id);
           this.startTtlTimer(this.ttlSeconds);
           this.setCaptchaImageSrc();
         }),

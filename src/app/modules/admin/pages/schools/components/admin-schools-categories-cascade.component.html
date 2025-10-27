@@ -1,0 +1,14 @@
+<uikit-field label="دسته‌بندی" for="category">
+  <p-cascadeselect
+    name="category"
+    [options]="categories()"
+    optionLabel="title"
+    optionGroupLabel="title"
+    [showClear]="true"
+    [loading]="getCategoriesLoading()"
+    [optionGroupChildren]="['children']"
+    (onChange)="onCategorySelect($event.value)"
+    (onClear)="(onClear)"
+    appendTo="body"
+  />
+</uikit-field>

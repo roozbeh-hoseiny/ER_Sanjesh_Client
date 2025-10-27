@@ -1,6 +1,6 @@
 import { Maybe } from '@/core';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
-import { Component, inject, Input, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { TableModule } from 'primeng/table';
@@ -12,16 +12,16 @@ import { StatesService } from '../services';
   imports: [UikitFieldComponent, CascadeSelectModule, TableModule],
 })
 export class StatesCascadeComponent {
-  @Input() stateFormControlName!: FormControl<Maybe<number>>;
-  @Input() onlyState?: boolean = false;
-  @Input() cityFormControlName?: FormControl<Maybe<number>>;
+  @Input() control?: FormControl<Maybe<number>>;
+
+  @Output() selectionChange = new EventEmitter<number>();
+  @Output() selectionClear = new EventEmitter();
 
   statesService = inject(StatesService);
 
   states = signal<any[]>([]);
   getStatesLoading = signal<boolean>(true);
-  selectedStateId = signal<Maybe<number>>(null);
-  cities = signal<Maybe<any[]>>(null);
+  selectedRegionId = signal<Maybe<number>>(null);
 
   constructor() {
     this.getStatesLoading.set(true);
@@ -31,16 +31,15 @@ export class StatesCascadeComponent {
     });
   }
 
-  onStateSelect = (state: any) => {
-    this.selectedStateId.set(state.id);
-    this.stateFormControlName.setValue(state.id);
-    if (this.cityFormControlName) {
-      this.cityFormControlName.setValue(null);
-    }
-    this.cities.set(state.children);
+  onChange = (region: any) => {
+    this.selectedRegionId.set(region?.id);
+    this.control?.setValue(region?.id);
+    this.selectionChange.emit(region.id);
   };
 
-  onCitySelect = (city: any) => {
-    this.cityFormControlName?.setValue(city.id);
+  onClear = () => {
+    this.selectedRegionId.set(null);
+    this.control?.setValue(null);
+    this.selectionClear.emit();
   };
 }

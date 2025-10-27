@@ -16,7 +16,12 @@
   (onEdit)="openEditForm($event)"
 >
   <ng-template #filter let-columns>
-    <app-admin-schools-filter (onSearch)="onSearch($event)" (onGenderFilter)="onGenderFilter($event)" />
+    <app-admin-schools-filter
+      (onSearch)="onSearch($event)"
+      (onGenderFilter)="onGenderFilter($event)"
+      (onCategoryFilter)="onCategoriesFilter($event)"
+      (onRegionFilter)="onRegionFilter($event)"
+    />
   </ng-template>
 
   <ng-template #boyOrGirl let-item>

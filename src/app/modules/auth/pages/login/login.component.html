@@ -1,90 +1,86 @@
-<div
-  class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-screen overflow-hidden md:p-10 p-6"
->
-  <div class="flex flex-col items-center justify-center">
+<div class="flex bg-primary-50 h-svh">
+  <div class="w-2/5 min-w-xs shrink-0 flex justify-center items-center">
     <div
-      style="padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)"
-      class="rounded-4xl shadow"
+      class="flex flex-col items-center justify-center px-12 py-10 h-auto bg-surface-card border border-surface-border rounded-lg shadow"
     >
-      <div class="w-full bg-surface-0 dark:bg-surface-900 md:py-20 py-8 px-4 md:px-20 rounded-4xl">
-        <div class="text-center sm:mb-8 mb-5 flex items-center flex-col sm:gap-4 gap-2">
-          <img [src]="logo" class="w-20 h-20 mb-3" />
-          <div class="text-surface-900 dark:text-surface-0 md:text-3xl text-xl font-medium">
-            به پنل آزمون آنلاین تشریحی خوش آمدید
-          </div>
-          <span class="text-muted-color font-medium md:text-base text-sm">برای ادامه وارد شوید</span>
+      <div class="flex flex-col gap-4 text-center mb-10 items-center justify-center">
+        <img [src]="logo" alt="لوگو سازمان سنجش" class="w-20 h-auto" />
+        <span class="text-lg font-bold"> به پنل آزمون آنلاین تشریحی خوش آمدید. </span>
+      </div>
+
+      <form [formGroup]="loginForm" class="w-full max-w-xs" (ngSubmit)="onSubmit()">
+        <div class="flex flex-col gap-2 mb-4">
+          <uikit-label for="username"> ایمیل </uikit-label>
+          <input
+            pInputText
+            id="username"
+            type="text"
+            placeholder="آدرس ایمیل"
+            class="w-full"
+            pSize="large"
+            formControlName="username"
+          />
+        </div>
+        <div class="flex flex-col gap-2 mb-4">
+          <uikit-label for="password1">رمز عبور</uikit-label>
+          <p-password
+            id="password1"
+            size="large"
+            formControlName="password"
+            placeholder="رمز عبور"
+            [toggleMask]="true"
+            [fluid]="true"
+            [feedback]="false"
+          />
         </div>
 
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-          <div class="flex flex-col gap-2 mb-4">
-            <uikit-label for="username"> ایمیل </uikit-label>
-            <input
-              pInputText
-              id="username"
-              type="text"
-              placeholder="آدرس ایمیل"
-              class="w-full"
-              formControlName="username"
-            />
+        <!-- <div class="flex items-center justify-between mt-2 mb-8 gap-8">
+          <div class="flex items-center">
+            <p-checkbox formControlName="rememberMe" id="rememberMe" binary class="me-2"></p-checkbox>
+            <uikit-label for="rememberMe" pSize="small">مرا به خاطر بسپار</uikit-label>
           </div>
-          <div class="flex flex-col gap-2 mb-4">
-            <uikit-label for="password1">رمز عبور</uikit-label>
-            <p-password
-              id="password1"
-              pSize="large"
-              formControlName="password"
-              placeholder="رمز عبور"
-              [toggleMask]="true"
-              [fluid]="true"
-              [feedback]="false"
-            />
+          <span class="text-sm font-medium no-underline ms-2 text-right cursor-pointer text-primary">
+            رمز را فراموش کردید؟
+          </span>
+        </div> -->
+        <div class="mb-6 flex flex-col items-center gap-4">
+          <div
+            class="relative bg-surface-ground rounded-xl overflow-hidden shadow shrink-0 border border-[var(--p-inputtext-border-color)] w-[16rem] aspect-[2]"
+          >
+            <img p-image [src]="captchaImageSrc()" class="w-full object-contain" />
+            @if (isCaptchaLoading()) {
+              <div class="!absolute inset-0 bg-surface-hover/50 flex items-center justify-center">
+                <p-progress-spinner
+                  strokeWidth="4"
+                  fill="transparent"
+                  animationDuration="1s"
+                  [style]="{ width: '48px', height: '48px' }"
+                />
+              </div>
+            } @else if (isCaptchaExpired()) {
+              <div
+                class="!absolute inset-0 bg-surface-hover/70 flex items-center justify-center text-center p-2 text-sm font-medium cursor-pointer"
+                (click)="onRefreshCaptcha()"
+              >
+                <i class="pi pi-refresh !text-3xl text-gray-500"></i>
+              </div>
+            }
           </div>
-
-          <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-            <div class="flex items-center">
-              <p-checkbox formControlName="rememberMe" id="rememberMe" binary class="me-2"></p-checkbox>
-              <uikit-label for="rememberMe" pSize="small">مرا به خاطر بسپار</uikit-label>
-            </div>
-            <span class="text-sm font-medium no-underline ms-2 text-right cursor-pointer text-primary">
-              رمز را فراموش کردید؟
-            </span>
-          </div>
-          <div class="mb-6 flex flex-col items-center gap-4">
-            <div
-              class="relative bg-surface-ground rounded-xl overflow-hidden shadow shrink-0 border border-[var(--p-inputtext-border-color)] w-[16rem] aspect-[2]"
-            >
-              <img p-image [src]="captchaImageSrc()" class="w-full object-contain" />
-              @if (isCaptchaLoading()) {
-                <div class="!absolute inset-0 bg-surface-hover/50 flex items-center justify-center">
-                  <p-progress-spinner
-                    strokeWidth="4"
-                    fill="transparent"
-                    animationDuration="1s"
-                    [style]="{ width: '48px', height: '48px' }"
-                  />
-                </div>
-              } @else if (isCaptchaExpired()) {
-                <div
-                  class="!absolute inset-0 bg-surface-hover/70 flex items-center justify-center text-center p-2 text-sm font-medium cursor-pointer"
-                  (click)="onRefreshCaptcha()"
-                >
-                  <i class="pi pi-refresh !text-3xl text-gray-500"></i>
-                </div>
-              }
-            </div>
-            <input
-              pInputText
-              id="captcha"
-              pSize="small"
-              type="text"
-              placeholder="کد کپچا را وارد کنید"
-              class="w-[12rem]"
-              formControlName="captcha"
-            />
-          </div>
-          <p-button label="ورود" styleClass="w-full" size="large" [loading]="isLoading" type="submit"></p-button>
-        </form>
-      </div>
+          <input
+            pInputText
+            id="captcha"
+            pSize="small"
+            type="text"
+            placeholder="کد کپچا را وارد کنید"
+            class="w-[12rem]"
+            formControlName="captcha"
+          />
+        </div>
+        <p-button label="ورود" styleClass="w-full" size="large" [loading]="isLoading" type="submit"></p-button>
+      </form>
     </div>
+  </div>
+  <div class="grow bg-primary-100 h-svh items-center justify-center hidden md:flex">
+    <img [src]="authVector" alt="background image" class="w-100 object-cover" />
   </div>
 </div>

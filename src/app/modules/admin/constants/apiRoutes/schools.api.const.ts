@@ -10,5 +10,6 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     deactivate: () => `${schoolsBaseUrl}/DeactivateSchool`,
     single: () => `${schoolsBaseUrl}/GetOne`,
     add: () => `${schoolsBaseUrl}/AddSchool`,
+    categories: () => `${schoolsBaseUrl}/GetCategoryFullTree`,
   };
 };

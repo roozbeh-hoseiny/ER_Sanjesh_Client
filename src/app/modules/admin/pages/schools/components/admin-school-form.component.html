@@ -7,17 +7,26 @@
 >
   <form (ngSubmit)="submit()" [formGroup]="form" class="grid grid-cols-1 gap-4">
     <div class="grid grid-cols-2 gap-4">
-      <uikit-field label="نام مدرسه" for="name" [invalid]="form.get('name')?.invalid && form.get('name')?.touched">
-        <input pInputText formControlName="name" required />
-        {{ form.errors }}
+      <uikit-field label="نام مدرسه" for="name" [control]="form.get('name')">
+        <input
+          pInputText
+          formControlName="name"
+          required
+          [invalid]="form.get('name')?.invalid && form.get('name')?.touched"
+        />
       </uikit-field>
     </div>
     <div class="grid grid-cols-1 gap-4">
       <div formGroupName="address">
         <p-divider align="center"> آدرس </p-divider>
         <div class="grid grid-cols-1 gap-4">
-          <uikit-field label="آدرس" for="address">
-            <textarea pTextarea formControlName="address" rows="2"></textarea>
+          <uikit-field label="آدرس" for="address" [control]="form.get('address.address')">
+            <textarea
+              pTextarea
+              formControlName="address"
+              rows="2"
+              [invalid]="form.get('address')?.invalid && form.get('address')?.touched"
+            ></textarea>
           </uikit-field>
           <app-states-select [stateFormControlName]="addressRegionControl"></app-states-select>
         </div>
@@ -25,22 +34,38 @@
       <p-divider align="center"> مدیریت </p-divider>
       <div formGroupName="managerInfo" class="grid grid-cols-1 gap-4">
         <div class="grid grid-cols-2 gap-4">
-          <uikit-field label="نام مدیر" for="firstName">
-            <input pInputText formControlName="firstName" />
+          <uikit-field label="نام مدیر" for="firstName" [control]="form.get('managerInfo.firstName')">
+            <input
+              pInputText
+              formControlName="firstName"
+              [invalid]="form.get('managerInfo.firstName')?.invalid && form.get('managerInfo.firstName')?.touched"
+            />
           </uikit-field>
-          <uikit-field label="نام خانوادگی" for="lastName">
-            <input pInputText formControlName="lastName" />
+          <uikit-field label="نام خانوادگی" for="lastName" [control]="form.get('managerInfo.lastName')">
+            <input
+              pInputText
+              formControlName="lastName"
+              [invalid]="form.get('managerInfo.lastName')?.invalid && form.get('managerInfo.lastName')?.touched"
+            />
           </uikit-field>
         </div>
         <div class="grid grid-cols-2 gap-4">
-          <uikit-field label="موبایل" for="mobile">
-            <input pInputText formControlName="mobile" />
+          <uikit-field label="موبایل" for="mobile" [control]="form.get('managerInfo.mobile')">
+            <input
+              pInputText
+              formControlName="mobile"
+              [invalid]="form.get('managerInfo.mobile')?.invalid && form.get('managerInfo.mobile')?.touched"
+            />
           </uikit-field>
-          <uikit-field label="ایمیل" for="email">
-            <input pInputText formControlName="email" />
+          <uikit-field label="ایمیل" for="email" [control]="form.get('managerInfo.email')">
+            <input
+              pInputText
+              formControlName="email"
+              [invalid]="form.get('managerInfo.email')?.invalid && form.get('managerInfo.email')?.touched"
+            />
           </uikit-field>
         </div>
-        <uikit-field label="جنسیت" for="gender">
+        <uikit-field label="جنسیت" for="gender" [control]="form.get('managerInfo.gender')">
           <p-select
             [options]="[
               { label: 'مرد', id: true },
@@ -54,16 +79,24 @@
 
       <p-divider align="center"> اطلاعات کاربری </p-divider>
       <div class="grid grid-cols-2 gap-4">
-        <uikit-field label="نام کاربری" for="username">
-          <input pInputText formControlName="username" />
+        <uikit-field label="نام کاربری" for="username" [control]="form.get('username')">
+          <input
+            pInputText
+            formControlName="username"
+            [invalid]="form.get('username')?.invalid && form.get('username')?.touched"
+          />
         </uikit-field>
-        <uikit-field label="رمز عبور" for="password">
-          <input pInputText formControlName="password" />
+        <uikit-field label="رمز عبور" for="password" [control]="form.get('password')">
+          <input
+            pInputText
+            formControlName="password"
+            [invalid]="form.get('password')?.invalid && form.get('password')?.touched"
+          />
         </uikit-field>
       </div>
       <div class="flex gap-2 justify-end mt-4">
         <button pButton type="button" class="p-button-secondary" (click)="close()">انصراف</button>
-        <button pButton type="submit" class="p-button-primary">ذخیره</button>
+        <button pButton type="submit" class="p-button-primary" [loading]="onSubmitLoading()">ذخیره</button>
       </div>
     </div>
   </form>

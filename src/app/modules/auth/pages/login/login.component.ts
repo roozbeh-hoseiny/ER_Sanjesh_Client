@@ -48,6 +48,7 @@ export class LoginComponent {
   readonly captchaImageSrc = this.captchaService.captchaImageSrc;
 
   readonly logo = images.logo;
+  readonly authVector = images.errors.authBack;
 
   readonly loginForm = this.fb.group({
     username: ['', [Validators.required]],
