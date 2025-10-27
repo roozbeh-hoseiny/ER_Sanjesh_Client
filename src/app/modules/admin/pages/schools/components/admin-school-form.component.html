@@ -25,10 +25,22 @@
               pTextarea
               formControlName="address"
               rows="2"
-              [invalid]="form.get('address')?.invalid && form.get('address')?.touched"
+              [invalid]="form.get('address.address')?.invalid && form.get('address.address')?.touched"
             ></textarea>
           </uikit-field>
-          <app-states-select [stateFormControlName]="addressRegionControl"></app-states-select>
+          <app-states-select
+            [stateControl]="form.get('address.state')"
+            [cityControl]="form.get('address.regionId')"
+          ></app-states-select>
+          <div class="grid grid-cols-2">
+            <uikit-field label="کد پستی" for="postalCode" [control]="form.get('address.postalCode')">
+              <input
+                pInputText
+                formControlName="postalCode"
+                [invalid]="form.get('address.postalCode')?.invalid && form.get('address.postalCode')?.touched"
+              />
+            </uikit-field>
+          </div>
         </div>
       </div>
       <p-divider align="center"> مدیریت </p-divider>
@@ -65,16 +77,19 @@
             />
           </uikit-field>
         </div>
-        <uikit-field label="جنسیت" for="gender" [control]="form.get('managerInfo.gender')">
-          <p-select
-            [options]="[
-              { label: 'مرد', id: true },
-              { label: 'زن', id: false },
-            ]"
-            [optionValue]="'id'"
-            formControlName="gender"
-          ></p-select>
-        </uikit-field>
+        <div class="grid grid-cols-2 gap-4">
+          <uikit-field label="جنسیت" for="gender" [control]="form.get('managerInfo.gender')">
+            <p-select
+              [options]="[
+                { label: 'مرد', id: true },
+                { label: 'زن', id: false },
+              ]"
+              [optionValue]="'id'"
+              [invalid]="form.get('managerInfo.gender')?.invalid && form.get('managerInfo.gender')?.touched"
+              formControlName="gender"
+            ></p-select>
+          </uikit-field>
+        </div>
       </div>
 
       <p-divider align="center"> اطلاعات کاربری </p-divider>

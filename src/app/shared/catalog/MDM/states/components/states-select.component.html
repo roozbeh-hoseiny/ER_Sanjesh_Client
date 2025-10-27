@@ -1,21 +1,25 @@
 <div class="grid grid-cols-2 gap-4">
-  <uikit-field label="استان" for="state">
+  <uikit-field label="استان" for="state" [control]="stateControl">
     <p-select
       name="state"
       [options]="states() || []"
       optionLabel="title"
       [loading]="getStatesLoading()"
+      [invalid]="stateControl?.invalid && stateControl?.touched"
       (onChange)="onStateSelect($event.value)"
     />
   </uikit-field>
-  <uikit-field label="شهر" for="city">
-    <p-select
-      name="city"
-      optionLabel="title"
-      [options]="cities() || []"
-      [loading]="getStatesLoading()"
-      [disabled]="!selectedStateId()"
-      (onChange)="onCitySelect($event.value)"
-    />
-  </uikit-field>
+  @if (cityControl) {
+    <uikit-field label="شهر" for="city" [control]="cityControl">
+      <p-select
+        name="city"
+        optionLabel="title"
+        [options]="cities() || []"
+        [loading]="getStatesLoading()"
+        [disabled]="!selectedStateId()"
+        [invalid]="cityControl?.invalid && cityControl?.touched"
+        (onChange)="onCitySelect($event.value)"
+      />
+    </uikit-field>
+  }
 </div>

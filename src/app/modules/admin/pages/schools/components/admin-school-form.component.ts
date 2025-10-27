@@ -9,7 +9,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
@@ -75,11 +75,6 @@ export class AdminSchoolFormComponent {
     password: [this.defaultValues?.password || '', [Validators.required, Validators.minLength(6)]],
   });
 
-  // typed accessors for template bindings
-  get addressRegionControl(): FormControl<Maybe<number>> {
-    return this.form.get('address.regionId') as FormControl<Maybe<number>>;
-  }
-
   editMode = computed(() => Boolean(this.defaultValues));
 
   ngOnChanges(changes: SimpleChanges) {
@@ -123,6 +118,9 @@ export class AdminSchoolFormComponent {
   }
 
   submit() {
+    console.log(this.form.getRawValue());
+
+    this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.onSubmitLoading.set(true);
     const payload = this.form.value as ISchoolRequest;

@@ -1,7 +1,7 @@
 import { Maybe } from '@/core';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Component, inject, Input, signal } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { ICity, IStateResponse } from '../models';
 import { StatesService } from '../services';
@@ -12,9 +12,9 @@ import { StatesService } from '../services';
   imports: [UikitFieldComponent, Select],
 })
 export class StatesSelectComponent {
-  @Input() stateFormControlName!: FormControl<Maybe<number>>;
+  @Input() stateControl!: Maybe<AbstractControl>;
   @Input() onlyState?: boolean = false;
-  @Input() cityFormControlName?: FormControl<Maybe<number>>;
+  @Input() cityControl?: Maybe<AbstractControl>;
 
   statesService = inject(StatesService);
 
@@ -33,14 +33,14 @@ export class StatesSelectComponent {
 
   onStateSelect = (state: any) => {
     this.selectedStateId.set(state.id);
-    this.stateFormControlName.setValue(state.id);
-    if (this.cityFormControlName) {
-      this.cityFormControlName.setValue(null);
+    this.stateControl?.setValue(state.id);
+    if (this.cityControl) {
+      this.cityControl.setValue(null);
     }
     this.cities.set(state.children);
   };
 
   onCitySelect = (city: ICity) => {
-    this.cityFormControlName?.setValue(city.id);
+    this.cityControl?.setValue(city.id);
   };
 }
