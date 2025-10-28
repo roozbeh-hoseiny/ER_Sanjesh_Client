@@ -3,8 +3,11 @@ export enum UserRole {
   GRADER = 'grader',
   ADMIN = 'admin',
   SCHOOLS = 'schools',
+  TEACHERS = 'teachers',
   SUPERADMIN = 'superadmin',
 }
+
+export type TRoles = keyof typeof UserRole;
 
 export interface User {
   id: string;

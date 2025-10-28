@@ -1,0 +1,28 @@
+<div class="bg-white h-svh relative">
+  <div class="absolute inset-0 opacity-30 blur-xs flex items-center justify-center">
+    <img [src]="authVector" alt="background image" class="object-cover max-w-full max-h-full" />
+  </div>
+  <div class="flex justify-center items-center relative z-10 h-svh mx-auto bg-gray-800/80">
+    <div
+      class="flex flex-col items-center justify-center px-12 py-10 h-auto bg-surface-card border border-surface-border rounded-lg shadow w-full max-w-md"
+    >
+      <div class="flex flex-col gap-4 text-center mb-10 items-center justify-center">
+        <img [src]="logo" alt="لوگو سازمان سنجش" class="w-20 h-auto" />
+        <span class="text-lg font-bold"> به پنل آزمون آنلاین تشریحی خوش آمدید. </span>
+      </div>
+      <!-- <button (click)="toggleActiveStep()">toggle</button> -->
+
+      @if (activeStep() === "login") {
+        <app-login
+          [redirectUrl]="redirectUrl"
+          [loginApiUrl]="loginApiUrl"
+          [certainRole]="certainRole"
+          class="w-full"
+          (onSubmit)="(onLogin)"
+        />
+      } @else if (activeStep() === "otp") {
+        <app-otp />
+      }
+    </div>
+  </div>
+</div>

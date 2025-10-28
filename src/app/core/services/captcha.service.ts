@@ -1,3 +1,4 @@
+import { timeToSeconds } from '@/utils';
 import { HttpClient } from '@angular/common/http';
 import { computed, Injectable, signal, Signal } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
@@ -44,9 +45,8 @@ export class CaptchaService {
           if (!res) {
             throw new Error('Invalid captcha response');
           }
-
           this._captchaId.set(res.id);
-          this.startTtlTimer(this.ttlSeconds);
+          this.startTtlTimer(timeToSeconds(res.expiry));
           this.setCaptchaImageSrc();
         }),
         finalize(() => this._loading.set(false)),

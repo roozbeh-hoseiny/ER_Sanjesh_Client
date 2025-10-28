@@ -1,0 +1,4 @@
+<form class="card flex justify-center flex-col gap-3 items-center p-6" (ngSubmit)="submit()">
+  <p-inputotp name="otp" [(ngModel)]="otpCode" />
+  <button pButton [loading]="submitLoading()">ثبت</button>
+</form>

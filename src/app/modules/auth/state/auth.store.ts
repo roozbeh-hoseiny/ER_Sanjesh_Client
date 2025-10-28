@@ -354,10 +354,11 @@ export class AuthStore extends BaseStore<AuthState> {
    */
   private navigateByRole(role: UserRole): void {
     const roleRoutes = {
-      [UserRole.STUDENT]: '/student',
-      [UserRole.GRADER]: '/grader',
       [UserRole.ADMIN]: '/admin',
       [UserRole.SCHOOLS]: '/schools',
+      [UserRole.TEACHERS]: '/teachers',
+      [UserRole.STUDENT]: '/student',
+      [UserRole.GRADER]: '/grader',
       [UserRole.SUPERADMIN]: '/superadmin',
     };
 

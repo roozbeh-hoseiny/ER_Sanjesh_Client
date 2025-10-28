@@ -1,0 +1,76 @@
+export interface ISchoolAddressRequest {
+  id: string;
+  regionId: number;
+  address: string;
+  postalCode: string;
+  number: string;
+  latitude: string;
+  longitude: string;
+  zoom: number;
+}
+
+export interface ISchoolInfoRequest {
+  id: string;
+  name: string;
+  managerInfo: Omit<ManagerInfo, 'mobileIsVerified' | 'emailIsVerified'>;
+  phoneNumber: string;
+  boyOrGirl: number;
+  examHallCapacity: number;
+}
+
+export interface ISchoolLoginInfoRequest {
+  username: string;
+  password: string;
+  email: string;
+  mobile: string;
+}
+
+export interface IVerifyRequest {
+  otp: string;
+}
+
+export interface IVerifyManagerEmailRequest extends IVerifyRequest {}
+export interface IVerifyManagerMobileRequest extends IVerifyRequest {}
+
+export interface IVerifyContactEmailRequest {}
+export interface IVerifyContactMobileRequest {}
+
+export interface ISchoolResponse {
+  id: string;
+  name: string;
+  address: Address;
+  managerInfo: ManagerInfo;
+  contactInfo: ManagerInfo;
+  username: string;
+  passwordMustBeChangedOnNextLogin: boolean;
+  canLoginWithMobileOrEmail: boolean;
+  boyOrGirl: number;
+  examHallCapacity: number;
+  isActive: boolean;
+  categories: any[];
+  fieldOfStudies: any[];
+}
+
+interface Address {
+  regionId: number;
+  address: string;
+  postalCode: string;
+  number: string;
+  latitude: string;
+  longitude: string;
+  zoom: number;
+  countryName: string;
+  stateName: string;
+  cityName: string;
+  districtName: string;
+}
+
+interface ManagerInfo {
+  firstName: string;
+  lastName: string;
+  gender: boolean;
+  mobile: string;
+  email: string;
+  mobileIsVerified: boolean;
+  emailIsVerified: boolean;
+}

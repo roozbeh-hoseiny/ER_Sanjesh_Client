@@ -1,5 +1,6 @@
 import { AuthService } from '@/core';
-import { LoginCredentials } from '@/core/models';
+import rolesConst from '@/core/constants/roles.const';
+import { LoginCredentials, TRoles } from '@/core/models';
 import { UikitLabelComponent } from '@/uikit';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
@@ -10,8 +11,8 @@ import { ImageModule } from 'primeng/image';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { CaptchaService } from 'src/app/core/services/captcha.service';
-import images from 'src/assets/images';
 
 @Component({
   selector: 'app-login',
@@ -25,13 +26,15 @@ import images from 'src/assets/images';
     ImageModule,
     ProgressSpinnerModule,
     UikitLabelComponent,
+    RadioButtonModule,
   ],
 })
 export class LoginComponent {
-  @Output() submit = new EventEmitter<Promise<boolean>>();
+  @Output() onSubmit = new EventEmitter<LoginCredentials>();
 
   @Input() redirectUrl!: string;
   @Input() loginApiUrl!: string;
+  @Input() certainRole: boolean = false;
 
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
@@ -44,17 +47,17 @@ export class LoginComponent {
   readonly isCaptchaExpired = this.captchaService.captchaIsExpired;
   readonly isCaptchaLoading = this.captchaService.loading;
   readonly captchaImageSrc = this.captchaService.captchaImageSrc;
-
-  readonly logo = images.logo;
-  readonly authVector = images.errors.authBack;
+  readonly roles = Object.values(rolesConst);
 
   readonly loginForm = this.fb.group({
     username: ['', [Validators.required]],
     password: ['', [Validators.required]],
     rememberMe: [false],
     captcha: ['', [Validators.required]],
+    role: [this.roles[0].key, [Validators.required]],
   });
 
+  selectedRole = signal<TRoles>('ADMIN');
   ngOnInit() {
     this.captchaService.requestNewCaptcha();
   }
@@ -72,7 +75,7 @@ export class LoginComponent {
     this.captchaService.requestNewCaptcha();
   }
 
-  onSubmit(): void {
+  submit(): void {
     console.log('first');
 
     if (this.loginForm.valid && !!this.captchaService.captchaId()) {
