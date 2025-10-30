@@ -17,7 +17,7 @@
         [options]="cities() || []"
         [loading]="getStatesLoading()"
         [disabled]="!selectedStateId()"
-        [invalid]="cityControl?.invalid && cityControl?.touched"
+        [invalid]="cityControl.invalid && cityControl.touched"
         (onChange)="onCitySelect($event.value)"
       />
     </uikit-field>

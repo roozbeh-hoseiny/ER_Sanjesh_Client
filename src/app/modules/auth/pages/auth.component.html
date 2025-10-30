@@ -16,12 +16,15 @@
         <app-login
           [redirectUrl]="redirectUrl"
           [loginApiUrl]="loginApiUrl"
-          [certainRole]="certainRole"
+          [defaultRole]="role"
           class="w-full"
-          (onSubmit)="(onLogin)"
+          (onSuccessfullySubmit)="onLoggedIn($event)"
         />
       } @else if (activeStep() === "otp") {
-        <app-otp />
+        <app-otp class="w-full" />
+      } @else if (activeStep() === "modifyLoginInfo") {
+        <app-modify-login-info [userLoginInfo]="{}" role="SCHOOLS" class="w-full" />
+        <!-- <app-modify-login-info [userLoginInfo]="{}" [role]="role!" class="w-full" /> -->
       }
     </div>
   </div>

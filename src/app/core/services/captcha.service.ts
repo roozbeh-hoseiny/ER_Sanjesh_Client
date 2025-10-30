@@ -69,7 +69,16 @@ export class CaptchaService {
   setCaptchaImageSrc = () => {
     const id = this._captchaId();
     const base = environment.apiBaseUrl ? environment.apiBaseUrl.replace(/\/$/, '') : '';
-    this.captchaImageSrc.set(id ? `${base}/captcha?Id=${encodeURIComponent(id)}` : '');
+    this.captchaImageSrc.set(
+      id ? `${base}/captcha?Id=${encodeURIComponent(id)}&width=222&height=111` : '',
+    );
+  };
+
+  resetCaptchaImage = () => {
+    this.captchaImageSrc.set(null);
+    console.log('first');
+
+    this.setCaptchaImageSrc();
   };
 
   buildCaptchaHeaders(

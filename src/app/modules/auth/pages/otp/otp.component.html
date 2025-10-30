@@ -1,4 +1,5 @@
-<form class="card flex justify-center flex-col gap-3 items-center p-6" (ngSubmit)="submit()">
-  <p-inputotp name="otp" [(ngModel)]="otpCode" />
-  <button pButton [loading]="submitLoading()">ثبت</button>
+<form class="flex justify-center flex-col gap-3 items-center px-6" (ngSubmit)="submit()">
+  <p-inputotp name="otp" size="large" [length]="5" [(ngModel)]="otpCode" />
+  <span class="text-muted-color"> کد ارسال شده را وارد کنید. </span>
+  <button pButton class="w-full mt-5" [loading]="submitLoading()">ثبت</button>
 </form>

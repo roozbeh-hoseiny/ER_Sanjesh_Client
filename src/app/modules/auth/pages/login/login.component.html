@@ -1,5 +1,5 @@
 <form [formGroup]="loginForm" class="w-full" (ngSubmit)="submit()">
-  @if (!certainRole) {
+  @if (!defaultRole) {
     <div class="flex items-center gap-4 justify-center mb-10">
       @for (role of roles; track role.key) {
         <div class="flex items-center gap-1">
@@ -11,14 +11,16 @@
   }
 
   <div class="flex flex-col gap-2 mb-4">
-    <uikit-label for="username" pSize="large"> ایمیل </uikit-label>
+    <uikit-label for="username" pSize="large"> نام کاربری </uikit-label>
     <input
       pInputText
       id="username"
+      name="username"
       type="text"
-      placeholder="آدرس ایمیل"
+      placeholder="نام کاربری"
       class="w-full"
       pSize="large"
+      autocomplete="username"
       formControlName="username"
     />
   </div>
@@ -27,7 +29,9 @@
     <p-password
       id="password1"
       size="large"
+      name="password"
       formControlName="password"
+      autocomplete="password"
       placeholder="رمز عبور"
       [toggleMask]="true"
       [fluid]="true"
@@ -48,7 +52,7 @@
     <div
       class="relative bg-surface-ground rounded-xl overflow-hidden shadow shrink-0 border border-[var(--p-inputtext-border-color)] w-full aspect-[2]"
     >
-      <img p-image [src]="captchaImageSrc()" class="w-full object-contain" />
+      <img p-image id="captchaImage" [src]="captchaImageSrc()" class="w-full object-contain" />
       @if (isCaptchaLoading()) {
         <div class="!absolute inset-0 bg-surface-hover/50 flex items-center justify-center">
           <p-progress-spinner
@@ -67,14 +71,20 @@
         </div>
       }
     </div>
-    <input
-      pInputText
-      id="captcha"
-      type="text"
-      placeholder="کد کپچا را وارد کنید"
-      class="w-full"
-      formControlName="captcha"
-    />
+    <p-inputgroup>
+      <input
+        pInputText
+        id="captcha"
+        type="text"
+        placeholder="کد کپچا را وارد کنید"
+        class="w-full"
+        formControlName="captcha"
+      />
+
+      <p-inputgroup-addon>
+        <p-button icon="pi pi-refresh" severity="secondary" variant="text" (click)="onRefreshCaptchaImage()" />
+      </p-inputgroup-addon>
+    </p-inputgroup>
   </div>
   <p-button label="ورود" styleClass="w-full" size="large" [loading]="isLoading" type="submit"></p-button>
 </form>

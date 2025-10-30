@@ -35,6 +35,31 @@ export interface IVerifyManagerMobileRequest extends IVerifyRequest {}
 export interface IVerifyContactEmailRequest {}
 export interface IVerifyContactMobileRequest {}
 
+export interface ISchoolMeResponse {
+  id: string;
+  name: string;
+  address: Address;
+  managerInfo: ManagerInfo;
+  contactInfo: ManagerInfo;
+  username: string;
+  passwordMustBeChangedOnNextLogin: boolean;
+  canLoginWithMobileOrEmail: boolean;
+  boyOrGirl: number;
+  examHallCapacity: number;
+  isActive: boolean;
+  uniqueId: string;
+  categories: Category[];
+  fieldOfStudies: any[];
+}
+
+interface Category {
+  id: number;
+  title: string;
+  ordinal: number;
+  parent: null;
+  children: any[];
+}
+
 export interface ISchoolResponse {
   id: string;
   name: string;

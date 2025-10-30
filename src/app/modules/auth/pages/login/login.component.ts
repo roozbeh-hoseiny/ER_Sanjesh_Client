@@ -1,6 +1,6 @@
 import { AuthService } from '@/core';
 import rolesConst from '@/core/constants/roles.const';
-import { LoginCredentials, TRoles } from '@/core/models';
+import { IAuthResponse, LoginCredentials, TRoles } from '@/core/models';
 import { UikitLabelComponent } from '@/uikit';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
@@ -8,6 +8,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Button } from 'primeng/button';
 import { ImageModule } from 'primeng/image';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -27,14 +29,16 @@ import { CaptchaService } from 'src/app/core/services/captcha.service';
     ProgressSpinnerModule,
     UikitLabelComponent,
     RadioButtonModule,
+    InputGroupModule,
+    InputGroupAddonModule,
   ],
 })
 export class LoginComponent {
-  @Output() onSubmit = new EventEmitter<LoginCredentials>();
+  @Output() onSuccessfullySubmit = new EventEmitter<IAuthResponse>();
 
   @Input() redirectUrl!: string;
   @Input() loginApiUrl!: string;
-  @Input() certainRole: boolean = false;
+  @Input() defaultRole?: TRoles;
 
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
@@ -54,7 +58,7 @@ export class LoginComponent {
     password: ['', [Validators.required]],
     rememberMe: [false],
     captcha: ['', [Validators.required]],
-    role: [this.roles[0].key, [Validators.required]],
+    role: [this.defaultRole || this.roles[0].key, [Validators.required]],
   });
 
   selectedRole = signal<TRoles>('ADMIN');
@@ -74,24 +78,36 @@ export class LoginComponent {
   onRefreshCaptcha(): void {
     this.captchaService.requestNewCaptcha();
   }
+  onRefreshCaptchaImage(): void {
+    document
+      .getElementById('captchaImage')
+      ?.setAttribute('src', this.captchaService.captchaImageSrc()! + `&${new Date().getTime()}`);
+  }
 
   submit(): void {
-    console.log('first');
-
     if (this.loginForm.valid && !!this.captchaService.captchaId()) {
       const credentials: LoginCredentials = this.loginForm.value as LoginCredentials;
 
-      this.authService.login(credentials, this.loginApiUrl).subscribe({
-        next: () => {
-          this.errorMessage.set('');
-          this.router.navigateByUrl(this.redirectUrl);
-        },
-        error: (error) => {
-          this.resetCaptcha();
-          this.errorMessage.set('نام کاربری یا رمز عبور اشتباه است');
-          console.error('Login failed:', error);
-        },
-      });
+      this.authService
+        .login(credentials, (this.defaultRole || this.loginForm.value.role)!)
+        .subscribe({
+          next: (data) => {
+            console.log('data');
+            console.log(data);
+
+            this.errorMessage.set('');
+            if (this.redirectUrl) {
+              this.router.navigateByUrl(this.redirectUrl.replace(/\/[^/]*$/, ''));
+            } else {
+              this.onSuccessfullySubmit.emit(data);
+            }
+          },
+          error: (error) => {
+            this.resetCaptcha();
+            this.errorMessage.set('نام کاربری یا رمز عبور اشتباه است');
+            console.error('Login failed:', error);
+          },
+        });
     }
   }
 }

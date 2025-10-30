@@ -1,9 +1,9 @@
-import { ISchoolResponse } from '@/modules/admin/pages/schools/models/schools';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SCHOOLS_API_ROUTES } from '../constants';
 import {
+  ISchoolMeResponse,
   IVerifyContactEmailRequest,
   IVerifyContactMobileRequest,
   IVerifyManagerEmailRequest,
@@ -16,8 +16,8 @@ export class SchoolsAuthService {
 
   private apiRoutes = SCHOOLS_API_ROUTES;
 
-  me(): Observable<ISchoolResponse> {
-    return this.http.get<ISchoolResponse>(this.apiRoutes.me());
+  me(): Observable<ISchoolMeResponse> {
+    return this.http.get<ISchoolMeResponse>(this.apiRoutes.me());
   }
 
   verifyContactEmail(request: IVerifyContactEmailRequest): Observable<void> {

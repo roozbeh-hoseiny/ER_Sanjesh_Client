@@ -1,9 +1,21 @@
+import { ADMIN_API_ROUTES } from '@/modules/admin/constants';
+import { SCHOOLS_API_ROUTES } from '@/modules/schools/constants';
+import { ISchoolMeResponse } from '@/modules/schools/models';
+import { TEACHERS_API_ROUTES } from '@/modules/teachers/constants';
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { AuthResponse, LoginCredentials, Maybe, User, UserRole } from '../models';
+import { catchError, finalize, map, tap } from 'rxjs/operators';
+import {
+  IAuthResponse,
+  IUserLoginInfo,
+  LoginCredentials,
+  Maybe,
+  TRoles,
+  User,
+  UserRole,
+} from '../models';
 import { CaptchaService } from './captcha.service';
 
 @Injectable({
@@ -11,10 +23,22 @@ import { CaptchaService } from './captcha.service';
 })
 export class AuthService {
   constructor() {
-    console.log('initializing auth service');
     this.initializeAuth();
-    console.log('initialized');
   }
+
+  readonly modulesLoginRoutes = {
+    ADMIN: ADMIN_API_ROUTES.login(),
+    SCHOOLS: SCHOOLS_API_ROUTES.login(),
+    TEACHERS: TEACHERS_API_ROUTES.login(),
+  } as Record<TRoles, string>;
+
+  readonly modulesGetInfoRoutes = {
+    SCHOOLS: SCHOOLS_API_ROUTES.me(),
+  } as Record<TRoles, string>;
+
+  readonly modulesChangeInfoRoutes = {
+    SCHOOLS: SCHOOLS_API_ROUTES.editLoginInfo(),
+  } as Record<TRoles, string>;
 
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
@@ -66,15 +90,15 @@ export class AuthService {
     }
   }
 
-  login(credentials: LoginCredentials, loginApiUrl: string): Observable<AuthResponse> {
+  login(credentials: LoginCredentials, role: TRoles): Observable<IAuthResponse> {
     const { username, password, captcha } = credentials;
     this.isLoading.set(true);
     this.isLoadingSubject.next(true);
     const baseHeaders = this.captchaService.buildCaptchaHeaders({}, captcha);
 
     return this.http
-      .post<AuthResponse>(
-        loginApiUrl,
+      .post<IAuthResponse>(
+        this.modulesLoginRoutes[role],
         { username, password },
         {
           headers: baseHeaders,
@@ -83,6 +107,7 @@ export class AuthService {
       .pipe(
         tap((response) => {
           this.handleAuthSuccess(response);
+          return response;
         }),
         catchError((error) => {
           console.error('Login error:', error);
@@ -104,14 +129,14 @@ export class AuthService {
     this.router.navigate(['/auth/login']);
   }
 
-  refreshToken(): Observable<AuthResponse> {
+  refreshToken(): Observable<IAuthResponse> {
     const refreshToken = this.getRefreshToken();
     if (!refreshToken) {
       this.logout();
       return throwError(() => new Error('No refresh token available'));
     }
 
-    return this.http.post<AuthResponse>('/api/auth/refresh', { refreshToken }).pipe(
+    return this.http.post<IAuthResponse>('/api/auth/refresh', { refreshToken }).pipe(
       tap((response) => {
         this.handleAuthSuccess(response);
       }),
@@ -121,6 +146,44 @@ export class AuthService {
         return throwError(() => error);
       }),
     );
+  }
+
+  getInfo(role: TRoles): Observable<Partial<IUserLoginInfo>> {
+    // If we have a module-specific endpoint to GET user info, call it and map to
+    // Partial<IUserLoginInfo>. For example, SCHOOLS returns ISchoolMeResponse which
+    // we adapt via prepareUserInfoBasedOnRole.
+    if (this.modulesGetInfoRoutes[role]) {
+      return this.http.get<any>(this.modulesGetInfoRoutes[role]).pipe(
+        map((data) => {
+          switch (role) {
+            case 'SCHOOLS':
+              return this.prepareUserInfoBasedOnRole(role, data as ISchoolMeResponse);
+            default:
+              return data as Partial<IUserLoginInfo>;
+          }
+        }),
+        catchError((err) => {
+          console.error('GetInfo error:', err);
+          return throwError(() => err);
+        }),
+      );
+    }
+
+    return throwError(() => new Error('متاسفانه مشکلی پیش آمده'));
+  }
+  changeInfo(credentials: IUserLoginInfo, role: TRoles): Observable<IAuthResponse> {
+    return this.http.post<IAuthResponse>(this.modulesChangeInfoRoutes[role], credentials);
+  }
+
+  prepareUserInfoBasedOnRole(role: TRoles, info: ISchoolMeResponse): Partial<IUserLoginInfo> {
+    if (role === 'SCHOOLS') {
+      return {
+        username: info.username,
+        email: info.managerInfo.email,
+        mobile: info.managerInfo.mobile,
+      };
+    }
+    return {};
   }
 
   /**
@@ -205,7 +268,7 @@ export class AuthService {
     return true;
   }
 
-  private handleAuthSuccess(response: AuthResponse): void {
+  private handleAuthSuccess(response: IAuthResponse): void {
     localStorage.setItem('auth_token', response.token);
     // localStorage.setItem('refresh_token', response.refreshToken);
     // localStorage.setItem('user_data', JSON.stringify(response.user));

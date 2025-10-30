@@ -95,13 +95,7 @@ function handleTokenRefresh(authService: AuthService, req: any, next: any): Obse
  * Check if the request should skip authentication
  */
 function shouldSkipAuth(url: string): boolean {
-  const skipAuthUrls = [
-    '/api/auth/login',
-    '/api/auth/register',
-    '/api/auth/forgot-password',
-    '/api/auth/verify-email',
-    '/api/public/',
-  ];
+  const skipAuthUrls = ['/captcha', '/api/v1/mdm', '/login'];
 
   return skipAuthUrls.some((skipUrl) => url.includes(skipUrl));
 }

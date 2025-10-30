@@ -8,7 +8,7 @@ type PSize = 'small' | 'normal' | 'large';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <label [attr.for]="for" [ngClass]="computedClass" [attr.class]="className">
+    <label [attr.for]="for" [ngClass]="computedClass" [attr.class]="className" class="select-none">
       <ng-content></ng-content>
     </label>
   `,

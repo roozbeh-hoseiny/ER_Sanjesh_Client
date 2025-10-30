@@ -30,9 +30,12 @@ export interface Permission {
   action: string;
 }
 
-export interface AuthResponse {
-  user: User;
+export interface IAuthResponse {
+  // user: User;
   token: string;
+  fullName: string;
+  mustChangePassword: boolean;
+  role: string;
   refreshToken: string;
   expiresIn: number;
 }
@@ -41,4 +44,11 @@ export interface LoginCredentials {
   username: string;
   password: string;
   captcha: string;
+}
+
+export interface IUserLoginInfo {
+  username: string;
+  password: string;
+  mobile: string;
+  email: string;
 }
