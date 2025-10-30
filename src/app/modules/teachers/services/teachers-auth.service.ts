@@ -1,4 +1,4 @@
-import { ISchoolResponse } from '@/modules/admin/pages/schools/models/schools';
+import { ISchoolMeResponse } from '@/modules/schools/models';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -11,8 +11,8 @@ export class SchoolsAuthService {
 
   private apiRoutes = TEACHERS_API_ROUTES;
 
-  me(): Observable<ISchoolResponse> {
-    return this.http.get<ISchoolResponse>(this.apiRoutes.me());
+  me(): Observable<ISchoolMeResponse> {
+    return this.http.get<ISchoolMeResponse>(this.apiRoutes.me());
   }
 
   sendOTPSms(request: { mobile: string }): Observable<void> {

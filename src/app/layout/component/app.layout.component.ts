@@ -1,17 +1,35 @@
+import { BreadcrumbService } from '@/core/services';
+import { BreadcrumbComponent } from '@/shared/components';
 import { CommonModule } from '@angular/common';
-import { Component, Renderer2, ViewChild } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  inject,
+  Input,
+  Renderer2,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { ProgressSpinner } from 'primeng/progressspinner';
 import { filter, Subscription } from 'rxjs';
 import { LayoutService } from '../service/layout.service';
 import { AppFooter } from './app.footer.component';
 import { AppSidebar } from './app.sidebar.component';
 import { AppTopbar } from './app.topbar.component';
-import { BreadcrumbComponent } from '@/shared/components';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter, BreadcrumbComponent],
+  imports: [
+    CommonModule,
+    AppTopbar,
+    AppSidebar,
+    RouterModule,
+    AppFooter,
+    BreadcrumbComponent,
+    ProgressSpinner,
+  ],
   templateUrl: './app.layout.component.html',
 })
 export class AppLayout {
@@ -19,9 +37,14 @@ export class AppLayout {
 
   menuOutsideClickListener: any;
 
+  @Input() fullLoading: boolean = false;
+
   @ViewChild(AppSidebar) appSidebar!: AppSidebar;
 
   @ViewChild(AppTopbar) appTopBar!: AppTopbar;
+  @ContentChild('content', { static: true }) content?: TemplateRef<any> | null;
+
+  private breadcrumbService = inject(BreadcrumbService);
 
   constructor(
     public layoutService: LayoutService,
@@ -103,6 +126,14 @@ export class AppLayout {
       'layout-overlay-active': this.layoutService.layoutState().overlayMenuActive,
       'layout-mobile-active': this.layoutService.layoutState().staticMenuMobileActive,
     };
+  }
+
+  get showBreadcrumb(): boolean {
+    return this.breadcrumbService.items.length > 0;
+  }
+
+  get showMenu(): boolean {
+    return this.layoutService.menuItems.length > 0;
   }
 
   ngOnDestroy() {

@@ -92,9 +92,6 @@ export class LoginComponent {
         .login(credentials, (this.defaultRole || this.loginForm.value.role)!)
         .subscribe({
           next: (data) => {
-            console.log('data');
-            console.log(data);
-
             this.errorMessage.set('');
             if (this.redirectUrl) {
               this.router.navigateByUrl(this.redirectUrl.replace(/\/[^/]*$/, ''));

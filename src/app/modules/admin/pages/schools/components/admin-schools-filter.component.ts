@@ -76,8 +76,6 @@ export class AdminSchoolsFilterComponent {
   }
 
   onRegionChange(regionId: Maybe<number> = null) {
-    console.log('first', regionId);
-
     this.resetFilters();
     this.selectedRegion.set(regionId);
     this.onRegionFilter.emit(regionId);

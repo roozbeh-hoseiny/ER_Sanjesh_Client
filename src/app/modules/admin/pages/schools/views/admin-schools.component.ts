@@ -177,9 +177,6 @@ export class AdminSchoolsComponent {
         this.schoolsChangeStatusSchedules.update(() => updatedSchedules);
         item.isActive = !checked;
       },
-      complete: () => {
-        console.log('comple');
-      },
     });
   }
 

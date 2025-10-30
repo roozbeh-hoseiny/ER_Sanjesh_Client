@@ -6,6 +6,11 @@
   justify-content: space-between;
   padding: 6rem 1rem 2rem 2rem;
   transition: margin-inline-start var(--layout-section-transition-duration);
+  &.hideMenu {
+    margin: 0 !important;
+    transform: translateX(0) !important;
+    padding-inline-start: 2rem !important;
+  }
 }
 
 .layout-main {

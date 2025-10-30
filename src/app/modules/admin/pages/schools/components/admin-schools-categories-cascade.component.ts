@@ -31,8 +31,6 @@ export class SchoolsCategoriesCascadeComponent {
   }
 
   onCategorySelect = (category: any) => {
-    console.log(category);
-
     if (!category) {
       this.onClear();
     } else {

@@ -17,6 +17,8 @@ export class SchoolsAuthService {
   private apiRoutes = SCHOOLS_API_ROUTES;
 
   me(): Observable<ISchoolMeResponse> {
+    console.log('asdasdasd');
+
     return this.http.get<ISchoolMeResponse>(this.apiRoutes.me());
   }
 

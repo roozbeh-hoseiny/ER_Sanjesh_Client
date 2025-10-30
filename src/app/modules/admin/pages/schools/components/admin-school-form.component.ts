@@ -118,8 +118,6 @@ export class AdminSchoolFormComponent {
   }
 
   submit() {
-    console.log(this.form.getRawValue());
-
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.onSubmitLoading.set(true);

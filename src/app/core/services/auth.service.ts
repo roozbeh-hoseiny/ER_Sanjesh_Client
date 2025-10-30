@@ -68,7 +68,6 @@ export class AuthService {
   readonly isLoading = signal<boolean>(false);
   readonly token = signal<Maybe<string>>(null);
   readonly isAuthenticated = computed(() => {
-    console.log('computed');
     return Boolean(this.token());
   });
   readonly userRole = computed(() => this.currentUser()?.role);

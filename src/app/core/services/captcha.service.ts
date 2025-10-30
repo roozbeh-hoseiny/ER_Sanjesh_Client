@@ -76,8 +76,6 @@ export class CaptchaService {
 
   resetCaptchaImage = () => {
     this.captchaImageSrc.set(null);
-    console.log('first');
-
     this.setCaptchaImageSrc();
   };
 
