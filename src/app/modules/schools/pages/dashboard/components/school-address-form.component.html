@@ -1,0 +1,22 @@
+<form [formGroup]="form">
+  <div class="grid grid-cols-1 gap-4">
+    <uikit-field label="آدرس" for="address" [control]="form.get('address')">
+      <textarea
+        pTextarea
+        formControlName="address"
+        rows="2"
+        [invalid]="form.get('address')?.invalid && form.get('address')?.touched"
+      ></textarea>
+    </uikit-field>
+    <app-states-select [stateControl]="form.get('state')" [cityControl]="form.get('regionId')"></app-states-select>
+    <div class="grid grid-cols-2">
+      <uikit-field label="کد پستی" for="postalCode" [control]="form.get('postalCode')">
+        <input
+          pInputText
+          formControlName="postalCode"
+          [invalid]="form.get('postalCode')?.invalid && form.get('postalCode')?.touched"
+        />
+      </uikit-field>
+    </div>
+  </div>
+</form>

@@ -3,15 +3,14 @@ import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Component, Input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Select } from 'primeng/select';
-import { schoolGenders } from './schoolGenders.const';
 
 @Component({
-  selector: 'app-school-genders-select',
-  templateUrl: './app-school-genders-select.component.html',
+  selector: 'app-gender-select',
+  templateUrl: './gender-select.component.html',
   imports: [UikitFieldComponent, Select],
 })
-export class SchoolGendersSelect {
-  @Input() control!: Maybe<AbstractControl<any, any>>;
+export class GenderSelectComponent {
+  constructor() {}
 
-  readonly genders = schoolGenders;
+  @Input() control!: Maybe<AbstractControl<any, any>>;
 }

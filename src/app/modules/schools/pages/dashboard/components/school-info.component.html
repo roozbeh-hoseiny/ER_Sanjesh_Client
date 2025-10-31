@@ -1,0 +1,48 @@
+<app-card-data cardTitle="اطلاعات مدرسه" [editable]="true" [editMode]="editMode()" (onEdit)="onEdit()">
+  @if (editMode()) {
+    <app-school-info-form [info]="info" (closeForm)="closeForm()" />
+  } @else {
+    <div class="flex flex-col gap-4">
+      <div class="grid grid-cols-3 gap-4">
+        <app-key-value label="نام مدرسه" [value]="info.name" />
+        <app-key-value label="جنسیت">
+          <app-school-genders-tag [genderId]="info.boyOrGirl" />
+        </app-key-value>
+        <app-key-value label="فعال بودن">
+          <p-badge [value]="info.isActive ? 'فعال' : 'غیرفعال'" [severity]="info.isActive ? 'success' : 'danger'" />
+        </app-key-value>
+        <app-key-value label="ظرفیت مدرسه" [value]="info.examHallCapacity.toString()" />
+      </div>
+      <app-key-value label="دسته‌بندی">
+        @if (info.categories.length) {
+          <div class="inline-flex items-center gap-2">
+            @for (category of info.categories; track category.id) {
+              <p-badge [value]="category.title" severity="secondary"></p-badge>
+            }
+          </div>
+        } @else {
+          -
+        }
+      </app-key-value>
+      <app-key-value label="رشته‌های تحصیلی">
+        @if (info.fieldOfStudies.length) {
+          <div class="inline-flex items-center gap-2">
+            @for (field of info.fieldOfStudies; track field.id) {
+              <p-badge [value]="field.title" severity="secondary"></p-badge>
+            }
+          </div>
+        } @else {
+          -
+        }
+      </app-key-value>
+      <hr />
+      <div class="grid grid-cols-3 gap-4">
+        <app-key-value label="نام" [value]="info.managerInfo.firstName" />
+        <app-key-value label="نام خانوادگی" [value]="info.managerInfo.lastName" />
+        <app-key-value label="جنسیت" [value]="info.managerInfo.gender ? 'مرد' : 'زن'" />
+        <app-key-value label="تلفن همراه" [value]="info.managerInfo.mobile" />
+        <app-key-value label="ایمیل" [value]="info.managerInfo.email" />
+      </div>
+    </div>
+  }
+</app-card-data>

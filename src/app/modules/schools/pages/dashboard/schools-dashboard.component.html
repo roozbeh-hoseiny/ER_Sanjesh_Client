@@ -1,1 +1,5 @@
-<div class="principal-dashboard"></div>
+<div class="flex flex-col gap-6">
+  <app-school-info [info]="schoolStore.info()!" />
+  <app-school-address [address]="schoolStore.info()?.address" />
+  <app-school-login-info [manager]="schoolStore.info()?.managerInfo!" />
+</div>

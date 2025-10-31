@@ -1,0 +1,10 @@
+<uikit-field label="جنسیت" for="gender" [control]="control">
+  <p-select
+    [options]="[
+      { label: 'مرد', id: true },
+      { label: 'زن', id: false },
+    ]"
+    [optionValue]="'id'"
+    [invalid]="control?.invalid && control?.touched"
+  ></p-select>
+</uikit-field>

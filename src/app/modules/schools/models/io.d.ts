@@ -12,7 +12,7 @@ export interface ISchoolAddressRequest {
 export interface ISchoolInfoRequest {
   id: string;
   name: string;
-  managerInfo: Omit<ManagerInfo, 'mobileIsVerified' | 'emailIsVerified'>;
+  managerInfo: Omit<IManagerInfo, 'mobileIsVerified' | 'emailIsVerified'>;
   phoneNumber: string;
   boyOrGirl: number;
   examHallCapacity: number;
@@ -39,8 +39,8 @@ export interface ISchoolMeResponse {
   id: string;
   name: string;
   address: Address;
-  managerInfo: ManagerInfo;
-  contactInfo: ManagerInfo;
+  managerInfo: IManagerInfo;
+  contactInfo: IManagerInfo;
   username: string;
   passwordMustBeChangedOnNextLogin: boolean;
   canLoginWithMobileOrEmail: boolean;
@@ -64,8 +64,8 @@ export interface ISchoolResponse {
   id: string;
   name: string;
   address: Address;
-  managerInfo: ManagerInfo;
-  contactInfo: ManagerInfo;
+  managerInfo: IManagerInfo;
+  contactInfo: IManagerInfo;
   username: string;
   passwordMustBeChangedOnNextLogin: boolean;
   canLoginWithMobileOrEmail: boolean;
@@ -76,7 +76,7 @@ export interface ISchoolResponse {
   fieldOfStudies: any[];
 }
 
-interface Address {
+export interface ISchoolAddress {
   regionId: number;
   address: string;
   postalCode: string;
@@ -90,7 +90,7 @@ interface Address {
   districtName: string;
 }
 
-interface ManagerInfo {
+export interface IManagerInfo {
   firstName: string;
   lastName: string;
   gender: boolean;

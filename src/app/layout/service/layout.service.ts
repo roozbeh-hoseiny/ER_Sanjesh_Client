@@ -16,6 +16,7 @@ interface LayoutState {
   configSidebarVisible?: boolean;
   staticMenuMobileActive?: boolean;
   menuHoverActive?: boolean;
+  showBackground?: boolean;
 }
 
 interface MenuChangeEvent {
@@ -41,6 +42,7 @@ export class LayoutService {
     configSidebarVisible: false,
     staticMenuMobileActive: false,
     menuHoverActive: false,
+    showBackground: false,
   };
 
   layoutConfig = signal<layoutConfig>(this._config);
@@ -78,6 +80,8 @@ export class LayoutService {
   getSurface = computed(() => this.layoutConfig().surface);
 
   isOverlay = computed(() => this.layoutConfig().menuMode === 'overlay');
+
+  showBackground = computed(() => this.layoutState().showBackground);
 
   transitionComplete = signal<boolean>(false);
 
@@ -122,6 +126,15 @@ export class LayoutService {
         this.onTransitionEnd();
       })
       .catch(() => {});
+  }
+
+  changeShowBackground(show: boolean) {
+    console.log(show);
+
+    this.layoutState.update((prev) => ({
+      ...prev,
+      showBackground: show,
+    }));
   }
 
   toggleDarkMode(config?: layoutConfig): void {
