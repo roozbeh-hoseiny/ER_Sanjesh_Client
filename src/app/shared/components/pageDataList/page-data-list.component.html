@@ -1,120 +1,123 @@
-<div class="h-full flex flex-col gap-4">
-  <p-table
-    [columns]="columns"
-    [scrollable]="true"
-    [value]="items"
-    [loading]="loading"
-    columnResizeMode="fit"
-    stripedRows
-    [showFirstLastIcon]="false"
-    class="grow !flex flex-col overflow-hidden"
-  >
-    <ng-template pTemplate="caption">
-      <div class="flex justify-between items-center gap-4">
-        <h5 class="font-bold">{{ pageTitle }}</h5>
-        @if (showAdd || filter) {
-          <div class="flex items-center gap-2">
-            @if (filter) {
-              <p-button
-                label="فیلتر"
-                icon="pi pi-filter"
-                variant="outlined"
-                badgeSeverity="info"
-                [badge]="isFiltered ? '1' : undefined"
-                (click)="openFilter()"
-              ></p-button>
-            }
-            @if (showAdd) {
-              <p-button label="{{ addNewCtaLabel }}" icon="pi pi-plus" (click)="openAddForm()"></p-button>
-            }
-          </div>
-        }
-      </div>
-    </ng-template>
+<div class="h-full bg-surface-overlay">
+  <div class="h-full flex flex-col gap-4">
+    <p-table
+      [columns]="columns"
+      [scrollable]="true"
+      [value]="items"
+      [loading]="loading"
+      columnResizeMode="fit"
+      stripedRows
+      [showFirstLastIcon]="false"
+      class="grow !flex flex-col overflow-hidden"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex justify-between items-center gap-4">
+          <h5 class="font-bold">{{ pageTitle }}</h5>
+          @if (showAdd || filter) {
+            <div class="flex items-center gap-2">
+              @if (filter) {
+                <p-button
+                  label="فیلتر"
+                  icon="pi pi-filter"
+                  variant="outlined"
+                  badgeSeverity="info"
+                  [badge]="isFiltered ? '1' : undefined"
+                  (click)="openFilter()"
+                ></p-button>
+              }
+              @if (showAdd) {
+                <p-button label="{{ addNewCtaLabel }}" icon="pi pi-plus" (click)="openAddForm()"></p-button>
+              }
+            </div>
+          }
+        </div>
+      </ng-template>
 
-    <ng-template #header let-columns>
-      <tr>
-        @for (col of columns; track col.header) {
-          <th [style]="{ width: col.width, minWidth: col.minWidth }">{{ col.header }}</th>
-        }
-        @if (showDelete || showEdit) {
-          <th type="th" class="w-[5rem]"></th>
-        }
-      </tr>
-    </ng-template>
+      <ng-template #header let-columns>
+        <tr>
+          @for (col of columns; track col.header) {
+            <th [style]="{ width: col.width, minWidth: col.minWidth }">{{ col.header }}</th>
+          }
+          @if (showDelete || showEdit) {
+            <th type="th" class="w-[5rem]"></th>
+          }
+        </tr>
+      </ng-template>
 
-    <ng-template #body let-item>
-      <tr>
-        @for (col of columns; track col.field) {
-          <td>
-            @if (getTemplate(col)) {
-              <ng-container
-                [ngTemplateOutlet]="getTemplate(col)"
-                [ngTemplateOutletContext]="{ $implicit: item }"
-              ></ng-container>
-            } @else {
-              <span>
-                {{ getCell(item, col) }}
-              </span>
-            }
-          </td>
-        }
-        @if (showDelete || showEdit) {
-          <td
-            table-action-row
-            type="td"
-            [showDelete]="showDelete"
-            [showEdit]="showEdit"
-            (edit)="edit(item)"
-            (delete)="remove(item)"
-          ></td>
-        }
-      </tr>
-    </ng-template>
-
-    <ng-template #emptymessage>
-      <tr class="h-full">
-        <td [colSpan]="columns.length.toString()" class="w-full">
-          <uikit-empty-state
-            [title]="emptyPlaceholderTitle"
-            [description]="emptyPlaceholderDescription"
-            [ctaLabel]="emptyPlaceholderCtaLabel"
-          ></uikit-empty-state>
-        </td>
-      </tr>
-    </ng-template>
-
-    <ng-template #loadingbody let-columns>
-      @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i) {
-        <tr style="height: 46px">
-          @for (col of columns; track col) {
+      <ng-template #body let-item>
+        <tr>
+          @for (col of columns; track col.field) {
             <td>
-              <p-skeleton></p-skeleton>
+              @if (getTemplate(col)) {
+                <ng-container
+                  [ngTemplateOutlet]="getTemplate(col)"
+                  [ngTemplateOutletContext]="{ $implicit: item }"
+                ></ng-container>
+              } @else {
+                <span>
+                  {{ getCell(item, col) }}
+                </span>
+              }
             </td>
           }
           @if (showDelete || showEdit) {
-            <td>
-              <p-skeleton></p-skeleton>
-            </td>
+            <td
+              table-action-row
+              type="td"
+              [showDelete]="showDelete"
+              [showEdit]="showEdit"
+              (edit)="edit(item)"
+              (delete)="remove(item)"
+            ></td>
           }
         </tr>
-      }
-    </ng-template>
-  </p-table>
-  @if (showPaginator) {
-    <app-paginator
-      [currentPage]="currentPage || 1"
-      [totalRecords]="totalRecords"
-      [perPage]="perPage || 10"
-      [loading]="loading"
-      (onChange)="onPage($event)"
-    />
-  }
+      </ng-template>
+
+      <ng-template #emptymessage>
+        <tr class="h-full">
+          <td [colSpan]="columns.length.toString()" class="w-full">
+            <uikit-empty-state
+              [title]="emptyPlaceholderTitle"
+              [description]="emptyPlaceholderDescription"
+              [ctaLabel]="emptyPlaceholderCtaLabel"
+            ></uikit-empty-state>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #loadingbody let-columns>
+        @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i) {
+          <tr style="height: 46px">
+            @for (col of columns; track col) {
+              <td>
+                <p-skeleton></p-skeleton>
+              </td>
+            }
+            @if (showDelete || showEdit) {
+              <td>
+                <p-skeleton></p-skeleton>
+              </td>
+            }
+          </tr>
+        }
+      </ng-template>
+    </p-table>
+    @if (showPaginator) {
+      <app-paginator
+        [currentPage]="currentPage || 1"
+        [totalRecords]="totalRecords"
+        [perPage]="perPage || 10"
+        [loading]="loading"
+        (onChange)="onPage($event)"
+      />
+    }
+  </div>
   @if (filter) {
     <p-drawer
       [visible]="filterDrawerVisible()"
       (onHide)="closeFilter()"
       header="فیلتر"
+      class="contnet"
       styleClass="!w-[80vw] md:!w-96 md:!max-w-96 !max-w-sm"
     >
       <div class="pt-2">

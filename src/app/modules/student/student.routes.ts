@@ -47,7 +47,7 @@ export const STUDENT_ROUTES: Routes = [
     path: '',
     component: AppLayout,
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: [UserRole.STUDENT] },
+    data: { roles: [UserRole.STUDENTS] },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       studentNamedRoutes.dashboard,

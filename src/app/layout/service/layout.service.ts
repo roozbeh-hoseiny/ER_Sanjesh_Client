@@ -129,8 +129,6 @@ export class LayoutService {
   }
 
   changeShowBackground(show: boolean) {
-    console.log(show);
-
     this.layoutState.update((prev) => ({
       ...prev,
       showBackground: show,

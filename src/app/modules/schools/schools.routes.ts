@@ -10,7 +10,7 @@ export const SCHOOLS_ROUTES: Routes = [
     path: '',
     component: SchoolsLayoutComponent,
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: [UserRole.SCHOOLS] },
+    data: { roles: [UserRole.SCHOOL] },
     children: Object.values(schoolsNamedRoutes),
   },
 

@@ -50,7 +50,7 @@ export class AdminSchoolsComponent {
   loading = signal<boolean>(true);
   lastSeen = signal<string>('');
   activePageIndex = signal<number>(0);
-  perPage = signal<number>(10);
+  perPage = signal<number>(40);
 
   isAddSchoolFormVisible = signal<boolean>(false);
   schoolsChangeStatusSchedules = signal<Record<string, boolean>>({});
@@ -243,13 +243,15 @@ export class AdminSchoolsComponent {
   }
 
   private getAll() {
-    this.services.getSchools(this.lastSeen()).subscribe({ ...this.onResponse });
+    this.services
+      .getSchools({ lastSeen: this.lastSeen(), pageSize: this.perPage() })
+      .subscribe({ ...this.onResponse });
   }
 
   private getByName() {
     this.loading.set(true);
     this.services
-      .getSchoolsByName(this.searchQuery(), this.lastSeen())
+      .getSchoolsByName(this.searchQuery(), { lastSeen: this.lastSeen(), pageSize: this.perPage() })
       .subscribe({ ...this.onResponse });
   }
 
@@ -259,7 +261,10 @@ export class AdminSchoolsComponent {
     }
     this.loading.set(true);
     this.services
-      .getSchoolsByGender(this.selectedGender()!, this.lastSeen())
+      .getSchoolsByGender(this.selectedGender()!, {
+        lastSeen: this.lastSeen(),
+        pageSize: this.perPage(),
+      })
       .subscribe({ ...this.onResponse });
   }
   private getByCategories() {
@@ -268,7 +273,10 @@ export class AdminSchoolsComponent {
     }
     this.loading.set(true);
     this.services
-      .getSchoolsByCategories([this.selectedCategories()!], this.lastSeen())
+      .getSchoolsByCategories([this.selectedCategories()!], {
+        lastSeen: this.lastSeen(),
+        pageSize: this.perPage(),
+      })
       .subscribe({ ...this.onResponse });
   }
 
@@ -278,7 +286,10 @@ export class AdminSchoolsComponent {
     }
     this.loading.set(true);
     this.services
-      .getSchoolsByRegion(this.selectedRegion()!, this.lastSeen())
+      .getSchoolsByRegion(this.selectedRegion()!, {
+        lastSeen: this.lastSeen(),
+        pageSize: this.perPage(),
+      })
       .subscribe({ ...this.onResponse });
   }
 

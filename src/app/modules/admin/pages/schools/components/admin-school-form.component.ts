@@ -17,10 +17,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 
 import { Maybe } from '@/core';
+import { ToastService } from '@/core/services/toast.service';
 import { AdminSchoolsService } from '@/modules/admin/services';
 import { StatesSelectComponent } from '@/shared/catalog';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
-import { MessageService } from 'primeng/api';
 import { SelectModule } from 'primeng/select';
 import { ISchoolRequest } from '../models/schools';
 
@@ -50,7 +50,7 @@ export class AdminSchoolFormComponent {
   @Output() save = new EventEmitter<ISchoolRequest>();
 
   adminSchoolsService = inject(AdminSchoolsService);
-  messageService = inject(MessageService);
+  toastService = inject(ToastService);
 
   onSubmitLoading = signal<boolean>(false);
 
@@ -123,7 +123,7 @@ export class AdminSchoolFormComponent {
     this.onSubmitLoading.set(true);
     const payload = this.form.value as ISchoolRequest;
     this.adminSchoolsService.addSchool(payload).subscribe(() => {
-      this.messageService.add({ severity: 'success', detail: 'مدرسه با موفقیت اضافه شد.' });
+      this.toastService.success({ text: 'مدرسه با موفقیت اضافه شد.' });
       this.save.emit(payload);
       this.close();
     });

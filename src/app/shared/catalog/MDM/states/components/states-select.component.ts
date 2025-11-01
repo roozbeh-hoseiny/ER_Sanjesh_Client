@@ -1,7 +1,8 @@
 import { Maybe } from '@/core';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
+import { CommonModule } from '@angular/common';
 import { Component, inject, Input, signal } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { ICity, IStateResponse } from '../models';
 import { StatesService } from '../services';
@@ -9,7 +10,7 @@ import { StatesService } from '../services';
 @Component({
   selector: 'app-states-select',
   templateUrl: './states-select.component.html',
-  imports: [UikitFieldComponent, Select],
+  imports: [CommonModule, UikitFieldComponent, Select, ReactiveFormsModule],
 })
 export class StatesSelectComponent {
   @Input() stateControl!: Maybe<AbstractControl>;
@@ -43,4 +44,12 @@ export class StatesSelectComponent {
   onCitySelect = (city: ICity) => {
     this.cityControl?.setValue(city.id);
   };
+
+  get stateFormControl(): FormControl | undefined {
+    return this.stateControl as FormControl | undefined;
+  }
+
+  get cityFormControl(): FormControl | undefined {
+    return this.cityControl as FormControl | undefined;
+  }
 }

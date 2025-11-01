@@ -1,5 +1,6 @@
 import { AuthService } from '@/core';
 import { IUserLoginInfo, TRoles } from '@/core/models';
+import { ToastService } from '@/core/services/toast.service';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
@@ -41,6 +42,7 @@ export class ModifyLoginInfoComponent {
   @Output() toLogin = new EventEmitter<void>();
 
   private readonly authService = inject(AuthService);
+  private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 
@@ -58,9 +60,6 @@ export class ModifyLoginInfoComponent {
   ngOnInit() {
     this.authService.getInfo(this.role).subscribe({
       next: (info) => {
-        console.log(info);
-
-        this.infoForm.patchValue(info);
         this.infoForm.patchValue(info);
       },
       error: () => {
@@ -75,12 +74,15 @@ export class ModifyLoginInfoComponent {
 
       this.authService.changeInfo(credentials, this.role).subscribe({
         next: () => {
+          this.toastService.success({
+            text: 'اطلاعات با موفقیت به‌روزرسانی شد',
+          });
           this.errorMessage.set('');
+          this.onSubmit?.emit();
           // this.router.navigateByUrl(this.redirectUrl.replace(/\/[^/]*$/, ''));
         },
         error: (error) => {
-          this.errorMessage.set('نام کاربری یا رمز عبور اشتباه است');
-          console.error('Login failed:', error);
+          // this.errorMessage.set('نام کاربری یا رمز عبور اشتباه است');
         },
       });
     }

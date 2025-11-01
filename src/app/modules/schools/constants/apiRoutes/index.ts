@@ -1,3 +1,5 @@
+import { schoolsTeachersApiRoutes } from './schools-teachers-api.const';
+
 const baseUrl = '/api/v1/school';
 
 export const SCHOOLS_API_ROUTES = {
@@ -19,4 +21,6 @@ export const SCHOOLS_API_ROUTES = {
   managerPhoneVerification: () => `${baseUrl}/VerifyManagerMobile`,
   contactEmailVerification: () => `${baseUrl}/VerifyContactEmail`,
   contactPhoneVerification: () => `${baseUrl}/VerifyContactMobile`,
+
+  teachers: schoolsTeachersApiRoutes(baseUrl),
 };

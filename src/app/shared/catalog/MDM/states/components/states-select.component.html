@@ -1,15 +1,18 @@
 <div class="grid grid-cols-2 gap-4">
   <uikit-field label="استان" for="state" [control]="stateControl">
-    <p-select
-      name="state"
-      [options]="states() || []"
-      optionLabel="title"
-      [loading]="getStatesLoading()"
-      [invalid]="stateControl?.invalid && stateControl?.touched"
-      (onChange)="onStateSelect($event.value)"
-    />
+    <ng-container *ngIf="stateFormControl as sfc">
+      <p-select
+        name="state"
+        [options]="states() || []"
+        optionLabel="title"
+        [loading]="getStatesLoading()"
+        [formControl]="sfc"
+        (onChange)="onStateSelect($event.value)"
+      ></p-select>
+    </ng-container>
   </uikit-field>
-  @if (cityControl) {
+
+  <ng-container *ngIf="cityFormControl as cfc">
     <uikit-field label="شهر" for="city" [control]="cityControl">
       <p-select
         name="city"
@@ -17,9 +20,9 @@
         [options]="cities() || []"
         [loading]="getStatesLoading()"
         [disabled]="!selectedStateId()"
-        [invalid]="cityControl.invalid && cityControl.touched"
+        [formControl]="cfc"
         (onChange)="onCitySelect($event.value)"
-      />
+      ></p-select>
     </uikit-field>
-  }
+  </ng-container>
 </div>

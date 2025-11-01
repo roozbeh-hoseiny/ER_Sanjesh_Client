@@ -5,12 +5,16 @@ export default {
     title: 'مدیر سیستم',
     key: 'ADMIN',
   },
-  SCHOOLS: {
+  SCHOOL: {
     title: 'مدرسه',
-    key: 'SCHOOLS',
+    key: 'SCHOOL',
   },
   TEACHERS: {
     title: 'دبیر',
     key: 'TEACHERS',
+  },
+  STUDENTS: {
+    title: 'دانش‌آموز',
+    key: 'STUDENTS',
   },
 } as Record<TRoles, { title: string; key: TRoles }>;

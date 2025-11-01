@@ -28,16 +28,16 @@ export class AuthService {
 
   readonly modulesLoginRoutes = {
     ADMIN: ADMIN_API_ROUTES.login(),
-    SCHOOLS: SCHOOLS_API_ROUTES.login(),
+    SCHOOL: SCHOOLS_API_ROUTES.login(),
     TEACHERS: TEACHERS_API_ROUTES.login(),
   } as Record<TRoles, string>;
 
   readonly modulesGetInfoRoutes = {
-    SCHOOLS: SCHOOLS_API_ROUTES.me(),
+    SCHOOL: SCHOOLS_API_ROUTES.me(),
   } as Record<TRoles, string>;
 
   readonly modulesChangeInfoRoutes = {
-    SCHOOLS: SCHOOLS_API_ROUTES.editLoginInfo(),
+    SCHOOL: SCHOOLS_API_ROUTES.editLoginInfo(),
   } as Record<TRoles, string>;
 
   private readonly http = inject(HttpClient);
@@ -148,14 +148,11 @@ export class AuthService {
   }
 
   getInfo(role: TRoles): Observable<Partial<IUserLoginInfo>> {
-    // If we have a module-specific endpoint to GET user info, call it and map to
-    // Partial<IUserLoginInfo>. For example, SCHOOLS returns ISchoolMeResponse which
-    // we adapt via prepareUserInfoBasedOnRole.
     if (this.modulesGetInfoRoutes[role]) {
       return this.http.get<any>(this.modulesGetInfoRoutes[role]).pipe(
         map((data) => {
           switch (role) {
-            case 'SCHOOLS':
+            case 'SCHOOL':
               return this.prepareUserInfoBasedOnRole(role, data as ISchoolMeResponse);
             default:
               return data as Partial<IUserLoginInfo>;
@@ -175,7 +172,7 @@ export class AuthService {
   }
 
   prepareUserInfoBasedOnRole(role: TRoles, info: ISchoolMeResponse): Partial<IUserLoginInfo> {
-    if (role === 'SCHOOLS') {
+    if (role === 'SCHOOL') {
       return {
         username: info.username,
         email: info.managerInfo.email,

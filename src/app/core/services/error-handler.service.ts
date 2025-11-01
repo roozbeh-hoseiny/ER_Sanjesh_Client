@@ -13,11 +13,12 @@ export class ErrorHandlerService {
    * Handle HTTP errors with user-friendly notifications
    */
   handleError(error: any): void {
-    if (error instanceof HttpErrorResponse) {
-      this.handleHttpError(error);
-    } else {
-      this.handleGenericError(error);
-    }
+    this.handleHttpError(error);
+    // if (error instanceof HttpErrorResponse) {
+
+    // } else {
+    //   this.handleGenericError(error);
+    // }
   }
 
   /**
@@ -27,24 +28,31 @@ export class ErrorHandlerService {
     const errorType = getErrorType(error);
     const userMessage = this.getUserMessage(error);
 
-    switch (errorType) {
-      case ErrorType.NETWORK:
-        this.showNetworkError(userMessage);
-        break;
-      case ErrorType.AUTHENTICATION:
-        this.showAuthError(userMessage);
-        break;
-      case ErrorType.AUTHORIZATION:
-        this.showAuthorizationError(userMessage);
-        break;
-      case ErrorType.VALIDATION:
-        this.showValidationError(userMessage, error);
-        break;
-      case ErrorType.SERVER:
-        this.showServerError(userMessage);
-        break;
-      default:
-        this.showGenericError(userMessage);
+    if (userMessage) {
+      this.toastService.error({
+        title: error.error?.title || 'خطا',
+        text: userMessage,
+      });
+    } else {
+      switch (errorType) {
+        case ErrorType.NETWORK:
+          this.showNetworkError(userMessage);
+          break;
+        case ErrorType.AUTHENTICATION:
+          this.showAuthError(userMessage);
+          break;
+        case ErrorType.AUTHORIZATION:
+          this.showAuthorizationError(userMessage);
+          break;
+        case ErrorType.VALIDATION:
+          this.showValidationError(userMessage, error);
+          break;
+        case ErrorType.SERVER:
+          this.showServerError(userMessage);
+          break;
+        default:
+          this.showGenericError(userMessage);
+      }
     }
   }
 

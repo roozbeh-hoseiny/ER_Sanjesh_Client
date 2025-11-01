@@ -1,6 +1,7 @@
 import { NamedRoutes } from '@/core';
+import { schoolsTeachersNamedRoutes, TSchoolTeachersRouteNames } from './routes';
 
-export type TSchoolsRouteNames = 'root';
+export type TSchoolsRouteNames = 'root' | TSchoolTeachersRouteNames;
 
 export const schoolsNamedRoutes: NamedRoutes<TSchoolsRouteNames> = {
   root: {
@@ -14,6 +15,7 @@ export const schoolsNamedRoutes: NamedRoutes<TSchoolsRouteNames> = {
       title: 'داشبورد',
     },
   },
+  ...schoolsTeachersNamedRoutes,
 };
 
 export const SCHOOLS_ROUTES = Object.entries(schoolsNamedRoutes).reduce(

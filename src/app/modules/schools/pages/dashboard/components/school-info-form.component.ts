@@ -1,4 +1,5 @@
-import { ISchoolResponse } from '@/modules/schools/models';
+import { ISchoolInfoRequest, ISchoolResponse } from '@/modules/schools/models';
+import { SchoolsInfoService } from '@/modules/schools/services';
 import { SchoolGendersSelect } from '@/shared/catalog';
 import { GenderSelectComponent } from '@/shared/catalog/gender/gender-select.component';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
@@ -29,11 +30,16 @@ export class SchoolInfoFormComponent {
 
   constructor() {}
 
+  private readonly schoolService = inject(SchoolsInfoService);
+
+  onSubmitLoading = signal<boolean>(false);
+
   private fb: FormBuilder = inject(FormBuilder);
   form = this.fb.group({
     name: ['', [Validators.required]],
     boyOrGirl: [0, [Validators.required]],
     examHallCapacity: [0, [Validators.required, Validators.min(1)]],
+    phoneNumber: [''],
 
     managerInfo: this.fb.group({
       firstName: ['', [Validators.required]],
@@ -48,9 +54,21 @@ export class SchoolInfoFormComponent {
     this.form.patchValue(this.info);
   }
 
-  onSubmitLoading = signal<boolean>(false);
-
-  submit() {}
+  submit() {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) return;
+    this.onSubmitLoading.set(true);
+    const payload = { id: this.info.id, ...this.form.value } as ISchoolInfoRequest;
+    this.schoolService.editInfo(payload).subscribe({
+      next: (value) => {
+        this.onSubmitLoading.set(false);
+        this.submitForm.emit(value);
+      },
+      error: (err) => {
+        this.onSubmitLoading.set(false);
+      },
+    });
+  }
   close() {
     this.closeForm.emit();
   }

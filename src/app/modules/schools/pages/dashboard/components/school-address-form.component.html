@@ -1,5 +1,19 @@
 <form [formGroup]="form">
   <div class="grid grid-cols-1 gap-4">
+    <div class="grid grid-cols-3 gap-4">
+      <app-states-select
+        [stateControl]="form.get('state')"
+        [cityControl]="form.get('regionId')"
+        class="col-span-2"
+      ></app-states-select>
+      <uikit-field label="کد پستی" for="postalCode" [control]="form.get('postalCode')">
+        <input
+          pInputText
+          formControlName="postalCode"
+          [invalid]="form.get('postalCode')?.invalid && form.get('postalCode')?.touched"
+        />
+      </uikit-field>
+    </div>
     <uikit-field label="آدرس" for="address" [control]="form.get('address')">
       <textarea
         pTextarea
@@ -8,15 +22,9 @@
         [invalid]="form.get('address')?.invalid && form.get('address')?.touched"
       ></textarea>
     </uikit-field>
-    <app-states-select [stateControl]="form.get('state')" [cityControl]="form.get('regionId')"></app-states-select>
-    <div class="grid grid-cols-2">
-      <uikit-field label="کد پستی" for="postalCode" [control]="form.get('postalCode')">
-        <input
-          pInputText
-          formControlName="postalCode"
-          [invalid]="form.get('postalCode')?.invalid && form.get('postalCode')?.touched"
-        />
-      </uikit-field>
+    <div class="flex gap-2 justify-end mt-4">
+      <button pButton type="button" class="p-button-secondary" (click)="close()">انصراف</button>
+      <button pButton type="submit" class="p-button-primary" [loading]="onSubmitLoading()">ذخیره</button>
     </div>
   </div>
 </form>

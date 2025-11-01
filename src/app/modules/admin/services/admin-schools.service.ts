@@ -1,5 +1,5 @@
-import { paginatedQueryDefaultValues } from '@/core/constants';
-import { IPaginatedResponse } from '@/core/models/service.model';
+import { PAGINATED_QUERY_DEFAULT_VALUES } from '@/core/constants';
+import { IPaginatedQuery, IPaginatedResponse } from '@/core/models/service.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -16,44 +16,44 @@ export class AdminSchoolsService {
 
   private apiRoutes = ADMIN_API_ROUTES;
 
-  getSchools(lastSeen?: string): Observable<IPaginatedResponse<ISchoolResponse>> {
+  getSchools(paginatedQuery: IPaginatedQuery): Observable<IPaginatedResponse<ISchoolResponse>> {
     return this.http.post<IPaginatedResponse<ISchoolResponse>>(this.apiRoutes.schools.list(), {
-      ...paginatedQueryDefaultValues,
-      lastSeen,
+      ...PAGINATED_QUERY_DEFAULT_VALUES,
+      ...paginatedQuery,
     });
   }
 
   getSchoolsByName(
     name: string,
-    lastSeen?: string,
+    paginatedQuery: IPaginatedQuery,
   ): Observable<IPaginatedResponse<ISchoolResponse>> {
     return this.http.post<IPaginatedResponse<ISchoolResponse>>(this.apiRoutes.schools.byName(), {
-      ...paginatedQueryDefaultValues,
-      lastSeen,
+      ...PAGINATED_QUERY_DEFAULT_VALUES,
+      ...paginatedQuery,
       name,
     });
   }
 
   getSchoolsByGender(
     boyOrGirl: number,
-    lastSeen?: string,
+    paginatedQuery: IPaginatedQuery,
   ): Observable<IPaginatedResponse<ISchoolResponse>> {
     return this.http.post<IPaginatedResponse<ISchoolResponse>>(this.apiRoutes.schools.byGender(), {
-      ...paginatedQueryDefaultValues,
-      lastSeen,
+      ...PAGINATED_QUERY_DEFAULT_VALUES,
+      ...paginatedQuery,
       boyOrGirl,
     });
   }
 
   getSchoolsByCategories(
     categoryIds: number[],
-    lastSeen?: string,
+    paginatedQuery: IPaginatedQuery,
   ): Observable<IPaginatedResponse<ISchoolResponse>> {
     return this.http.post<IPaginatedResponse<ISchoolResponse>>(
       this.apiRoutes.schools.byCategories(),
       {
-        ...paginatedQueryDefaultValues,
-        lastSeen,
+        ...PAGINATED_QUERY_DEFAULT_VALUES,
+        ...paginatedQuery,
         categoryIds,
       },
     );
@@ -61,11 +61,11 @@ export class AdminSchoolsService {
 
   getSchoolsByRegion(
     regionId: number,
-    lastSeen?: string,
+    paginatedQuery: IPaginatedQuery,
   ): Observable<IPaginatedResponse<ISchoolResponse>> {
     return this.http.post<IPaginatedResponse<ISchoolResponse>>(this.apiRoutes.schools.byRegion(), {
-      ...paginatedQueryDefaultValues,
-      lastSeen,
+      ...PAGINATED_QUERY_DEFAULT_VALUES,
+      ...paginatedQuery,
       regionId,
     });
   }

@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
       text: 'برای دسترسی به این بخش باید وارد شوید.',
     });
 
-    this.router.navigate(['/admin/login']);
+    this.router.navigate(['/auth']);
     return false;
     // return this.router.navigate(['/auth/login'], {
     //   queryParams: { returnUrl: state.url },

@@ -15,11 +15,5 @@ export class SchoolsDashboardComponent {
   constructor(
     protected schoolStore: SchoolsStore = inject(SchoolsStore),
     protected layoutService: LayoutService = inject(LayoutService),
-  ) {
-    layoutService.changeShowBackground(false);
-  }
-
-  ngOnDestroy() {
-    this.layoutService.changeShowBackground(true);
-  }
+  ) {}
 }

@@ -10,7 +10,7 @@ import { SchoolAddressFormComponent } from './school-address-form.component';
   templateUrl: './school-address.component.html',
 })
 export class SchoolAddress {
-  @Input() address?: ISchoolAddress;
+  @Input() address!: ISchoolAddress;
 
   editMode = signal<boolean>(false);
 

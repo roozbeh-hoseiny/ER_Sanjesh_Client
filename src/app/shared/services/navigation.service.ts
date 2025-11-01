@@ -12,7 +12,7 @@ export class NavigationService {
 
   private readonly navigationConfigs: NavigationConfig[] = [
     {
-      role: UserRole.STUDENT,
+      role: UserRole.STUDENTS,
       menuItems: [
         {
           key: 'dashboard',
@@ -105,7 +105,7 @@ export class NavigationService {
       ],
     },
     {
-      role: UserRole.SCHOOLS,
+      role: UserRole.SCHOOL,
       menuItems: [
         {
           key: 'dashboard',

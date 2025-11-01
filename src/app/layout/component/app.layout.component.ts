@@ -3,6 +3,7 @@ import { BreadcrumbComponent } from '@/shared/components';
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  computed,
   ContentChild,
   inject,
   Input,
@@ -132,9 +133,11 @@ export class AppLayout {
     return this.breadcrumbService.items.length > 0;
   }
 
-  get showMenu(): boolean {
-    return this.layoutService.menuItems.length > 0;
-  }
+  showMenu = computed(() => {
+    console.log('showMenu', this.layoutService.menuItems());
+
+    return this.layoutService.menuItems().length > 0;
+  });
 
   ngOnDestroy() {
     if (this.overlayMenuOpenSubscription) {

@@ -1,10 +1,10 @@
 <form [formGroup]="loginForm" class="w-full" (ngSubmit)="submit()">
   @if (!defaultRole) {
     <div class="flex items-center gap-4 justify-center mb-10">
-      @for (role of roles; track role.key) {
+      @for (role of centralAuthRoles; track role.key) {
         <div class="flex items-center gap-1">
           <p-radiobutton [inputId]="role.key" name="role" [value]="role.key" formControlName="role" size="small" />
-          <uikit-label [for]="role.key">{{ role.title }}</uikit-label>
+          <uikit-label [for]="role.key" class="cursor-pointer">{{ role.title }}</uikit-label>
         </div>
       }
     </div>

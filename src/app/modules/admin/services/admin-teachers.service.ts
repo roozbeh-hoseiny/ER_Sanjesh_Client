@@ -1,4 +1,4 @@
-import { paginatedQueryDefaultValues } from '@/core/constants';
+import { PAGINATED_QUERY_DEFAULT_VALUES } from '@/core/constants';
 import { IPaginatedResponse } from '@/core/models/service.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -14,7 +14,7 @@ export class AdminTeachersService {
 
   getAll(lastSeen?: string): Observable<IPaginatedResponse<ITeacherResponse>> {
     return this.http.post<IPaginatedResponse<ITeacherResponse>>(this.apiRoutes.teachers.list(), {
-      ...paginatedQueryDefaultValues,
+      ...PAGINATED_QUERY_DEFAULT_VALUES,
       lastSeen,
     });
   }

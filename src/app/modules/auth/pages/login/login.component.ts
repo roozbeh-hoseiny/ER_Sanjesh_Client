@@ -1,5 +1,4 @@
 import { AuthService } from '@/core';
-import rolesConst from '@/core/constants/roles.const';
 import { IAuthResponse, LoginCredentials, TRoles } from '@/core/models';
 import { UikitLabelComponent } from '@/uikit';
 import { CommonModule } from '@angular/common';
@@ -15,6 +14,7 @@ import { Password } from 'primeng/password';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CaptchaService } from 'src/app/core/services/captcha.service';
+import { CENTRAL_AUTH_ROLES } from '../../constants/central-auth-roles.const';
 
 @Component({
   selector: 'app-login',
@@ -51,17 +51,17 @@ export class LoginComponent {
   readonly isCaptchaExpired = this.captchaService.captchaIsExpired;
   readonly isCaptchaLoading = this.captchaService.loading;
   readonly captchaImageSrc = this.captchaService.captchaImageSrc;
-  readonly roles = Object.values(rolesConst);
+  readonly centralAuthRoles = CENTRAL_AUTH_ROLES;
 
   readonly loginForm = this.fb.group({
     username: ['', [Validators.required]],
     password: ['', [Validators.required]],
     rememberMe: [false],
     captcha: ['', [Validators.required]],
-    role: [this.defaultRole || this.roles[0].key, [Validators.required]],
+    role: [this.defaultRole || this.centralAuthRoles[0].key, [Validators.required]],
   });
 
-  selectedRole = signal<TRoles>('ADMIN');
+  selectedRole = signal<TRoles>('SCHOOL');
   ngOnInit() {
     this.captchaService.requestNewCaptcha();
   }

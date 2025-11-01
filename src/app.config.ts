@@ -1,15 +1,15 @@
 import {
+  ApiBaseUrlInterceptor,
   authInterceptor,
   errorInterceptor,
   loggingInterceptor,
-  ApiBaseUrlInterceptor,
 } from '@/core/interceptors';
 import {
+  HTTP_INTERCEPTORS,
   provideHttpClient,
   withFetch,
   withInterceptors,
   withInterceptorsFromDi,
-  HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -19,8 +19,8 @@ import {
   withInMemoryScrolling,
 } from '@angular/router';
 // Use the consolidated preset that includes our custom variables
-import { providePrimeNG } from 'primeng/config';
 import { MessageService } from 'primeng/api';
+import { providePrimeNG } from 'primeng/config';
 import { routes } from './app.routes';
 import MyPreset from './presets';
 
@@ -40,7 +40,6 @@ export const appConfig: ApplicationConfig = {
 
     { provide: HTTP_INTERCEPTORS, useClass: ApiBaseUrlInterceptor, multi: true },
 
-    // PrimeNG global services
     MessageService,
 
     provideHttpClient(

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SCHOOLS_API_ROUTES } from '../constants/apiRoutes';
-import { ISchoolInfoRequest, ISchoolLoginInfoRequest } from '../models';
+import { ISchoolInfoRequest, ISchoolLoginInfoRequest, ISchoolResponse } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class SchoolsInfoService {
@@ -19,7 +19,7 @@ export class SchoolsInfoService {
     return this.http.post<void>(this.apiRoutes.editLoginInfo(), request);
   }
 
-  editInfo(request: ISchoolInfoRequest): Observable<void> {
-    return this.http.post<void>(this.apiRoutes.editInfo(), request);
+  editInfo(request: ISchoolInfoRequest): Observable<ISchoolResponse> {
+    return this.http.post<ISchoolResponse>(this.apiRoutes.editInfo(), request);
   }
 }

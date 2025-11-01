@@ -8,7 +8,7 @@
         [invalid]="form.get('name')?.invalid && form.get('name')?.touched"
       />
     </uikit-field>
-    <app-school-genders-select [control]="form.get('gender')" />
+    <app-school-genders-select [control]="form.get('boyOrGirl')" />
     <uikit-field label="ظرفیت" for="examHallCapacity" [control]="form.get('examHallCapacity')">
       <input
         pInputText
