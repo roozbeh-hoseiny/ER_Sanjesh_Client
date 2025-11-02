@@ -16,7 +16,7 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
       },
       {
         label: 'مدیریت دبیران',
-        icon: 'pi pi-fw pi-warehouse',
+        icon: 'pi pi-fw pi-graduation-cap',
         routerLink: [adminNamedRoutes.teachers.path],
       },
     ],
@@ -27,22 +27,22 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
     items: [
       {
         label: 'اطلاعات پایه دانش‌آموزان',
-        icon: 'pi pi-fw pi-users',
+        icon: 'pi pi-fw pi-database',
         routerLink: [adminNamedRoutes.mdmEducationalLevels.path],
       },
       {
         label: 'رشته‌های تحصیلی دانش‌آموزان',
-        icon: 'pi pi-fw pi-users',
+        icon: 'pi pi-fw pi-database',
         routerLink: [adminNamedRoutes.mdmFieldOfStudies.path],
       },
       {
         label: 'مناطق',
-        icon: 'pi pi-fw pi-users',
+        icon: 'pi pi-fw pi-database',
         routerLink: [adminNamedRoutes.mdmRegions.path],
       },
       {
         label: 'استان‌ها',
-        icon: 'pi pi-fw pi-users',
+        icon: 'pi pi-fw pi-database',
         routerLink: [adminNamedRoutes.mdmStates.path],
       },
     ],

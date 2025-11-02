@@ -1,3 +1,4 @@
+import { SchoolsStore } from '@/modules/schools/dataStore';
 import { ISchoolResponse } from '@/modules/schools/models';
 import { EducationalLevelsTagsComponent, SchoolGendersTag } from '@/shared/catalog';
 import { AppCardComponent } from '@/shared/components';
@@ -25,6 +26,8 @@ import { SchoolInfoFormComponent } from './school-info-form.component';
 export class SchoolInfoComponent {
   @Input() info!: ISchoolResponse;
 
+  constructor(private schoolsStore: SchoolsStore) {}
+
   editMode = signal<boolean>(false);
 
   onEdit() {
@@ -33,5 +36,10 @@ export class SchoolInfoComponent {
 
   closeForm() {
     this.editMode.set(false);
+  }
+
+  submitForm() {
+    this.schoolsStore.getInfo();
+    this.closeForm();
   }
 }

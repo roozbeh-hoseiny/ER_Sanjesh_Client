@@ -1,6 +1,7 @@
 import { Maybe } from '@/core';
 import { BreadcrumbService } from '@/core/services';
 import { schoolsNamedRoutes } from '@/modules/schools/constants';
+import { SchoolsStore } from '@/modules/schools/dataStore';
 import { SchoolsTeachersService } from '@/modules/schools/services/schools-teachers.service';
 import {
   IColumn,
@@ -29,6 +30,7 @@ import { ISchoolTeachersResponse } from '../models';
 export class SchoolTeachersComponent {
   private services = inject(SchoolsTeachersService);
   private breadcrumbService = inject(BreadcrumbService);
+  private schoolsStore = inject(SchoolsStore);
 
   columns = [] as IColumn[];
 
@@ -63,7 +65,10 @@ export class SchoolTeachersComponent {
   }
 
   private setColumns() {
-    this.columns = [{ field: 'name', header: 'نام دبیر', minWidth: '15rem' }];
+    this.columns = [
+      { field: 'firstName', header: 'نام دبیر' },
+      { field: 'lastName', header: 'نام خانوادگی دبیر' },
+    ];
   }
 
   private getData() {
@@ -95,7 +100,7 @@ export class SchoolTeachersComponent {
   }
 
   private getAll() {
-    this.services.getAll(this.lastSeen()).subscribe({
+    this.services.getAll(this.schoolsStore.info()?.id!, this.lastSeen()).subscribe({
       next: (teachers) => {
         if (!this.paginatedItems.length) {
           this.totalRecords.set(teachers.totalCount);

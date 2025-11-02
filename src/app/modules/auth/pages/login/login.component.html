@@ -17,8 +17,9 @@
       name="username"
       type="text"
       placeholder="نام کاربری"
-      class="w-full"
+      class="w-full placeholder:text-right"
       pSize="large"
+      dir="ltr"
       autocomplete="username"
       formControlName="username"
       [invalid]="loginForm.controls.username.touched && loginForm.controls.username.invalid"
@@ -36,6 +37,12 @@
       [toggleMask]="true"
       [fluid]="true"
       [feedback]="false"
+      inputStyleClass="placeholder:text-right"
+      [inputStyle]="{
+        direction: 'ltr',
+        'padding-inline-start': 'calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size))',
+        'padding-inline-end': 'var(--p-inputtext-lg-padding-x)',
+      }"
       [invalid]="loginForm.controls.password.touched && loginForm.controls.password.invalid"
     />
   </uikit-field>

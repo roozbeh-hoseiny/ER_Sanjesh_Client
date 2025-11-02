@@ -12,12 +12,16 @@ export class SchoolsTeachersService {
 
   private apiRoutes = SCHOOLS_API_ROUTES;
 
-  getAll(lastSeen?: string): Observable<IPaginatedResponse<ISchoolTeachersResponse>> {
+  getAll(
+    schoolId: string,
+    lastSeen?: string,
+  ): Observable<IPaginatedResponse<ISchoolTeachersResponse>> {
     return this.http.post<IPaginatedResponse<ISchoolTeachersResponse>>(
       this.apiRoutes.teachers.list(),
       {
         ...PAGINATED_QUERY_DEFAULT_VALUES,
         lastSeen,
+        id: schoolId,
       },
     );
   }

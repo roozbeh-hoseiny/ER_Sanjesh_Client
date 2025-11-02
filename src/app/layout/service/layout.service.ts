@@ -1,4 +1,4 @@
-import { Injectable, computed, effect, signal } from '@angular/core';
+import { computed, effect, Injectable, signal } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 
@@ -16,7 +16,7 @@ interface LayoutState {
   configSidebarVisible?: boolean;
   staticMenuMobileActive?: boolean;
   menuHoverActive?: boolean;
-  showBackground?: boolean;
+  isFixedContentSize?: boolean;
 }
 
 interface MenuChangeEvent {
@@ -32,7 +32,7 @@ export class LayoutService {
     preset: 'Aura',
     primary: 'blue',
     surface: null,
-    darkTheme: false,
+    darkTheme: localStorage.getItem('isDarkTheme') === 'true',
     menuMode: 'static',
   };
 
@@ -42,7 +42,7 @@ export class LayoutService {
     configSidebarVisible: false,
     staticMenuMobileActive: false,
     menuHoverActive: false,
-    showBackground: false,
+    isFixedContentSize: false,
   };
 
   layoutConfig = signal<layoutConfig>(this._config);
@@ -81,13 +81,14 @@ export class LayoutService {
 
   isOverlay = computed(() => this.layoutConfig().menuMode === 'overlay');
 
-  showBackground = computed(() => this.layoutState().showBackground);
+  isFixedContentSize = computed(() => this.layoutState().isFixedContentSize);
 
   transitionComplete = signal<boolean>(false);
 
   private initialized = false;
 
   constructor() {
+    this.handleDarkModeTransition(this._config);
     effect(() => {
       const config = this.layoutConfig();
       if (config) {
@@ -128,15 +129,16 @@ export class LayoutService {
       .catch(() => {});
   }
 
-  changeShowBackground(show: boolean) {
+  changeIsFixedContentSize(status: boolean) {
     this.layoutState.update((prev) => ({
       ...prev,
-      showBackground: show,
+      isFixedContentSize: status,
     }));
   }
 
   toggleDarkMode(config?: layoutConfig): void {
     const _config = config || this.layoutConfig();
+    localStorage.setItem('isDarkTheme', JSON.stringify(_config.darkTheme));
     if (_config.darkTheme) {
       document.documentElement.classList.add('app-dark');
     } else {

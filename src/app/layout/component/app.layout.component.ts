@@ -133,6 +133,10 @@ export class AppLayout {
     return this.breadcrumbService.items.length > 0;
   }
 
+  get isFixedContentSize(): boolean {
+    return this.layoutService.isFixedContentSize() || false;
+  }
+
   showMenu = computed(() => {
     console.log('showMenu', this.layoutService.menuItems());
 

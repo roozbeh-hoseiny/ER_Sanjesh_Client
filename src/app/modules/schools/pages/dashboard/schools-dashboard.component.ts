@@ -15,10 +15,16 @@ export class SchoolsDashboardComponent {
   constructor(
     protected schoolStore: SchoolsStore = inject(SchoolsStore),
     protected layoutService: LayoutService = inject(LayoutService),
-  ) {}
+  ) {
+    this.layoutService.changeIsFixedContentSize(true);
+  }
 
   readonly info = computed(() => this.schoolStore.info());
   readonly schoolId = computed(() => this.schoolStore.info()?.id);
 
   readonly loading = computed(() => this.schoolStore.initLoading());
+
+  ngOnDestroy() {
+    this.layoutService.changeIsFixedContentSize(false);
+  }
 }

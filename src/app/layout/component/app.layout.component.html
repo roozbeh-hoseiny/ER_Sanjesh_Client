@@ -13,7 +13,7 @@
         @if (showBreadcrumb) {
           <app-breadcrumb class="rounded-md overflow-hidden shrink-0" />
         }
-        <div class="rounded-md overflow-hidden flex flex-col grow">
+        <div [class]="`rounded-md flex flex-col grow ${isFixedContentSize ? 'overflow-auto' : 'overflow-hidden'}`">
           <div class="h-full" style="container-type: size">
             @if (content) {
               <ng-container [ngTemplateOutlet]="content"></ng-container>

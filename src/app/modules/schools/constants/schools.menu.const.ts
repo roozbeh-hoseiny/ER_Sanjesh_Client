@@ -11,7 +11,7 @@ export const SCHOOLS_MENU_ITEMS: MenuItem[] = [
       },
       {
         label: 'دبیران',
-        icon: 'pi pi-fw pi-home',
+        icon: 'pi pi-fw pi-graduation-cap',
         routerLink: schoolsNamedRoutes.teachers.path,
       },
     ],
