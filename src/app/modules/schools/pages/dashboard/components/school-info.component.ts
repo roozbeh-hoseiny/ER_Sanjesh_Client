@@ -1,5 +1,5 @@
 import { ISchoolResponse } from '@/modules/schools/models';
-import { SchoolGendersTag } from '@/shared/catalog';
+import { EducationalLevelsTagsComponent, SchoolGendersTag } from '@/shared/catalog';
 import { AppCardComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
 import { Component, Input, signal } from '@angular/core';
@@ -18,6 +18,7 @@ import { SchoolInfoFormComponent } from './school-info-form.component';
     SchoolInfoFormComponent,
     Divider,
     Button,
+    EducationalLevelsTagsComponent,
   ],
   templateUrl: './school-info.component.html',
 })

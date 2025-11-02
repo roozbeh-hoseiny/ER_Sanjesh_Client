@@ -56,12 +56,17 @@ export class AdminSchoolFormComponent {
 
   onSubmitLoading = signal<boolean>(false);
 
+  // Password must be minimum 8 characters, include at least one uppercase, one lowercase, one number and one special character
+  private readonly passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
   form = this.fb.group({
     name: [this.defaultValues?.name || '', [Validators.required]],
     address: this.fb.group({
       address: [this.defaultValues?.address?.address || '', [Validators.required]],
       postalCode: [this.defaultValues?.address?.postalCode || '', [Validators.required]],
       regionId: [this.defaultValues?.address?.regionId || null, [Validators.required]],
+      state: [Number.MAX_SAFE_INTEGER, [Validators.required]],
+      city: [Number.MAX_SAFE_INTEGER, [Validators.required]],
     }),
     managerInfo: this.fb.group({
       firstName: [this.defaultValues?.managerInfo?.firstName || '', [Validators.required]],
@@ -74,7 +79,10 @@ export class AdminSchoolFormComponent {
       gender: [this.defaultValues?.managerInfo?.gender || '', [Validators.required]],
     }),
     username: [this.defaultValues?.username || '', [Validators.required]],
-    password: [this.defaultValues?.password || '', [Validators.required, Validators.minLength(6)]],
+    password: [
+      this.defaultValues?.password || '',
+      [Validators.required, Validators.pattern(this.passwordPattern)],
+    ],
   });
 
   editMode = computed(() => Boolean(this.defaultValues));
@@ -88,24 +96,7 @@ export class AdminSchoolFormComponent {
   private applyDefaultValues() {
     if (this.defaultValues) {
       // patch nested groups safely
-      const { name, address, managerInfo, username, password } = this.defaultValues;
-      this.form.patchValue({
-        name: name ?? '',
-        address: {
-          address: address?.address ?? '',
-          postalCode: address?.postalCode ?? '',
-          regionId: address?.regionId ?? null,
-        },
-        managerInfo: {
-          firstName: managerInfo?.firstName ?? '',
-          lastName: managerInfo?.lastName ?? '',
-          mobile: managerInfo?.mobile ?? '',
-          email: managerInfo?.email ?? '',
-          gender: managerInfo?.gender ?? '',
-        },
-        username: username ?? '',
-        password: password ?? '',
-      });
+      this.form.patchValue(this.defaultValues);
     } else {
       this.form.reset();
     }
@@ -124,10 +115,15 @@ export class AdminSchoolFormComponent {
     if (this.form.invalid) return;
     this.onSubmitLoading.set(true);
     const payload = this.form.value as ISchoolRequest;
-    this.adminSchoolsService.addSchool(payload).subscribe(() => {
-      this.toastService.success({ text: 'مدرسه با موفقیت اضافه شد.' });
-      this.save.emit(payload);
-      this.close();
-    });
+    this.adminSchoolsService
+      .addSchool({
+        ...payload,
+        address: { ...payload.address, regionId: this.form.value.address?.city as number },
+      })
+      .subscribe(() => {
+        this.toastService.success({ text: 'مدرسه با موفقیت اضافه شد.' });
+        this.save.emit(payload);
+        this.close();
+      });
   }
 }

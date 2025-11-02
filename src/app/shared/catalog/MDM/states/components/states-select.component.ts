@@ -13,7 +13,7 @@ import { StatesService } from '../services';
   imports: [CommonModule, UikitFieldComponent, SelectModule, FormsModule],
 })
 export class StatesSelectComponent {
-  @Input() stateControl!: Maybe<FormControl>;
+  @Input() stateControl!: FormControl;
   @Input() onlyState?: boolean = false;
   @Input() cityControl?: Maybe<FormControl>;
 
@@ -23,7 +23,7 @@ export class StatesSelectComponent {
   getStatesLoading = signal<boolean>(true);
   cities = signal<Maybe<ICity[]>>(null);
 
-  isSelectedState = computed(() => this.stateControl?.value || this.stateControl?.value === 0);
+  isSelectedState = computed(() => this.stateControl.value || this.stateControl.value === 0);
 
   constructor() {
     this.getStatesLoading.set(true);

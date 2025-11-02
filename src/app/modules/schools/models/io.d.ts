@@ -102,3 +102,11 @@ export interface IManagerInfo {
   mobileIsVerified: boolean;
   emailIsVerified: boolean;
 }
+
+export interface ISchoolEducationalLevelsResponse {
+  educationalLevelId: number;
+  educationalLevelTitle: string;
+  educationalLevelLevel: string;
+  fieldOfStudyId: number;
+  fieldOfStudyTitle: string;
+}
