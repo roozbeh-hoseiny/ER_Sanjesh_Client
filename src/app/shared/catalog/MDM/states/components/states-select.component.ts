@@ -51,9 +51,17 @@ export class StatesSelectComponent {
     if (this.cityControl) {
       this.cityControl.setValue(null);
     }
+    this.stateControl?.setValue(stateId.value);
+    console.log(stateId);
 
-    const cities = this.states()?.find((state) => state.id === stateId)?.children;
+    const cities = this.states()?.find((state) => state.id === stateId.value)?.children;
 
     this.cities.set(cities || []);
+  };
+
+  onCitySelect = (cityId: any) => {
+    if (this.cityControl) {
+      this.cityControl.setValue(cityId.value);
+    }
   };
 }

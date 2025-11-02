@@ -23,6 +23,7 @@
         [loading]="getStatesLoading()"
         [disabled]="!isSelectedState()"
         [(ngModel)]="cityControl.value"
+        (onChange)="onCitySelect($event)"
       ></p-select>
     </uikit-field>
   </ng-container>

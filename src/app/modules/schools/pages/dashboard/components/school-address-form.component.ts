@@ -57,7 +57,11 @@ export class SchoolAddressFormComponent {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.onSubmitLoading.set(true);
-    const payload = { id: this.schoolId, ...this.form.value } as ISchoolAddressRequest;
+    const payload = {
+      id: this.schoolId,
+      ...this.form.value,
+      regionId: this.form.controls.city.value,
+    } as ISchoolAddressRequest;
     this.schoolService.editAddress(payload).subscribe({
       next: (value) => {
         this.onSubmitLoading.set(false);

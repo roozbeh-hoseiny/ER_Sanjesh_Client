@@ -8,7 +8,7 @@ import {
   PageDataListComponent,
 } from '@/shared/components/pageDataList/page-data-list.component';
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal, TemplateRef, ViewChild } from '@angular/core';
+import { Component, computed, signal, TemplateRef, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
@@ -36,8 +36,15 @@ type TGetDataMode = 'all' | 'search' | 'gender' | 'category' | 'region';
   ],
 })
 export class AdminSchoolsComponent {
-  private services = inject(AdminSchoolsService);
-  private breadcrumbService = inject(BreadcrumbService);
+  constructor(
+    // private confirmationService: ConfirmationService,
+    private services: AdminSchoolsService,
+    private breadcrumbService: BreadcrumbService,
+  ) {
+    this.breadcrumbService.setItems([adminNamedRoutes.root.meta, adminNamedRoutes.schools.meta]);
+    this.getData();
+  }
+
   @ViewChild('boyOrGirl', { static: true }) boyOrGirlTpl!: TemplateRef<any>;
   @ViewChild('status', { static: true }) statusTpl!: TemplateRef<any>;
 
@@ -72,11 +79,6 @@ export class AdminSchoolsComponent {
     const pages = this.paginatedItems();
     return pages[pageIndex] || [];
   });
-
-  constructor() {
-    this.breadcrumbService.setItems([adminNamedRoutes.root.meta, adminNamedRoutes.schools.meta]);
-    this.getData();
-  }
 
   ngOnInit(): void {
     this.setColumns();

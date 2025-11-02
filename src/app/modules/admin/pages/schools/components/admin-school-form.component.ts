@@ -20,6 +20,7 @@ import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
 import { AdminSchoolsService } from '@/modules/admin/services';
 import { StatesSelectComponent } from '@/shared/catalog';
+import { GenderSelectComponent } from '@/shared/catalog/gender/gender-select.component';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { SelectModule } from 'primeng/select';
 import { ISchoolRequest } from '../models/schools';
@@ -38,6 +39,7 @@ import { ISchoolRequest } from '../models/schools';
     DividerModule,
     StatesSelectComponent,
     SelectModule,
+    GenderSelectComponent,
   ],
   templateUrl: './admin-school-form.component.html',
 })
