@@ -1,25 +1,25 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (submit)="submit()">
   <div class="grid grid-cols-1 gap-4">
     <div class="grid grid-cols-3 gap-4">
       <app-states-select
-        [stateControl]="form.get('state')"
-        [cityControl]="form.get('regionId')"
+        [stateControl]="form.controls.state"
+        [cityControl]="form.controls.city"
         class="col-span-2"
       ></app-states-select>
-      <uikit-field label="کد پستی" for="postalCode" [control]="form.get('postalCode')">
+      <uikit-field label="کد پستی" for="postalCode" [control]="form.controls.postalCode">
         <input
           pInputText
           formControlName="postalCode"
-          [invalid]="form.get('postalCode')?.invalid && form.get('postalCode')?.touched"
+          [invalid]="form.controls.postalCode.invalid && form.controls.postalCode.touched"
         />
       </uikit-field>
     </div>
-    <uikit-field label="آدرس" for="address" [control]="form.get('address')">
+    <uikit-field label="آدرس" for="address" [control]="form.controls.address">
       <textarea
         pTextarea
         formControlName="address"
         rows="2"
-        [invalid]="form.get('address')?.invalid && form.get('address')?.touched"
+        [invalid]="form.controls.address.invalid && form.controls.address.touched"
       ></textarea>
     </uikit-field>
     <div class="flex gap-2 justify-end mt-4">

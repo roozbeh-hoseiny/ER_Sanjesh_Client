@@ -11,6 +11,7 @@ import { SchoolAddressFormComponent } from './school-address-form.component';
 })
 export class SchoolAddress {
   @Input() address!: ISchoolAddress;
+  @Input() schoolId!: string;
 
   editMode = signal<boolean>(false);
 

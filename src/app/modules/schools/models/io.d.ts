@@ -90,6 +90,7 @@ export interface ISchoolAddress {
   stateName: string;
   cityName: string;
   districtName: string;
+  regionType: number;
 }
 
 export interface IManagerInfo {

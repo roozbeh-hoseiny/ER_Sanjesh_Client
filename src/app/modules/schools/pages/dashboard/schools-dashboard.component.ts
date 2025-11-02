@@ -1,6 +1,6 @@
 import { LayoutService } from '@/layout/service/layout.service';
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { SchoolsStore } from '../../dataStore';
 import { SchoolAddress } from './components/school-address.component';
 import { SchoolInfoComponent } from './components/school-info.component';
@@ -16,4 +16,9 @@ export class SchoolsDashboardComponent {
     protected schoolStore: SchoolsStore = inject(SchoolsStore),
     protected layoutService: LayoutService = inject(LayoutService),
   ) {}
+
+  readonly info = computed(() => this.schoolStore.info());
+  readonly schoolId = computed(() => this.schoolStore.info()?.id);
+
+  readonly loading = computed(() => this.schoolStore.initLoading());
 }

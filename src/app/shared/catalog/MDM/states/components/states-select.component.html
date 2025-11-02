@@ -1,27 +1,28 @@
 <div class="grid grid-cols-2 gap-4">
   <uikit-field label="استان" for="state" [control]="stateControl">
-    <ng-container *ngIf="stateFormControl as sfc">
+    <ng-container *ngIf="stateControl">
       <p-select
         name="state"
         [options]="states() || []"
         optionLabel="title"
+        optionValue="id"
         [loading]="getStatesLoading()"
-        [formControl]="sfc"
-        (onChange)="onStateSelect($event.value)"
+        [(ngModel)]="stateControl.value"
+        (onChange)="onStateSelect($event)"
       ></p-select>
     </ng-container>
   </uikit-field>
 
-  <ng-container *ngIf="cityFormControl as cfc">
+  <ng-container *ngIf="cityControl">
     <uikit-field label="شهر" for="city" [control]="cityControl">
       <p-select
         name="city"
         optionLabel="title"
+        optionValue="id"
         [options]="cities() || []"
         [loading]="getStatesLoading()"
-        [disabled]="!selectedStateId()"
-        [formControl]="cfc"
-        (onChange)="onCitySelect($event.value)"
+        [disabled]="!isSelectedState()"
+        [(ngModel)]="cityControl.value"
       ></p-select>
     </uikit-field>
   </ng-container>

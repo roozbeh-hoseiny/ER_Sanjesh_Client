@@ -1,55 +1,59 @@
 import { Maybe } from '@/core';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, signal } from '@angular/core';
-import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Select } from 'primeng/select';
+import { Component, computed, inject, Input, signal } from '@angular/core';
+import { FormControl, FormsModule } from '@angular/forms';
+import { SelectModule } from 'primeng/select';
 import { ICity, IStateResponse } from '../models';
 import { StatesService } from '../services';
 
 @Component({
   selector: 'app-states-select',
   templateUrl: './states-select.component.html',
-  imports: [CommonModule, UikitFieldComponent, Select, ReactiveFormsModule],
+  imports: [CommonModule, UikitFieldComponent, SelectModule, FormsModule],
 })
 export class StatesSelectComponent {
-  @Input() stateControl!: Maybe<AbstractControl>;
+  @Input() stateControl!: Maybe<FormControl>;
   @Input() onlyState?: boolean = false;
-  @Input() cityControl?: Maybe<AbstractControl>;
+  @Input() cityControl?: Maybe<FormControl>;
 
   statesService = inject(StatesService);
 
   states = signal<Maybe<IStateResponse[]>>(null);
   getStatesLoading = signal<boolean>(true);
-  selectedStateId = signal<Maybe<number>>(null);
   cities = signal<Maybe<ICity[]>>(null);
+
+  isSelectedState = computed(() => this.stateControl?.value || this.stateControl?.value === 0);
 
   constructor() {
     this.getStatesLoading.set(true);
     this.statesService.getRegionTree().subscribe((states) => {
       this.states.set(states);
       this.getStatesLoading.set(false);
+      if (this.cityControl?.value && !this.stateControl?.value) {
+        const selectedState = states.find((state) =>
+          state.children.some((city) => city.id === this.cityControl?.value),
+        );
+        console.log(selectedState);
+        if (selectedState) {
+          this.stateControl?.setValue(selectedState.id);
+          this.cities.set(selectedState.children);
+          this.stateControl?.setValue(selectedState.id);
+        } else {
+          this.cities.set(null);
+          this.cityControl.setValue(null);
+        }
+      }
     });
   }
 
-  onStateSelect = (state: any) => {
-    this.selectedStateId.set(state.id);
-    this.stateControl?.setValue(state.id);
+  onStateSelect = (stateId: any) => {
     if (this.cityControl) {
       this.cityControl.setValue(null);
     }
-    this.cities.set(state.children);
+
+    const cities = this.states()?.find((state) => state.id === stateId)?.children;
+
+    this.cities.set(cities || []);
   };
-
-  onCitySelect = (city: ICity) => {
-    this.cityControl?.setValue(city.id);
-  };
-
-  get stateFormControl(): FormControl | undefined {
-    return this.stateControl as FormControl | undefined;
-  }
-
-  get cityFormControl(): FormControl | undefined {
-    return this.cityControl as FormControl | undefined;
-  }
 }

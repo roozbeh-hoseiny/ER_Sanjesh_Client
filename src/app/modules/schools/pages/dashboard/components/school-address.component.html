@@ -1,6 +1,6 @@
 <app-card-data cardTitle="اطلاعات آدرس" [editable]="true" [editMode]="editMode()" (onEdit)="onEdit()" class="">
   @if (editMode()) {
-    <app-school-address-form [address]="address" (closeForm)="closeForm()" />
+    <app-school-address-form [address]="address" [schoolId]="schoolId" (closeForm)="closeForm()" />
   } @else {
     <div class="flex flex-col gap-4">
       <div class="grid grid-cols-3 gap-4">
