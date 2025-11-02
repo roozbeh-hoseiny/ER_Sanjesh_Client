@@ -32,28 +32,24 @@ export class AuthComponent {
 
   selectedRole = signal<TRoles | undefined>(this.role);
 
-  toggleActiveStep = () => {
-    this.activeStep.update((prev) => (prev === 'login' ? 'otp' : 'login'));
-  };
   onLoggedIn = (data: IAuthResponse) => {
-    console.log('onLoggedIn');
-    console.log(this.submit.observed);
-
     this.toastService.success({ text: 'شما با موفقیت وارد شدید.' });
     this.selectedRole.set(data.role.toUpperCase() as TRoles);
     if (data.mustChangePassword) {
       this.activeStep.set('modifyLoginInfo');
       return;
     }
-    console.log('first');
 
     if (this.submit.observed) {
       return this.submit.emit(Promise.resolve(true));
     }
-    console.log('sec');
     this.redirectToDashboard();
   };
+
   onModifyLoginInfo = () => {
+    console.log('onModifyLoginInfo');
+    console.log(this.submit.observed);
+
     if (this.submit.observed) {
       return this.submit.emit(Promise.resolve(true));
     }

@@ -1,20 +1,28 @@
 <form (ngSubmit)="submit()" [formGroup]="form" class="grid grid-cols-1 gap-4">
   <div class="grid grid-cols-3 gap-4">
-    <uikit-field label="نام مدرسه" for="name" [control]="form.get('name')">
+    <uikit-field label="نام مدرسه" for="name" [control]="form.controls.name">
       <input
         pInputText
         [formControlName]="'name'"
         required
-        [invalid]="form.get('name')?.invalid && form.get('name')?.touched"
+        [invalid]="form.controls.name.invalid && form.controls.name.touched"
       />
     </uikit-field>
-    <app-school-genders-select [control]="form.get('boyOrGirl')" />
-    <uikit-field label="ظرفیت" for="examHallCapacity" [control]="form.get('examHallCapacity')">
+    <app-school-genders-select [control]="form.controls.boyOrGirl" />
+    <uikit-field label="ظرفیت" for="examHallCapacity" [control]="form.controls.examHallCapacity">
       <input
         pInputText
         formControlName="examHallCapacity"
         required
-        [invalid]="form.get('examHallCapacity')?.invalid && form.get('examHallCapacity')?.touched"
+        [invalid]="form.controls.examHallCapacity.invalid && form.controls.examHallCapacity.touched"
+      />
+    </uikit-field>
+    <uikit-field label="شماره تماس" for="phoneNumber" [control]="form.controls.phoneNumber">
+      <input
+        pInputText
+        formControlName="phoneNumber"
+        required
+        [invalid]="form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched"
       />
     </uikit-field>
   </div>

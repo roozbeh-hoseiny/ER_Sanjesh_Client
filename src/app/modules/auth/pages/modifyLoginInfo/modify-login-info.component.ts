@@ -1,6 +1,7 @@
 import { AuthService } from '@/core';
 import { IUserLoginInfo, TRoles } from '@/core/models';
 import { ToastService } from '@/core/services/toast.service';
+import { MustMatch } from '@/core/validators';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
@@ -46,16 +47,25 @@ export class ModifyLoginInfoComponent {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 
-  readonly isLoading = this.authService.isLoading();
+  readonly isLoading = signal<boolean>(false);
   readonly errorMessage = signal<string>('');
   readonly hidePassword = signal<boolean>(true);
 
-  readonly infoForm = this.fb.group({
-    username: [this.userLoginInfo?.username, [Validators.required]],
-    password: [this.userLoginInfo?.password, [Validators.required]],
-    mobile: [this.userLoginInfo?.mobile, [Validators.required]],
-    email: [this.userLoginInfo?.email, [Validators.required, Validators.email]],
-  });
+  // Password must be minimum 8 characters, include at least one uppercase, one lowercase, one number and one special character
+  private readonly passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
+  readonly infoForm = this.fb.group(
+    {
+      username: [this.userLoginInfo?.username, [Validators.required]],
+      password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
+      confirmPassword: ['', [Validators.required]],
+      mobile: [this.userLoginInfo?.mobile, [Validators.required]],
+      email: [this.userLoginInfo?.email, [Validators.required, Validators.email]],
+    },
+    {
+      validators: [MustMatch('password', 'confirmPassword')],
+    },
+  );
 
   ngOnInit() {
     this.authService.getInfo(this.role).subscribe({
@@ -69,22 +79,24 @@ export class ModifyLoginInfoComponent {
   }
 
   submit(): void {
-    if (this.infoForm.valid) {
-      const credentials: IUserLoginInfo = this.infoForm.value as IUserLoginInfo;
-
-      this.authService.changeInfo(credentials, this.role).subscribe({
-        next: () => {
-          this.toastService.success({
-            text: 'اطلاعات با موفقیت به‌روزرسانی شد',
-          });
-          this.errorMessage.set('');
-          this.onSubmit?.emit();
-          // this.router.navigateByUrl(this.redirectUrl.replace(/\/[^/]*$/, ''));
-        },
-        error: (error) => {
-          // this.errorMessage.set('نام کاربری یا رمز عبور اشتباه است');
-        },
-      });
-    }
+    this.infoForm.markAllAsTouched();
+    if (this.infoForm.invalid) return;
+    const credentials: IUserLoginInfo = this.infoForm.value as IUserLoginInfo;
+    this.isLoading.set(true);
+    this.authService.changeInfo(credentials, this.role).subscribe({
+      next: () => {
+        this.toastService.success({
+          text: 'اطلاعات با موفقیت به‌روزرسانی شد',
+        });
+        this.errorMessage.set('');
+        this.onSubmit?.emit();
+        this.isLoading.set(false);
+        // this.router.navigateByUrl(this.redirectUrl.replace(/\/[^/]*$/, ''));
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        // this.errorMessage.set('نام کاربری یا رمز عبور اشتباه است');
+      },
+    });
   }
 }

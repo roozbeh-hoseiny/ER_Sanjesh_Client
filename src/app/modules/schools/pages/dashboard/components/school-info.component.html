@@ -1,6 +1,6 @@
 <app-card-data cardTitle="اطلاعات مدرسه" [editable]="true" [editMode]="editMode()" (onEdit)="onEdit()">
   @if (editMode()) {
-    <app-school-info-form [info]="info" (closeForm)="closeForm()" />
+    <app-school-info-form [info]="info" (closeForm)="closeForm()" (submitForm)="closeForm()" />
   } @else {
     <div class="flex flex-col gap-4">
       <div class="grid grid-cols-3 gap-4">
@@ -12,6 +12,7 @@
           <p-badge [value]="info.isActive ? 'فعال' : 'غیرفعال'" [severity]="info.isActive ? 'success' : 'danger'" />
         </app-key-value>
         <app-key-value label="ظرفیت مدرسه" [value]="info.examHallCapacity.toString()" />
+        <app-key-value label="تلفن تماس" [value]="info.phoneNumber" />
       </div>
       <app-key-value label="دسته‌بندی">
         @if (info.categories.length) {
@@ -35,29 +36,32 @@
           -
         }
       </app-key-value>
-      <p-divider title="مدیریت" />
+      <p-divider> مدیریت </p-divider>
       <div class="grid grid-cols-3 gap-4">
         <app-key-value label="نام" [value]="info.managerInfo.firstName" />
         <app-key-value label="نام خانوادگی" [value]="info.managerInfo.lastName" />
         <app-key-value label="جنسیت" [value]="info.managerInfo.gender ? 'مرد' : 'زن'" />
         <app-key-value label="تلفن همراه">
           <div class="inline-flex items-center gap-1">
-            {{ info.managerInfo.mobile }}
+            <span class="text-text-color text-base font-bold">
+              {{ info.managerInfo.mobile }}
+            </span>
             <p-button
               size="small"
-              variant="outlined"
-              [severity]="info.managerInfo.mobileIsVerified ? 'success' : 'danger'"
+              [severity]="info.managerInfo.mobileIsVerified ? 'success' : 'warn'"
               [icon]="`pi pi-${info.managerInfo.mobileIsVerified ? 'check' : 'info'}`"
             ></p-button>
           </div>
         </app-key-value>
         <app-key-value label="ایمیل">
           <div class="inline-flex items-center gap-1">
-            {{ info.managerInfo.email }}
+            <span class="text-text-color text-base font-bold">
+              {{ info.managerInfo.email }}
+            </span>
+
             <p-button
               size="small"
-              variant="outlined"
-              [severity]="info.managerInfo.emailIsVerified ? 'success' : 'danger'"
+              [severity]="info.managerInfo.emailIsVerified ? 'success' : 'warn'"
               [icon]="`pi pi-${info.managerInfo.emailIsVerified ? 'check' : 'info'}`"
             ></p-button>
           </div>

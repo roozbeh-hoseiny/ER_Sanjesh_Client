@@ -125,7 +125,7 @@ export class AuthService {
     localStorage.removeItem('refresh_token');
 
     this.setCurrentUser(null);
-    this.router.navigate(['/auth/login']);
+    this.router.navigate(['/auth']);
   }
 
   refreshToken(): Observable<IAuthResponse> {
@@ -266,6 +266,7 @@ export class AuthService {
 
   private handleAuthSuccess(response: IAuthResponse): void {
     localStorage.setItem('auth_token', response.token);
+    this.token.set(response.token);
     // localStorage.setItem('refresh_token', response.refreshToken);
     // localStorage.setItem('user_data', JSON.stringify(response.user));
 

@@ -164,7 +164,7 @@ export class AuthStore extends BaseStore<AuthState> {
     this._loginState.loginError = null;
 
     // Navigate to login
-    this.router.navigate(['/auth/login']);
+    this.router.navigate(['/auth']);
   }
 
   /**

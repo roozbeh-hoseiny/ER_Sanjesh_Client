@@ -24,6 +24,23 @@
       [feedback]="false"
       [invalid]="infoForm.get('password')?.touched && infoForm.get('password')?.invalid"
     />
+    <span class="text-xs mt-2 text-muted-color">
+      رمز باید حداقل ۸ کاراکتر بوده و شامل حداقل یک حرف بزرگ، یک حرف کوچک، یک عدد و یک کاراکتر ویژه باشد.
+    </span>
+  </uikit-field>
+
+  <uikit-field label="تکرار رمز عبور" pSize="large" class="" [control]="infoForm.get('confirmPassword')">
+    <p-password
+      id="confirmPassword"
+      size="large"
+      name="confirmPassword"
+      formControlName="confirmPassword"
+      autocomplete="new-password"
+      [toggleMask]="true"
+      [fluid]="true"
+      [feedback]="false"
+      [invalid]="infoForm.get('confirmPassword')?.touched && infoForm.get('confirmPassword')?.invalid"
+    />
   </uikit-field>
 
   <uikit-field label="شماره تلفن همراه" pSize="large" class="" [control]="infoForm.get('mobile')">
@@ -44,5 +61,5 @@
     />
   </uikit-field>
 
-  <p-button label="تایید" styleClass="w-full mt-4" size="large" [loading]="isLoading" type="submit"></p-button>
+  <p-button label="تایید" styleClass="w-full mt-4" size="large" [loading]="isLoading()" type="submit"></p-button>
 </form>

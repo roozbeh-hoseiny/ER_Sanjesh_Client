@@ -10,7 +10,6 @@
         <img [src]="logo" alt="لوگو سازمان سنجش" class="w-20 h-auto" />
         <span class="text-lg font-bold"> به پنل آزمون آنلاین تشریحی خوش آمدید. </span>
       </div>
-      <!-- <button (click)="toggleActiveStep()">toggle</button> -->
 
       @if (activeStep() === "login") {
         <app-login
@@ -23,11 +22,10 @@
       } @else if (activeStep() === "otp") {
         <app-otp class="w-full" />
       } @else if (activeStep() === "modifyLoginInfo") {
-        <!-- <app-modify-login-info [userLoginInfo]="{}" [role]="" class="w-full" /> -->
         <app-modify-login-info
           [userLoginInfo]="{}"
           [role]="selectedRole()!"
-          (onsubmit)="onModifyLoginInfo()"
+          (onSubmit)="onModifyLoginInfo()"
           class="w-full"
         />
       }

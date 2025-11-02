@@ -1,8 +1,10 @@
 import { AuthService } from '@/core';
 import { IAuthResponse, LoginCredentials, TRoles } from '@/core/models';
+import { ToastService } from '@/core/services/toast.service';
 import { UikitLabelComponent } from '@/uikit';
+import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Button } from 'primeng/button';
@@ -31,6 +33,7 @@ import { CENTRAL_AUTH_ROLES } from '../../constants/central-auth-roles.const';
     RadioButtonModule,
     InputGroupModule,
     InputGroupAddonModule,
+    UikitFieldComponent,
   ],
 })
 export class LoginComponent {
@@ -44,8 +47,9 @@ export class LoginComponent {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly captchaService = inject(CaptchaService);
+  private readonly toastService = inject(ToastService);
 
-  readonly isLoading = this.authService.isLoading();
+  readonly isLoading = computed(() => this.authService.isLoading());
   readonly errorMessage = signal<string>('');
   readonly hidePassword = signal<boolean>(true);
   readonly isCaptchaExpired = this.captchaService.captchaIsExpired;
@@ -72,39 +76,43 @@ export class LoginComponent {
 
   resetCaptcha(): void {
     this.fb.control('captcha').setValue('');
-    this.captchaService.requestNewCaptcha();
+    this.captchaService.renewCaptcha();
   }
 
   onRefreshCaptcha(): void {
-    this.captchaService.requestNewCaptcha();
+    this.resetCaptcha();
   }
   onRefreshCaptchaImage(): void {
-    document
-      .getElementById('captchaImage')
-      ?.setAttribute('src', this.captchaService.captchaImageSrc()! + `&${new Date().getTime()}`);
+    this.resetCaptcha();
+    // document
+    //   .getElementById('captchaImage')
+    //   ?.setAttribute('src', this.captchaService.captchaImageSrc()! + `&${new Date().getTime()}`);
   }
 
   submit(): void {
-    if (this.loginForm.valid && !!this.captchaService.captchaId()) {
-      const credentials: LoginCredentials = this.loginForm.value as LoginCredentials;
-
-      this.authService
-        .login(credentials, (this.defaultRole || this.loginForm.value.role)!)
-        .subscribe({
-          next: (data) => {
-            this.errorMessage.set('');
-            if (this.redirectUrl) {
-              this.router.navigateByUrl(this.redirectUrl.replace(/\/[^/]*$/, ''));
-            } else {
-              this.onSuccessfullySubmit.emit(data);
-            }
-          },
-          error: (error) => {
-            this.resetCaptcha();
-            this.errorMessage.set('نام کاربری یا رمز عبور اشتباه است');
-            console.error('Login failed:', error);
-          },
-        });
+    this.loginForm.markAllAsTouched();
+    if (this.loginForm.invalid) return;
+    if (!this.captchaService.captchaId()) {
+      this.toastService.error({ text: 'مقدار کپچا را وارد کنید' });
     }
+    const credentials: LoginCredentials = this.loginForm.value as LoginCredentials;
+
+    this.authService
+      .login(credentials, (this.defaultRole || this.loginForm.value.role)!)
+      .subscribe({
+        next: (data) => {
+          this.errorMessage.set('');
+          if (this.redirectUrl) {
+            this.router.navigateByUrl(this.redirectUrl.replace(/\/[^/]*$/, ''));
+          } else {
+            this.onSuccessfullySubmit.emit(data);
+          }
+        },
+        error: (error) => {
+          this.resetCaptcha();
+          this.errorMessage.set('نام کاربری یا رمز عبور اشتباه است');
+          console.error('Login failed:', error);
+        },
+      });
   }
 }

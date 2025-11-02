@@ -38,6 +38,7 @@ export interface IVerifyContactMobileRequest {}
 export interface ISchoolMeResponse {
   id: string;
   name: string;
+  phoneNumber: string;
   address: Address;
   managerInfo: IManagerInfo;
   contactInfo: IManagerInfo;
@@ -63,6 +64,7 @@ interface Category {
 export interface ISchoolResponse {
   id: string;
   name: string;
+  phoneNumber: string;
   address: Address;
   managerInfo: IManagerInfo;
   contactInfo: IManagerInfo;

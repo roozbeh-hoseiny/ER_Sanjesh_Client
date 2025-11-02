@@ -1,5 +1,5 @@
 import { timeToSeconds } from '@/utils';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { computed, Injectable, signal, Signal } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
@@ -21,7 +21,7 @@ export class CaptchaService {
   readonly loading: Signal<boolean> = this._loading;
 
   // default TTL 120 seconds
-  private ttlSeconds = 120;
+  private ttlSeconds = signal<number>(120);
   private ttlTimerSub: Subscription | null = null;
 
   readonly captchaImageSrc = signal<Maybe<string>>(null);
@@ -33,20 +33,27 @@ export class CaptchaService {
   /** request a new captcha from backend and start TTL countdown */
   requestNewCaptcha(): void {
     const url = `/captcha/new`;
+    this.getCaptcha(url);
+  }
+
+  private getCaptcha(url: string, headers?: HttpHeaders): void {
     this._loading.set(true);
 
     // Cancel any previous TTL timer
     this.clearTtlTimer();
 
     this.http
-      .get<ICaptchaResponse>(url)
+      .get<ICaptchaResponse>(url, {
+        headers,
+      })
       .pipe(
         tap((res) => {
           if (!res) {
             throw new Error('Invalid captcha response');
           }
           this._captchaId.set(res.id);
-          this.startTtlTimer(timeToSeconds(res.expiry));
+          this.ttlSeconds.set(timeToSeconds(res.expiry));
+          this.startTtlTimer();
           this.setCaptchaImageSrc();
         }),
         finalize(() => this._loading.set(false)),
@@ -74,9 +81,13 @@ export class CaptchaService {
     );
   };
 
-  resetCaptchaImage = () => {
-    this.captchaImageSrc.set(null);
-    this.setCaptchaImageSrc();
+  renewCaptcha = () => {
+    console.log(this.captchaId());
+    const url = `/captcha/new`;
+
+    const headers = new HttpHeaders({ 'x-OldCaptchaId': this.captchaId()! });
+
+    this.getCaptcha(url, headers);
   };
 
   buildCaptchaHeaders(
@@ -93,9 +104,9 @@ export class CaptchaService {
   }
 
   /** internal TTL timer management */
-  private startTtlTimer(seconds: number) {
+  private startTtlTimer() {
     this.clearTtlTimer();
-    this.ttlTimerSub = timer(seconds * 1000).subscribe(() => {
+    this.ttlTimerSub = timer(this.ttlSeconds() * 1000).subscribe(() => {
       this.requestNewCaptcha();
       this.ttlTimerSub = null;
     });

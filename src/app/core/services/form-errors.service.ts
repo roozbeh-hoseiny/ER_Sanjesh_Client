@@ -55,6 +55,9 @@ export class FormErrorsService {
     if (errors['pattern']) {
       out.push({ key: 'pattern', message: `${label} فرمت معتبری ندارد.` });
     }
+    if (errors['mismatch']) {
+      out.push({ key: 'mismatch', message: `${label} تکرار رمز با رمز وارد شده مطابقت ندارد.` });
+    }
     // fallback: include any other error keys
     Object.keys(errors).forEach((k) => {
       if (

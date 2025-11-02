@@ -1,4 +1,4 @@
-<form [formGroup]="loginForm" class="w-full" (ngSubmit)="submit()">
+<form [formGroup]="loginForm" class="w-full flex flex-col gap-4" (ngSubmit)="submit()">
   @if (!defaultRole) {
     <div class="flex items-center gap-4 justify-center mb-10">
       @for (role of centralAuthRoles; track role.key) {
@@ -10,8 +10,7 @@
     </div>
   }
 
-  <div class="flex flex-col gap-2 mb-4">
-    <uikit-label for="username" pSize="large"> نام کاربری </uikit-label>
+  <uikit-field for="username" pSize="large" [control]="loginForm.controls.username" label="نام کاربری">
     <input
       pInputText
       id="username"
@@ -22,10 +21,11 @@
       pSize="large"
       autocomplete="username"
       formControlName="username"
+      [invalid]="loginForm.controls.username.touched && loginForm.controls.username.invalid"
     />
-  </div>
-  <div class="flex flex-col gap-2 mb-6">
-    <uikit-label for="password1" pSize="large">رمز عبور</uikit-label>
+  </uikit-field>
+
+  <uikit-field for="password1" pSize="large" [control]="loginForm.controls.password" label="رمز عبور">
     <p-password
       id="password1"
       size="large"
@@ -36,8 +36,9 @@
       [toggleMask]="true"
       [fluid]="true"
       [feedback]="false"
+      [invalid]="loginForm.controls.password.touched && loginForm.controls.password.invalid"
     />
-  </div>
+  </uikit-field>
 
   <!-- <div class="flex items-center justify-between mt-2 mb-8 gap-8">
           <div class="flex items-center">
@@ -86,5 +87,5 @@
       </p-inputgroup-addon>
     </p-inputgroup>
   </div>
-  <p-button label="ورود" styleClass="w-full" size="large" [loading]="isLoading" type="submit"></p-button>
+  <p-button label="ورود" styleClass="w-full" size="large" [loading]="isLoading()" type="submit"></p-button>
 </form>

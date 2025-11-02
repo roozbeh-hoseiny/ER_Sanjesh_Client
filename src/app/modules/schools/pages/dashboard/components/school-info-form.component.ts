@@ -1,3 +1,5 @@
+import { ToastService } from '@/core/services/toast.service';
+import { mobileValidator } from '@/core/validators/mobile.validator';
 import { ISchoolInfoRequest, ISchoolResponse } from '@/modules/schools/models';
 import { SchoolsInfoService } from '@/modules/schools/services';
 import { SchoolGendersSelect } from '@/shared/catalog';
@@ -31,6 +33,7 @@ export class SchoolInfoFormComponent {
   constructor() {}
 
   private readonly schoolService = inject(SchoolsInfoService);
+  private readonly toastService = inject(ToastService);
 
   onSubmitLoading = signal<boolean>(false);
 
@@ -39,12 +42,12 @@ export class SchoolInfoFormComponent {
     name: ['', [Validators.required]],
     boyOrGirl: [0, [Validators.required]],
     examHallCapacity: [0, [Validators.required, Validators.min(1)]],
-    phoneNumber: [''],
+    phoneNumber: ['', [Validators.required, mobileValidator()]],
 
     managerInfo: this.fb.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      mobile: ['', [Validators.required]],
+      mobile: ['', [Validators.required, mobileValidator()]],
       email: ['', [Validators.required, Validators.email]],
       gender: [true, [Validators.required]],
     }),
@@ -62,6 +65,7 @@ export class SchoolInfoFormComponent {
     this.schoolService.editInfo(payload).subscribe({
       next: (value) => {
         this.onSubmitLoading.set(false);
+        this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
         this.submitForm.emit(value);
       },
       error: (err) => {
