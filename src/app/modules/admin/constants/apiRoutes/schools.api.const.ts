@@ -11,5 +11,7 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     single: () => `${schoolsBaseUrl}/GetOne`,
     add: () => `${schoolsBaseUrl}/AddSchool`,
     categories: () => `${schoolsBaseUrl}/GetCategoryFullTree`,
+
+    updateContact: () => `${schoolsBaseUrl}/ChangeContactInfo`,
   };
 };

@@ -47,9 +47,6 @@ export class AuthComponent {
   };
 
   onModifyLoginInfo = () => {
-    console.log('onModifyLoginInfo');
-    console.log(this.submit.observed);
-
     if (this.submit.observed) {
       return this.submit.emit(Promise.resolve(true));
     }

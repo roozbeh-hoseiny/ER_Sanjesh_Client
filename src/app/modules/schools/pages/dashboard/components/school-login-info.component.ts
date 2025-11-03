@@ -10,4 +10,5 @@ import { Component, Input } from '@angular/core';
 })
 export class SchoolManagerComponent {
   @Input() manager!: IManagerInfo;
+  @Input() canEdit = false;
 }

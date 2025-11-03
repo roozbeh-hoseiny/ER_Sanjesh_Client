@@ -1,9 +1,13 @@
-import { IAddressRequestPayload } from '@/modules/admin/pages/schools/models/schools';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SCHOOLS_API_ROUTES } from '../constants/apiRoutes';
-import { ISchoolInfoRequest, ISchoolLoginInfoRequest, ISchoolResponse } from '../models';
+import {
+  ISchoolAddressRequestPayload,
+  ISchoolInfoRequest,
+  ISchoolLoginInfoRequest,
+  ISchoolResponse,
+} from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class SchoolsInfoService {
@@ -11,7 +15,7 @@ export class SchoolsInfoService {
 
   private apiRoutes = SCHOOLS_API_ROUTES;
 
-  editAddress(request: IAddressRequestPayload): Observable<void> {
+  editAddress(request: ISchoolAddressRequestPayload): Observable<void> {
     return this.http.post<void>(this.apiRoutes.editAddress(), request);
   }
 

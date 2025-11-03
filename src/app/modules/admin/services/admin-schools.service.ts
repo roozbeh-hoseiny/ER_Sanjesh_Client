@@ -1,13 +1,14 @@
 import { PAGINATED_QUERY_DEFAULT_VALUES } from '@/core/constants';
 import { IPaginatedQuery, IPaginatedResponse } from '@/core/models/service.model';
+import { ISchoolContactRequest } from '@/modules/schools/models';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ADMIN_API_ROUTES } from '../constants/apiRoutes';
 import {
+  IAdminSchoolResponse,
   ICategoryFullTree,
   ISchoolRequest,
-  ISchoolResponse,
 } from '../pages/schools/models/schools';
 
 @Injectable({ providedIn: 'root' })
@@ -16,40 +17,46 @@ export class AdminSchoolsService {
 
   private apiRoutes = ADMIN_API_ROUTES;
 
-  getSchools(paginatedQuery: IPaginatedQuery): Observable<IPaginatedResponse<ISchoolResponse>> {
-    return this.http.post<IPaginatedResponse<ISchoolResponse>>(this.apiRoutes.schools.list(), {
+  getAll(paginatedQuery: IPaginatedQuery): Observable<IPaginatedResponse<IAdminSchoolResponse>> {
+    return this.http.post<IPaginatedResponse<IAdminSchoolResponse>>(this.apiRoutes.schools.list(), {
       ...PAGINATED_QUERY_DEFAULT_VALUES,
       ...paginatedQuery,
     });
   }
 
-  getSchoolsByName(
+  filterByName(
     name: string,
     paginatedQuery: IPaginatedQuery,
-  ): Observable<IPaginatedResponse<ISchoolResponse>> {
-    return this.http.post<IPaginatedResponse<ISchoolResponse>>(this.apiRoutes.schools.byName(), {
-      ...PAGINATED_QUERY_DEFAULT_VALUES,
-      ...paginatedQuery,
-      name,
-    });
+  ): Observable<IPaginatedResponse<IAdminSchoolResponse>> {
+    return this.http.post<IPaginatedResponse<IAdminSchoolResponse>>(
+      this.apiRoutes.schools.byName(),
+      {
+        ...PAGINATED_QUERY_DEFAULT_VALUES,
+        ...paginatedQuery,
+        name,
+      },
+    );
   }
 
-  getSchoolsByGender(
+  filterByGender(
     boyOrGirl: number,
     paginatedQuery: IPaginatedQuery,
-  ): Observable<IPaginatedResponse<ISchoolResponse>> {
-    return this.http.post<IPaginatedResponse<ISchoolResponse>>(this.apiRoutes.schools.byGender(), {
-      ...PAGINATED_QUERY_DEFAULT_VALUES,
-      ...paginatedQuery,
-      boyOrGirl,
-    });
+  ): Observable<IPaginatedResponse<IAdminSchoolResponse>> {
+    return this.http.post<IPaginatedResponse<IAdminSchoolResponse>>(
+      this.apiRoutes.schools.byGender(),
+      {
+        ...PAGINATED_QUERY_DEFAULT_VALUES,
+        ...paginatedQuery,
+        boyOrGirl,
+      },
+    );
   }
 
-  getSchoolsByCategories(
+  filterByCategories(
     categoryIds: number[],
     paginatedQuery: IPaginatedQuery,
-  ): Observable<IPaginatedResponse<ISchoolResponse>> {
-    return this.http.post<IPaginatedResponse<ISchoolResponse>>(
+  ): Observable<IPaginatedResponse<IAdminSchoolResponse>> {
+    return this.http.post<IPaginatedResponse<IAdminSchoolResponse>>(
       this.apiRoutes.schools.byCategories(),
       {
         ...PAGINATED_QUERY_DEFAULT_VALUES,
@@ -59,19 +66,22 @@ export class AdminSchoolsService {
     );
   }
 
-  getSchoolsByRegion(
+  filterByRegion(
     regionId: number,
     paginatedQuery: IPaginatedQuery,
-  ): Observable<IPaginatedResponse<ISchoolResponse>> {
-    return this.http.post<IPaginatedResponse<ISchoolResponse>>(this.apiRoutes.schools.byRegion(), {
-      ...PAGINATED_QUERY_DEFAULT_VALUES,
-      ...paginatedQuery,
-      regionId,
-    });
+  ): Observable<IPaginatedResponse<IAdminSchoolResponse>> {
+    return this.http.post<IPaginatedResponse<IAdminSchoolResponse>>(
+      this.apiRoutes.schools.byRegion(),
+      {
+        ...PAGINATED_QUERY_DEFAULT_VALUES,
+        ...paginatedQuery,
+        regionId,
+      },
+    );
   }
 
-  addSchool(data?: ISchoolRequest): Observable<ISchoolResponse> {
-    return this.http.post<ISchoolResponse>(this.apiRoutes.schools.add(), data);
+  addSchool(data?: ISchoolRequest): Observable<IAdminSchoolResponse> {
+    return this.http.post<IAdminSchoolResponse>(this.apiRoutes.schools.add(), data);
   }
 
   updateSchoolStatus(schoolId: string, isActive: boolean): Observable<any> {
@@ -83,5 +93,13 @@ export class AdminSchoolsService {
 
   categories(): Observable<ICategoryFullTree[]> {
     return this.http.get<ICategoryFullTree[]>(this.apiRoutes.schools.categories());
+  }
+
+  getOne(schoolId: string): Observable<IAdminSchoolResponse> {
+    return this.http.post<IAdminSchoolResponse>(this.apiRoutes.schools.single(), { id: schoolId });
+  }
+
+  updateContact(payload: ISchoolContactRequest) {
+    return this.http.post<boolean>(this.apiRoutes.schools.updateContact(), payload);
   }
 }

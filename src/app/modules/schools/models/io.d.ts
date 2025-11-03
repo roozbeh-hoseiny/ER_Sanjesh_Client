@@ -18,6 +18,15 @@ export interface ISchoolInfoRequest {
   examHallCapacity: number;
 }
 
+export interface ISchoolContactRequest {
+  id: string;
+  firstname: string;
+  lastname: string;
+  gender: boolean;
+  email: string;
+  mobile: string;
+}
+
 export interface ISchoolLoginInfoRequest {
   username: string;
   password: string;
@@ -67,7 +76,7 @@ export interface ISchoolResponse {
   phoneNumber: string;
   address: Address;
   managerInfo: IManagerInfo;
-  contactInfo: IManagerInfo;
+  contactInfo: IContactInfo;
   username: string;
   passwordMustBeChangedOnNextLogin: boolean;
   canLoginWithMobileOrEmail: boolean;
@@ -102,6 +111,7 @@ export interface IManagerInfo {
   mobileIsVerified: boolean;
   emailIsVerified: boolean;
 }
+export interface IContactInfo extends IManagerInfo {}
 
 export interface ISchoolEducationalLevelsResponse {
   educationalLevelId: number;
@@ -109,4 +119,13 @@ export interface ISchoolEducationalLevelsResponse {
   educationalLevelLevel: string;
   fieldOfStudyId: number;
   fieldOfStudyTitle: string;
+}
+
+export interface ISchoolAddressRequestPayload {
+  regionId: number;
+  address: string;
+  postalCode: string;
+  number: string;
+  latitude: string;
+  longitude: string;
 }

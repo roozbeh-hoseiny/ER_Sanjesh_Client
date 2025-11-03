@@ -138,8 +138,6 @@ export class AppLayout {
   }
 
   showMenu = computed(() => {
-    console.log('showMenu', this.layoutService.menuItems());
-
     return this.layoutService.menuItems().length > 0;
   });
 

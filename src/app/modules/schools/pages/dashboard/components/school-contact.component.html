@@ -1,0 +1,45 @@
+<app-card-data cardTitle="اطلاعات رابط" [editable]="canEdit" [editMode]="editMode()" (onEdit)="onEdit()">
+  @if (canEdit && editMode()) {
+    <app-school-contact-form
+      [contact]="contact"
+      [loading]="submitLoading"
+      (closeForm)="closeForm()"
+      (submitForm)="submitForm($event)"
+    />
+  } @else {
+    <div class="flex flex-col gap-4">
+      <div class="grid grid-cols-3 gap-4">
+        <app-key-value label="نام" [value]="contact.firstName" />
+        <app-key-value label="نام خانوادگی" [value]="contact.lastName" />
+        <app-key-value label="جنسیت" [value]="contact.gender ? 'مرد' : 'زن'" />
+        <app-key-value label="تلفن همراه">
+          <div class="inline-flex items-center gap-1">
+            <span class="text-text-color text-base font-bold">
+              {{ contact.mobile }}
+            </span>
+            <p-button
+              size="small"
+              [title]="contact.mobileIsVerified ? '' : 'شماره تایید نشده است'"
+              [severity]="contact.mobileIsVerified ? 'success' : 'warn'"
+              [icon]="`pi pi-${contact.mobileIsVerified ? 'check' : 'exclamation-triangle'}`"
+            ></p-button>
+          </div>
+        </app-key-value>
+        <app-key-value label="ایمیل">
+          <div class="inline-flex items-center gap-1">
+            <span class="text-text-color text-base font-bold">
+              {{ contact.email }}
+            </span>
+
+            <p-button
+              size="small"
+              [title]="contact.emailIsVerified ? '' : 'ایمیل تایید نشده است'"
+              [severity]="contact.emailIsVerified ? 'success' : 'warn'"
+              [icon]="`pi pi-${contact.emailIsVerified ? 'check' : 'exclamation-triangle'}`"
+            ></p-button>
+          </div>
+        </app-key-value>
+      </div>
+    </div>
+  }
+</app-card-data>

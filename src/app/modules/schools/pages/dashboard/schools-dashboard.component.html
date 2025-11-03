@@ -1,5 +1,7 @@
-<div class="flex flex-col gap-6">
-  <app-school-info [info]="info()!" />
-  <app-school-address [address]="info()?.address" [schoolId]="schoolId()!" />
-  <app-school-login-info [manager]="info()?.managerInfo!" />
-</div>
+<school-details
+  [school]="info()!"
+  [canEditInfo]="true"
+  [canEditAddress]="true"
+  [canEditLoginInfo]="true"
+  (onRefreshData)="(refreshData)"
+/>

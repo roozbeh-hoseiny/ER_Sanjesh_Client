@@ -2,14 +2,12 @@ import { LayoutService } from '@/layout/service/layout.service';
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { SchoolsStore } from '../../dataStore';
-import { SchoolAddress } from './components/school-address.component';
-import { SchoolInfoComponent } from './components/school-info.component';
-import { SchoolManagerComponent } from './components/school-login-info.component';
+import { SchoolDetailsComponent } from './components/school-details.component';
 
 @Component({
   selector: 'app-schools-dashboard',
   templateUrl: './schools-dashboard.component.html',
-  imports: [CommonModule, SchoolAddress, SchoolManagerComponent, SchoolInfoComponent],
+  imports: [CommonModule, SchoolDetailsComponent],
 })
 export class SchoolsDashboardComponent {
   constructor(
@@ -26,5 +24,9 @@ export class SchoolsDashboardComponent {
 
   ngOnDestroy() {
     this.layoutService.changeIsFixedContentSize(false);
+  }
+
+  refreshData() {
+    this.schoolStore.getInfo();
   }
 }

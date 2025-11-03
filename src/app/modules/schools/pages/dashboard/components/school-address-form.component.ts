@@ -25,9 +25,6 @@ export class SchoolAddressFormComponent {
   @Input() schoolId!: string;
   @Output() closeForm = new EventEmitter<void>();
   @Output() submitForm = new EventEmitter<ISchoolResponse>();
-  constructor() {
-    console.log(this.address);
-  }
 
   onSubmitLoading = signal<boolean>(false);
 
@@ -52,8 +49,6 @@ export class SchoolAddressFormComponent {
   }
 
   submit() {
-    console.log('submit');
-
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.onSubmitLoading.set(true);
@@ -65,7 +60,7 @@ export class SchoolAddressFormComponent {
     this.schoolService.editAddress(payload).subscribe({
       next: (value) => {
         this.onSubmitLoading.set(false);
-        // this.submitForm.emit(value);
+        this.submitForm.emit();
       },
       error: (err) => {
         this.onSubmitLoading.set(false);

@@ -1,6 +1,11 @@
-<app-card-data cardTitle="اطلاعات آدرس" [editable]="true" [editMode]="editMode()" (onEdit)="onEdit()" class="">
-  @if (editMode()) {
-    <app-school-address-form [address]="address" [schoolId]="schoolId" (closeForm)="closeForm()" />
+<app-card-data cardTitle="اطلاعات آدرس" [editable]="canEdit" [editMode]="editMode()" (onEdit)="onEdit()" class="">
+  @if (canEdit && editMode()) {
+    <app-school-address-form
+      [address]="address"
+      [schoolId]="schoolId"
+      (closeForm)="closeForm()"
+      (submitForm)="submitForm()"
+    />
   } @else {
     <div class="flex flex-col gap-4">
       <div class="grid grid-cols-3 gap-4">

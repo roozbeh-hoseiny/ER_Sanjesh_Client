@@ -2,6 +2,7 @@ import { PaginatorComponent, UikitEmptyStateComponent } from '@/uikit';
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  computed,
   ContentChild,
   EventEmitter,
   Input,
@@ -53,6 +54,7 @@ export class PageDataListComponent<I> {
   @Input() currentPage?: number = 1;
   @Input() showEdit: boolean = false;
   @Input() showDelete: boolean = false;
+  @Input() showDetails: boolean = false;
   @Input() showAdd: boolean = false;
   @Input() isFiltered: boolean = false;
 
@@ -60,6 +62,7 @@ export class PageDataListComponent<I> {
 
   @Output() onEdit = new EventEmitter<I>();
   @Output() onDelete = new EventEmitter<I>();
+  @Output() onDetails = new EventEmitter<I>();
   @Output() onAdd = new EventEmitter<void>();
   @Output() pageChange = new EventEmitter<any>();
 
@@ -71,6 +74,10 @@ export class PageDataListComponent<I> {
 
   remove = (item: I) => {
     this.onDelete.emit(item);
+  };
+
+  details = (item: I) => {
+    this.onDetails.emit(item);
   };
 
   openAddForm = () => {
@@ -135,4 +142,12 @@ export class PageDataListComponent<I> {
     if (typeof v === 'string') return v;
     return null;
   }
+
+  actionsCount = computed(() => {
+    let totalCount = 0;
+    if (this.showEdit) totalCount += 1;
+    if (this.showDelete) totalCount += 1;
+    if (this.showDetails) totalCount += 1;
+    return totalCount;
+  });
 }

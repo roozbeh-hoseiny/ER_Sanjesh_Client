@@ -3,13 +3,13 @@ import { mobileValidator } from '@/core/validators/mobile.validator';
 import { ISchoolInfoRequest, ISchoolResponse } from '@/modules/schools/models';
 import { SchoolsInfoService } from '@/modules/schools/services';
 import { SchoolGendersSelect } from '@/shared/catalog';
-import { GenderSelectComponent } from '@/shared/catalog/gender/gender-select.component';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { Divider } from 'primeng/divider';
 import { InputText } from 'primeng/inputtext';
+import { SchoolPersonFormComponent } from './school-person-form.component';
 
 @Component({
   selector: 'app-school-info-form',
@@ -20,8 +20,8 @@ import { InputText } from 'primeng/inputtext';
     InputText,
     Divider,
     ButtonDirective,
-    GenderSelectComponent,
     SchoolGendersSelect,
+    SchoolPersonFormComponent,
   ],
 })
 export class SchoolInfoFormComponent {

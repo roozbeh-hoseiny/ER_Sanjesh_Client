@@ -1,9 +1,8 @@
-import { SchoolsStore } from '@/modules/schools/dataStore';
 import { ISchoolResponse } from '@/modules/schools/models';
 import { EducationalLevelsTagsComponent, SchoolGendersTag } from '@/shared/catalog';
 import { AppCardComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
-import { Component, Input, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { Badge } from 'primeng/badge';
 import { Button } from 'primeng/button';
 import { Divider } from 'primeng/divider';
@@ -25,8 +24,9 @@ import { SchoolInfoFormComponent } from './school-info-form.component';
 })
 export class SchoolInfoComponent {
   @Input() info!: ISchoolResponse;
+  @Input() canEdit: boolean = false;
 
-  constructor(private schoolsStore: SchoolsStore) {}
+  @Output() onSubmitted = new EventEmitter<void>();
 
   editMode = signal<boolean>(false);
 
@@ -39,7 +39,7 @@ export class SchoolInfoComponent {
   }
 
   submitForm() {
-    this.schoolsStore.getInfo();
+    this.onSubmitted.emit();
     this.closeForm();
   }
 }

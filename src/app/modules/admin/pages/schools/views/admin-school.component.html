@@ -1,0 +1,16 @@
+@if (initLoading()) {
+  <div class="flex items-center justify-center">
+    <p-progressSpinner />
+  </div>
+} @else {
+  <school-details
+    [school]="school()!"
+    [canEditInfo]="true"
+    [canEditAddress]="true"
+    [canEditLoginInfo]="true"
+    [canEditContact]="true"
+    [submitContactLoading]="submitContactLoading()"
+    (onRefreshData)="loadSchool()"
+    (onSubmitContact)="onSubmitContact($event)"
+  />
+}

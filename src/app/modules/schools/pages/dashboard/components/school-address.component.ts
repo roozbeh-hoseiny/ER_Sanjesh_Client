@@ -1,7 +1,7 @@
 import { ISchoolAddress } from '@/modules/schools/models';
 import { AppCardComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
-import { Component, Input, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { SchoolAddressFormComponent } from './school-address-form.component';
 
 @Component({
@@ -12,6 +12,10 @@ import { SchoolAddressFormComponent } from './school-address-form.component';
 export class SchoolAddress {
   @Input() address!: ISchoolAddress;
   @Input() schoolId!: string;
+  @Input() canEdit: boolean = false;
+  @Input() loading: boolean = false;
+
+  @Output() onSubmitted = new EventEmitter<void>();
 
   editMode = signal<boolean>(false);
 
@@ -21,5 +25,10 @@ export class SchoolAddress {
 
   closeForm() {
     this.editMode.set(false);
+  }
+
+  submitForm() {
+    this.onSubmitted.emit();
+    this.closeForm();
   }
 }

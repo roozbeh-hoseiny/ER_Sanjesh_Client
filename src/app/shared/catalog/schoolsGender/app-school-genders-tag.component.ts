@@ -1,27 +1,22 @@
-import { Component, Input, signal, OnInit } from '@angular/core';
-import { schoolGenders } from './schoolGenders.const';
-import { TagModule } from 'primeng/tag';
-import { ISchoolGender } from './schoolsGender';
 import { Maybe } from '@/core';
+import { Component, Input, computed } from '@angular/core';
+import { TagModule } from 'primeng/tag';
+import { schoolGenders } from './schoolGenders.const';
+import { ISchoolGender } from './schoolsGender';
 
 @Component({
   selector: 'app-school-genders-tag',
   templateUrl: './app-school-genders-tag.component.html',
   imports: [TagModule],
 })
-export class SchoolGendersTag implements OnInit {
+export class SchoolGendersTag {
   @Input() genderId!: number;
 
   private readonly genders = schoolGenders;
-  gender = signal<Maybe<ISchoolGender>>(null);
 
-  ngOnInit(): void {
+  readonly gender = computed(() => {
     const gender = this.genders.find((g) => g.id === this.genderId);
 
-    if (!gender) {
-      this.gender.set(null);
-    } else {
-      this.gender.set(gender);
-    }
-  }
+    return gender as Maybe<ISchoolGender>;
+  });
 }

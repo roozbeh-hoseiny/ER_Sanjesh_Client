@@ -1,0 +1,25 @@
+<div class="grid grid-cols-1 gap-4">
+  <div class="grid grid-cols-3 gap-4">
+    <uikit-field label="نام" for="firstName" [control]="firstNameControl">
+      <input
+        pInputText
+        [formControl]="firstNameControl"
+        [invalid]="firstNameControl.invalid && firstNameControl.touched"
+      />
+    </uikit-field>
+    <uikit-field label="نام خانوادگی" for="lastName" [control]="lastNameControl">
+      <input
+        pInputText
+        [formControl]="lastNameControl"
+        [invalid]="lastNameControl.invalid && lastNameControl.touched"
+      />
+    </uikit-field>
+    <uikit-field label="موبایل" for="mobile" [control]="mobileControl">
+      <input pInputText [formControl]="mobileControl" [invalid]="mobileControl.invalid && mobileControl.touched" />
+    </uikit-field>
+    <uikit-field label="ایمیل" for="email" [control]="emailControl">
+      <input pInputText [formControl]="emailControl" [invalid]="emailControl.invalid && emailControl.touched" />
+    </uikit-field>
+    <app-gender-select [control]="genderControl" />
+  </div>
+</div>

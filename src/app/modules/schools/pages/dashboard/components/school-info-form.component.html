@@ -26,44 +26,18 @@
       />
     </uikit-field>
   </div>
-  <div class="grid grid-cols-1 gap-4">
+  <div [formGroup]="form.controls.managerInfo" class="grid grid-cols-1 gap-4">
     <p-divider align="center"> مدیریت </p-divider>
-    <div formGroupName="managerInfo" class="grid grid-cols-1 gap-4">
-      <div class="grid grid-cols-3 gap-4">
-        <uikit-field label="نام مدیر" for="firstName" [control]="form.get('managerInfo.firstName')">
-          <input
-            pInputText
-            formControlName="firstName"
-            [invalid]="form.get('managerInfo.firstName')?.invalid && form.get('managerInfo.firstName')?.touched"
-          />
-        </uikit-field>
-        <uikit-field label="نام خانوادگی" for="lastName" [control]="form.get('managerInfo.lastName')">
-          <input
-            pInputText
-            formControlName="lastName"
-            [invalid]="form.get('managerInfo.lastName')?.invalid && form.get('managerInfo.lastName')?.touched"
-          />
-        </uikit-field>
-        <uikit-field label="موبایل" for="mobile" [control]="form.get('managerInfo.mobile')">
-          <input
-            pInputText
-            formControlName="mobile"
-            [invalid]="form.get('managerInfo.mobile')?.invalid && form.get('managerInfo.mobile')?.touched"
-          />
-        </uikit-field>
-        <uikit-field label="ایمیل" for="email" [control]="form.get('managerInfo.email')">
-          <input
-            pInputText
-            formControlName="email"
-            [invalid]="form.get('managerInfo.email')?.invalid && form.get('managerInfo.email')?.touched"
-          />
-        </uikit-field>
-        <app-gender-select [control]="form.get('managerInfo.gender')" />
-      </div>
-    </div>
-    <div class="flex gap-2 justify-end mt-4">
-      <button pButton type="button" class="p-button-secondary" (click)="close()">انصراف</button>
-      <button pButton type="submit" class="p-button-primary" [loading]="onSubmitLoading()">ذخیره</button>
-    </div>
+    <app-school-person-form
+      [firstNameControl]="form.controls.managerInfo.controls.firstName"
+      [lastNameControl]="form.controls.managerInfo.controls.lastName"
+      [mobileControl]="form.controls.managerInfo.controls.mobile"
+      [emailControl]="form.controls.managerInfo.controls.email"
+      [genderControl]="form.controls.managerInfo.controls.gender"
+    />
+  </div>
+  <div class="flex gap-2 justify-end mt-4">
+    <button pButton type="button" class="p-button-secondary" (click)="close()">انصراف</button>
+    <button pButton type="submit" class="p-button-primary" [loading]="onSubmitLoading()">ذخیره</button>
   </div>
 </form>

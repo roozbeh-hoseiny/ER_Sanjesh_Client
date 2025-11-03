@@ -9,11 +9,13 @@
   [currentPage]="activePageIndex() + 1"
   [perPage]="perPage()"
   [isFiltered]="isFiltered"
+  [showDetails]="true"
   style="height: 100cqmin"
   class="overflow-hidden"
   (pageChange)="onPageChange($event)"
   (onAdd)="openAddSchoolForm()"
   (onEdit)="openEditForm($event)"
+  (onDetails)="toDetails($event)"
 >
   <ng-template #filter let-columns>
     <app-admin-schools-filter

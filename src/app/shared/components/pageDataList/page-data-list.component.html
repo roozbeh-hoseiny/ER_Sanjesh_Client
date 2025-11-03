@@ -38,8 +38,8 @@
           @for (col of columns; track col.header) {
             <th [style]="{ width: col.width, minWidth: col.minWidth }">{{ col.header }}</th>
           }
-          @if (showDelete || showEdit) {
-            <th type="th" class="w-[5rem]"></th>
+          @if (actionsCount()) {
+            <th type="th" [style]="{ width: `${actionsCount() * 2 + (actionsCount() - 1) * 0.25}rem` }"></th>
           }
         </tr>
       </ng-template>
@@ -60,14 +60,16 @@
               }
             </td>
           }
-          @if (showDelete || showEdit) {
+          @if (actionsCount()) {
             <td
               table-action-row
               type="td"
+              [showDetails]="showDetails"
               [showDelete]="showDelete"
               [showEdit]="showEdit"
               (edit)="edit(item)"
               (delete)="remove(item)"
+              (details)="details(item)"
             ></td>
           }
         </tr>
@@ -93,7 +95,7 @@
                 <p-skeleton></p-skeleton>
               </td>
             }
-            @if (showDelete || showEdit) {
+            @if (showDelete || showEdit || showDetails) {
               <td>
                 <p-skeleton></p-skeleton>
               </td>

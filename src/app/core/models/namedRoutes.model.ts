@@ -19,6 +19,7 @@ export interface RouteInfo {
   meta: {
     title: string;
     icon?: string;
+    pagePath?: (params: any) => string;
   };
 }
 

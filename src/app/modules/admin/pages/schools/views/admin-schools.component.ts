@@ -10,12 +10,13 @@ import {
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal, TemplateRef, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { AdminSchoolsService } from '../../../services';
 import { AdminSchoolFormComponent } from '../components/admin-school-form.component';
 import { AdminSchoolsFilterComponent } from '../components/admin-schools-filter.component';
-import { ISchoolResponse } from '../models/schools';
+import { IAdminSchoolResponse } from '../models/schools';
 
 type TGetDataMode = 'all' | 'search' | 'gender' | 'category' | 'region';
 
@@ -40,6 +41,7 @@ export class AdminSchoolsComponent {
     // private confirmationService: ConfirmationService,
     private services: AdminSchoolsService,
     private breadcrumbService: BreadcrumbService,
+    private router: Router,
   ) {
     this.breadcrumbService.setItems([adminNamedRoutes.root.meta, adminNamedRoutes.schools.meta]);
     this.getData();
@@ -52,7 +54,7 @@ export class AdminSchoolsComponent {
 
   checked: boolean = false;
 
-  paginatedItems = signal<ISchoolResponse[][]>([]);
+  paginatedItems = signal<IAdminSchoolResponse[][]>([]);
   totalRecords = signal<number>(0);
   loading = signal<boolean>(true);
   lastSeen = signal<string>('');
@@ -61,7 +63,7 @@ export class AdminSchoolsComponent {
 
   isAddSchoolFormVisible = signal<boolean>(false);
   schoolsChangeStatusSchedules = signal<Record<string, boolean>>({});
-  selectedSchoolForEdit = signal<Maybe<ISchoolResponse>>(null);
+  selectedSchoolForEdit = signal<Maybe<IAdminSchoolResponse>>(null);
 
   getDataMode = signal<TGetDataMode>('all');
 
@@ -103,7 +105,7 @@ export class AdminSchoolsComponent {
       {
         field: 'state',
         header: 'استان',
-        customDataModel: (item: ISchoolResponse) => item?.address?.stateName ?? '-',
+        customDataModel: (item: IAdminSchoolResponse) => item?.address?.stateName ?? '-',
         width: '8rem',
         minWidth: '8rem',
       },
@@ -112,7 +114,7 @@ export class AdminSchoolsComponent {
         header: 'مدیریت',
         width: '10rem',
         minWidth: '10rem',
-        customDataModel: (item: ISchoolResponse) => {
+        customDataModel: (item: IAdminSchoolResponse) => {
           const { firstName, lastName } = item.managerInfo;
           const fullName = [firstName, lastName].filter(Boolean).join(' ');
           return fullName || '-';
@@ -159,12 +161,12 @@ export class AdminSchoolsComponent {
     this.isAddSchoolFormVisible.set(true);
   }
 
-  openEditForm(item: ISchoolResponse) {
+  openEditForm(item: IAdminSchoolResponse) {
     this.selectedSchoolForEdit.set(item);
     this.isAddSchoolFormVisible.set(true);
   }
 
-  toggleStatus(item: ISchoolResponse, checked: boolean) {
+  toggleStatus(item: IAdminSchoolResponse, checked: boolean) {
     this.schoolsChangeStatusSchedules.update((prev) => ({ ...prev, [item.id]: true }));
     this.services.updateSchoolStatus(item.id, checked).subscribe({
       next: () => {
@@ -222,7 +224,13 @@ export class AdminSchoolsComponent {
     this.getByRegion();
   }
 
-  validateFilterData(value: Maybe<string | number>, mode: TGetDataMode) {
+  toDetails(item: IAdminSchoolResponse) {
+    const detailRoute = adminNamedRoutes.school.meta.pagePath!(item.id)! as string;
+
+    this.router.navigateByUrl(detailRoute);
+  }
+
+  private validateFilterData(value: Maybe<string | number>, mode: TGetDataMode) {
     if (!value) {
       this.changeGetDataMode('all');
       return this.getData();
@@ -246,14 +254,14 @@ export class AdminSchoolsComponent {
 
   private getAll() {
     this.services
-      .getSchools({ lastSeen: this.lastSeen(), pageSize: this.perPage() })
+      .getAll({ lastSeen: this.lastSeen(), pageSize: this.perPage() })
       .subscribe({ ...this.onResponse });
   }
 
   private getByName() {
     this.loading.set(true);
     this.services
-      .getSchoolsByName(this.searchQuery(), { lastSeen: this.lastSeen(), pageSize: this.perPage() })
+      .filterByName(this.searchQuery(), { lastSeen: this.lastSeen(), pageSize: this.perPage() })
       .subscribe({ ...this.onResponse });
   }
 
@@ -263,7 +271,7 @@ export class AdminSchoolsComponent {
     }
     this.loading.set(true);
     this.services
-      .getSchoolsByGender(this.selectedGender()!, {
+      .filterByGender(this.selectedGender()!, {
         lastSeen: this.lastSeen(),
         pageSize: this.perPage(),
       })
@@ -275,7 +283,7 @@ export class AdminSchoolsComponent {
     }
     this.loading.set(true);
     this.services
-      .getSchoolsByCategories([this.selectedCategories()!], {
+      .filterByCategories([this.selectedCategories()!], {
         lastSeen: this.lastSeen(),
         pageSize: this.perPage(),
       })
@@ -288,7 +296,7 @@ export class AdminSchoolsComponent {
     }
     this.loading.set(true);
     this.services
-      .getSchoolsByRegion(this.selectedRegion()!, {
+      .filterByRegion(this.selectedRegion()!, {
         lastSeen: this.lastSeen(),
         pageSize: this.perPage(),
       })
@@ -296,7 +304,7 @@ export class AdminSchoolsComponent {
   }
 
   private onResponse = {
-    next: (schools: IPaginatedResponse<ISchoolResponse>) => {
+    next: (schools: IPaginatedResponse<IAdminSchoolResponse>) => {
       if (!this.paginatedItems.length) {
         this.totalRecords.set(schools.totalCount);
       }
