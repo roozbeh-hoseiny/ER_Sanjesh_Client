@@ -11,8 +11,10 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, signal, TemplateRef, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
 import { AdminSchoolsService } from '../../../services';
 import { AdminSchoolFormComponent } from '../components/admin-school-form.component';
 import { AdminSchoolsFilterComponent } from '../components/admin-schools-filter.component';
@@ -34,14 +36,16 @@ type TGetDataMode = 'all' | 'search' | 'gender' | 'category' | 'region';
     ToggleSwitchModule,
     AdminSchoolsFilterComponent,
     ProgressSpinnerModule,
+    ConfirmPopupModule,
   ],
+  providers: [ConfirmationService],
 })
 export class AdminSchoolsComponent {
   constructor(
-    // private confirmationService: ConfirmationService,
     private services: AdminSchoolsService,
     private breadcrumbService: BreadcrumbService,
     private router: Router,
+    private confirmationService: ConfirmationService,
   ) {
     this.breadcrumbService.setItems([adminNamedRoutes.root.meta, adminNamedRoutes.schools.meta]);
     this.getData();
@@ -164,24 +168,6 @@ export class AdminSchoolsComponent {
   openEditForm(item: IAdminSchoolResponse) {
     this.selectedSchoolForEdit.set(item);
     this.isAddSchoolFormVisible.set(true);
-  }
-
-  toggleStatus(item: IAdminSchoolResponse, checked: boolean) {
-    this.schoolsChangeStatusSchedules.update((prev) => ({ ...prev, [item.id]: true }));
-    this.services.updateSchoolStatus(item.id, checked).subscribe({
-      next: () => {
-        item.isActive = checked;
-        const updatedSchedules = { ...this.schoolsChangeStatusSchedules() };
-        delete updatedSchedules[item.id];
-        this.schoolsChangeStatusSchedules.update(() => updatedSchedules);
-      },
-      error: () => {
-        const updatedSchedules = { ...this.schoolsChangeStatusSchedules() };
-        delete updatedSchedules[item.id];
-        this.schoolsChangeStatusSchedules.update(() => updatedSchedules);
-        item.isActive = !checked;
-      },
-    });
   }
 
   onSchoolFormSave($event: any) {
@@ -317,4 +303,39 @@ export class AdminSchoolsComponent {
       this.loading.set(false);
     },
   };
+
+  showConfirmation(item: IAdminSchoolResponse, checked: boolean, event: ToggleSwitchChangeEvent) {
+    this.schoolsChangeStatusSchedules.update((prev) => ({ ...prev, [item.id]: true }));
+    this.confirmationService.confirm({
+      target: (event.originalEvent.target as HTMLElement)?.parentNode?.parentNode!,
+      message: !checked
+        ? 'آیا از غیرفعال کردن این مدرسه اطمینان دارید؟'
+        : 'آیا از فعال کردن این مدرسه اطمینان دارید؟',
+      header: 'تایید تغییر وضعیت',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => this.toggleStatus(item, checked),
+      reject: () => {
+        this.removeSchoolFromSchedule(item.id);
+      },
+    });
+  }
+
+  toggleStatus(item: IAdminSchoolResponse, checked: boolean) {
+    this.services.updateSchoolStatus(item.id, checked).subscribe({
+      next: () => {
+        item.isActive = checked;
+        this.removeSchoolFromSchedule(item.id);
+      },
+      error: () => {
+        this.removeSchoolFromSchedule(item.id);
+        item.isActive = !checked;
+      },
+    });
+  }
+
+  removeSchoolFromSchedule(itemId: string) {
+    const updatedSchedules = { ...this.schoolsChangeStatusSchedules() };
+    delete updatedSchedules[itemId];
+    this.schoolsChangeStatusSchedules.update(() => updatedSchedules);
+  }
 }

@@ -30,6 +30,7 @@
     <app-school-genders-tag [genderId]="item.boyOrGirl"></app-school-genders-tag>
   </ng-template>
   <ng-template #status let-item>
+    <p-confirmpopup />
     @if (schoolsChangeStatusSchedules()[item.id]) {
       <p-progressSpinner
         strokeWidth="4"
@@ -41,7 +42,7 @@
       <p-toggleSwitch
         [disabled]="schoolsChangeStatusSchedules()[item.id]"
         [ngModel]="item.isActive"
-        (onChange)="toggleStatus(item, $event.checked)"
+        (onChange)="showConfirmation(item, $event.checked, $event)"
       ></p-toggleSwitch>
     }
     <!-- <p-button
