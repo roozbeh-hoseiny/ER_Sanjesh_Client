@@ -1,11 +1,30 @@
 <div class="layout-wrapper" [ngClass]="containerClass">
-    <app-topbar></app-topbar>
-    <app-sidebar></app-sidebar>
-    <div class="layout-main-container">
-        <div class="layout-main">
-            <router-outlet></router-outlet>
-        </div>
-        <app-footer></app-footer>
+  <app-topbar></app-topbar>
+  @if (fullLoading) {
+    <div class="flex justify-center align-items-center h-svh items-center">
+      <p-progressSpinner></p-progressSpinner>
     </div>
-    <div class="layout-mask animate-fadein"></div>
+  } @else {
+    @if (showMenu()) {
+      <app-sidebar></app-sidebar>
+    }
+    <div [class]="`layout-main-container ${!showMenu ? 'hideMenu' : ''}`">
+      <div class="layout-main flex flex-col gap-4">
+        @if (showBreadcrumb) {
+          <app-breadcrumb class="rounded-md overflow-hidden shrink-0" />
+        }
+        <div [class]="`rounded-md flex flex-col grow ${isFixedContentSize ? 'overflow-auto' : 'overflow-hidden'}`">
+          <div class="h-full" style="container-type: size">
+            @if (content) {
+              <ng-container [ngTemplateOutlet]="content"></ng-container>
+            } @else {
+              <router-outlet></router-outlet>
+            }
+          </div>
+        </div>
+      </div>
+      <app-footer></app-footer>
+    </div>
+  }
+  <div class="layout-mask animate-fadein"></div>
 </div>

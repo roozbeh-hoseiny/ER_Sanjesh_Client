@@ -1,54 +1,118 @@
 import { AuthService } from '@/core';
+import { IAuthResponse, LoginCredentials, TRoles } from '@/core/models';
+import { ToastService } from '@/core/services/toast.service';
+import { UikitLabelComponent } from '@/uikit';
+import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Button } from 'primeng/button';
-import { Checkbox } from 'primeng/checkbox';
+import { ImageModule } from 'primeng/image';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
-import images from 'src/assets/images';
-import { LoginCredentials } from '../../../../core/models';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { CaptchaService } from 'src/app/core/services/captcha.service';
+import { CENTRAL_AUTH_ROLES } from '../../constants/central-auth-roles.const';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  imports: [CommonModule, ReactiveFormsModule, Button, Checkbox, Password, InputText],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    Button,
+    Password,
+    InputText,
+    ImageModule,
+    ProgressSpinnerModule,
+    UikitLabelComponent,
+    RadioButtonModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    UikitFieldComponent,
+  ],
 })
 export class LoginComponent {
+  @Output() onSuccessfullySubmit = new EventEmitter<IAuthResponse>();
+
+  @Input() redirectUrl!: string;
+  @Input() loginApiUrl!: string;
+  @Input() defaultRole?: TRoles;
+
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
+  private readonly captchaService = inject(CaptchaService);
+  private readonly toastService = inject(ToastService);
 
-  readonly isLoading = this.authService.isLoading;
+  readonly isLoading = computed(() => this.authService.isLoading());
   readonly errorMessage = signal<string>('');
   readonly hidePassword = signal<boolean>(true);
-
-  readonly logo = images.logo;
+  readonly isCaptchaExpired = this.captchaService.captchaIsExpired;
+  readonly isCaptchaLoading = this.captchaService.loading;
+  readonly captchaImageSrc = this.captchaService.captchaImageSrc;
+  readonly centralAuthRoles = CENTRAL_AUTH_ROLES;
 
   readonly loginForm = this.fb.group({
-    username: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required]],
     password: ['', [Validators.required]],
     rememberMe: [false],
+    captcha: ['', [Validators.required]],
+    role: [this.defaultRole || this.centralAuthRoles[0].key, [Validators.required]],
   });
+
+  selectedRole = signal<TRoles>('SCHOOL');
+  ngOnInit() {
+    this.captchaService.requestNewCaptcha();
+  }
 
   togglePasswordVisibility(): void {
     this.hidePassword.set(!this.hidePassword());
   }
 
-  onSubmit(): void {
-    if (this.loginForm.valid) {
-      const credentials: LoginCredentials = this.loginForm.value as LoginCredentials;
+  resetCaptcha(): void {
+    this.fb.control('captcha').setValue('');
+    this.captchaService.renewCaptcha();
+  }
 
-      this.authService.login(credentials).subscribe({
-        next: () => {
+  onRefreshCaptcha(): void {
+    this.resetCaptcha();
+  }
+  onRefreshCaptchaImage(): void {
+    this.resetCaptcha();
+    // document
+    //   .getElementById('captchaImage')
+    //   ?.setAttribute('src', this.captchaService.captchaImageSrc()! + `&${new Date().getTime()}`);
+  }
+
+  submit(): void {
+    this.loginForm.markAllAsTouched();
+    if (this.loginForm.invalid) return;
+    if (!this.captchaService.captchaId()) {
+      this.toastService.error({ text: 'مقدار کپچا را وارد کنید' });
+    }
+    const credentials: LoginCredentials = this.loginForm.value as LoginCredentials;
+
+    this.authService
+      .login(credentials, (this.defaultRole || this.loginForm.value.role)!)
+      .subscribe({
+        next: (data) => {
           this.errorMessage.set('');
+          if (this.redirectUrl) {
+            this.router.navigateByUrl(this.redirectUrl.replace(/\/[^/]*$/, ''));
+          } else {
+            this.onSuccessfullySubmit.emit(data);
+          }
         },
         error: (error) => {
+          this.resetCaptcha();
           this.errorMessage.set('نام کاربری یا رمز عبور اشتباه است');
           console.error('Login failed:', error);
         },
       });
-    }
   }
 }

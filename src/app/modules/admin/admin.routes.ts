@@ -12,4 +12,12 @@ export const ADMIN_ROUTES: Routes = [
     data: { roles: [UserRole.ADMIN] },
     children: Object.values(adminNamedRoutes),
   },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./pages/login/admin-login.component').then((m) => m.AdminLoginComponent),
+    // meta: {
+    //   title: 'لاگین',
+    // },
+  },
 ];

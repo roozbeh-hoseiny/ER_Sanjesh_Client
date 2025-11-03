@@ -1,51 +1,43 @@
 import { NamedRoutes } from '@/core';
+import {
+  adminMDMNamedRoutes,
+  adminSchoolNamedRoutes,
+  adminTeachersNamedRoutes,
+  TAdminMDMRouteNames,
+  TAdminSchoolsRouteNames,
+  TAdminTeachersRouteNames,
+} from './routes';
 
 export type AdminRouteNames =
   | 'root'
-  | 'login'
-  | 'dashboard'
-  | 'users'
-  | 'mdm'
-  | 'mdmEducationalLevels'
-  | 'mdmFieldOfStudies';
+  | TAdminSchoolsRouteNames
+  | TAdminMDMRouteNames
+  | TAdminTeachersRouteNames;
 
 export const adminNamedRoutes: NamedRoutes<AdminRouteNames> = {
-  login: {
-    path: 'login',
-    loadComponent: () =>
-      import('../pages/login/admin-login.component').then((m) => m.AdminLoginComponent),
-  },
   root: {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: adminSchoolNamedRoutes.schools.path,
     pathMatch: 'full',
+    meta: {
+      title: 'داشبورد',
+    },
   },
-  dashboard: {
-    path: 'dashboard',
-    loadComponent: () =>
-      import('../pages/root/admin-root.component').then((m) => m.AdminDashboardComponent),
-  },
-  users: {
-    path: 'users',
-    loadComponent: () =>
-      import('../pages/root/admin-root.component').then((m) => m.AdminDashboardComponent),
-  },
-  mdm: {
-    path: 'mdm',
-    redirectTo: 'mdm/educational-levels',
-  },
-  mdmEducationalLevels: {
-    path: 'mdm/educational-levels',
-    loadComponent: () =>
-      import('../pages/mdm/educationalLevels/admin-mdm-educational-levels.component').then(
-        (m) => m.AdminMdmEducationalLevelsComponent,
-      ),
-  },
-  mdmFieldOfStudies: {
-    path: 'mdm/field-of-studies',
-    loadComponent: () =>
-      import('../pages/mdm/fieldOfStudies/admin-mdm-field-of-studies.component').then(
-        (m) => m.AdminMdmFieldOfStudiesComponent,
-      ),
-  },
+  ...adminMDMNamedRoutes,
+  ...adminSchoolNamedRoutes,
+  ...adminTeachersNamedRoutes,
 };
+
+export const ADMIN_ROUTES = Object.entries(adminNamedRoutes).reduce(
+  (acc, [name, route]) => {
+    const { path, meta } = route;
+    return {
+      ...acc,
+      [name]: {
+        path: `/admin/${path}`,
+        meta,
+      },
+    };
+  },
+  {} as Record<AdminRouteNames, { path: string; meta: any }>,
+);

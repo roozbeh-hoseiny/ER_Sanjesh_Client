@@ -1,10 +1,13 @@
 export enum UserRole {
-  STUDENT = 'student',
-  GRADER = 'grader',
   ADMIN = 'admin',
-  PRINCIPAL = 'principal',
+  SCHOOL = 'school',
+  TEACHERS = 'teachers',
+  STUDENTS = 'students',
+  GRADER = 'grader',
   SUPERADMIN = 'superadmin',
 }
+
+export type TRoles = keyof typeof UserRole;
 
 export interface User {
   id: string;
@@ -27,9 +30,12 @@ export interface Permission {
   action: string;
 }
 
-export interface AuthResponse {
-  user: User;
+export interface IAuthResponse {
+  // user: User;
   token: string;
+  fullName: string;
+  mustChangePassword: boolean;
+  role: string;
   refreshToken: string;
   expiresIn: number;
 }
@@ -37,4 +43,12 @@ export interface AuthResponse {
 export interface LoginCredentials {
   username: string;
   password: string;
+  captcha: string;
+}
+
+export interface IUserLoginInfo {
+  username: string;
+  password: string;
+  mobile: string;
+  email: string;
 }

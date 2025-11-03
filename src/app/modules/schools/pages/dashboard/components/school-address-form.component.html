@@ -1,0 +1,30 @@
+<form [formGroup]="form" (submit)="submit()">
+  <div class="grid grid-cols-1 gap-4">
+    <div class="grid grid-cols-3 gap-4">
+      <app-states-select
+        [stateControl]="form.controls.state"
+        [cityControl]="form.controls.city"
+        class="col-span-2"
+      ></app-states-select>
+      <uikit-field label="کد پستی" for="postalCode" [control]="form.controls.postalCode">
+        <input
+          pInputText
+          formControlName="postalCode"
+          [invalid]="form.controls.postalCode.invalid && form.controls.postalCode.touched"
+        />
+      </uikit-field>
+    </div>
+    <uikit-field label="آدرس" for="address" [control]="form.controls.address">
+      <textarea
+        pTextarea
+        formControlName="address"
+        rows="2"
+        [invalid]="form.controls.address.invalid && form.controls.address.touched"
+      ></textarea>
+    </uikit-field>
+    <div class="flex gap-2 justify-end mt-4">
+      <button pButton type="button" class="p-button-secondary" (click)="close()">انصراف</button>
+      <button pButton type="submit" class="p-button-primary" [loading]="onSubmitLoading()">ذخیره</button>
+    </div>
+  </div>
+</form>

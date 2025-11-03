@@ -1,0 +1,7 @@
+<div class="flex items-center gap-2 flex-wrap">
+  @for (level of groupedEducationalLevels(); track level.level) {
+    @for (field of level.fields; track field.id) {
+      <p-tag>{{ level.level.fullTitle }} - {{ field.title }}</p-tag>
+    }
+  }
+</div>

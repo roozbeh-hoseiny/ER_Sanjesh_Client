@@ -1,0 +1,14 @@
+<app-card-data cardTitle="اطلاعات آدرس" [editable]="true" [editMode]="editMode()" (onEdit)="onEdit()" class="">
+  @if (editMode()) {
+    <app-school-address-form [address]="address" [schoolId]="schoolId" (closeForm)="closeForm()" />
+  } @else {
+    <div class="flex flex-col gap-4">
+      <div class="grid grid-cols-3 gap-4">
+        <app-key-value label="استان" [value]="address.stateName" />
+        <app-key-value label="شهر" [value]="address.cityName" />
+        <app-key-value label="کد پستی" [value]="address.postalCode" />
+      </div>
+      <app-key-value label="آدرس" [value]="address.address" />
+    </div>
+  }
+</app-card-data>

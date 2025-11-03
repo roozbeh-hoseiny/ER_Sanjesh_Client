@@ -12,6 +12,10 @@ export const superadminNamedRoutes: NamedRoutes<SuperadminRouteNames> = {
       import('./pages/dashboard/superadmin-dashboard.component').then(
         (m) => m.SuperadminDashboardComponent,
       ),
+
+    meta: {
+      title: 'داشبورد سوپرادمین',
+    },
   },
 };
 

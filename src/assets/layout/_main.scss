@@ -1,17 +1,19 @@
 .layout-main-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    justify-content: space-between;
-    padding: 6rem 2rem 0 2rem;
-    transition: margin-inline-start var(--layout-section-transition-duration);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  justify-content: space-between;
+  padding: 6rem 1rem 2rem 2rem;
+  transition: margin-inline-start var(--layout-section-transition-duration);
+  &.hideMenu {
+    margin: 0 !important;
+    transform: translateX(0) !important;
+    padding-inline-start: 2rem !important;
+  }
 }
 
 .layout-main {
-    flex: 1 1 auto;
-    padding-bottom: 2rem;
-}
-
-img {
-    max-width: none !important;
+  flex: 1 1 auto;
+  overflow: hidden;
 }

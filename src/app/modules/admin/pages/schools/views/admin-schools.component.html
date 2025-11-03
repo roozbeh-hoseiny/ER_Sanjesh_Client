@@ -1,0 +1,61 @@
+<app-page-data-list
+  [pageTitle]="'مدیریت مدارس'"
+  [addNewCtaLabel]="'افزودن مدرسه جدید'"
+  [columns]="columns"
+  [showAdd]="true"
+  [items]="activePageItems()"
+  [loading]="loading()"
+  [totalRecords]="totalRecords()"
+  [currentPage]="activePageIndex() + 1"
+  [perPage]="perPage()"
+  [isFiltered]="isFiltered"
+  style="height: 100cqmin"
+  class="overflow-hidden"
+  (pageChange)="onPageChange($event)"
+  (onAdd)="openAddSchoolForm()"
+  (onEdit)="openEditForm($event)"
+>
+  <ng-template #filter let-columns>
+    <app-admin-schools-filter
+      (onSearch)="onSearch($event)"
+      (onGenderFilter)="onGenderFilter($event)"
+      (onCategoryFilter)="onCategoriesFilter($event)"
+      (onRegionFilter)="onRegionFilter($event)"
+    />
+  </ng-template>
+
+  <ng-template #boyOrGirl let-item>
+    <app-school-genders-tag [genderId]="item.boyOrGirl"></app-school-genders-tag>
+  </ng-template>
+  <ng-template #status let-item>
+    @if (schoolsChangeStatusSchedules()[item.id]) {
+      <p-progressSpinner
+        strokeWidth="4"
+        fill="transparent"
+        animationDuration="1s"
+        [style]="{ width: '24px', height: '24px' }"
+      ></p-progressSpinner>
+    } @else {
+      <p-toggleSwitch
+        [disabled]="schoolsChangeStatusSchedules()[item.id]"
+        [ngModel]="item.isActive"
+        (onChange)="toggleStatus(item, $event.checked)"
+      ></p-toggleSwitch>
+    }
+    <!-- <p-button
+      [severity]="item.isActive ? 'success' : 'danger'"
+      size="small"
+      [loading]="schoolsChangeStatusSchedules()[item.id]"
+      (click)="toggleStatus(item, !item.isActive)"
+    >
+      {{ item.isActive ? "فعال" : "غیرفعال" }}
+    </p-button> -->
+  </ng-template>
+</app-page-data-list>
+
+<app-admin-school-form
+  [visible]="isAddSchoolFormVisible()"
+  [defaultValues]="selectedSchoolForEdit()"
+  (visibleChange)="isAddSchoolFormVisible.set($event)"
+  (save)="onSchoolFormSave($event)"
+/>

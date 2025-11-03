@@ -1,16 +1,48 @@
+import { ADMIN_API_ROUTES } from '@/modules/admin/constants';
+import { SCHOOLS_API_ROUTES } from '@/modules/schools/constants';
+import { ISchoolMeResponse } from '@/modules/schools/models';
+import { TEACHERS_API_ROUTES } from '@/modules/teachers/constants';
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { AuthResponse, LoginCredentials, Maybe, User, UserRole } from '../models';
+import { catchError, finalize, map, tap } from 'rxjs/operators';
+import {
+  IAuthResponse,
+  IUserLoginInfo,
+  LoginCredentials,
+  Maybe,
+  TRoles,
+  User,
+  UserRole,
+} from '../models';
+import { CaptchaService } from './captcha.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  constructor() {
+    this.initializeAuth();
+  }
+
+  readonly modulesLoginRoutes = {
+    ADMIN: ADMIN_API_ROUTES.login(),
+    SCHOOL: SCHOOLS_API_ROUTES.login(),
+    TEACHERS: TEACHERS_API_ROUTES.login(),
+  } as Record<TRoles, string>;
+
+  readonly modulesGetInfoRoutes = {
+    SCHOOL: SCHOOLS_API_ROUTES.me(),
+  } as Record<TRoles, string>;
+
+  readonly modulesChangeInfoRoutes = {
+    SCHOOL: SCHOOLS_API_ROUTES.editLoginInfo(),
+  } as Record<TRoles, string>;
+
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
+  private captchaService = inject(CaptchaService);
 
   private readonly currentUserSubject = new BehaviorSubject<Maybe<User>>(null);
   private readonly isLoadingSubject = new BehaviorSubject<boolean>(false);
@@ -34,21 +66,22 @@ export class AuthService {
     permissions: [],
   });
   readonly isLoading = signal<boolean>(false);
-  readonly isAuthenticated = computed(() => !!this.currentUser());
+  readonly token = signal<Maybe<string>>(null);
+  readonly isAuthenticated = computed(() => {
+    return Boolean(this.token());
+  });
   readonly userRole = computed(() => this.currentUser()?.role);
-
-  constructor() {
-    this.initializeAuth();
-  }
 
   private initializeAuth(): void {
     const token = localStorage.getItem('auth_token');
-    const userData = localStorage.getItem('user_data');
+    this.token.set(token);
+    // const userData = localStorage.getItem('user_data');
+    const userData = this.currentUser();
 
     if (token && userData) {
       try {
-        const user = JSON.parse(userData) as User;
-        this.setCurrentUser(user);
+        // const user = JSON.parse(userData) as User;
+        // this.setCurrentUser(user);
       } catch (error) {
         console.error('Error parsing stored user data:', error);
         this.logout();
@@ -56,22 +89,34 @@ export class AuthService {
     }
   }
 
-  login(credentials: LoginCredentials): Observable<AuthResponse> {
+  login(credentials: LoginCredentials, role: TRoles): Observable<IAuthResponse> {
+    const { username, password, captcha } = credentials;
     this.isLoading.set(true);
     this.isLoadingSubject.next(true);
+    const baseHeaders = this.captchaService.buildCaptchaHeaders({}, captcha);
 
-    // TODO: Replace with actual API endpoint
-    return this.http.post<AuthResponse>('/api/auth/login', credentials).pipe(
-      tap((response) => {
-        this.handleAuthSuccess(response);
-      }),
-      catchError((error) => {
-        console.error('Login error:', error);
-        this.isLoading.set(false);
-        this.isLoadingSubject.next(false);
-        throw error;
-      })
-    );
+    return this.http
+      .post<IAuthResponse>(
+        this.modulesLoginRoutes[role],
+        { username, password },
+        {
+          headers: baseHeaders,
+        },
+      )
+      .pipe(
+        tap((response) => {
+          this.handleAuthSuccess(response);
+          return response;
+        }),
+        catchError((error) => {
+          console.error('Login error:', error);
+          this.isLoadingSubject.next(false);
+          throw error;
+        }),
+        finalize(() => {
+          this.isLoading.set(false);
+        }),
+      );
   }
 
   logout(): void {
@@ -80,17 +125,17 @@ export class AuthService {
     localStorage.removeItem('refresh_token');
 
     this.setCurrentUser(null);
-    this.router.navigate(['/auth/login']);
+    this.router.navigate(['/auth']);
   }
 
-  refreshToken(): Observable<AuthResponse> {
+  refreshToken(): Observable<IAuthResponse> {
     const refreshToken = this.getRefreshToken();
     if (!refreshToken) {
       this.logout();
       return throwError(() => new Error('No refresh token available'));
     }
 
-    return this.http.post<AuthResponse>('/api/auth/refresh', { refreshToken }).pipe(
+    return this.http.post<IAuthResponse>('/api/auth/refresh', { refreshToken }).pipe(
       tap((response) => {
         this.handleAuthSuccess(response);
       }),
@@ -98,8 +143,43 @@ export class AuthService {
         console.error('Token refresh error:', error);
         this.logout();
         return throwError(() => error);
-      })
+      }),
     );
+  }
+
+  getInfo(role: TRoles): Observable<Partial<IUserLoginInfo>> {
+    if (this.modulesGetInfoRoutes[role]) {
+      return this.http.get<any>(this.modulesGetInfoRoutes[role]).pipe(
+        map((data) => {
+          switch (role) {
+            case 'SCHOOL':
+              return this.prepareUserInfoBasedOnRole(role, data as ISchoolMeResponse);
+            default:
+              return data as Partial<IUserLoginInfo>;
+          }
+        }),
+        catchError((err) => {
+          console.error('GetInfo error:', err);
+          return throwError(() => err);
+        }),
+      );
+    }
+
+    return throwError(() => new Error('متاسفانه مشکلی پیش آمده'));
+  }
+  changeInfo(credentials: IUserLoginInfo, role: TRoles): Observable<IAuthResponse> {
+    return this.http.post<IAuthResponse>(this.modulesChangeInfoRoutes[role], credentials);
+  }
+
+  prepareUserInfoBasedOnRole(role: TRoles, info: ISchoolMeResponse): Partial<IUserLoginInfo> {
+    if (role === 'SCHOOL') {
+      return {
+        username: info.username,
+        email: info.managerInfo.email,
+        mobile: info.managerInfo.mobile,
+      };
+    }
+    return {};
   }
 
   /**
@@ -166,7 +246,7 @@ export class AuthService {
     if (!user) return false;
 
     return user.permissions.some(
-      (p) => p.name === permission || `${p.resource}:${p.action}` === permission
+      (p) => p.name === permission || `${p.resource}:${p.action}` === permission,
     );
   }
 
@@ -184,33 +264,22 @@ export class AuthService {
     return true;
   }
 
-  private handleAuthSuccess(response: AuthResponse): void {
+  private handleAuthSuccess(response: IAuthResponse): void {
     localStorage.setItem('auth_token', response.token);
-    localStorage.setItem('refresh_token', response.refreshToken);
-    localStorage.setItem('user_data', JSON.stringify(response.user));
+    this.token.set(response.token);
+    // localStorage.setItem('refresh_token', response.refreshToken);
+    // localStorage.setItem('user_data', JSON.stringify(response.user));
 
-    this.setCurrentUser(response.user);
-    this.isLoading.set(false);
+    // this.setCurrentUser(response.user);
+    // this.isLoading.set(false);
     this.isLoadingSubject.next(false);
 
     // Navigate based on user role
-    this.navigateByRole(response.user.role);
+    // this.navigateByRole(response.user.role);
   }
 
   private setCurrentUser(user: Maybe<User>): void {
     this.currentUser.set(user);
     this.currentUserSubject.next(user);
-  }
-
-  private navigateByRole(role: UserRole): void {
-    const roleRoutes = {
-      [UserRole.STUDENT]: '/student',
-      [UserRole.GRADER]: '/grader',
-      [UserRole.ADMIN]: '/admin',
-      [UserRole.PRINCIPAL]: '/principal',
-      [UserRole.SUPERADMIN]: '/superadmin',
-    };
-
-    this.router.navigate([roleRoutes[role]]);
   }
 }

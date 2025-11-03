@@ -1,51 +1,37 @@
 import { adminNamedRoutes } from '@/modules/admin/constants';
+import { schoolsNamedRoutes } from '@/modules/schools/constants';
+import { teachersNamedRoutes } from '@/modules/teachers/constants';
 import { Routes } from '@angular/router';
-import { authNamedRoutes } from 'modules/auth/auth.routes';
-import { graderNamedRoutes } from 'modules/grader/grader.routes';
-import { principalNamedRoutes } from 'modules/principal/principal.routes';
-import { studentNamedRoutes } from 'modules/student/student.routes';
-import { superadminNamedRoutes } from 'modules/superadmin/superadmin.routes';
 
 export const namedRoutes = {
-  auth: authNamedRoutes,
-  student: studentNamedRoutes,
-  grader: graderNamedRoutes,
   admin: adminNamedRoutes,
-  principal: principalNamedRoutes,
-  superadmin: superadminNamedRoutes,
+  schools: schoolsNamedRoutes,
+  teachers: teachersNamedRoutes,
 };
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/auth/login' },
+  // Role-based module routes
 
-  // Authentication routes
+  {
+    path: '',
+    redirectTo: 'auth',
+    pathMatch: 'full',
+  },
   {
     path: 'auth',
-    loadChildren: () => import('modules/auth/auth.routes').then((m) => m.AUTH_ROUTES),
-  },
-
-  // Role-based module routes
-  {
-    path: 'student',
-    loadChildren: () => import('modules/student/student.routes').then((m) => m.STUDENT_ROUTES),
-  },
-  {
-    path: 'grader',
-    loadChildren: () => import('modules/grader/grader.routes').then((m) => m.GRADER_ROUTES),
+    loadChildren: () => import('@/modules/auth/auth.routes').then((m) => m.AUTH_ROUTES),
   },
   {
     path: 'admin',
     loadChildren: () => import('modules/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
   {
-    path: 'principal',
-    loadChildren: () =>
-      import('modules/principal/principal.routes').then((m) => m.PRINCIPAL_ROUTES),
+    path: 'schools',
+    loadChildren: () => import('@/modules/schools/schools.routes').then((m) => m.SCHOOLS_ROUTES),
   },
   {
-    path: 'superadmin',
-    loadChildren: () =>
-      import('modules/superadmin/superadmin.routes').then((m) => m.SUPERADMIN_ROUTES),
+    path: 'teachers',
+    loadChildren: () => import('@/modules/teachers/teachers.routes').then((m) => m.TEACHERS_ROUTES),
   },
 
   // Unauthorized page (legacy - redirects to 403)

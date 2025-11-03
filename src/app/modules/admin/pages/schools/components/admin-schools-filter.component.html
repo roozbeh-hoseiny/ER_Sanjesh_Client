@@ -1,0 +1,42 @@
+<div class="flex flex-col gap-4 w-full">
+  <p-message severity="info" icon="pi pi-info-circle" class="mb-5">
+    یکی از فیلتر‌ها در لحظه قابل انتخاب هستند
+  </p-message>
+  <uikit-field label="بر اساس نام مدرسه" for="search" class="w-full">
+    <p-inputgroup class="w-full">
+      <input pInputText [(ngModel)]="search" placeholder="جستجوی نام مدرسه" (ngModelChange)="onFilterChange($event)" />
+      <p-inputgroup-addon>
+        <p-button icon="pi pi-times" severity="secondary" (onClick)="clearSearch()"></p-button>
+      </p-inputgroup-addon>
+    </p-inputgroup>
+  </uikit-field>
+
+  <hr />
+
+  <app-states-cascade (selectionChange)="onRegionChange($event)" (selectionClear)="onRegionChange()" />
+
+  <hr />
+
+  <app-schools-categories-cascade (selectionChange)="onCategoryChange($event)" (selectionClear)="onCategoryChange()" />
+  <!-- <p-inputgroup class="w-full">
+    <p-inputgroup-addon>
+      <p-button icon="pi pi-times" severity="secondary" (onClick)="clearSearch()"></p-button>
+    </p-inputgroup-addon>
+  </p-inputgroup> -->
+
+  <hr />
+
+  <div class="flex flex-col gap-3">
+    <uikit-label> بر اساس جنسیت </uikit-label>
+    <div class="flex items-center gap-3">
+      @for (item of schoolGenders; track item.id) {
+        <p-button
+          [label]="item.title"
+          [severity]="item.color"
+          [outlined]="selectedGender() !== item.id"
+          (onClick)="onGenderChange(item.id)"
+        ></p-button>
+      }
+    </div>
+  </div>
+</div>

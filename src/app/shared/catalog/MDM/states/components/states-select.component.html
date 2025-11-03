@@ -1,0 +1,30 @@
+<div class="grid grid-cols-2 gap-4">
+  <uikit-field label="استان" for="state" [control]="stateControl">
+    <ng-container *ngIf="stateControl">
+      <p-select
+        name="state"
+        [options]="states() || []"
+        optionLabel="title"
+        optionValue="id"
+        [loading]="getStatesLoading()"
+        [(ngModel)]="stateControl.value"
+        (onChange)="onStateSelect($event)"
+      ></p-select>
+    </ng-container>
+  </uikit-field>
+
+  <ng-container *ngIf="cityControl">
+    <uikit-field label="شهر" for="city" [control]="cityControl">
+      <p-select
+        name="city"
+        optionLabel="title"
+        optionValue="id"
+        [options]="cities() || []"
+        [loading]="getStatesLoading()"
+        [disabled]="!isSelectedState()"
+        [(ngModel)]="cityControl.value"
+        (onChange)="onCitySelect($event)"
+      ></p-select>
+    </uikit-field>
+  </ng-container>
+</div>

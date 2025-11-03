@@ -1,0 +1,19 @@
+<div class="flex items-center justify-center gap-3 p-4">
+  <button
+    pButton
+    icon="pi pi-angle-right"
+    size="small"
+    severity="secondary"
+    [disabled]="loading || currentPage === 1"
+    (click)="prevPage()"
+  ></button>
+  <span class="text-pretty text-sm text-muted-color">صفحه {{ currentPage }} از {{ totalPages() }}</span>
+  <button
+    pButton
+    icon="pi pi-angle-left"
+    size="small"
+    severity="secondary"
+    [disabled]="loading || currentPage >= totalPages()"
+    (click)="nextPage()"
+  ></button>
+</div>

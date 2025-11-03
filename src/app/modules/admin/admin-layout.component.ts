@@ -17,6 +17,5 @@ export class AdminLayoutComponent implements OnInit {
 
   ngOnInit() {
     this.layoutService.setMenuItems(ADMIN_MENU_ITEMS);
-    console.log(this.layoutService.menuItems());
   }
 }

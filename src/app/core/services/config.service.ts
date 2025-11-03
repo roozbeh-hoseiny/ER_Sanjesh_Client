@@ -51,14 +51,6 @@ export class ConfigService {
   }
 
   /**
-   * Get a specific API endpoint URL
-   * @param endpoint The endpoint key from environment.apiEndpoints
-   */
-  getApiEndpoint(endpoint: keyof typeof environment.apiEndpoints): string {
-    return `${this.apiBaseUrl}${environment.apiEndpoints[endpoint]}`;
-  }
-
-  /**
    * Get the full API URL for a given path
    * @param path The API path (should start with /)
    */

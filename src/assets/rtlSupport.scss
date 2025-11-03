@@ -1,0 +1,39 @@
+.p-breadcrumb-separator {
+  transform: rotate(180deg);
+}
+
+.p-breadcrumb-separator > svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.p-datatable-mask {
+  display: none !important;
+}
+
+.p-datatable-thead > tr > th {
+  // font-size: 0.875rem;
+}
+
+input.p-inputtext {
+  // font-size: 0.875rem;
+}
+
+// .p-datatable-table {
+//   height: 100%;
+// }
+
+.p-datatable-header {
+  flex-shrink: 0;
+}
+.p-datatable-table-container {
+  flex-grow: 1;
+}
+
+.p-cascadeselect-option-active > .p-cascadeselect-option-list {
+  inset-inline-start: -100% !important;
+}
+
+.formHint .p-message-sm .p-message-text {
+  font-size: 0.875rem;
+}

@@ -11,6 +11,9 @@ export const graderNamedRoutes: NamedRoutes<GraderRouteNames> = {
     component: AppLayout,
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: [UserRole.GRADER] },
+    meta: {
+      title: 'داشبورد تصحیح‌کننده',
+    },
   },
   dashboard: {
     path: 'dashboard',
@@ -18,15 +21,15 @@ export const graderNamedRoutes: NamedRoutes<GraderRouteNames> = {
       import('./pages/dashboard/grader-dashboard.component').then(
         (m) => m.GraderDashboardComponent,
       ),
+    meta: {
+      title: 'داشبورد تصحیح‌کننده',
+    },
   },
 };
 
 export const GRADER_ROUTES: Routes = [
   {
     ...graderNamedRoutes.root,
-    children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      graderNamedRoutes.dashboard,
-    ],
+    children: [{ path: '', redirectTo: 'dashboard', pathMatch: 'full' }, graderNamedRoutes.root],
   },
 ];

@@ -1,0 +1,69 @@
+<form (ngSubmit)="submit()" [formGroup]="form" class="grid grid-cols-1 gap-4">
+  <div class="grid grid-cols-3 gap-4">
+    <uikit-field label="نام مدرسه" for="name" [control]="form.controls.name">
+      <input
+        pInputText
+        [formControlName]="'name'"
+        required
+        [invalid]="form.controls.name.invalid && form.controls.name.touched"
+      />
+    </uikit-field>
+    <app-school-genders-select [control]="form.controls.boyOrGirl" />
+    <uikit-field label="ظرفیت" for="examHallCapacity" [control]="form.controls.examHallCapacity">
+      <input
+        pInputText
+        formControlName="examHallCapacity"
+        required
+        [invalid]="form.controls.examHallCapacity.invalid && form.controls.examHallCapacity.touched"
+      />
+    </uikit-field>
+    <uikit-field label="شماره تماس" for="phoneNumber" [control]="form.controls.phoneNumber">
+      <input
+        pInputText
+        formControlName="phoneNumber"
+        required
+        [invalid]="form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched"
+      />
+    </uikit-field>
+  </div>
+  <div class="grid grid-cols-1 gap-4">
+    <p-divider align="center"> مدیریت </p-divider>
+    <div formGroupName="managerInfo" class="grid grid-cols-1 gap-4">
+      <div class="grid grid-cols-3 gap-4">
+        <uikit-field label="نام مدیر" for="firstName" [control]="form.get('managerInfo.firstName')">
+          <input
+            pInputText
+            formControlName="firstName"
+            [invalid]="form.get('managerInfo.firstName')?.invalid && form.get('managerInfo.firstName')?.touched"
+          />
+        </uikit-field>
+        <uikit-field label="نام خانوادگی" for="lastName" [control]="form.get('managerInfo.lastName')">
+          <input
+            pInputText
+            formControlName="lastName"
+            [invalid]="form.get('managerInfo.lastName')?.invalid && form.get('managerInfo.lastName')?.touched"
+          />
+        </uikit-field>
+        <uikit-field label="موبایل" for="mobile" [control]="form.get('managerInfo.mobile')">
+          <input
+            pInputText
+            formControlName="mobile"
+            [invalid]="form.get('managerInfo.mobile')?.invalid && form.get('managerInfo.mobile')?.touched"
+          />
+        </uikit-field>
+        <uikit-field label="ایمیل" for="email" [control]="form.get('managerInfo.email')">
+          <input
+            pInputText
+            formControlName="email"
+            [invalid]="form.get('managerInfo.email')?.invalid && form.get('managerInfo.email')?.touched"
+          />
+        </uikit-field>
+        <app-gender-select [control]="form.get('managerInfo.gender')" />
+      </div>
+    </div>
+    <div class="flex gap-2 justify-end mt-4">
+      <button pButton type="button" class="p-button-secondary" (click)="close()">انصراف</button>
+      <button pButton type="submit" class="p-button-primary" [loading]="onSubmitLoading()">ذخیره</button>
+    </div>
+  </div>
+</form>

@@ -114,7 +114,7 @@ export class StateSelectors {
       breadcrumbs: globalState.breadcrumbs,
       isOnline: globalState.isOnline,
     })),
-    shareReplay(1)
+    shareReplay(1),
   );
 
   /**
@@ -126,12 +126,12 @@ export class StateSelectors {
       role: authState.user?.role,
       permissions: authState.permissions,
       canAccessAdmin: authState.user?.role === 'admin' || authState.user?.role === 'superadmin',
-      canAccessStudent: authState.user?.role === 'student',
+      canAccessStudent: authState.user?.role === 'students',
       canAccessGrader: authState.user?.role === 'grader',
-      canAccessPrincipal: authState.user?.role === 'principal',
+      canAccessSchools: authState.user?.role === 'school',
       canAccessSuperAdmin: authState.user?.role === 'superadmin',
     })),
-    shareReplay(1)
+    shareReplay(1),
   );
 
   /**
@@ -147,7 +147,7 @@ export class StateSelectors {
         : '',
       userFullName: authState.user ? `${authState.user.firstName} ${authState.user.lastName}` : '',
     })),
-    shareReplay(1)
+    shareReplay(1),
   );
 
   /**
@@ -162,7 +162,7 @@ export class StateSelectors {
         .sort((a, b) => b.timestamp - a.timestamp)
         .slice(0, 5),
     })),
-    shareReplay(1)
+    shareReplay(1),
   );
 
   /**
@@ -175,7 +175,7 @@ export class StateSelectors {
       globalLoading: globalState.loading,
     })),
     startWith({ isLoading: false, authLoading: false, globalLoading: false }),
-    shareReplay(1)
+    shareReplay(1),
   );
 }
 
@@ -208,7 +208,7 @@ export class StateUtils {
 
     if (requiredPermissions && requiredPermissions.length > 0) {
       const hasAllPermissions = requiredPermissions.every((permission) =>
-        authState.permissions.includes(permission)
+        authState.permissions.includes(permission),
       );
       if (!hasAllPermissions) {
         return false;

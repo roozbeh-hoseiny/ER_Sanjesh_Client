@@ -14,4 +14,14 @@ import { Route } from '@angular/router';
  * };
  * ```
  */
-export type NamedRoutes<T extends string> = Record<T, Route>;
+
+export interface RouteInfo {
+  meta: {
+    title: string;
+    icon?: string;
+  };
+}
+
+export interface NamedRouteWithInfo extends Route, RouteInfo {}
+
+export type NamedRoutes<T extends string> = Record<T, NamedRouteWithInfo>;

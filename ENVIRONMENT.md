@@ -1,114 +1,90 @@
-# Environment Configuration Guide
+# Environment configuration
 
-This project uses environment files to manage configuration across different environments (development, staging, production).
+This project uses Angular's `src/environments` files to provide environment-specific configuration (API base URL, feature flags, etc.). The repository contains:
 
-## Environment Files
+- `src/environments/environment.ts` — default (development) values used during `ng serve` and development builds.
+- `src/environments/environment.staging.ts` — staging values. Use `--configuration=staging` when serving or building.
+- `src/environments/environment.prod.ts` — production values used by production builds.
 
-- `src/environments/environment.ts` - Development environment (default)
-- `src/environments/environment.staging.ts` - Staging environment
-- `src/environments/environment.prod.ts` - Production environment
+Each file exports an `environment` object. Typical properties used by this project:
 
-## Configuration Properties
+- `apiBaseUrl` (string) — base URL of the backend API, e.g. `https://api.example.com`.
+- `captchaEndpoint` or related settings — if your backend returns captcha headers, ensure `apiBaseUrl` points to the correct host.
+- `production` (boolean) — standard Angular flag.
 
-Each environment file contains:
+Example (minimal) `environment.ts`:
 
-- **production**: Boolean flag indicating if it's a production build
-- **apiBaseUrl**: Base URL for API calls (e.g., `https://localhost:7148`)
-- **host**: Application host
-- **port**: Application port
-- **apiEndpoints**: Object containing API endpoint paths
-- **enableLogging**: Enable/disable console logging
-- **enableDebug**: Enable/disable debug mode
-
-## Usage
-
-### Using ConfigService
-
-The `ConfigService` provides centralized access to environment variables:
-
-```typescript
-import { ConfigService } from '@app/core/services';
-
-constructor(private configService: ConfigService) {}
-
-// Get API base URL
-const apiUrl = this.configService.apiBaseUrl;
-
-// Get a specific endpoint
-const authEndpoint = this.configService.getApiEndpoint('auth');
-
-// Build a full API URL
-const fullUrl = this.configService.getApiUrl('/api/custom-endpoint');
-
-// Check environment
-if (this.configService.isProduction) {
-  // Production-specific logic
-}
+```ts
+export const environment = {
+  production: false,
+  apiBaseUrl: 'https://localhost:5001',
+};
 ```
 
-### Using BaseApiService
+How to use different environments
 
-Extend `BaseApiService` for consistent API calls:
+- Development (default):
 
-```typescript
-import { Injectable } from '@angular/core';
-import { BaseApiService } from '@app/shared/services/base-api.service';
-import { Observable } from 'rxjs';
+  ```bash
+  pnpm install
+  pnpm start
+  # or
+  npm install
+  npm start
+  ```
 
-@Injectable({
-  providedIn: 'root'
-})
-export class UserService extends BaseApiService {
+  The project's `package.json` includes `start` scripts that try to configure SSL certs on macOS/Windows for local ASP.NET Core backends. If you prefer a plain `ng serve` without those scripts, run:
 
-  getUsers(): Observable<User[]> {
-    return this.get<User[]>('/api/users');
-  }
+  ```bash
+  ng serve --host 127.0.0.1
+  ```
 
-  createUser(user: User): Observable<User> {
-    return this.post<User>('/api/users', user);
-  }
-}
-```
+- Serve staging config:
 
-## Running Different Environments
+  ```bash
+  ng serve --configuration=staging
+  ```
+
+- Build for production:
+
+  ```bash
+  ng build --configuration=production
+  ```
+
+Proxying API requests in development
+
+If you want to proxy API calls to a backend during development (to avoid CORS), use the `proxy.conf.js` in the project root. Example:
 
 ```bash
-# Development (default)
-npm start
-# or
-ng serve
-
-# Staging
-ng serve --configuration=staging
-
-# Production
-ng build --configuration=production
+ng serve --proxy-config proxy.conf.js
 ```
 
-## Environment Variables (.env)
+CORS and custom response headers
 
-Create a `.env` file from `.env.example`:
+If your frontend needs to read custom response headers (for example `X-CaptchaId` returned by a renew-captcha endpoint), the backend must expose those headers to the browser:
 
-```bash
-cp .env.example .env
+- Add the header name to `Access-Control-Expose-Headers` on the server response.
+- Ensure CORS preflight allows any request headers you send (for example `X-Requested-With` or custom headers).
+
+For example (server-side response headers):
+
+```
+Access-Control-Allow-Origin: https://localhost:4200
+Access-Control-Expose-Headers: X-CaptchaId
 ```
 
-Then update the values in `.env` with your actual configuration.
+Where to change settings in code
 
-**Note**: The `.env` file is git-ignored and should never be committed.
+- The Angular code reads environment values from `src/environments/environment.ts` (and environment-specific files during builds). Update `apiBaseUrl` there.
+- If you need to change the captcha handling or TTL behavior, see `src/app/core/services/captcha.service.ts`.
 
-## Updating Environment Files
+Troubleshooting
 
-When adding new configuration properties:
+- If headers present in server logs are not visible in the browser client, verify `Access-Control-Expose-Headers` is set for that header.
+- If you're seeing runtime template errors (e.g. "reading 'control' of undefined"), ensure your form-control bindings are present before PrimeNG components instantiate — this project uses safe template patterns to avoid such errors.
 
-1. Add the property to all environment files
-2. Update the `ConfigService` if needed to provide typed access
-3. Update this documentation
+If you want, I can:
 
-## Best Practices
+- Add a small script to copy a `.env.example` into `src/environments/environment.ts` for easier onboarding.
+- Add a short CI/build note for deploying production assets.
 
-1. **Never commit sensitive data** (API keys, passwords) to environment files
-2. Use environment variables or secrets management for sensitive data
-3. Keep environment files in sync (same properties across all environments)
-4. Use the `ConfigService` instead of importing environment files directly
-5. Test your application in each environment before deployment

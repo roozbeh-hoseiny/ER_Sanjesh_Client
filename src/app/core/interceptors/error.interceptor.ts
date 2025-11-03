@@ -42,6 +42,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           case 404:
             errorMessage = 'منبع مورد نظر یافت نشد';
             break;
+          case 412:
+            errorMessage = error.error?.detail || 'اطلاعات ارسالی نامعتبر است';
+            break;
           case 422:
             errorMessage = error.error?.message || 'اطلاعات ارسالی نامعتبر است';
             break;
@@ -88,7 +91,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       errorHandler.handleError(enhancedError);
 
       return throwError(() => enhancedError);
-    })
+    }),
   );
 };
 
@@ -133,6 +136,7 @@ export function getErrorType(error: HttpErrorResponse): ErrorType {
 
   switch (error.status) {
     case 400:
+    case 412:
     case 422:
       return ErrorType.VALIDATION;
     case 401:

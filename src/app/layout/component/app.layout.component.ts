@@ -1,6 +1,18 @@
+import { BreadcrumbService } from '@/core/services';
+import { BreadcrumbComponent } from '@/shared/components';
 import { CommonModule } from '@angular/common';
-import { Component, Renderer2, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  ContentChild,
+  inject,
+  Input,
+  Renderer2,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { ProgressSpinner } from 'primeng/progressspinner';
 import { filter, Subscription } from 'rxjs';
 import { LayoutService } from '../service/layout.service';
 import { AppFooter } from './app.footer.component';
@@ -10,7 +22,15 @@ import { AppTopbar } from './app.topbar.component';
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter],
+  imports: [
+    CommonModule,
+    AppTopbar,
+    AppSidebar,
+    RouterModule,
+    AppFooter,
+    BreadcrumbComponent,
+    ProgressSpinner,
+  ],
   templateUrl: './app.layout.component.html',
 })
 export class AppLayout {
@@ -18,9 +38,14 @@ export class AppLayout {
 
   menuOutsideClickListener: any;
 
+  @Input() fullLoading: boolean = false;
+
   @ViewChild(AppSidebar) appSidebar!: AppSidebar;
 
   @ViewChild(AppTopbar) appTopBar!: AppTopbar;
+  @ContentChild('content', { static: true }) content?: TemplateRef<any> | null;
+
+  private breadcrumbService = inject(BreadcrumbService);
 
   constructor(
     public layoutService: LayoutService,
@@ -103,6 +128,20 @@ export class AppLayout {
       'layout-mobile-active': this.layoutService.layoutState().staticMenuMobileActive,
     };
   }
+
+  get showBreadcrumb(): boolean {
+    return this.breadcrumbService.items.length > 0;
+  }
+
+  get isFixedContentSize(): boolean {
+    return this.layoutService.isFixedContentSize() || false;
+  }
+
+  showMenu = computed(() => {
+    console.log('showMenu', this.layoutService.menuItems());
+
+    return this.layoutService.menuItems().length > 0;
+  });
 
   ngOnDestroy() {
     if (this.overlayMenuOpenSubscription) {

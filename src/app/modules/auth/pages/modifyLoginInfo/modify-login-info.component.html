@@ -1,0 +1,65 @@
+<form [formGroup]="infoForm" class="w-full flex flex-col gap-4" (ngSubmit)="submit()">
+  <p-message severity="warn" [closable]="false" variant="text" icon="pi pi-info-circle" class="mb-5">
+    برای ادامه می‌بایست اطلاعات ورود خود را به روز کنید
+  </p-message>
+  <uikit-field for="username" label="نام کاربری" pSize="large" class="" [control]="infoForm.get('username')">
+    <input
+      pInputText
+      id="username"
+      pSize="large"
+      formControlName="username"
+      [invalid]="infoForm.get('username')?.touched && infoForm.get('username')?.invalid"
+    />
+  </uikit-field>
+
+  <uikit-field label="رمز عبور" pSize="large" class="" [control]="infoForm.get('password')">
+    <p-password
+      id="password1"
+      size="large"
+      name="password"
+      formControlName="password"
+      autocomplete="password"
+      [toggleMask]="true"
+      [fluid]="true"
+      [feedback]="false"
+      [invalid]="infoForm.get('password')?.touched && infoForm.get('password')?.invalid"
+    />
+    <span class="text-xs mt-2 text-muted-color">
+      رمز باید حداقل ۸ کاراکتر بوده و شامل حداقل یک حرف بزرگ، یک حرف کوچک، یک عدد و یک کاراکتر ویژه باشد.
+    </span>
+  </uikit-field>
+
+  <uikit-field label="تکرار رمز عبور" pSize="large" class="" [control]="infoForm.get('confirmPassword')">
+    <p-password
+      id="confirmPassword"
+      size="large"
+      name="confirmPassword"
+      formControlName="confirmPassword"
+      autocomplete="new-password"
+      [toggleMask]="true"
+      [fluid]="true"
+      [feedback]="false"
+      [invalid]="infoForm.get('confirmPassword')?.touched && infoForm.get('confirmPassword')?.invalid"
+    />
+  </uikit-field>
+
+  <uikit-field label="شماره تلفن همراه" pSize="large" class="" [control]="infoForm.get('mobile')">
+    <input
+      pInputText
+      pSize="large"
+      formControlName="mobile"
+      [invalid]="infoForm.get('mobile')?.touched && infoForm.get('mobile')?.invalid"
+    />
+  </uikit-field>
+
+  <uikit-field label="آدرس ایمیل" pSize="large" class="" [control]="infoForm.get('email')">
+    <input
+      pInputText
+      pSize="large"
+      formControlName="email"
+      [invalid]="infoForm.get('email')?.touched && infoForm.get('email')?.invalid"
+    />
+  </uikit-field>
+
+  <p-button label="تایید" styleClass="w-full mt-4" size="large" [loading]="isLoading()" type="submit"></p-button>
+</form>

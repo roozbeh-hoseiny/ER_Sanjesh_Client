@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, of, tap } from 'rxjs';
-import { AuthResponse, LoginCredentials, Maybe, User, UserRole } from '../../../core/models';
+import { IAuthResponse, LoginCredentials, Maybe, User, UserRole } from '../../../core/models';
 import { BaseState, BaseStore } from '../../../core/state/base-store';
 
 /**
@@ -123,7 +123,7 @@ export class AuthStore extends BaseStore<AuthState> {
     this._loginState.loginError = null;
     this.setLoading(true);
 
-    return this.http.post<AuthResponse>('/api/auth/login', credentials).pipe(
+    return this.http.post<IAuthResponse>('/api/auth/login', credentials).pipe(
       tap((response) => {
         this.handleAuthSuccess(response);
         this._loginState.isLoggingIn = false;
@@ -164,7 +164,7 @@ export class AuthStore extends BaseStore<AuthState> {
     this._loginState.loginError = null;
 
     // Navigate to login
-    this.router.navigate(['/auth/login']);
+    this.router.navigate(['/auth']);
   }
 
   /**
@@ -180,7 +180,7 @@ export class AuthStore extends BaseStore<AuthState> {
     this._loginState.isRefreshing = true;
     this.setLoading(true);
 
-    return this.http.post<AuthResponse>('/api/auth/refresh', { refreshToken }).pipe(
+    return this.http.post<IAuthResponse>('/api/auth/refresh', { refreshToken }).pipe(
       tap((response) => {
         this.handleAuthSuccess(response);
         this._loginState.isRefreshing = false;
@@ -299,23 +299,23 @@ export class AuthStore extends BaseStore<AuthState> {
   /**
    * Handle successful authentication
    */
-  private handleAuthSuccess(response: AuthResponse): void {
+  private handleAuthSuccess(response: IAuthResponse): void {
     const sessionExpiry = this.getTokenExpiry(response.token);
     const currentTime = Date.now();
 
     // Store in localStorage
     localStorage.setItem('auth_token', response.token);
     localStorage.setItem('refresh_token', response.refreshToken);
-    localStorage.setItem('user_data', JSON.stringify(response.user));
+    // localStorage.setItem('user_data', JSON.stringify(response.user));
     localStorage.setItem('last_login_time', currentTime.toString());
 
     // Update state
     this.patchState({
-      user: response.user,
+      // user: response.user,
       token: response.token,
       refreshToken: response.refreshToken,
       isAuthenticated: true,
-      permissions: response.user.permissions?.map((p) => `${p.resource}:${p.action}`) || [],
+      // permissions: response.user.permissions?.map((p) => `${p.resource}:${p.action}`) || [],
       lastLoginTime: currentTime,
       sessionExpiry,
       loading: false,
@@ -326,7 +326,7 @@ export class AuthStore extends BaseStore<AuthState> {
     localStorage.removeItem('login_attempts');
 
     // Navigate based on user role
-    this.navigateByRole(response.user.role);
+    // this.navigateByRole(response.user.role);
   }
 
   /**
@@ -354,10 +354,11 @@ export class AuthStore extends BaseStore<AuthState> {
    */
   private navigateByRole(role: UserRole): void {
     const roleRoutes = {
-      [UserRole.STUDENT]: '/student',
-      [UserRole.GRADER]: '/grader',
       [UserRole.ADMIN]: '/admin',
-      [UserRole.PRINCIPAL]: '/principal',
+      [UserRole.SCHOOL]: '/schools',
+      [UserRole.TEACHERS]: '/teachers',
+      [UserRole.STUDENTS]: '/students',
+      [UserRole.GRADER]: '/grader',
       [UserRole.SUPERADMIN]: '/superadmin',
     };
 

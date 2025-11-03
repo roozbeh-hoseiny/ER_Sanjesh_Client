@@ -1,0 +1,5 @@
+<uikit-field label="جنسیت مدرسه" for="schoolGender" [control]="control">
+  <ng-container *ngIf="formControl as fc">
+    <p-select [options]="genders" [optionValue]="'id'" optionLabel="title" [formControl]="fc"></p-select>
+  </ng-container>
+</uikit-field>
