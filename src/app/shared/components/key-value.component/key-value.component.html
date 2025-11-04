@@ -1,6 +1,6 @@
-<div class="inline-flex gap-2">
+<div class="inline-flex gap-2 items-center">
   <span class="text-muted-color text-base font-normal shrink-0">{{ label }}:</span>
   <ng-content>
-    <span class="text-text-color text-base font-bold grow">{{ value ?? "-" }}</span>
+    <span class="text-text-color text-base font-bold grow">{{ value || "-" }}</span>
   </ng-content>
 </div>

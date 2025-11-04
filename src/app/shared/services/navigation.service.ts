@@ -1,5 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { MenuItem, NavigationConfig, UserRole } from '../../core/models';
+import { ROLES } from 'src/assets/constants';
+import { MenuItem, NavigationConfig } from '../../core/models';
 import { AuthService } from '../../core/services/auth.service';
 
 @Injectable({
@@ -12,7 +13,7 @@ export class NavigationService {
 
   private readonly navigationConfigs: NavigationConfig[] = [
     {
-      role: UserRole.STUDENTS,
+      role: ROLES.STUDENTS,
       menuItems: [
         {
           key: 'dashboard',
@@ -41,7 +42,7 @@ export class NavigationService {
       ],
     },
     {
-      role: UserRole.GRADER,
+      role: ROLES.GRADER,
       menuItems: [
         {
           key: 'dashboard',
@@ -70,7 +71,7 @@ export class NavigationService {
       ],
     },
     {
-      role: UserRole.ADMIN,
+      role: ROLES.ADMIN,
       menuItems: [
         {
           key: 'dashboard',
@@ -105,7 +106,7 @@ export class NavigationService {
       ],
     },
     {
-      role: UserRole.SCHOOL,
+      role: ROLES.SCHOOL,
       menuItems: [
         {
           key: 'dashboard',
@@ -140,7 +141,7 @@ export class NavigationService {
       ],
     },
     {
-      role: UserRole.SUPERADMIN,
+      role: ROLES.SUPERADMIN,
       menuItems: [
         {
           key: 'dashboard',

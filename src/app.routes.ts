@@ -14,7 +14,7 @@ export const routes: Routes = [
 
   {
     path: '',
-    redirectTo: 'auth',
+    loadComponent: () => import('@/root.component').then((m) => m.RootComponent),
     pathMatch: 'full',
   },
   {

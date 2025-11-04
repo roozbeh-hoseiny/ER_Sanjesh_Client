@@ -4,9 +4,11 @@ import {
   Component,
   computed,
   ContentChild,
+  ElementRef,
   EventEmitter,
   Input,
   Output,
+  Renderer2,
   signal,
   TemplateRef,
 } from '@angular/core';
@@ -41,6 +43,11 @@ export interface IColumn {
   ],
 })
 export class PageDataListComponent<I> {
+  constructor(
+    private host: ElementRef,
+    private renderer: Renderer2,
+  ) {}
+
   @Input() pageTitle!: string;
   @Input() addNewCtaLabel?: string;
   @Input() columns!: IColumn[];
@@ -57,6 +64,7 @@ export class PageDataListComponent<I> {
   @Input() showDetails: boolean = false;
   @Input() showAdd: boolean = false;
   @Input() isFiltered: boolean = false;
+  @Input() fullHeight: boolean = false;
 
   @ContentChild('filter', { static: true }) filter!: TemplateRef<any> | null;
 
@@ -67,6 +75,12 @@ export class PageDataListComponent<I> {
   @Output() pageChange = new EventEmitter<any>();
 
   filterDrawerVisible = signal<boolean>(false);
+
+  ngOnInit() {
+    if (this.fullHeight) {
+      this.renderer.setStyle(this.host.nativeElement, 'height', '100cqmin');
+    }
+  }
 
   edit = (item: I) => {
     this.onEdit.emit(item);

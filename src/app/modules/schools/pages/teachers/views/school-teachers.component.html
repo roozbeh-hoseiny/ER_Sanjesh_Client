@@ -8,7 +8,7 @@
   [totalRecords]="totalRecords()"
   [currentPage]="activePageIndex() + 1"
   [perPage]="perPage()"
-  style="height: 100cqmin"
+  [fullHeight]="true"
   class="overflow-hidden"
   (pageChange)="onPageChange($event)"
   (onAdd)="openAddForm()"

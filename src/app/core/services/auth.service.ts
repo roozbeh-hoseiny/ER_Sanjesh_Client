@@ -7,15 +7,8 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
-import {
-  IAuthResponse,
-  IUserLoginInfo,
-  LoginCredentials,
-  Maybe,
-  TRoles,
-  User,
-  UserRole,
-} from '../models';
+import { LOCAL_STORAGE_KEYS } from 'src/assets/constants';
+import { IAuthResponse, IUserLoginInfo, LoginCredentials, Maybe, TRoles, User } from '../models';
 import { CaptchaService } from './captcha.service';
 
 @Injectable({
@@ -52,19 +45,7 @@ export class AuthService {
 
   // Signals for reactive state management
   // readonly currentUser = signal<Maybe<User>>(null);
-  readonly currentUser = signal<Maybe<User>>({
-    firstName: 'عباس',
-    lastName: 'حسنی',
-    role: UserRole.ADMIN,
-    id: '213',
-    username: 'abas.hassani',
-    email: 'abas.hassani@example.com',
-    isActive: true,
-    lastLogin: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    permissions: [],
-  });
+  readonly currentUser = signal<Maybe<User>>(null);
   readonly isLoading = signal<boolean>(false);
   readonly token = signal<Maybe<string>>(null);
   readonly isAuthenticated = computed(() => {
@@ -73,15 +54,16 @@ export class AuthService {
   readonly userRole = computed(() => this.currentUser()?.role);
 
   private initializeAuth(): void {
-    const token = localStorage.getItem('auth_token');
-    this.token.set(token);
-    // const userData = localStorage.getItem('user_data');
-    const userData = this.currentUser();
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN);
+    console.log(token);
+
+    const userData = localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA);
 
     if (token && userData) {
       try {
-        // const user = JSON.parse(userData) as User;
-        // this.setCurrentUser(user);
+        this.token.set(token);
+        const user = JSON.parse(userData) as User;
+        this.setCurrentUser(user);
       } catch (error) {
         console.error('Error parsing stored user data:', error);
         this.logout();
@@ -120,9 +102,9 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user_data');
-    localStorage.removeItem('refresh_token');
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.USER_DATA);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN);
 
     this.setCurrentUser(null);
     this.router.navigate(['/auth']);
@@ -186,14 +168,14 @@ export class AuthService {
    * Get current access token
    */
   getToken(): Maybe<string> {
-    return localStorage.getItem('auth_token');
+    return localStorage.getItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN);
   }
 
   /**
    * Get current refresh token
    */
   getRefreshToken(): Maybe<string> {
-    return localStorage.getItem('refresh_token');
+    return localStorage.getItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN);
   }
 
   /**
@@ -232,11 +214,11 @@ export class AuthService {
     }
   }
 
-  hasRole(role: UserRole): boolean {
+  hasRole(role: TRoles): boolean {
     return this.currentUser()?.role === role;
   }
 
-  hasAnyRole(roles: UserRole[]): boolean {
+  hasAnyRole(roles: TRoles[]): boolean {
     const currentRole = this.currentUser()?.role;
     return currentRole ? roles.includes(currentRole) : false;
   }
@@ -245,12 +227,13 @@ export class AuthService {
     const user = this.currentUser();
     if (!user) return false;
 
-    return user.permissions.some(
-      (p) => p.name === permission || `${p.resource}:${p.action}` === permission,
-    );
+    return true;
+    // return user.permissions.some(
+    //   (p) => p.name === permission || `${p.resource}:${p.action}` === permission,
+    // );
   }
 
-  canAccess(requiredRoles?: UserRole[], requiredPermissions?: string[]): boolean {
+  canAccess(requiredRoles?: TRoles[], requiredPermissions?: string[]): boolean {
     if (!this.isAuthenticated()) return false;
 
     if (requiredRoles && requiredRoles.length > 0) {
@@ -265,13 +248,18 @@ export class AuthService {
   }
 
   private handleAuthSuccess(response: IAuthResponse): void {
-    localStorage.setItem('auth_token', response.token);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN, response.token);
     this.token.set(response.token);
     // localStorage.setItem('refresh_token', response.refreshToken);
-    // localStorage.setItem('user_data', JSON.stringify(response.user));
+    const user = { fullName: response.fullName, role: response.role as TRoles };
+    console.log('user');
+    console.log(user);
 
-    // this.setCurrentUser(response.user);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(user));
+
+    this.setCurrentUser(user);
     // this.isLoading.set(false);
+    this.currentUser.set({ fullName: response.fullName, role: response.role as TRoles });
     this.isLoadingSubject.next(false);
 
     // Navigate based on user role

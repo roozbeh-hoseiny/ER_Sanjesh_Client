@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { combineLatest, map, shareReplay, startWith } from 'rxjs';
+import { LOCAL_STORAGE_KEYS } from 'src/assets/constants';
 import { AuthStore } from '../../modules/auth/state/auth.store';
 import { GlobalStore } from './global/global.store';
 
@@ -31,13 +32,13 @@ export class StateEffects {
   private setupAuthEffects(): void {
     // Update global notifications when auth state changes
     this.authStore.state$.subscribe((authState) => {
-      if (authState.isAuthenticated && authState.user) {
-        this.globalStore.addNotification({
-          type: 'success',
-          title: 'خوش آمدید',
-          message: `${authState.user.firstName} ${authState.user.lastName} عزیز، خوش آمدید`,
-        });
-      }
+      // if (authState.isAuthenticated && authState.user) {
+      //   this.globalStore.addNotification({
+      //     type: 'success',
+      //     title: 'خوش آمدید',
+      //     message: `${authState.user.firstName} ${authState.user.lastName} عزیز، خوش آمدید`,
+      //   });
+      // }
     });
 
     // Handle session expiry warnings
@@ -125,11 +126,11 @@ export class StateSelectors {
       isAuthenticated: authState.isAuthenticated,
       role: authState.user?.role,
       permissions: authState.permissions,
-      canAccessAdmin: authState.user?.role === 'admin' || authState.user?.role === 'superadmin',
-      canAccessStudent: authState.user?.role === 'students',
-      canAccessGrader: authState.user?.role === 'grader',
-      canAccessSchools: authState.user?.role === 'school',
-      canAccessSuperAdmin: authState.user?.role === 'superadmin',
+      canAccessAdmin: authState.user?.role === 'ADMIN' || authState.user?.role === 'SUPERADMIN',
+      canAccessStudent: authState.user?.role === 'STUDENTS',
+      canAccessGrader: authState.user?.role === 'GRADER',
+      canAccessSchools: authState.user?.role === 'SCHOOL',
+      canAccessSuperAdmin: authState.user?.role === 'SUPERADMIN',
     })),
     shareReplay(1),
   );
@@ -142,10 +143,10 @@ export class StateSelectors {
       user: authState.user,
       sidebarCollapsed: globalState.sidebarCollapsed,
       breadcrumbs: globalState.breadcrumbs,
-      userInitials: authState.user
-        ? `${authState.user.firstName[0]}${authState.user.lastName[0]}`
-        : '',
-      userFullName: authState.user ? `${authState.user.firstName} ${authState.user.lastName}` : '',
+      // userInitials: authState.user
+      //   ? `${authState.user.firstName[0]}${authState.user.lastName[0]}`
+      //   : '',
+      // userFullName: authState.user ? `${authState.user.firstName} ${authState.user.lastName}` : '',
     })),
     shareReplay(1),
   );
@@ -274,7 +275,8 @@ export class StateUtils {
    */
   getUserDisplayName(): string {
     const user = this.authStore.getCurrentState().user;
-    return user ? `${user.firstName} ${user.lastName}` : '';
+    return '';
+    // return user ? `${user.firstName} ${user.lastName}` : '';
   }
 
   /**
@@ -282,7 +284,8 @@ export class StateUtils {
    */
   getUserInitials(): string {
     const user = this.authStore.getCurrentState().user;
-    return user ? `${user.firstName[0]}${user.lastName[0]}` : '';
+    return '';
+    // return user ? `${user.firstName[0]}${user.lastName[0]}` : '';
   }
 
   /**
@@ -314,10 +317,10 @@ export class StateUtils {
     this.globalStore.reset();
 
     // Clear localStorage
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user_data');
-    localStorage.removeItem('last_login_time');
-    localStorage.removeItem('login_attempts');
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.USER_DATA);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.LAST_LOGIN_TIME);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.LOGIN_ATTEMPTS);
   }
 }

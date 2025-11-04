@@ -1,7 +1,8 @@
 import { AppLayout } from '@/layout/component/app.layout.component';
 import { Routes } from '@angular/router';
+import { ROLES } from 'src/assets/constants';
 import { AuthGuard, RoleGuard } from '../../core/guards';
-import { NamedRoutes, UserRole } from '../../core/models';
+import { NamedRoutes } from '../../core/models';
 
 export type StudentRouteNames = 'dashboard' | 'exams' | 'results' | 'profile';
 
@@ -47,7 +48,7 @@ export const STUDENT_ROUTES: Routes = [
     path: '',
     component: AppLayout,
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: [UserRole.STUDENTS] },
+    data: { roles: [ROLES.STUDENTS] },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       studentNamedRoutes.dashboard,

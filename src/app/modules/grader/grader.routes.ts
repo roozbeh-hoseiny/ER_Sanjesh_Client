@@ -1,7 +1,8 @@
 import { AppLayout } from '@/layout/component/app.layout.component';
 import { Routes } from '@angular/router';
+import { ROLES } from 'src/assets/constants';
 import { AuthGuard, RoleGuard } from '../../core/guards';
-import { NamedRoutes, UserRole } from '../../core/models';
+import { NamedRoutes } from '../../core/models';
 
 export type GraderRouteNames = 'root' | 'dashboard';
 
@@ -10,7 +11,7 @@ export const graderNamedRoutes: NamedRoutes<GraderRouteNames> = {
     path: '',
     component: AppLayout,
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: [UserRole.GRADER] },
+    data: { roles: [ROLES.GRADER] },
     meta: {
       title: 'داشبورد تصحیح‌کننده',
     },

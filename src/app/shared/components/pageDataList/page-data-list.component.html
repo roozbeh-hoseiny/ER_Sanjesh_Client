@@ -9,6 +9,7 @@
       stripedRows
       [showFirstLastIcon]="false"
       class="grow !flex flex-col overflow-hidden"
+      [tableStyleClass]="!items.length && !loading ? 'h-full' : ''"
     >
       <ng-template pTemplate="caption">
         <div class="flex justify-between items-center gap-4">

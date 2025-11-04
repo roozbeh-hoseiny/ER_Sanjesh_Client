@@ -1,7 +1,8 @@
 import { AppLayout } from '@/layout/component/app.layout.component';
 import { Routes } from '@angular/router';
+import { ROLES } from 'src/assets/constants';
 import { AuthGuard, RoleGuard } from '../../core/guards';
-import { NamedRoutes, UserRole } from '../../core/models';
+import { NamedRoutes } from '../../core/models';
 
 export type SuperadminRouteNames = 'dashboard';
 
@@ -24,7 +25,7 @@ export const SUPERADMIN_ROUTES: Routes = [
     path: '',
     component: AppLayout,
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: [UserRole.SUPERADMIN] },
+    data: { roles: [ROLES.SUPERADMIN] },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       superadminNamedRoutes.dashboard,

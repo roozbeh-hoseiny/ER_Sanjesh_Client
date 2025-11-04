@@ -1,6 +1,6 @@
+import { UserRole } from '@/core';
 import { Routes } from '@angular/router';
 import { AuthGuard, RoleGuard } from '../../core/guards';
-import { UserRole } from '../../core/models';
 import { AdminLayoutComponent } from './admin-layout.component';
 import { adminNamedRoutes } from './constants';
 

@@ -10,17 +10,17 @@ export enum UserRole {
 export type TRoles = keyof typeof UserRole;
 
 export interface User {
-  id: string;
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
-  permissions: Permission[];
-  isActive: boolean;
-  lastLogin?: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  fullName: string;
+  role: TRoles;
+  // id: string;
+  // email: string;
+  // firstName: string;
+  // lastName: string;
+  // permissions: Permission[];
+  // isActive: boolean;
+  // lastLogin?: Date;
+  // createdAt: Date;
+  // updatedAt: Date;
 }
 
 export interface Permission {

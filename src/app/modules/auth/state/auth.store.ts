@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, of, tap } from 'rxjs';
-import { IAuthResponse, LoginCredentials, Maybe, User, UserRole } from '../../../core/models';
+import { LOCAL_STORAGE_KEYS, ROLES } from 'src/assets/constants';
+import { IAuthResponse, LoginCredentials, Maybe, TRoles, User } from '../../../core/models';
 import { BaseState, BaseStore } from '../../../core/state/base-store';
 
 /**
@@ -82,11 +83,11 @@ export class AuthStore extends BaseStore<AuthState> {
    * Initialize authentication from stored data
    */
   private initializeAuth(): void {
-    const token = localStorage.getItem('auth_token');
-    const refreshToken = localStorage.getItem('refresh_token');
-    const userData = localStorage.getItem('user_data');
-    const loginAttempts = parseInt(localStorage.getItem('login_attempts') || '0');
-    const lastLoginTime = parseInt(localStorage.getItem('last_login_time') || '0');
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN);
+    const refreshToken = localStorage.getItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN);
+    const userData = localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA);
+    const loginAttempts = parseInt(localStorage.getItem(LOCAL_STORAGE_KEYS.LOGIN_ATTEMPTS) || '0');
+    const lastLoginTime = parseInt(localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_LOGIN_TIME) || '0');
 
     if (token && refreshToken && userData) {
       try {
@@ -98,7 +99,8 @@ export class AuthStore extends BaseStore<AuthState> {
           token,
           refreshToken,
           isAuthenticated: true,
-          permissions: user.permissions?.map((p) => `${p.resource}:${p.action}`) || [],
+          permissions: [],
+          // permissions: user.permissions?.map((p) => `${p.resource}:${p.action}`) || [],
           loginAttempts,
           lastLoginTime: lastLoginTime || null,
           sessionExpiry,
@@ -140,10 +142,10 @@ export class AuthStore extends BaseStore<AuthState> {
    */
   logout(): void {
     // Clear stored data
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user_data');
-    localStorage.removeItem('last_login_time');
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.USER_DATA);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.LAST_LOGIN_TIME);
 
     // Reset state
     this.patchState({
@@ -196,14 +198,14 @@ export class AuthStore extends BaseStore<AuthState> {
   /**
    * Check if user has specific role
    */
-  hasRole(role: UserRole): boolean {
+  hasRole(role: TRoles): boolean {
     return this._state().user?.role === role;
   }
 
   /**
    * Check if user has any of the specified roles
    */
-  hasAnyRole(roles: UserRole[]): boolean {
+  hasAnyRole(roles: TRoles[]): boolean {
     const userRole = this._state().user?.role;
     return userRole ? roles.includes(userRole) : false;
   }
@@ -235,7 +237,7 @@ export class AuthStore extends BaseStore<AuthState> {
   /**
    * Check if user can access resource
    */
-  canAccess(requiredRoles?: UserRole[], requiredPermissions?: string[]): boolean {
+  canAccess(requiredRoles?: TRoles[], requiredPermissions?: string[]): boolean {
     if (!this._state().isAuthenticated) return false;
 
     if (requiredRoles && !this.hasAnyRole(requiredRoles)) {
@@ -293,7 +295,7 @@ export class AuthStore extends BaseStore<AuthState> {
     const updatedUser = { ...currentUser, ...updates };
 
     this.patchState({ user: updatedUser });
-    localStorage.setItem('user_data', JSON.stringify(updatedUser));
+    localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(updatedUser));
   }
 
   /**
@@ -304,14 +306,14 @@ export class AuthStore extends BaseStore<AuthState> {
     const currentTime = Date.now();
 
     // Store in localStorage
-    localStorage.setItem('auth_token', response.token);
-    localStorage.setItem('refresh_token', response.refreshToken);
-    // localStorage.setItem('user_data', JSON.stringify(response.user));
-    localStorage.setItem('last_login_time', currentTime.toString());
+    localStorage.setItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN, response.token);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken);
+    // localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(response.user));
+    localStorage.setItem(LOCAL_STORAGE_KEYS.LAST_LOGIN_TIME, currentTime.toString());
 
     // Update state
     this.patchState({
-      // user: response.user,
+      user: { fullName: response.fullName, role: response.role as TRoles },
       token: response.token,
       refreshToken: response.refreshToken,
       isAuthenticated: true,
@@ -323,7 +325,7 @@ export class AuthStore extends BaseStore<AuthState> {
     });
 
     // Reset login attempts on successful login
-    localStorage.removeItem('login_attempts');
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.LOGIN_ATTEMPTS);
 
     // Navigate based on user role
     // this.navigateByRole(response.user.role);
@@ -338,7 +340,7 @@ export class AuthStore extends BaseStore<AuthState> {
     // Increment login attempts
     const attempts = this._state().loginAttempts + 1;
     this.patchState({ loginAttempts: attempts });
-    localStorage.setItem('login_attempts', attempts.toString());
+    localStorage.setItem(LOCAL_STORAGE_KEYS.LOGIN_ATTEMPTS, attempts.toString());
 
     // Set login error
     this._loginState.isLoggingIn = false;
@@ -352,14 +354,14 @@ export class AuthStore extends BaseStore<AuthState> {
   /**
    * Navigate user based on their role
    */
-  private navigateByRole(role: UserRole): void {
+  private navigateByRole(role: TRoles): void {
     const roleRoutes = {
-      [UserRole.ADMIN]: '/admin',
-      [UserRole.SCHOOL]: '/schools',
-      [UserRole.TEACHERS]: '/teachers',
-      [UserRole.STUDENTS]: '/students',
-      [UserRole.GRADER]: '/grader',
-      [UserRole.SUPERADMIN]: '/superadmin',
+      [ROLES.ADMIN]: '/admin',
+      [ROLES.SCHOOL]: '/schools',
+      [ROLES.TEACHERS]: '/teachers',
+      [ROLES.STUDENTS]: '/students',
+      [ROLES.GRADER]: '/grader',
+      [ROLES.SUPERADMIN]: '/superadmin',
     };
 
     this.router.navigate([roleRoutes[role]]);
