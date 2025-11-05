@@ -1,0 +1,12 @@
+<div class="inline-flex items-center gap-1">
+  <span class="text-text-color text-base font-bold">
+    {{ value }}
+  </span>
+  <p-button
+    size="small"
+    [title]="isVerified ? '' : notVerifiedMessage"
+    [severity]="isVerified ? 'success' : 'warn'"
+    [icon]="`pi pi-${isVerified ? 'check' : 'exclamation-triangle'}`"
+    (onClick)="onClick()"
+  ></p-button>
+</div>

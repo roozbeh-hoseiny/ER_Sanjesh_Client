@@ -14,7 +14,7 @@ export class AppCardComponent {
   @Input() editable: boolean = false;
   @Input() editMode: boolean = false;
 
-  @Output() onEdit: EventEmitter<void> = new EventEmitter<void>();
+  @Output() onEdit = new EventEmitter<void>();
 
   constructor() {
     if (this.editable) {

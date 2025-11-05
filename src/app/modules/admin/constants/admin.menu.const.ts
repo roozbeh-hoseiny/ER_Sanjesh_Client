@@ -40,11 +40,6 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
         icon: 'pi pi-fw pi-database',
         routerLink: [adminNamedRoutes.mdmRegions.path],
       },
-      {
-        label: 'استان‌ها',
-        icon: 'pi pi-fw pi-database',
-        routerLink: [adminNamedRoutes.mdmStates.path],
-      },
     ],
   },
 ];

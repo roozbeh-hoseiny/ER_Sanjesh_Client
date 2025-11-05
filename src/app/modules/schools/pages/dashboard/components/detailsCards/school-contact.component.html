@@ -8,31 +8,10 @@
         <app-key-value label="نام خانوادگی" [value]="contact?.lastName" />
         <app-key-value label="جنسیت" [value]="contact?.gender ? 'مرد' : 'زن'" />
         <app-key-value label="تلفن همراه">
-          <div class="inline-flex items-center gap-1">
-            <span class="text-text-color text-base font-bold">
-              {{ contact?.mobile }}
-            </span>
-            <p-button
-              size="small"
-              [title]="contact?.mobileIsVerified ? '' : 'شماره تایید نشده است'"
-              [severity]="contact?.mobileIsVerified ? 'success' : 'warn'"
-              [icon]="`pi pi-${contact?.mobileIsVerified ? 'check' : 'exclamation-triangle'}`"
-            ></p-button>
-          </div>
+          <app-check-verified-info [value]="contact?.mobile" [isVerified]="contact?.mobileIsVerified" />
         </app-key-value>
         <app-key-value label="ایمیل">
-          <div class="inline-flex items-center gap-1">
-            <span class="text-text-color text-base font-bold">
-              {{ contact?.email }}
-            </span>
-
-            <p-button
-              size="small"
-              [title]="contact?.emailIsVerified ? '' : 'ایمیل تایید نشده است'"
-              [severity]="contact?.emailIsVerified ? 'success' : 'warn'"
-              [icon]="`pi pi-${contact?.emailIsVerified ? 'check' : 'exclamation-triangle'}`"
-            ></p-button>
-          </div>
+          <app-check-verified-info [value]="contact?.email" [isVerified]="contact?.emailIsVerified" />
         </app-key-value>
       </div>
     </div>

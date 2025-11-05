@@ -9,9 +9,10 @@ import {
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { ITeacherResponse } from '../models';
+import { IAdminTeacherEntity } from '../models';
 
 @Component({
   selector: 'admin-teachers',
@@ -34,15 +35,15 @@ export class AdminTeachersComponent {
 
   checked: boolean = false;
 
-  paginatedItems = signal<ITeacherResponse[][]>([]);
+  paginatedItems = signal<IAdminTeacherEntity[][]>([]);
   totalRecords = signal<number>(0);
   loading = signal<boolean>(true);
   lastSeen = signal<string>('');
   activePageIndex = signal<number>(0);
-  perPage = signal<number>(10);
+  perPage = signal<number>(40);
 
   isAddFormVisible = signal<boolean>(false);
-  selectedItemForEdit = signal<Maybe<ITeacherResponse>>(null);
+  selectedItemForEdit = signal<Maybe<IAdminTeacherEntity>>(null);
 
   activePageItems = computed(() => {
     const pageIndex = this.activePageIndex();
@@ -50,7 +51,7 @@ export class AdminTeachersComponent {
     return pages[pageIndex] || [];
   });
 
-  constructor() {
+  constructor(private router: Router) {
     this.breadcrumbService.setItems([adminNamedRoutes.root.meta, adminNamedRoutes.teachers.meta]);
     this.getData();
   }
@@ -60,7 +61,29 @@ export class AdminTeachersComponent {
   }
 
   private setColumns() {
-    this.columns = [{ field: 'name', header: 'نام دبیر', minWidth: '15rem' }];
+    this.columns = [
+      {
+        field: 'fullname',
+        header: 'نام دبیر',
+        minWidth: '15rem',
+      },
+      {
+        field: 'uniqueId',
+        header: 'شناسه',
+        width: '5rem',
+        minWidth: '5rem',
+      },
+      {
+        field: 'gender',
+        header: 'جنسیت',
+        width: '4rem',
+        minWidth: '4rem',
+      },
+      {
+        field: 'mobile',
+        header: 'شماره موبایل',
+      },
+    ];
   }
 
   private getData() {
@@ -82,7 +105,7 @@ export class AdminTeachersComponent {
     this.isAddFormVisible.set(true);
   }
 
-  openEditForm(item: ITeacherResponse) {
+  openEditForm(item: IAdminTeacherEntity) {
     this.selectedItemForEdit.set(item);
     this.isAddFormVisible.set(true);
   }
@@ -91,16 +114,24 @@ export class AdminTeachersComponent {
     console.log($event);
   }
 
+  toDetails(item: IAdminTeacherEntity) {
+    const detailRoute = adminNamedRoutes.teacher.meta.pagePath!(item.id)! as string;
+
+    this.router.navigateByUrl(detailRoute);
+  }
+
   private getAll() {
-    this.services.getAll(this.lastSeen()).subscribe((teachers) => {
-      if (!this.paginatedItems.length) {
-        this.totalRecords.set(teachers.totalCount);
-      }
-      this.paginatedItems.update((prev) => {
-        return [...prev, teachers.items];
+    this.services
+      .getAll({ lastSeen: this.lastSeen(), pageSize: this.perPage() })
+      .subscribe((teachers) => {
+        if (!this.paginatedItems.length) {
+          this.totalRecords.set(teachers.totalCount);
+        }
+        this.paginatedItems.update((prev) => {
+          return [...prev, teachers.items];
+        });
+        this.lastSeen.set(teachers.lastSeen || '');
+        this.loading.set(false);
       });
-      this.lastSeen.set(teachers.lastSeen || '');
-      this.loading.set(false);
-    });
   }
 }

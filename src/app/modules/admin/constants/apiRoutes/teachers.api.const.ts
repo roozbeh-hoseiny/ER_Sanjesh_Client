@@ -3,7 +3,10 @@ export const adminTeachersApiRoutes = (baseUrl: string) => {
   return {
     list: () => `${teachersBaseUrl}/GetAll`,
     byIds: () => `${teachersBaseUrl}/FindByIds`,
-    byId: () => `${teachersBaseUrl}/GetOneById`,
-    byUniqueId: () => `${teachersBaseUrl}/GetOneByUniqueId`,
+    byId: (id: string) => `${teachersBaseUrl}/GetOneById/${id}`,
+    byUniqueId: (id: string) => `${teachersBaseUrl}/GetOneByUniqueId/${id}`,
+
+    attachLesson: () => `${teachersBaseUrl}/AssignLesson`,
+    detachLesson: () => `${teachersBaseUrl}/UnassignLesson`,
   };
 };

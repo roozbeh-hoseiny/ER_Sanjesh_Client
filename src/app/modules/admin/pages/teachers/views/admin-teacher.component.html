@@ -1,0 +1,11 @@
+@if (initLoading()) {
+  <div class="flex items-center justify-center">
+    <p-progressSpinner />
+  </div>
+} @else {
+  <div class="flex flex-col gap-4">
+    <app-teacher-info-card />
+
+    <app-teacher-lessons-card />
+  </div>
+}

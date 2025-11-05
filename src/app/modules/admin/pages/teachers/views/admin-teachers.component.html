@@ -3,15 +3,16 @@
   [addNewCtaLabel]="'افزودن دبیر جدید'"
   [columns]="columns"
   [showAdd]="true"
+  [showDetails]="true"
   [items]="activePageItems()"
   [loading]="loading()"
   [totalRecords]="totalRecords()"
   [currentPage]="activePageIndex() + 1"
   [perPage]="perPage()"
-  style="height: 100cqmin"
+  [fullHeight]="true"
   class="overflow-hidden"
   (pageChange)="onPageChange($event)"
   (onAdd)="openAddForm()"
-  (onEdit)="openEditForm($event)"
+  (onDetails)="toDetails($event)"
 >
 </app-page-data-list>

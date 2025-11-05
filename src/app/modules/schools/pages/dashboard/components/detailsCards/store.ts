@@ -3,6 +3,7 @@ import { ToastService } from '@/core/services/toast.service';
 import { AdminSchoolsService } from '@/modules/admin/services/admin-schools.service';
 import {
   ISchoolAddressRequest,
+  ISchoolContactRequest,
   ISchoolInfoRequest,
   ISchoolResponse,
 } from '@/modules/schools/models';
@@ -47,10 +48,6 @@ export class SchoolDetailsCardsStore {
     this.state$.set({ ...this.state$(), ...partial });
   }
 
-  // service-backed operations. The concrete implementation SHOULD be
-  // provided by the parent module via the SCHOOL_DETAILS_SERVICE token.
-  // If not provided, a small default adapter uses the existing
-  // SchoolsInfoService/AdminSchoolsService implementations.
   private toastService = inject(ToastService);
   private _defaultSchoolsInfo = inject(SchoolsInfoService);
   private _defaultAdminSchools = inject(AdminSchoolsService);
@@ -92,14 +89,7 @@ export class SchoolDetailsCardsStore {
     );
   }
 
-  editContact(payload: {
-    id: string;
-    firstname: string;
-    lastname: string;
-    gender: boolean;
-    email: string;
-    mobile: string;
-  }) {
+  editContact(payload: ISchoolContactRequest) {
     this.setState({ submitContactLoading: true });
     return this.service.updateContact(payload).pipe(
       tap((ok) => {

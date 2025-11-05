@@ -4,8 +4,7 @@ export type TAdminMDMRouteNames =
   | 'mdm'
   | 'mdmEducationalLevels'
   | 'mdmFieldOfStudies'
-  | 'mdmRegions'
-  | 'mdmStates';
+  | 'mdmRegions';
 
 export const adminMDMNamedRoutes: NamedRoutes<TAdminMDMRouteNames> = {
   mdm: {
@@ -40,16 +39,6 @@ export const adminMDMNamedRoutes: NamedRoutes<TAdminMDMRouteNames> = {
     loadComponent: () =>
       import('../../pages/mdm/views/regions/admin-mdm-regions.component').then(
         (m) => m.AdminMdmRegionsComponent,
-      ),
-    meta: {
-      title: 'مناطق',
-    },
-  },
-  mdmStates: {
-    path: 'mdm/states',
-    loadComponent: () =>
-      import('../../pages/mdm/views/states/admin-mdm-states.component').then(
-        (m) => m.AdminMdmStatesComponent,
       ),
     meta: {
       title: 'مناطق',

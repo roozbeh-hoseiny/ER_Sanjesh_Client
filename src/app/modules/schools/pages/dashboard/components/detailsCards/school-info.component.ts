@@ -1,9 +1,8 @@
 import { EducationalLevelsTagsComponent, SchoolGendersTag } from '@/shared/catalog';
-import { AppCardComponent } from '@/shared/components';
+import { AppCardComponent, CheckVerifiedInfoComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
 import { Component, computed, EventEmitter, inject, Output, signal } from '@angular/core';
 import { Badge } from 'primeng/badge';
-import { Button } from 'primeng/button';
 import { Divider } from 'primeng/divider';
 import { SchoolInfoFormComponent } from './school-info-form.component';
 import { SchoolDetailsCardsStore } from './store';
@@ -17,8 +16,8 @@ import { SchoolDetailsCardsStore } from './store';
     Badge,
     SchoolInfoFormComponent,
     Divider,
-    Button,
     EducationalLevelsTagsComponent,
+    CheckVerifiedInfoComponent,
   ],
   templateUrl: './school-info.component.html',
 })

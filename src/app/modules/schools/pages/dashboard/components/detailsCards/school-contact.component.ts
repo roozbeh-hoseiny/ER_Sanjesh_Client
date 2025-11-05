@@ -1,14 +1,18 @@
 import { IContactInfo, ISchoolContactRequest } from '@/modules/schools/models';
-import { AppCardComponent } from '@/shared/components';
+import { AppCardComponent, CheckVerifiedInfoComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
-import { Button } from 'primeng/button';
 import { SchoolContactFormComponent } from './school-contact-form.component';
 import { SchoolDetailsCardsStore } from './store';
 
 @Component({
   selector: 'app-school-contact',
-  imports: [AppCardComponent, KeyValueComponent, Button, SchoolContactFormComponent],
+  imports: [
+    AppCardComponent,
+    KeyValueComponent,
+    SchoolContactFormComponent,
+    CheckVerifiedInfoComponent,
+  ],
   templateUrl: './school-contact.component.html',
 })
 export class SchoolContactComponent {

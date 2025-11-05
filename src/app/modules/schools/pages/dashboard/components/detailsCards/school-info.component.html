@@ -40,31 +40,16 @@
         <app-key-value label="نام خانوادگی" [value]="info().managerInfo.lastName" />
         <app-key-value label="جنسیت" [value]="info().managerInfo.gender ? 'مرد' : 'زن'" />
         <app-key-value label="تلفن همراه">
-          <div class="inline-flex items-center gap-1">
-            <span class="text-text-color text-base font-bold">
-              {{ info().managerInfo.mobile }}
-            </span>
-            <p-button
-              size="small"
-              [title]="info().managerInfo.mobileIsVerified ? '' : 'شماره تایید نشده است'"
-              [severity]="info().managerInfo.mobileIsVerified ? 'success' : 'warn'"
-              [icon]="`pi pi-${info().managerInfo.mobileIsVerified ? 'check' : 'exclamation-triangle'}`"
-            ></p-button>
-          </div>
+          <app-check-verified-info
+            [value]="info().managerInfo.mobile"
+            [isVerified]="info().managerInfo.mobileIsVerified"
+          />
         </app-key-value>
         <app-key-value label="ایمیل">
-          <div class="inline-flex items-center gap-1">
-            <span class="text-text-color text-base font-bold">
-              {{ info().managerInfo.email }}
-            </span>
-
-            <p-button
-              size="small"
-              [title]="info().managerInfo.emailIsVerified ? '' : 'ایمیل تایید نشده است'"
-              [severity]="info().managerInfo.emailIsVerified ? 'success' : 'warn'"
-              [icon]="`pi pi-${info().managerInfo.emailIsVerified ? 'check' : 'exclamation-triangle'}`"
-            ></p-button>
-          </div>
+          <app-check-verified-info
+            [value]="info().managerInfo.email"
+            [isVerified]="info().managerInfo.emailIsVerified"
+          />
         </app-key-value>
       </div>
     </div>

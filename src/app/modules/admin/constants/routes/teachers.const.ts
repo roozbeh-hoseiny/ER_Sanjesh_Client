@@ -1,6 +1,6 @@
 import { NamedRoutes } from '@/core';
 
-export type TAdminTeachersRouteNames = 'teachers';
+export type TAdminTeachersRouteNames = 'teachers' | 'teacher';
 
 export const adminTeachersNamedRoutes: NamedRoutes<TAdminTeachersRouteNames> = {
   teachers: {
@@ -11,6 +11,17 @@ export const adminTeachersNamedRoutes: NamedRoutes<TAdminTeachersRouteNames> = {
       ),
     meta: {
       title: 'دبیران',
+    },
+  },
+  teacher: {
+    path: 'teachers/:teacherId',
+    loadComponent: () =>
+      import('../../pages/teachers/views/admin-teacher.component').then(
+        (m) => m.AdminTeacherComponent,
+      ),
+    meta: {
+      title: 'دبیر',
+      pagePath: (id: string) => `/admin/teachers/${id}`,
     },
   },
 };

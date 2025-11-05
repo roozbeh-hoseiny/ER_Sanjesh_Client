@@ -1,0 +1,13 @@
+<app-card-data cardTitle="اطلاعات دبیر">
+  <div class="grid grid-cols-3 gap-4">
+    <app-key-value label="نام دبیر" [value]="teacher()?.fullname" />
+    <app-key-value label="جنسیت" [value]="teacher()?.gender" />
+    <app-key-value label="شناسه" [value]="teacher()?.uniqueId" />
+    <app-key-value label="شماره موبایل">
+      <app-check-verified-info [value]="teacher()?.mobile" [isVerified]="teacher()?.isMobileVerified" />
+    </app-key-value>
+    <app-key-value label="ایمیل">
+      <app-check-verified-info [value]="teacher()?.email" [isVerified]="teacher()?.isEmailVerified" />
+    </app-key-value>
+  </div>
+</app-card-data>

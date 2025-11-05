@@ -1,24 +1,24 @@
 import { Maybe } from '@/core';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
 import { FormControl, FormsModule } from '@angular/forms';
-import { MultiSelectModule } from 'primeng/multiselect';
+import { SelectModule } from 'primeng/select';
 import { ILessonsResponse } from '../models';
 import { LessonsService } from '../services';
 
 @Component({
-  selector: 'catalog-lessons-multiselect',
+  selector: 'lessons-select',
   standalone: true,
-  imports: [CommonModule, FormsModule, MultiSelectModule, UikitFieldComponent],
-  templateUrl: './lessons-multiselect.component.html',
+  imports: [CommonModule, FormsModule, SelectModule, UikitFieldComponent],
+  templateUrl: './lessons-select.component.html',
 })
 export class LessonsSelectComponent implements OnInit {
   @Input() formControlName!: FormControl<Maybe<string>>;
   @Input() name: string = 'lesson';
   @Output() onSelect = new EventEmitter<Maybe<string>>();
 
-  constructor(private lessonsService: LessonsService) {}
+  private lessonsService = inject(LessonsService);
 
   items = signal<ILessonsResponse[]>([]);
   loading = signal<boolean>(false);
@@ -40,9 +40,7 @@ export class LessonsSelectComponent implements OnInit {
     });
   }
 
-  onSelectItem = (items: ILessonsResponse[]) => {
-    console.log(items);
-
-    // this.onSelect.emit(item.id);
+  onSelectItem = (item: ILessonsResponse) => {
+    this.onSelect.emit(item.id);
   };
 }
