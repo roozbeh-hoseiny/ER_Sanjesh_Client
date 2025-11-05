@@ -1,11 +1,10 @@
-import { ToastService } from '@/core/services/toast.service';
 import { mobileValidator } from '@/core/validators/mobile.validator';
 import { IContactInfo, ISchoolContactRequest } from '@/modules/schools/models';
-import { SchoolsInfoService } from '@/modules/schools/services';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { SchoolPersonFormComponent } from './school-person-form.component';
+import { SchoolDetailsCardsStore } from './store';
 
 @Component({
   selector: 'app-school-contact-form',
@@ -13,19 +12,12 @@ import { SchoolPersonFormComponent } from './school-person-form.component';
   imports: [SchoolPersonFormComponent, ReactiveFormsModule, ButtonDirective],
 })
 export class SchoolContactFormComponent {
-  @Input() schoolId!: string;
-  @Input() contact!: IContactInfo;
-  @Input() loading: boolean = false;
-
   @Output() closeForm = new EventEmitter();
   @Output() submitForm = new EventEmitter<ISchoolContactRequest>();
 
   private fb = inject(FormBuilder);
 
-  constructor(
-    private readonly schoolService: SchoolsInfoService,
-    private readonly toastService: ToastService,
-  ) {}
+  private detailsStore = inject(SchoolDetailsCardsStore);
 
   form = this.fb.group({
     firstName: ['', [Validators.required]],
@@ -35,15 +27,29 @@ export class SchoolContactFormComponent {
     gender: [true, [Validators.required]],
   });
 
+  submitLoading = signal<boolean>(false);
+
   ngOnInit() {
-    this.form.patchValue(this.contact);
+    const cur = this.detailsStore.school();
+    if (cur && cur.contactInfo) {
+      this.form.patchValue(cur.contactInfo as IContactInfo);
+    }
   }
 
   submit() {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
-    const payload = { id: this.schoolId, ...this.form.value } as ISchoolContactRequest;
-    this.submitForm.emit(payload);
+    this.submitLoading.set(true);
+    const payload = this.form.value as ISchoolContactRequest;
+    this.detailsStore.editContact(payload).subscribe({
+      next: () => {
+        this.submitForm.emit(payload);
+        this.submitLoading.set(false);
+      },
+      error: () => {
+        this.submitLoading.set(false);
+      },
+    });
   }
 
   close() {

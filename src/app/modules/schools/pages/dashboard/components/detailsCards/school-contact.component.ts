@@ -1,21 +1,32 @@
 import { IContactInfo, ISchoolContactRequest } from '@/modules/schools/models';
 import { AppCardComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { SchoolContactFormComponent } from './school-contact-form.component';
+import { SchoolDetailsCardsStore } from './store';
 
 @Component({
-  selector: 'school-contact',
+  selector: 'app-school-contact',
   imports: [AppCardComponent, KeyValueComponent, Button, SchoolContactFormComponent],
   templateUrl: './school-contact.component.html',
 })
 export class SchoolContactComponent {
-  @Input() contact!: IContactInfo;
-  @Input() canEdit: boolean = false;
-  @Input() submitLoading: boolean = false;
-
   @Output() onSubmit = new EventEmitter<ISchoolContactRequest>();
+
+  private detailsStore = inject(SchoolDetailsCardsStore);
+
+  get contact() {
+    return this.detailsStore.school()
+      ? (this.detailsStore.school()!.contactInfo as IContactInfo)
+      : null;
+  }
+  get canEdit() {
+    return this.detailsStore.canEditContact();
+  }
+  get submitLoading() {
+    return this.detailsStore.submitContactLoading();
+  }
 
   editMode = signal<boolean>(false);
 
@@ -28,7 +39,13 @@ export class SchoolContactComponent {
   }
 
   submitForm(payload: ISchoolContactRequest) {
-    this.onSubmit.emit(payload);
-    this.closeForm();
+    // delegate to store
+    this.detailsStore.editContact(payload).subscribe({
+      next: () => {
+        this.onSubmit.emit(payload);
+        this.closeForm();
+      },
+      error: () => {},
+    });
   }
 }

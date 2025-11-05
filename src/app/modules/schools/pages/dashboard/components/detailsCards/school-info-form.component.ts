@@ -1,15 +1,15 @@
 import { ToastService } from '@/core/services/toast.service';
 import { mobileValidator } from '@/core/validators/mobile.validator';
 import { ISchoolInfoRequest, ISchoolResponse } from '@/modules/schools/models';
-import { SchoolsInfoService } from '@/modules/schools/services';
 import { SchoolGendersSelect } from '@/shared/catalog';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { Divider } from 'primeng/divider';
 import { InputText } from 'primeng/inputtext';
 import { SchoolPersonFormComponent } from './school-person-form.component';
+import { SchoolDetailsCardsStore } from './store';
 
 @Component({
   selector: 'app-school-info-form',
@@ -25,14 +25,14 @@ import { SchoolPersonFormComponent } from './school-person-form.component';
   ],
 })
 export class SchoolInfoFormComponent {
-  @Input() info!: ISchoolResponse;
+  // read data from store instead of input
+  private detailsStore = inject(SchoolDetailsCardsStore);
 
   @Output() closeForm = new EventEmitter<void>();
   @Output() submitForm = new EventEmitter<ISchoolResponse>();
 
   constructor() {}
 
-  private readonly schoolService = inject(SchoolsInfoService);
   private readonly toastService = inject(ToastService);
 
   onSubmitLoading = signal<boolean>(false);
@@ -54,18 +54,22 @@ export class SchoolInfoFormComponent {
   });
 
   ngOnInit() {
-    this.form.patchValue(this.info);
+    const cur = this.detailsStore.school();
+    if (cur) {
+      this.form.patchValue(cur as ISchoolResponse);
+    }
   }
 
   submit() {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.onSubmitLoading.set(true);
-    const payload = { id: this.info.id, ...this.form.value } as ISchoolInfoRequest;
-    this.schoolService.editInfo(payload).subscribe({
+    const cur = this.detailsStore.school();
+    const payload = { id: cur?.id ?? '', ...this.form.value } as ISchoolInfoRequest;
+    // use store's editInfo which also updates store state and shows toast
+    this.detailsStore.editInfo(payload).subscribe({
       next: (value) => {
         this.onSubmitLoading.set(false);
-        this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
         this.submitForm.emit(value);
       },
       error: (err) => {

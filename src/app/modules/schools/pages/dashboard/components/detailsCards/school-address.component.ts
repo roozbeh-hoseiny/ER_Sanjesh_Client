@@ -1,8 +1,9 @@
 import { ISchoolAddress } from '@/modules/schools/models';
 import { AppCardComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { SchoolAddressFormComponent } from './school-address-form.component';
+import { SchoolDetailsCardsStore } from './store';
 
 @Component({
   selector: 'app-school-address',
@@ -10,14 +11,29 @@ import { SchoolAddressFormComponent } from './school-address-form.component';
   templateUrl: './school-address.component.html',
 })
 export class SchoolAddress {
-  @Input() address!: ISchoolAddress;
-  @Input() schoolId!: string;
-  @Input() canEdit: boolean = false;
-  @Input() loading: boolean = false;
+  private detailsStore = inject(SchoolDetailsCardsStore);
 
   @Output() onSubmitted = new EventEmitter<void>();
 
   editMode = signal<boolean>(false);
+
+  get address() {
+    return this.detailsStore.school()
+      ? (this.detailsStore.school()!.address as ISchoolAddress)
+      : null;
+  }
+
+  get schoolId() {
+    return this.detailsStore.school() ? this.detailsStore.school()!.id : '';
+  }
+
+  get canEdit() {
+    return this.detailsStore.canEditAddress();
+  }
+
+  get loading() {
+    return this.detailsStore.submitContactLoading();
+  }
 
   onEdit() {
     this.editMode.update((prev) => !prev);

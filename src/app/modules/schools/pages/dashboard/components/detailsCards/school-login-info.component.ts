@@ -1,7 +1,8 @@
 import { IManagerInfo } from '@/modules/schools/models';
 import { AppCardComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
-import { Component, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { SchoolDetailsCardsStore } from './store';
 
 @Component({
   selector: 'app-school-login-info',
@@ -9,6 +10,15 @@ import { Component, Input } from '@angular/core';
   templateUrl: './school-login-info.component.html',
 })
 export class SchoolManagerComponent {
-  @Input() manager!: IManagerInfo;
-  @Input() canEdit = false;
+  private detailsStore = inject(SchoolDetailsCardsStore);
+
+  get manager() {
+    return this.detailsStore.school()
+      ? (this.detailsStore.school()!.managerInfo as IManagerInfo)
+      : null;
+  }
+
+  get canEdit() {
+    return this.detailsStore.canEditLoginInfo();
+  }
 }

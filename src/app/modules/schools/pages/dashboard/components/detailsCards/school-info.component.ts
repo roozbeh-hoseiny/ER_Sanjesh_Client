@@ -1,12 +1,12 @@
-import { ISchoolResponse } from '@/modules/schools/models';
 import { EducationalLevelsTagsComponent, SchoolGendersTag } from '@/shared/catalog';
 import { AppCardComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Output, signal } from '@angular/core';
 import { Badge } from 'primeng/badge';
 import { Button } from 'primeng/button';
 import { Divider } from 'primeng/divider';
 import { SchoolInfoFormComponent } from './school-info-form.component';
+import { SchoolDetailsCardsStore } from './store';
 
 @Component({
   selector: 'app-school-info',
@@ -23,12 +23,15 @@ import { SchoolInfoFormComponent } from './school-info-form.component';
   templateUrl: './school-info.component.html',
 })
 export class SchoolInfoComponent {
-  @Input() info!: ISchoolResponse;
-  @Input() canEdit: boolean = false;
+  private detailsStore = inject(SchoolDetailsCardsStore);
 
   @Output() onSubmitted = new EventEmitter<void>();
 
   editMode = signal<boolean>(false);
+
+  info = computed(() => this.detailsStore.school()!);
+
+  canEdit = computed(() => this.detailsStore.canEditInfo());
 
   onEdit() {
     this.editMode.update((prev) => !prev);

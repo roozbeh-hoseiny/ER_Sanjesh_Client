@@ -1,12 +1,12 @@
 import { ISchoolAddress, ISchoolAddressRequest, ISchoolResponse } from '@/modules/schools/models';
-import { SchoolsInfoService } from '@/modules/schools/services';
 import { StatesSelectComponent } from '@/shared/catalog';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
+import { SchoolDetailsCardsStore } from './store';
 
 @Component({
   selector: 'app-school-address-form',
@@ -21,14 +21,12 @@ import { Textarea } from 'primeng/textarea';
   ],
 })
 export class SchoolAddressFormComponent {
-  @Input() address!: ISchoolAddress;
-  @Input() schoolId!: string;
   @Output() closeForm = new EventEmitter<void>();
   @Output() submitForm = new EventEmitter<ISchoolResponse>();
 
   onSubmitLoading = signal<boolean>(false);
 
-  private schoolService = inject(SchoolsInfoService);
+  private detailsStore = inject(SchoolDetailsCardsStore);
   private fb = inject(FormBuilder);
 
   form = this.fb.group({
@@ -39,12 +37,15 @@ export class SchoolAddressFormComponent {
   });
 
   ngOnInit() {
-    this.form.patchValue(this.address);
-    if (this.address.regionType === 3) {
-      this.form.controls.city.setValue(this.address.regionId);
-    }
-    if (this.address.regionType === 2) {
-      this.form.controls.state.setValue(this.address.regionId);
+    const cur = this.detailsStore.school();
+    if (cur && cur.address) {
+      this.form.patchValue(cur.address as ISchoolAddress);
+      if (cur.address.regionType === 3) {
+        this.form.controls.city.setValue(cur.address.regionId);
+      }
+      if (cur.address.regionType === 2) {
+        this.form.controls.state.setValue(cur.address.regionId);
+      }
     }
   }
 
@@ -52,17 +53,18 @@ export class SchoolAddressFormComponent {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.onSubmitLoading.set(true);
+    const cur = this.detailsStore.school();
     const payload = {
-      id: this.schoolId,
+      id: cur?.id ?? '',
       ...this.form.value,
       regionId: this.form.controls.city.value,
     } as ISchoolAddressRequest;
-    this.schoolService.editAddress(payload).subscribe({
-      next: (value) => {
+    this.detailsStore.editAddress(payload).subscribe({
+      next: () => {
         this.onSubmitLoading.set(false);
         this.submitForm.emit();
       },
-      error: (err) => {
+      error: () => {
         this.onSubmitLoading.set(false);
       },
     });

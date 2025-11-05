@@ -1,0 +1,6 @@
+<div class="flex flex-col gap-6">
+  <app-school-info (onSubmitted)="refreshData()" />
+  <app-school-contact (onSubmit)="submitContact($event)" (onSubmitted)="refreshData()" />
+  <app-school-address (onSubmitted)="refreshData()" />
+  <app-school-login-info (onSubmitted)="refreshData()" />
+</div>

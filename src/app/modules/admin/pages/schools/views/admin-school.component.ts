@@ -4,7 +4,7 @@ import { LayoutService } from '@/layout/service/layout.service';
 import { adminNamedRoutes } from '@/modules/admin/constants';
 import { AdminSchoolsService } from '@/modules/admin/services';
 import { ISchoolContactRequest } from '@/modules/schools/models';
-import { SchoolDetailsComponent } from '@/modules/schools/pages/dashboard/components/school-details.component';
+import { SchoolDetailsComponent } from '@/modules/schools/pages/dashboard/components/detailsCards/school-details.component';
 import { Component, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProgressSpinner } from 'primeng/progressspinner';
