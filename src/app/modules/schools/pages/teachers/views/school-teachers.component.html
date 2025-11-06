@@ -1,17 +1,18 @@
 <app-page-data-list
   [pageTitle]="'مدیریت دبیران'"
-  [addNewCtaLabel]="'افزودن دبیر جدید'"
   [columns]="columns"
-  [showAdd]="true"
-  [items]="activePageItems()"
+  [items]="teachers()"
   [loading]="loading()"
-  [totalRecords]="totalRecords()"
-  [currentPage]="activePageIndex() + 1"
-  [perPage]="perPage()"
   [fullHeight]="true"
   class="overflow-hidden"
-  (pageChange)="onPageChange($event)"
-  (onAdd)="openAddForm()"
-  (onEdit)="openEditForm($event)"
 >
+  <ng-template #lessons let-item>
+    <div class="flex flex-col gap-2">
+      @for (lesson of item.lessons; track lesson.lessonId) {
+        <div class="flex items-center gap-2">
+          <span>{{ lesson.lessonTitle }} - {{ lesson.educationalLevelTitle }}</span>
+        </div>
+      }
+    </div>
+  </ng-template>
 </app-page-data-list>

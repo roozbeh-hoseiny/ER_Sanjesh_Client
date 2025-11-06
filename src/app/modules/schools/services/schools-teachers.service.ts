@@ -1,10 +1,8 @@
-import { PAGINATED_QUERY_DEFAULT_VALUES } from '@/core/constants';
-import { IPaginatedResponse } from '@/core/models/service.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { SCHOOLS_API_ROUTES } from '../constants/apiRoutes';
-import { ISchoolTeachersResponse } from '../pages/teachers/models';
+import { ISchoolTeacherMappedData, ISchoolTeacherResponse } from '../pages/teachers/models';
 
 @Injectable({ providedIn: 'root' })
 export class SchoolsTeachersService {
@@ -12,17 +10,20 @@ export class SchoolsTeachersService {
 
   private apiRoutes = SCHOOLS_API_ROUTES;
 
-  getAll(
-    schoolId: string,
-    lastSeen?: string,
-  ): Observable<IPaginatedResponse<ISchoolTeachersResponse>> {
-    return this.http.post<IPaginatedResponse<ISchoolTeachersResponse>>(
-      this.apiRoutes.teachers.list(),
-      {
-        ...PAGINATED_QUERY_DEFAULT_VALUES,
-        lastSeen,
-        id: schoolId,
-      },
+  getAll(schoolId: string): Observable<ISchoolTeacherResponse[]> {
+    return this.http.post<ISchoolTeacherResponse[]>(this.apiRoutes.teachers.list(), {
+      id: schoolId,
+    });
+  }
+
+  getAllMappedData(schoolId: string): Observable<ISchoolTeacherMappedData[]> {
+    return this.getAll(schoolId).pipe(
+      map((teachers) =>
+        teachers.map((teacher) => ({
+          ...teacher,
+          fullname: `${teacher.gender ? 'آقای' : 'خانم'} ${teacher.firstName} ${teacher.lastName}`,
+        })),
+      ),
     );
   }
 }

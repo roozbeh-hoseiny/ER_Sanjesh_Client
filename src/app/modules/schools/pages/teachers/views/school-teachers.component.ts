@@ -1,4 +1,3 @@
-import { Maybe } from '@/core';
 import { BreadcrumbService } from '@/core/services';
 import { schoolsNamedRoutes } from '@/modules/schools/constants';
 import { SchoolsStore } from '@/modules/schools/dataStore';
@@ -8,11 +7,11 @@ import {
   PageDataListComponent,
 } from '@/shared/components/pageDataList/page-data-list.component';
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal, TemplateRef, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { ISchoolTeachersResponse } from '../models';
+import { ISchoolTeacherMappedData } from '../models';
 
 @Component({
   selector: 'school-teachers',
@@ -32,25 +31,15 @@ export class SchoolTeachersComponent {
   private breadcrumbService = inject(BreadcrumbService);
   private schoolsStore = inject(SchoolsStore);
 
+  @ViewChild('lessons', { static: true }) lessonsTpl!: TemplateRef<any>;
+
   columns = [] as IColumn[];
 
   checked: boolean = false;
 
-  paginatedItems = signal<ISchoolTeachersResponse[][]>([]);
-  totalRecords = signal<number>(0);
+  teachers = signal<ISchoolTeacherMappedData[]>([]);
   loading = signal<boolean>(true);
-  lastSeen = signal<string>('');
-  activePageIndex = signal<number>(0);
-  perPage = signal<number>(10);
-
-  isAddFormVisible = signal<boolean>(false);
-  selectedItemForEdit = signal<Maybe<ISchoolTeachersResponse>>(null);
-
-  activePageItems = computed(() => {
-    const pageIndex = this.activePageIndex();
-    const pages = this.paginatedItems();
-    return pages[pageIndex] || [];
-  });
+  schoolId = signal(this.schoolsStore.info()?.id!);
 
   constructor() {
     this.breadcrumbService.setItems([
@@ -66,8 +55,10 @@ export class SchoolTeachersComponent {
 
   private setColumns() {
     this.columns = [
-      { field: 'firstName', header: 'نام دبیر' },
-      { field: 'lastName', header: 'نام خانوادگی دبیر' },
+      { field: 'fullname', header: 'نام دبیر', width: '14rem' },
+      { field: 'mobile', header: 'شماره موبایل', width: '10rem' },
+      { field: 'uniqueId', header: 'شناسه', width: '5rem' },
+      { field: 'lessons', header: 'درس‌ها', customDataModel: this.lessonsTpl },
     ];
   }
 
@@ -76,44 +67,10 @@ export class SchoolTeachersComponent {
     this.getAll();
   }
 
-  onPageChange = (page: number) => {
-    this.activePageIndex.set(page - 1);
-    if (this.paginatedItems().length > page) {
-      return;
-    }
-
-    this.getData();
-  };
-
-  openAddForm() {
-    this.selectedItemForEdit.set(null);
-    this.isAddFormVisible.set(true);
-  }
-
-  openEditForm(item: ISchoolTeachersResponse) {
-    this.selectedItemForEdit.set(item);
-    this.isAddFormVisible.set(true);
-  }
-
-  onFormSave($event: any) {
-    console.log($event);
-  }
-
   private getAll() {
-    this.services.getAll(this.schoolsStore.info()?.id!, this.lastSeen()).subscribe({
-      next: (teachers) => {
-        if (!this.paginatedItems.length) {
-          this.totalRecords.set(teachers.totalCount);
-        }
-        this.paginatedItems.update((prev) => {
-          return [...prev, teachers.items];
-        });
-        this.lastSeen.set(teachers.lastSeen || '');
-        this.loading.set(false);
-      },
-      error: () => {
-        this.loading.set(false);
-      },
+    this.services.getAllMappedData(this.schoolId()).subscribe((teachers) => {
+      this.teachers.set(teachers);
+      this.loading.set(false);
     });
   }
 }

@@ -7,7 +7,7 @@
     <p class="text-surface-500 inline-block">{{ description }}</p>
   }
   <ng-content select="[cta]" #cta class="mt-4"></ng-content>
-  @if (!hasCtaContent && ctaLabel) {
+  @if (!hasCtaContent && ctaLabel && showCTA) {
     <p-button class="mt-2" size="small" (click)="ctaClick.emit()">
       {{ ctaLabel }}
       <i class="pi pi-plus" pButtonIcon></i>
