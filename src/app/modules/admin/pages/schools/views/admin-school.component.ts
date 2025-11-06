@@ -5,7 +5,10 @@ import { adminNamedRoutes } from '@/modules/admin/constants';
 import { AdminSchoolsService } from '@/modules/admin/services';
 import { ISchoolContactRequest } from '@/modules/schools/models';
 import { SchoolDetailsComponent } from '@/modules/schools/pages/dashboard/components/detailsCards/school-details.component';
-import { Component, signal } from '@angular/core';
+import { SCHOOL_DETAILS_SERVICE } from '@/modules/schools/pages/dashboard/components/detailsCards/service.token';
+import { SchoolDetailsCardsStore } from '@/modules/schools/pages/dashboard/components/detailsCards/store';
+import { SchoolsInfoService } from '@/modules/schools/services';
+import { Component, effect, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { IAdminSchoolResponse } from '../models/schools';
@@ -14,6 +17,17 @@ import { IAdminSchoolResponse } from '../models/schools';
   selector: 'app-admin-school',
   templateUrl: './admin-school.component.html',
   imports: [SchoolDetailsComponent, ProgressSpinner],
+  providers: [
+    {
+      provide: SCHOOL_DETAILS_SERVICE,
+      useFactory: (schoolService: SchoolsInfoService, adminSchoolService: AdminSchoolsService) => ({
+        editInfo: (req: any) => schoolService.editInfo(req),
+        editAddress: (req: any) => schoolService.editAddress(req),
+        editContactInfo: (req: any) => adminSchoolService.updateContact(req),
+      }),
+      deps: [SchoolsInfoService, AdminSchoolsService],
+    },
+  ],
 })
 export class AdminSchoolComponent {
   schoolId = signal<string>('');
@@ -27,8 +41,21 @@ export class AdminSchoolComponent {
     private route: ActivatedRoute,
     private toastService: ToastService,
     private breadcrumbService: BreadcrumbService,
+    private schoolDetailsStore: SchoolDetailsCardsStore,
   ) {
     this.layoutService.changeIsFixedContentSize(true);
+    effect(() => {
+      const info = this.school();
+      if (info) {
+        this.schoolDetailsStore.fillInitial({
+          school: info,
+          canEditAddress: true,
+          canEditInfo: true,
+          canEditLoginInfo: true,
+          canEditContact: true,
+        });
+      }
+    });
     this.schoolId.set(this.route.snapshot.paramMap.get('schoolId') || '');
   }
 
