@@ -82,7 +82,6 @@ export class CaptchaService {
   };
 
   renewCaptcha = () => {
-    console.log(this.captchaId());
     const url = `/captcha/new`;
 
     const headers = new HttpHeaders({ 'x-OldCaptchaId': this.captchaId()! });

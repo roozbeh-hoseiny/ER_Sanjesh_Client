@@ -1,6 +1,7 @@
 import { IAdminTeacherResponse } from './io';
 
 export * from './io';
+export * from './mappedData';
 
 export interface IAdminTeacherEntity extends Omit<IAdminTeacherResponse, 'gender'> {
   fullname: string;

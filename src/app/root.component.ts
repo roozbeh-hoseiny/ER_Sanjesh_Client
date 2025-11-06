@@ -12,10 +12,7 @@ export class RootComponent {
   authService = inject(AuthService);
 
   ngOnInit() {
-    console.log(this.authService.currentUser());
-
     const role = this.authService.userRole();
-    console.log(role);
 
     let navigatedUrl = '/auth';
     switch (role?.toUpperCase()) {

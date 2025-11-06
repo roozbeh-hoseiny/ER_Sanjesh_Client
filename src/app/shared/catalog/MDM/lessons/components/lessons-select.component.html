@@ -1,12 +1,15 @@
 <uikit-field label="درس" [for]="name">
   <p-select
     [name]="name"
-    [(ngModel)]="formControlName.value"
-    [options]="items()"
-    optionLabel="title"
+    [formControl]="control"
+    [options]="filteredItems"
+    optionLabel="fullTitle"
     placeholder="یکی از درس‌ها را انتخاب کنید"
     [loading]="loading()"
     [disabled]="loading()"
     (onChange)="onSelectItem($event.value)"
   />
 </uikit-field>
+<!-- [group]="true"
+  optionGroupChildren="lessons"
+  optionGroupLabel="title" -->

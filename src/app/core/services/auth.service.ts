@@ -55,7 +55,6 @@ export class AuthService {
 
   private initializeAuth(): void {
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN);
-    console.log(token);
 
     const userData = localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA);
 
@@ -252,8 +251,6 @@ export class AuthService {
     this.token.set(response.token);
     // localStorage.setItem('refresh_token', response.refreshToken);
     const user = { fullName: response.fullName, role: response.role as TRoles };
-    console.log('user');
-    console.log(user);
 
     localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(user));
 

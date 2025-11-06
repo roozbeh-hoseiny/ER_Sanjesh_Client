@@ -1,4 +1,2 @@
-export interface ILessonsResponse {
-  id: string;
-}
-export interface ILessonsRequest {}
+export * from './io';
+export * from './mappedData';

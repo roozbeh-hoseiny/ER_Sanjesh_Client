@@ -4,5 +4,14 @@
   [editMode]="editModeLessons()"
   (onEdit)="onEditLessonsClick()"
 >
-  <app-key-value label="دروس" />
+  @if (editModeLessons()) {
+    <app-teacher-lessons-form
+      [teacherId]="teacherId"
+      [selectedSchoolLessons]="lessons"
+      (closeForm)="onEditLessonsClick()"
+      (onUpdate)="lessonsUpdated()"
+    />
+  } @else {
+    <app-key-value label="دروس" />
+  }
 </app-card-data>

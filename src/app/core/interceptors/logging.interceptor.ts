@@ -12,19 +12,19 @@ export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
 
   // Only log in development mode
   if (!isProductionMode()) {
-    console.group(`🌐 HTTP ${req.method} ${req.url}`);
-    console.log('Request:', {
-      url: req.url,
-      method: req.method,
-      headers: req.headers.keys().reduce((acc, key) => {
-        // Don't log sensitive headers
-        if (!isSensitiveHeader(key)) {
-          acc[key] = req.headers.get(key);
-        }
-        return acc;
-      }, {} as any),
-      body: req.body,
-    });
+    // console.group(`🌐 HTTP ${req.method} ${req.url}`);
+    // console.log('Request:', {
+    //   url: req.url,
+    //   method: req.method,
+    //   headers: req.headers.keys().reduce((acc, key) => {
+    //     // Don't log sensitive headers
+    //     if (!isSensitiveHeader(key)) {
+    //       acc[key] = req.headers.get(key);
+    //     }
+    //     return acc;
+    //   }, {} as any),
+    //   body: req.body,
+    // });
   }
 
   return next(req).pipe(
@@ -32,7 +32,7 @@ export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
       next: (response) => {
         if (!isProductionMode()) {
           const duration = Date.now() - startTime;
-          console.log(`✅ Response (${duration}ms):`, response);
+          // console.log(`✅ Response (${duration}ms):`, response);
           console.groupEnd();
         }
       },
@@ -43,7 +43,7 @@ export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
           console.groupEnd();
         }
       },
-    })
+    }),
   );
 };
 

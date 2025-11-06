@@ -1,3 +1,5 @@
+import { ITeacherLesson } from './mappedData';
+
 export interface IAdminTeacherResponse {
   id: string;
   firstName: string;
@@ -8,7 +10,7 @@ export interface IAdminTeacherResponse {
   isEmailVerified: boolean;
   isMobileVerified: boolean;
   uniqueId: string;
-  lessons: any[];
+  lessons: ITeacherLesson[];
 }
 
 export interface IAttachLessonToTeacherRequest {

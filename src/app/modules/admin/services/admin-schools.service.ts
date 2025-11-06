@@ -3,7 +3,7 @@ import { IPaginatedQuery, IPaginatedResponse } from '@/core/models/service.model
 import { ISchoolContactRequest } from '@/modules/schools/models';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { debounceTime, Observable } from 'rxjs';
 import { ADMIN_API_ROUTES } from '../constants/apiRoutes';
 import {
   IAdminSchoolResponse,
@@ -28,14 +28,13 @@ export class AdminSchoolsService {
     name: string,
     paginatedQuery: IPaginatedQuery,
   ): Observable<IPaginatedResponse<IAdminSchoolResponse>> {
-    return this.http.post<IPaginatedResponse<IAdminSchoolResponse>>(
-      this.apiRoutes.schools.byName(),
-      {
+    return this.http
+      .post<IPaginatedResponse<IAdminSchoolResponse>>(this.apiRoutes.schools.byName(), {
         ...PAGINATED_QUERY_DEFAULT_VALUES,
         ...paginatedQuery,
         name,
-      },
-    );
+      })
+      .pipe(debounceTime(300));
   }
 
   filterByGender(

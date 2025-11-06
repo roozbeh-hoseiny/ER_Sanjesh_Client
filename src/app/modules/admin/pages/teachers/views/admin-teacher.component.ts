@@ -29,12 +29,20 @@ export class AdminTeacherComponent {
     this.teacherId.set(this.route.snapshot.paramMap.get('teacherId') || '');
   }
 
+  get lessons() {
+    return this.teacherCardStore.teacher()?.lessons || [];
+  }
+
   ngOnInit() {
     this.loadTeacher();
   }
 
   ngOnDestroy() {
     this.layoutService.changeIsFixedContentSize(false);
+  }
+
+  refreshData() {
+    this.loadTeacher();
   }
 
   setBreadcrumb() {
