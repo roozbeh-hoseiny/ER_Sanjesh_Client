@@ -40,7 +40,7 @@ export class TeacherLessonsFormComponent {
 
     if (school && lesson) {
       const schoolId = school.id;
-      const lessonId = lesson.id.toString();
+      const lessonId = lesson.id;
 
       this.attachLoading.set(true);
       this.service
@@ -63,26 +63,6 @@ export class TeacherLessonsFormComponent {
     }
   }
 
-  detach(item: ITeacherLesson) {
-    this.detachLoading.set(true);
-    this.service
-      .detachLesson({
-        id: this.teacherId,
-        schoolId: item.schoolId,
-        lessonId: item.lessonId.toString(),
-      })
-      .subscribe({
-        next: () => {
-          this.selectedSchool.reset();
-          this.selectedLesson.reset();
-          this.detachLoading.set(false);
-          this.onUpdate.emit();
-        },
-        error: () => {
-          this.detachLoading.set(false);
-        },
-      });
-  }
   // this.selectedSchoolLessons.set(this.selectedSchoolLessons().filter((item) => item.id !== id));
 
   updateLessonsFilter() {

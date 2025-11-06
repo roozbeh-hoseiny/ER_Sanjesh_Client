@@ -6,12 +6,33 @@
 >
   @if (editModeLessons()) {
     <app-teacher-lessons-form
+      class="mb-5"
       [teacherId]="teacherId"
       [selectedSchoolLessons]="lessons"
       (closeForm)="onEditLessonsClick()"
       (onUpdate)="lessonsUpdated()"
     />
-  } @else {
-    <app-key-value label="دروس" />
+  }
+  @for (item of lessonsGroupedBySchool(); track item.schoolId) {
+    <p-divider align="right">
+      {{ item.schoolTitle }}
+    </p-divider>
+    @for (lesson of item.lessons; track lesson.lessonId) {
+      <div class="mb-3 flex items-center gap-4">
+        <app-key-value label="درس">{{ lesson.lessonTitle }}</app-key-value>
+        <app-key-value label="رشته">{{ lesson.fieldOfStudyTitle }}</app-key-value>
+        <app-key-value label="پایه">{{ lesson.educationalLevelTitle }}</app-key-value>
+        @if (editModeLessons()) {
+          <button
+            pButton
+            [loading]="detachLoading()"
+            severity="danger"
+            (click)="detach({ schoolId: item.schoolId, lessonId: lesson.lessonId })"
+          >
+            حذف درس
+          </button>
+        }
+      </div>
+    }
   }
 </app-card-data>

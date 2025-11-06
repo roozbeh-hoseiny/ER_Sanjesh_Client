@@ -1,14 +1,14 @@
-<div class="flex flex-col gap-4">
-  @for (item of selectedSchoolLessons; track item.schoolId + item.lessonId) {
+<!-- <div class="flex flex-col gap-4"> -->
+<!-- @for (item of selectedSchoolLessons; track item.schoolId + item.lessonId) {
     <div class="flex items-center gap-2">
       <span>مدرسه: {{ item.schoolTitle }}</span>
       <span> درس‌: {{ item.lessonTitle + item.fieldOfStudyTitle + item.educationalLevelTitle }}</span>
       <button pButton [loading]="detachLoading()" severity="danger" (click)="detach(item)">حذف درس</button>
     </div>
-  }
-  <div class="flex items-end gap-4">
-    <app-admin-school-select [control]="selectedSchool" class="w-xs shrink-0" />
-    <catalog-lessons-select [control]="selectedLesson" [filters]="filteredLessenIds()" class="w-xs shrink-0" />
-    <button pButton [loading]="attachLoading()" (click)="attach()">اضافه کردن درس</button>
-  </div>
+  } -->
+<div class="flex items-end gap-4">
+  <app-admin-school-select [control]="selectedSchool" class="w-xs shrink-0" />
+  <catalog-lessons-select [control]="selectedLesson" [filters]="filteredLessenIds()" class="w-xs shrink-0" />
+  <button pButton [loading]="attachLoading()" (click)="attach()">اضافه کردن درس</button>
 </div>
+<!-- </div> -->

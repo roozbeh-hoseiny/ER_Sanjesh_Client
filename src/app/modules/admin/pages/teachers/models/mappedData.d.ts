@@ -8,3 +8,9 @@ export interface ITeacherLesson {
   fieldOfStudyId: number;
   fieldOfStudyTitle: string;
 }
+
+export interface ITeacherLessonGroupedBySchool {
+  schoolId: string;
+  schoolTitle: string;
+  lessons: Omit<ITeacherLesson, 'schoolId' | 'schoolTitle'>[];
+}

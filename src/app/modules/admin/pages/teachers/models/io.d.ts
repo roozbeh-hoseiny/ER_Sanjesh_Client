@@ -16,6 +16,6 @@ export interface IAdminTeacherResponse {
 export interface IAttachLessonToTeacherRequest {
   id: string;
   schoolId: string;
-  lessonId: string;
+  lessonId: number;
 }
 export interface IDetachLessonFromTeacherRequest extends IAttachLessonToTeacherRequest {}
