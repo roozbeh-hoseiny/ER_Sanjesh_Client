@@ -5,7 +5,6 @@ import { adminNamedRoutes } from '@/modules/admin/constants';
 import { AdminSchoolsService } from '@/modules/admin/services';
 import { ISchoolContactRequest } from '@/modules/schools/models';
 import { SchoolDetailsComponent } from '@/modules/schools/pages/dashboard/components/detailsCards/school-details.component';
-import { SCHOOL_DETAILS_SERVICE } from '@/modules/schools/pages/dashboard/components/detailsCards/service.token';
 import { SchoolDetailsCardsStore } from '@/modules/schools/pages/dashboard/components/detailsCards/store';
 import { SchoolsInfoService } from '@/modules/schools/services';
 import { Component, effect, signal } from '@angular/core';
@@ -17,17 +16,6 @@ import { IAdminSchoolResponse } from '../models/schools';
   selector: 'app-admin-school',
   templateUrl: './admin-school.component.html',
   imports: [SchoolDetailsComponent, ProgressSpinner],
-  providers: [
-    {
-      provide: SCHOOL_DETAILS_SERVICE,
-      useFactory: (schoolService: SchoolsInfoService, adminSchoolService: AdminSchoolsService) => ({
-        editInfo: (req: any) => schoolService.editInfo(req),
-        editAddress: (req: any) => schoolService.editAddress(req),
-        editContactInfo: (req: any) => adminSchoolService.updateContact(req),
-      }),
-      deps: [SchoolsInfoService, AdminSchoolsService],
-    },
-  ],
 })
 export class AdminSchoolComponent {
   schoolId = signal<string>('');
@@ -42,8 +30,24 @@ export class AdminSchoolComponent {
     private toastService: ToastService,
     private breadcrumbService: BreadcrumbService,
     private schoolDetailsStore: SchoolDetailsCardsStore,
+    private schoolsInfoService: SchoolsInfoService,
   ) {
     this.layoutService.changeIsFixedContentSize(true);
+    // Explicitly set the store service adapter to ensure the store uses the
+    // Admin/Schools implementation (works around component-provider resolution edge cases).
+    this.schoolDetailsStore.setService({
+      editInfo: (req: any) => this.schoolsInfoService.editInfo(req),
+      editAddress: (req: any) => this.schoolsInfoService.editAddress(req),
+      updateContact: (req: any) => this.schoolService.updateContact(req),
+      validateContactEmail: (id: string) => this.schoolService.validateContactEmail(id),
+      validateContactMobile: (id: string) => this.schoolService.validateContactMobile(id),
+      validateManagerEmail: (id: string) => this.schoolService.validateManagerEmail(id),
+      validateManagerMobile: (id: string) => this.schoolService.validateManagerMobile(id),
+      invalidateContactEmail: (id: string) => this.schoolService.invalidateContactEmail(id),
+      invalidateContactMobile: (id: string) => this.schoolService.invalidateContactMobile(id),
+      invalidateManagerEmail: (id: string) => this.schoolService.invalidateManagerEmail(id),
+      invalidateManagerMobile: (id: string) => this.schoolService.invalidateManagerMobile(id),
+    });
     effect(() => {
       const info = this.school();
       if (info) {

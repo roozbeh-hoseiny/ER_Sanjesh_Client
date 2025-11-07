@@ -1,12 +1,16 @@
-<div class="inline-flex items-center gap-1">
+<div class="inline-flex items-center gap-2">
   <span class="text-text-color text-base font-bold">
     {{ value }}
   </span>
+  @if (inlineConfirmation) {
+    <p-confirmpopup />
+  }
   <p-button
     size="small"
     [title]="isVerified ? '' : notVerifiedMessage"
     [severity]="isVerified ? 'success' : 'warn'"
     [icon]="`pi pi-${isVerified ? 'check' : 'exclamation-triangle'}`"
-    (onClick)="onClick()"
+    [loading]="toggleLoading"
+    (onClick)="onClick($event)"
   ></p-button>
 </div>

@@ -13,5 +13,14 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     categories: () => `${schoolsBaseUrl}/GetCategoryFullTree`,
 
     updateContact: () => `${schoolsBaseUrl}/ChangeContactInfo`,
+
+    validateContactEmail: () => `${schoolsBaseUrl}/ValidateContactEmail`,
+    validateContactMobile: () => `${schoolsBaseUrl}/ValidateContactMobile`,
+    validateManagerEmail: () => `${schoolsBaseUrl}/ValidateManagerEmail`,
+    validateManagerMobile: () => `${schoolsBaseUrl}/ValidateManagerMobile`,
+    invalidateContactEmail: () => `${schoolsBaseUrl}/InvalidateContactEmail`,
+    invalidateContactMobile: () => `${schoolsBaseUrl}/InvalidateContactMobile`,
+    invalidateManagerEmail: () => `${schoolsBaseUrl}/InvalidateManagerEmail`,
+    invalidateManagerMobile: () => `${schoolsBaseUrl}/InvalidateManagerMobile`,
   };
 };

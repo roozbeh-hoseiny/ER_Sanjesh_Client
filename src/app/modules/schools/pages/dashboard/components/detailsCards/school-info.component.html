@@ -43,12 +43,15 @@
           <app-check-verified-info
             [value]="info().managerInfo.mobile"
             [isVerified]="info().managerInfo.mobileIsVerified"
+            (onToggleVerify)="toggleVerifyMobile($event)"
           />
         </app-key-value>
         <app-key-value label="ایمیل">
           <app-check-verified-info
             [value]="info().managerInfo.email"
+            [inlineConfirmation]="true"
             [isVerified]="info().managerInfo.emailIsVerified"
+            (onToggleVerify)="toggleVerifyEmail($event)"
           />
         </app-key-value>
       </div>

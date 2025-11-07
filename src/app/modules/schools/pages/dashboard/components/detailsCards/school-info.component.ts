@@ -40,6 +40,30 @@ export class SchoolInfoComponent {
     this.editMode.set(false);
   }
 
+  toggleVerifyMobile(status: boolean) {
+    if (status) {
+      this.detailsStore.validateManagerMobile(this.info().id).subscribe(() => {
+        this.onSubmitted.emit();
+      });
+    } else {
+      this.detailsStore.invalidateManagerMobile(this.info().id).subscribe(() => {
+        this.onSubmitted.emit();
+      });
+    }
+  }
+
+  toggleVerifyEmail(status: boolean) {
+    if (status) {
+      this.detailsStore.validateManagerEmail(this.info().id).subscribe(() => {
+        this.onSubmitted.emit();
+      });
+    } else {
+      this.detailsStore.invalidateManagerEmail(this.info().id).subscribe(() => {
+        this.onSubmitted.emit();
+      });
+    }
+  }
+
   submitForm() {
     this.onSubmitted.emit();
     this.closeForm();

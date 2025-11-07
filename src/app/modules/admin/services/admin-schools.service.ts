@@ -98,7 +98,52 @@ export class AdminSchoolsService {
     return this.http.post<IAdminSchoolResponse>(this.apiRoutes.schools.single(), { id: schoolId });
   }
 
+  // contact info methods
   updateContact(payload: ISchoolContactRequest) {
     return this.http.post<boolean>(this.apiRoutes.schools.updateContact(), payload);
+  }
+
+  validateContactMobile(schoolId: string): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.validateContactMobile(), {
+      id: schoolId,
+    });
+  }
+  validateContactEmail(schoolId: string): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.validateContactEmail(), { id: schoolId });
+  }
+
+  invalidateContactMobile(schoolId: string): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.invalidateContactMobile(), {
+      id: schoolId,
+    });
+  }
+  invalidateContactEmail(schoolId: string): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.invalidateContactEmail(), {
+      id: schoolId,
+    });
+  }
+
+  // manager info methods
+
+  validateManagerMobile(schoolId: string): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.validateManagerMobile(), {
+      id: schoolId,
+    });
+  }
+  validateManagerEmail(schoolId: string): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.validateManagerEmail(), { id: schoolId });
+  }
+
+  invalidateManagerMobile(schoolId: string): Observable<boolean> {
+    console.log('invalidateManagerMobile');
+
+    return this.http.post<boolean>(this.apiRoutes.schools.invalidateManagerMobile(), {
+      id: schoolId,
+    });
+  }
+  invalidateManagerEmail(schoolId: string): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.invalidateManagerEmail(), {
+      id: schoolId,
+    });
   }
 }
