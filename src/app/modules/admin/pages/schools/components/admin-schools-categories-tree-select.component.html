@@ -1,0 +1,11 @@
+<uikit-field label="دسته‌بندی a" for="category">
+  <p-tree-select
+    name="category"
+    [options]="categories()"
+    [showClear]="true"
+    [loading]="getCategoriesLoading()"
+    (onNodeSelect)="onCategorySelect($event)"
+    (onClear)="onClear()"
+    appendTo="body"
+  />
+</uikit-field>

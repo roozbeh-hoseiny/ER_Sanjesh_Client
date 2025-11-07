@@ -9,5 +9,16 @@ export interface ISchoolRequest {
   username: string;
   password: string;
 }
-
-export interface ICategoryFullTree {}
+export interface ICategoryFullTreeResponse {
+  id: number;
+  title: string;
+  ordinal: number;
+  parent: number;
+  children: ICategoryFullTreeResponse[];
+}
+export interface ICategoryFullTreeMapped
+  extends Omit<ICategoryFullTreeResponse, 'children' | 'title' | 'parent'> {
+  label: string;
+  key: string;
+  children: ICategoryFullTreeMapped[];
+}

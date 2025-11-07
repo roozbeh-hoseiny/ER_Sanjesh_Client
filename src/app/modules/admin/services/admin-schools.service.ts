@@ -7,7 +7,7 @@ import { debounceTime, Observable } from 'rxjs';
 import { ADMIN_API_ROUTES } from '../constants/apiRoutes';
 import {
   IAdminSchoolResponse,
-  ICategoryFullTree,
+  ICategoryFullTreeResponse,
   ISchoolRequest,
 } from '../pages/schools/models/schools';
 
@@ -90,8 +90,8 @@ export class AdminSchoolsService {
     return this.http.post<any>(endpoint, { id: schoolId });
   }
 
-  categories(): Observable<ICategoryFullTree[]> {
-    return this.http.get<ICategoryFullTree[]>(this.apiRoutes.schools.categories());
+  categories(): Observable<ICategoryFullTreeResponse[]> {
+    return this.http.get<ICategoryFullTreeResponse[]>(this.apiRoutes.schools.categories());
   }
 
   getOne(schoolId: string): Observable<IAdminSchoolResponse> {

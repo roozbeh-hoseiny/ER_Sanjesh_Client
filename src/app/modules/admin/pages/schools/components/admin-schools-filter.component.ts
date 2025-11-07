@@ -10,7 +10,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputText, InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
-import { SchoolsCategoriesCascadeComponent } from './admin-schools-categories-cascade.component';
+import { SchoolsCategoriesTreeSelectComponent } from './admin-schools-categories-tree-select.component';
 
 @Component({
   selector: 'app-admin-schools-filter',
@@ -26,7 +26,7 @@ import { SchoolsCategoriesCascadeComponent } from './admin-schools-categories-ca
     UikitLabelComponent,
     MessageModule,
     StatesCascadeComponent,
-    SchoolsCategoriesCascadeComponent,
+    SchoolsCategoriesTreeSelectComponent,
   ],
 })
 export class AdminSchoolsFilterComponent {

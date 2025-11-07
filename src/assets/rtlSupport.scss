@@ -37,3 +37,7 @@ input.p-inputtext {
 .formHint .p-message-sm .p-message-text {
   font-size: 0.875rem;
 }
+
+.p-tree-node-toggle-button {
+  transform: rotateY(180deg);
+}
