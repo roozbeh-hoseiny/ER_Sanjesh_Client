@@ -7,11 +7,11 @@ import { DialogModule } from 'primeng/dialog';
 import { InputOtp } from 'primeng/inputotp';
 
 @Component({
-  selector: 'school-validate-manager-mobile-dialog',
-  templateUrl: './validate-manager-mobile-dialog.component.html',
+  selector: 'school-validate-manager-email-dialog',
+  templateUrl: './validate-manager-email-dialog.component.html',
   imports: [DialogModule, Button, InputOtp, FormsModule],
 })
-export class ValidateManagerMobileDialogComponent {
+export class ValidateManagerEmailDialogComponent {
   private visibleSignal = signal(false);
   initialLoading = signal(false);
   submitLoading = signal(false);
@@ -33,17 +33,16 @@ export class ValidateManagerMobileDialogComponent {
     private authService: SchoolsAuthService,
     private toastService: ToastService,
   ) {
-    if (this.visibleSignal()) {
-      this.sendSMSRequest();
-    }
-
     effect(() => {
+      if (this.visibleSignal()) {
+        this.sendEmailRequest();
+      }
       this.visibleChange.emit(this.visibleSignal());
     });
   }
 
-  sendSMSRequest() {
-    this.authService.sendOTPSmsForManagerMobile().subscribe({
+  sendEmailRequest() {
+    this.authService.sendOTPEmailForManagerEmail().subscribe({
       next: () => {
         this.initialLoading.set(false);
       },
@@ -62,13 +61,13 @@ export class ValidateManagerMobileDialogComponent {
   submit() {
     this.submitLoading.set(true);
     this.authService
-      .verifyManagerMobile({
+      .verifyManagerEmail({
         otp: this.code(),
       })
       .subscribe({
         next: () => {
           this.submitLoading.set(false);
-          this.toastService.success({ text: 'شماره تلفن مدیریت با موفقیت تایید شد.' });
+          this.toastService.success({ text: 'ایمیل مدیریت با موفقیت تایید شد.' });
           this.onSubmit.emit();
           this.close();
         },

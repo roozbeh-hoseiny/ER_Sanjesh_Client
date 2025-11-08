@@ -5,11 +5,17 @@ import { SchoolsStore } from '../../dataStore';
 import { SchoolsInfoService } from '../../services';
 import { SchoolDetailsComponent, ValidateManagerMobileDialogComponent } from './components';
 import { SchoolDetailsCardsStore } from './components/detailsCards/store';
+import { ValidateManagerEmailDialogComponent } from './components/validateDialog/validate-manager-email-dialog.component';
 
 @Component({
   selector: 'app-schools-dashboard',
   templateUrl: './schools-dashboard.component.html',
-  imports: [CommonModule, SchoolDetailsComponent, ValidateManagerMobileDialogComponent],
+  imports: [
+    CommonModule,
+    SchoolDetailsComponent,
+    ValidateManagerMobileDialogComponent,
+    ValidateManagerEmailDialogComponent,
+  ],
 })
 export class SchoolsDashboardComponent {
   readonly isOpenConfirmationMobileModal = signal<boolean>(false);
