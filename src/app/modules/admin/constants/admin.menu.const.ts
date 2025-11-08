@@ -9,15 +9,27 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
         icon: 'pi pi-fw pi-home',
         routerLink: '/admin',
       },
-      {
-        label: 'مدیریت مدارس',
-        icon: 'pi pi-fw pi-warehouse',
-        routerLink: [adminNamedRoutes.schools.path],
-      },
+
       {
         label: 'مدیریت دبیران',
         icon: 'pi pi-fw pi-graduation-cap',
         routerLink: [adminNamedRoutes.teachers.path],
+      },
+    ],
+  },
+
+  {
+    label: 'مدیریت مدارس',
+    items: [
+      {
+        label: 'لیست مدارس',
+        icon: 'pi pi-fw pi-warehouse',
+        routerLink: [adminNamedRoutes.schools.path],
+      },
+      {
+        label: 'مدیریت دسته‌بندی‌های مدارس',
+        icon: 'pi pi-fw pi-warehouse',
+        routerLink: [adminNamedRoutes.schools.path],
       },
     ],
   },

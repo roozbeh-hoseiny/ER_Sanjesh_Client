@@ -70,13 +70,11 @@ export class AppMenuitem {
       this.active = false;
     });
 
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((params) => {
-        if (this.item.routerLink) {
-          this.updateActiveStateFromRoute();
-        }
-      });
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+      // always update active state on navigation so parent items can
+      // detect if any descendant route is active
+      this.updateActiveStateFromRoute();
+    });
   }
 
   ngOnInit() {
@@ -88,14 +86,38 @@ export class AppMenuitem {
   }
 
   updateActiveStateFromRoute() {
-    let activeRoute = this.router.isActive(this.item.routerLink[0], {
-      paths: 'exact',
-      queryParams: 'ignored',
-      matrixParams: 'ignored',
-      fragment: 'ignored',
-    });
+    const opts = {
+      paths: 'subset' as any,
+      queryParams: 'ignored' as any,
+      matrixParams: 'subset' as any,
+      fragment: 'ignored' as any,
+    };
+
+    let activeRoute = false;
+
+    if (this.item.routerLink) {
+      activeRoute = this.router.isActive(this.item.routerLink[0], opts);
+    }
+
+    // if this item itself is not active, check its descendants
+    if (!activeRoute && this.item.items && this.item.items.length) {
+      const anyChildActive = (items: MenuItem[]): boolean => {
+        for (const it of items) {
+          if (it.routerLink && this.router.isActive(it.routerLink[0], opts)) {
+            return true;
+          }
+          if (it.items && it.items.length && anyChildActive(it.items)) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      activeRoute = anyChildActive(this.item.items);
+    }
 
     if (activeRoute) {
+      // notify layout that this menu (or its descendant) is active
       this.layoutService.onMenuStateChange({ key: this.key, routeEvent: true });
     }
   }
@@ -126,7 +148,9 @@ export class AppMenuitem {
 
   @HostBinding('class.active-menuitem')
   get activeClass() {
-    return this.active && !this.root;
+    // mark item as active when itself or any of its submenu items are active
+    // include root items as well so parents highlight when a child route is active
+    return this.active;
   }
 
   ngOnDestroy() {
