@@ -53,7 +53,6 @@ export class SchoolDetailsComponent {
   }
 
   submitContact(payload: ISchoolContactRequest) {
-    // delegate to store
     this.detailsStore.editContact(payload).subscribe({
       next: () => this.onSubmitContact.emit(payload),
       error: () => {},

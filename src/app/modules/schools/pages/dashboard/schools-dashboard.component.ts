@@ -1,34 +1,34 @@
 import { LayoutService } from '@/layout/service/layout.service';
 import { CommonModule } from '@angular/common';
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { SchoolsStore } from '../../dataStore';
 import { SchoolsInfoService } from '../../services';
-import { SchoolDetailsComponent } from './components';
-import { SCHOOL_DETAILS_SERVICE } from './components/detailsCards/service.token';
+import { SchoolDetailsComponent, ValidateManagerMobileDialogComponent } from './components';
 import { SchoolDetailsCardsStore } from './components/detailsCards/store';
 
 @Component({
   selector: 'app-schools-dashboard',
   templateUrl: './schools-dashboard.component.html',
-  imports: [CommonModule, SchoolDetailsComponent],
-  providers: [
-    {
-      provide: SCHOOL_DETAILS_SERVICE,
-      useFactory: (schoolService: SchoolsInfoService) => ({
-        editInfo: (req: any) => schoolService.editInfo(req),
-        editAddress: (req: any) => schoolService.editAddress(req),
-      }),
-      deps: [SchoolsInfoService],
-    },
-  ],
+  imports: [CommonModule, SchoolDetailsComponent, ValidateManagerMobileDialogComponent],
 })
 export class SchoolsDashboardComponent {
+  readonly isOpenConfirmationMobileModal = signal<boolean>(false);
+  readonly isOpenConfirmationEmailModal = signal<boolean>(false);
+
   constructor(
     protected schoolStore: SchoolsStore = inject(SchoolsStore),
     protected layoutService: LayoutService = inject(LayoutService),
     protected detailsStore: SchoolDetailsCardsStore = inject(SchoolDetailsCardsStore),
+    protected schoolService: SchoolsInfoService,
   ) {
     this.layoutService.changeIsFixedContentSize(true);
+    this.detailsStore.setService({
+      editInfo: (req: any) => this.schoolService.editInfo(req),
+      editAddress: (req: any) => this.schoolService.editAddress(req),
+      validateManagerMobile: (id: string) => this.openConfirmationMobileModal(id),
+      validateManagerEmail: (id: string) => this.openConfirmationEmailModal(id),
+    });
+
     effect(() => {
       const info = this.schoolStore.info();
       if (info) {
@@ -54,5 +54,12 @@ export class SchoolsDashboardComponent {
 
   refreshData() {
     this.schoolStore.getInfo();
+  }
+
+  openConfirmationMobileModal(schoolId: string) {
+    this.isOpenConfirmationMobileModal.set(true);
+  }
+  openConfirmationEmailModal(schoolId: string) {
+    this.isOpenConfirmationEmailModal.set(true);
   }
 }

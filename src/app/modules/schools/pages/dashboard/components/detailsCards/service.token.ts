@@ -13,8 +13,8 @@ export interface SchoolDetailsService {
   updateContact(payload: ISchoolContactRequest): Observable<boolean>;
   validateContactEmail(id: string): Observable<boolean>;
   validateContactMobile(id: string): Observable<boolean>;
-  validateManagerEmail(id: string): Observable<boolean>;
-  validateManagerMobile(id: string): Observable<boolean>;
+  validateManagerEmail(id: string): Observable<boolean> | void;
+  validateManagerMobile(id: string): Observable<boolean> | void;
   invalidateContactEmail(id: string): Observable<boolean>;
   invalidateContactMobile(id: string): Observable<boolean>;
   invalidateManagerEmail(id: string): Observable<boolean>;

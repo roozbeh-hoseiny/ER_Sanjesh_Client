@@ -1,1 +1,4 @@
-<school-details (onRefreshData)="refreshData()" />
+<div class="">
+  <school-details (onRefreshData)="refreshData()" />
+  <school-validate-manager-mobile-dialog [(visible)]="isOpenConfirmationMobileModal" (onSubmit)="refreshData()" />
+</div>

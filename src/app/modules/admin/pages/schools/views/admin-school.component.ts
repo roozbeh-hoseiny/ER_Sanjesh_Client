@@ -57,6 +57,8 @@ export class AdminSchoolComponent {
           canEditInfo: true,
           canEditLoginInfo: true,
           canEditContact: true,
+          showContactValidateInlineConfirmation: true,
+          showManagerValidateInlineConfirmation: true,
         });
       }
     });

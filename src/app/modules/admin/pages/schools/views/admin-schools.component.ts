@@ -101,7 +101,7 @@ export class AdminSchoolsComponent {
 
   ngOnInit(): void {
     this.setColumns();
-    // this.store.initial();
+    this.store.initial();
   }
 
   private setColumns() {

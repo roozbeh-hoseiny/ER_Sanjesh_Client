@@ -32,6 +32,10 @@ export class SchoolInfoComponent {
 
   canEdit = computed(() => this.detailsStore.canEditInfo());
 
+  showInlineConfirmation = computed(() =>
+    this.detailsStore.showManagerValidateInlineConfirmation(),
+  );
+
   onEdit() {
     this.editMode.update((prev) => !prev);
   }
@@ -41,24 +45,22 @@ export class SchoolInfoComponent {
   }
 
   toggleVerifyMobile(status: boolean) {
-    if (status) {
-      this.detailsStore.validateManagerMobile(this.info().id).subscribe(() => {
-        this.onSubmitted.emit();
-      });
-    } else {
-      this.detailsStore.invalidateManagerMobile(this.info().id).subscribe(() => {
+    const observable = this.detailsStore[
+      status ? 'validateManagerMobile' : 'invalidateManagerMobile'
+    ](this.info().id);
+    if (observable && typeof (observable as any).subscribe === 'function') {
+      (observable as { subscribe: Function }).subscribe(() => {
         this.onSubmitted.emit();
       });
     }
   }
 
   toggleVerifyEmail(status: boolean) {
-    if (status) {
-      this.detailsStore.validateManagerEmail(this.info().id).subscribe(() => {
-        this.onSubmitted.emit();
-      });
-    } else {
-      this.detailsStore.invalidateManagerEmail(this.info().id).subscribe(() => {
+    const observable = this.detailsStore[
+      status ? 'validateManagerEmail' : 'invalidateManagerEmail'
+    ](this.info().id);
+    if (observable && typeof (observable as any).subscribe === 'function') {
+      (observable as { subscribe: Function }).subscribe(() => {
         this.onSubmitted.emit();
       });
     }
