@@ -17,6 +17,7 @@ interface ISchoolDetailsCardsState {
   school: Maybe<ISchoolResponse>;
   showManagerValidateInlineConfirmation?: boolean;
   showContactValidateInlineConfirmation?: boolean;
+  showContactCard?: boolean;
   canEditInfo: boolean;
   canEditAddress: boolean;
   canEditContact: boolean;
@@ -28,6 +29,7 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   school: null,
   showManagerValidateInlineConfirmation: false,
   showContactValidateInlineConfirmation: false,
+  showContactCard: false,
   canEditInfo: false,
   canEditAddress: false,
   canEditContact: false,
@@ -47,6 +49,7 @@ export class SchoolDetailsCardsStore {
   readonly showContactValidateInlineConfirmation = computed(() =>
     Boolean(this.state$().showContactValidateInlineConfirmation),
   );
+  readonly showContactCard = computed(() => Boolean(this.state$().showContactCard));
   readonly canEditInfo = computed(() => !!this.state$().canEditInfo);
   readonly canEditAddress = computed(() => !!this.state$().canEditAddress);
   readonly canEditContact = computed(() => !!this.state$().canEditContact);

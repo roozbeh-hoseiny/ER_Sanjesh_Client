@@ -23,6 +23,10 @@ export class SchoolDetailsComponent {
     return this.detailsStore.school();
   }
 
+  get showContactCard() {
+    return this.detailsStore.showContactCard();
+  }
+
   get canEditInfo() {
     return this.detailsStore.canEditInfo();
   }

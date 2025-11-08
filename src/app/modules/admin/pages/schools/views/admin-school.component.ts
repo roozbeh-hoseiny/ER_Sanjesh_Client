@@ -53,6 +53,7 @@ export class AdminSchoolComponent {
       if (info) {
         this.schoolDetailsStore.fillInitial({
           school: info,
+          showContactCard: true,
           canEditAddress: true,
           canEditInfo: true,
           canEditLoginInfo: true,
