@@ -3,7 +3,10 @@
   [columns]="columns"
   [items]="teachers()"
   [loading]="loading()"
+  [showAdd]="true"
+  addNewCtaLabel="افزودن دبیر جدید"
   [fullHeight]="true"
+  (onAdd)="openAssignTeacher()"
   class="overflow-hidden"
 >
   <ng-template #lessons let-item>
@@ -16,3 +19,5 @@
     </div>
   </ng-template>
 </app-page-data-list>
+
+<app-assign-teacher-dialog [visible]="isOpenAssignTeacherDialog()" />

@@ -11,6 +11,7 @@ import { Component, inject, signal, TemplateRef, ViewChild } from '@angular/core
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { AssignTeacherDialogComponent } from '../components';
 import { ISchoolTeacherMappedData } from '../models';
 
 @Component({
@@ -24,6 +25,7 @@ import { ISchoolTeacherMappedData } from '../models';
     ToggleSwitchModule,
     ButtonModule,
     FormsModule,
+    AssignTeacherDialogComponent,
   ],
 })
 export class SchoolTeachersComponent {
@@ -35,11 +37,10 @@ export class SchoolTeachersComponent {
 
   columns = [] as IColumn[];
 
-  checked: boolean = false;
-
   teachers = signal<ISchoolTeacherMappedData[]>([]);
   loading = signal<boolean>(true);
   schoolId = signal(this.schoolsStore.info()?.id!);
+  isOpenAssignTeacherDialog = signal<boolean>(true);
 
   constructor() {
     this.breadcrumbService.setItems([
@@ -72,5 +73,9 @@ export class SchoolTeachersComponent {
       this.teachers.set(teachers);
       this.loading.set(false);
     });
+  }
+
+  openAssignTeacher() {
+    this.isOpenAssignTeacherDialog.set(true);
   }
 }

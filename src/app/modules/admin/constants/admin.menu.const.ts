@@ -1,3 +1,5 @@
+import { CategoryIcon } from '@/shared/components/icon';
+import { TeacherIcon } from '@/shared/components/icon/icon-teacher.component';
 import { MenuItem } from 'primeng/api';
 import { adminNamedRoutes } from './admin.routes.const';
 
@@ -12,7 +14,7 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
 
       {
         label: 'مدیریت دبیران',
-        icon: 'pi pi-fw pi-graduation-cap',
+        customIcon: TeacherIcon,
         routerLink: [adminNamedRoutes.teachers.path],
       },
     ],
@@ -28,7 +30,7 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
       },
       {
         label: 'مدیریت دسته‌بندی‌های مدارس',
-        icon: 'pi pi-fw pi-warehouse',
+        customIcon: CategoryIcon,
         routerLink: [adminNamedRoutes.schools.path],
       },
     ],

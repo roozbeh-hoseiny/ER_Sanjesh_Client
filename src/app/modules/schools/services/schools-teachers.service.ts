@@ -26,4 +26,8 @@ export class SchoolsTeachersService {
       ),
     );
   }
+
+  findByUniqueId(uniqueId: string): Observable<ISchoolTeacherResponse> {
+    return this.http.get<ISchoolTeacherResponse>(this.apiRoutes.teachers.findByUniqueId(uniqueId));
+  }
 }

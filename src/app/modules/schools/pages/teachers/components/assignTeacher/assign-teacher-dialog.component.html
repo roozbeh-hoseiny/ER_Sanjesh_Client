@@ -1,0 +1,31 @@
+<p-dialog header="افزودن دبیر" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+  <form (submit)="submit()">
+    <div class="flex flex-col gap-4 mb-6 items-center">
+      <span>شناسه‌ی ۶ کاراکتری مرتبط با دبیر را وارد کنید </span>
+      <input pInputText [formControl]="code" name="code" size="large" dir="ltr" class="text-center" />
+    </div>
+
+    <p-multiselect
+      [options]="groupedCities"
+      [group]="true"
+      [formControl]="selectedCities"
+      placeholder="Select Cities"
+      scrollHeight="250px"
+      display="none"
+      [displaySelectedLabel]="false"
+      appendTo="body"
+      class="w-full md:w-80"
+    >
+      <ng-template let-group #group>
+        <div class="flex items-center">
+          <img
+            src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+            [class]="'mr-2 flag flag-' + group.value"
+            style="width: 20px"
+          />
+          <span>{{ group.label }}</span>
+        </div>
+      </ng-template>
+    </p-multiselect>
+  </form>
+</p-dialog>

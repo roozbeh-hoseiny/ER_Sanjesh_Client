@@ -41,3 +41,9 @@ input.p-inputtext {
 .p-tree-node-toggle-button {
   transform: rotateY(180deg);
 }
+
+.layout-root-menuitem li svg {
+  width: 1rem;
+  height: 1rem;
+  margin-inline-end: 0.5rem;
+}
