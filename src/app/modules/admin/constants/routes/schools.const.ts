@@ -1,6 +1,6 @@
 import { NamedRoutes } from '@/core';
 
-export type TAdminSchoolsRouteNames = 'schools' | 'school';
+export type TAdminSchoolsRouteNames = 'schools' | 'school' | 'categories';
 
 export const adminSchoolNamedRoutes: NamedRoutes<TAdminSchoolsRouteNames> = {
   schools: {
@@ -11,6 +11,17 @@ export const adminSchoolNamedRoutes: NamedRoutes<TAdminSchoolsRouteNames> = {
       ),
     meta: {
       title: 'مدارس',
+    },
+  },
+  categories: {
+    path: 'schools/categories',
+    loadComponent: () =>
+      import('../../pages/schools/views/admin-school-categories.component').then(
+        (m) => m.AdminSchoolCategoriesComponent,
+      ),
+    meta: {
+      title: 'دسته‌بندی‌ها',
+      pagePath: (id: string) => `/admin/categories`,
     },
   },
   school: {

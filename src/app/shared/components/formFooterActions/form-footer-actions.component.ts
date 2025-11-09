@@ -7,6 +7,8 @@ import { Button } from 'primeng/button';
   imports: [Button],
 })
 export class FormFooterActionsComponent {
+  @Input() submitLabel = 'تایید';
+  @Input() cancelLabel = 'لغو';
   @Input() loading = false;
   @Output() onSubmit = new EventEmitter<void>();
   @Output() onCancel = new EventEmitter<void>();

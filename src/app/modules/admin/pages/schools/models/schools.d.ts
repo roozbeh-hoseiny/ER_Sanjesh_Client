@@ -22,3 +22,12 @@ export interface ICategoryFullTreeMapped
   key: string;
   children: ICategoryFullTreeMapped[];
 }
+
+export interface ICreateCategoryRequestPayload {
+  title: string;
+  ordinal: number;
+}
+export interface ICreateSubCategoryRequestPayload {
+  title: string;
+  parentId: number;
+}

@@ -1,0 +1,15 @@
+<p-card class="h-full">
+  <ng-template #header>
+    <div class="flex justify-between items-center gap-4 px-5 pt-4">
+      <h5 class="font-bold">لیست دسته‌بندی‌های مدارس</h5>
+
+      <p-button label="افزودن دسته‌بندی" icon="pi pi-plus" (click)="openAddForm()"></p-button>
+    </div>
+  </ng-template>
+  <div class="flex flex-col gap-4">
+    @for (category of items(); track category.id) {
+      <app-admin-school-category-list-show [category]="category" (submitted)="onSubCategorySubmitted()" />
+    }
+  </div>
+  <app-category-add-form-dialog [(visible)]="isAddFormVisible" (submitted)="onCategorySubmitted()" />
+</p-card>

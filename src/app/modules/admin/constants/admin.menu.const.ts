@@ -31,7 +31,7 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
       {
         label: 'مدیریت دسته‌بندی‌های مدارس',
         customIcon: CategoryIcon,
-        routerLink: [adminNamedRoutes.schools.path],
+        routerLink: [adminNamedRoutes.categories.path],
       },
     ],
   },

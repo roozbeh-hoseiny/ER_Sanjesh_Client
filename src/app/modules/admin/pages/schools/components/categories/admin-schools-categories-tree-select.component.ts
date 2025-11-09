@@ -7,7 +7,7 @@ import { TableModule } from 'primeng/table';
 import { TreeNodeSelectEvent } from 'primeng/tree';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { map } from 'rxjs';
-import { ICategoryFullTreeMapped } from '../models/schools';
+import { ICategoryFullTreeMapped } from '../../models/schools';
 
 @Component({
   selector: 'app-schools-categories-tree-select',
@@ -28,7 +28,7 @@ export class SchoolsCategoriesTreeSelectComponent {
   constructor() {
     this.getCategoriesLoading.set(true);
     this.adminSchoolService
-      .categories()
+      .getCategories()
       .pipe(map((categories) => categories.map(mapCategory)))
       .subscribe((categories) => {
         this.categories.set(categories);

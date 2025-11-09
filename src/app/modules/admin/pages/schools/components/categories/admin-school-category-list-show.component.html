@@ -1,0 +1,35 @@
+<div class="">
+  <p-divider align="right">{{ category.title }}</p-divider>
+  <div class="flex items-center gap-3">
+    @for (item of category.children; track item.id) {
+      <p-chip class="flex items-center gap-3">
+        <span>{{ item.title }}</span>
+        <!-- <p-button
+                type="button"
+                icon="pi pi-times"
+                size="small"
+                text
+                class="p-button-text p-button-plain"
+              ></p-button> -->
+      </p-chip>
+    }
+
+    <form (ngSubmit)="addSubCategory()" class="flex items-center gap-2">
+      <p-input-group>
+        <!-- Disable browser/autocomplete/spellcheck hooks to avoid external content scripts
+             attempting to access form internals (some extensions probe elements and can
+             throw when they expect framework internals like 'control'). -->
+        <input
+          pInputText
+          name="title"
+          [(ngModel)]="title"
+          placeholder="عنوان دسته‌بندی فرعی"
+          [disabled]="loading()"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <p-button type="submit" label="افزودن" [loading]="loading()" [disabled]="!title().length"></p-button>
+      </p-input-group>
+    </form>
+  </div>
+</div>

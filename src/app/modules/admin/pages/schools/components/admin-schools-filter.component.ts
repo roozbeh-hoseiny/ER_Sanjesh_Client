@@ -10,7 +10,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputText, InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
-import { SchoolsCategoriesTreeSelectComponent } from './admin-schools-categories-tree-select.component';
+import { SchoolsCategoriesTreeSelectComponent } from './categories/admin-schools-categories-tree-select.component';
 
 @Component({
   selector: 'app-admin-schools-filter',

@@ -24,7 +24,7 @@ export class SchoolsCategoriesCascadeComponent {
 
   constructor() {
     this.getCategoriesLoading.set(true);
-    this.adminSchoolService.categories().subscribe((categories) => {
+    this.adminSchoolService.getCategories().subscribe((categories) => {
       this.categories.set(categories);
       this.getCategoriesLoading.set(false);
     });

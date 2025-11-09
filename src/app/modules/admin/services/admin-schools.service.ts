@@ -8,6 +8,8 @@ import { ADMIN_API_ROUTES } from '../constants/apiRoutes';
 import {
   IAdminSchoolResponse,
   ICategoryFullTreeResponse,
+  ICreateCategoryRequestPayload,
+  ICreateSubCategoryRequestPayload,
   ISchoolRequest,
 } from '../pages/schools/models/schools';
 
@@ -90,10 +92,6 @@ export class AdminSchoolsService {
     return this.http.post<any>(endpoint, { id: schoolId });
   }
 
-  categories(): Observable<ICategoryFullTreeResponse[]> {
-    return this.http.get<ICategoryFullTreeResponse[]>(this.apiRoutes.schools.categories());
-  }
-
   getOne(schoolId: string): Observable<IAdminSchoolResponse> {
     return this.http.post<IAdminSchoolResponse>(this.apiRoutes.schools.single(), { id: schoolId });
   }
@@ -145,5 +143,16 @@ export class AdminSchoolsService {
     return this.http.post<boolean>(this.apiRoutes.schools.invalidateManagerEmail(), {
       id: schoolId,
     });
+  }
+
+  getCategories(): Observable<ICategoryFullTreeResponse[]> {
+    return this.http.get<ICategoryFullTreeResponse[]>(this.apiRoutes.schools.categories());
+  }
+
+  addCategory(payload: ICreateCategoryRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.addCategory(), payload);
+  }
+  addSubCategory(payload: ICreateSubCategoryRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.addSubCategory(), payload);
   }
 }
