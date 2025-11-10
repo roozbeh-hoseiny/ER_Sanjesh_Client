@@ -55,7 +55,7 @@ export class PageDataListComponent<I> {
   @Input() loading!: boolean;
   @Input() emptyPlaceholderTitle: string = 'موردی برای نمایش وجود ندارد';
   @Input() emptyPlaceholderDescription?: string = '';
-  @Input() emptyPlaceholderCtaLabel?: string = 'افزودن نمونه‌ی جدید';
+  @Input() emptyPlaceholderCtaLabel?: string;
   @Input() totalRecords!: number;
   @Input() perPage?: number = 10;
   @Input() currentPage?: number = 1;

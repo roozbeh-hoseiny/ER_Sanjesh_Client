@@ -33,11 +33,10 @@ export class ValidateManagerMobileDialogComponent {
     private authService: SchoolsAuthService,
     private toastService: ToastService,
   ) {
-    if (this.visibleSignal()) {
-      this.sendSMSRequest();
-    }
-
     effect(() => {
+      if (this.visibleSignal()) {
+        this.sendSMSRequest();
+      }
       this.visibleChange.emit(this.visibleSignal());
     });
   }

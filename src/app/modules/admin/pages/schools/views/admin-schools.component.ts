@@ -177,6 +177,8 @@ export class AdminSchoolsComponent {
         : 'آیا از فعال کردن این مدرسه اطمینان دارید؟',
       header: 'تایید تغییر وضعیت',
       icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'بله',
+      rejectLabel: 'خیر',
       accept: () => this.toggleStatus(item, checked),
       reject: () => {
         this.removeSchoolFromSchedule(item.id);

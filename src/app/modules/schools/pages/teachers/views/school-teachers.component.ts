@@ -40,7 +40,7 @@ export class SchoolTeachersComponent {
   teachers = signal<ISchoolTeacherMappedData[]>([]);
   loading = signal<boolean>(true);
   schoolId = signal(this.schoolsStore.info()?.id!);
-  isOpenAssignTeacherDialog = signal<boolean>(true);
+  isOpenAssignTeacherDialog = signal<boolean>(false);
 
   constructor() {
     this.breadcrumbService.setItems([

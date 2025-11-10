@@ -82,8 +82,9 @@
             <uikit-empty-state
               [title]="emptyPlaceholderTitle"
               [description]="emptyPlaceholderDescription"
-              [ctaLabel]="emptyPlaceholderCtaLabel"
+              [ctaLabel]="emptyPlaceholderCtaLabel || addNewCtaLabel"
               [showCTA]="showAdd"
+              (ctaClick)="openAddForm()"
             ></uikit-empty-state>
           </td>
         </tr>
@@ -97,7 +98,7 @@
                 <p-skeleton></p-skeleton>
               </td>
             }
-            @if (showDelete || showEdit || showDetails) {
+            @if (actionsCount()) {
               <td>
                 <p-skeleton></p-skeleton>
               </td>

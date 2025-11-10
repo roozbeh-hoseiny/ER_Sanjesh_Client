@@ -47,20 +47,6 @@ export class AdminSchoolCategoriesComponent {
 
   isAddFormVisible = signal<boolean>(false);
 
-  ngOnInit(): void {
-    this.setColumns();
-  }
-
-  private setColumns() {
-    this.columns = [
-      {
-        field: 'title',
-        header: 'عنوان',
-        minWidth: '15rem',
-      },
-    ];
-  }
-
   private getData() {
     this.loading.set(true);
     this.getAll();
@@ -68,10 +54,6 @@ export class AdminSchoolCategoriesComponent {
 
   openAddForm() {
     this.isAddFormVisible.set(true);
-  }
-
-  onFormSave($event: any) {
-    console.log($event);
   }
 
   onSubCategorySubmitted() {

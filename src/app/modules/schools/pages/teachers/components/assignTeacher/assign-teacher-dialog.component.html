@@ -5,6 +5,10 @@
       <input pInputText [formControl]="code" name="code" size="large" dir="ltr" class="text-center" />
     </div>
 
+    @if (teacher()) {
+      <span> {{ teacher()?.firstName }} - {{ teacher()?.lastName }} </span>
+    }
+    <!--
     <p-multiselect
       [options]="groupedCities"
       [group]="true"
@@ -21,6 +25,6 @@
           <span>{{ group.label }}</span>
         </div>
       </ng-template>
-    </p-multiselect>
+    </p-multiselect> -->
   </form>
 </p-dialog>

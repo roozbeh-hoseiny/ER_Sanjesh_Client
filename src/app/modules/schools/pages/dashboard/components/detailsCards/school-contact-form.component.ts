@@ -40,7 +40,10 @@ export class SchoolContactFormComponent {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.submitLoading.set(true);
-    const payload = this.form.value as ISchoolContactRequest;
+    const payload = {
+      ...(this.form.value as ISchoolContactRequest),
+      id: this.detailsStore.school()!.id,
+    };
     this.detailsStore.editContact(payload).subscribe({
       next: () => {
         this.submitForm.emit(payload);
