@@ -14,17 +14,11 @@
         <app-key-value label="ظرفیت مدرسه" [value]="info().examHallCapacity.toString()" />
         <app-key-value label="تلفن تماس" [value]="info().phoneNumber" />
       </div>
-      <app-key-value label="دسته‌بندی">
-        @if (info().categories.length) {
-          <div class="inline-flex items-center gap-2">
-            @for (category of info().categories; track category.id) {
-              <p-badge [value]="category.title" severity="secondary"></p-badge>
-            }
-          </div>
-        } @else {
-          -
-        }
-      </app-key-value>
+      <app-school-info-categories
+        [categories]="categories()"
+        [editable]="canEditCategories()"
+        (onUpdate)="submitForm()"
+      />
       <app-key-value label="رشته‌های تحصیلی">
         @if (info().fieldOfStudies.length) {
           <div class="inline-flex">

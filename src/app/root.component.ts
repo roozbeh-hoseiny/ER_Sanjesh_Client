@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { AuthService } from './core';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-root-component',
   template: '',
-  standalone: true,
+  standalone: false,
 })
 export class RootComponent {
   constructor(private router: Router) {}

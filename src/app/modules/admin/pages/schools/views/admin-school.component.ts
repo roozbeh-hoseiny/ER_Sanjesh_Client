@@ -10,7 +10,11 @@ import { SchoolsInfoService } from '@/modules/schools/services';
 import { Component, effect, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProgressSpinner } from 'primeng/progressspinner';
-import { IAdminSchoolResponse } from '../models/schools';
+import {
+  IAdminSchoolResponse,
+  IAttachCategoryToSchoolRequestPayload,
+  IDetachCategoryToSchoolRequestPayload,
+} from '../models/schools';
 
 @Component({
   selector: 'app-admin-school',
@@ -39,6 +43,10 @@ export class AdminSchoolComponent {
       editInfo: (req: any) => this.schoolsInfoService.editInfo(req),
       editAddress: (req: any) => this.schoolsInfoService.editAddress(req),
       updateContact: (req: any) => this.schoolService.updateContact(req),
+      attachCategory: (payload: IAttachCategoryToSchoolRequestPayload) =>
+        this.schoolService.attachCategory(payload),
+      detachCategory: (payload: IDetachCategoryToSchoolRequestPayload) =>
+        this.schoolService.detachCategory(payload),
       validateContactEmail: (id: string) => this.schoolService.validateContactEmail(id),
       validateContactMobile: (id: string) => this.schoolService.validateContactMobile(id),
       validateManagerEmail: (id: string) => this.schoolService.validateManagerEmail(id),
@@ -58,6 +66,7 @@ export class AdminSchoolComponent {
           canEditInfo: true,
           canEditLoginInfo: true,
           canEditContact: true,
+          canEditCategories: true,
           showContactValidateInlineConfirmation: true,
           showManagerValidateInlineConfirmation: true,
         });

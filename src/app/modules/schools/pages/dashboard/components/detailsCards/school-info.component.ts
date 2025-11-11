@@ -4,6 +4,7 @@ import { KeyValueComponent } from '@/shared/components/key-value.component/key-v
 import { Component, computed, EventEmitter, inject, Output, signal } from '@angular/core';
 import { Badge } from 'primeng/badge';
 import { Divider } from 'primeng/divider';
+import { SchoolInfoCategoriesComponent } from './school-info-categories.component';
 import { SchoolInfoFormComponent } from './school-info-form.component';
 import { SchoolDetailsCardsStore } from './store';
 
@@ -18,6 +19,7 @@ import { SchoolDetailsCardsStore } from './store';
     Divider,
     EducationalLevelsTagsComponent,
     CheckVerifiedInfoComponent,
+    SchoolInfoCategoriesComponent,
   ],
   templateUrl: './school-info.component.html',
 })
@@ -29,8 +31,10 @@ export class SchoolInfoComponent {
   editMode = signal<boolean>(false);
 
   info = computed(() => this.detailsStore.school()!);
+  categories = computed(() => this.detailsStore.schoolCategories());
 
   canEdit = computed(() => this.detailsStore.canEditInfo());
+  canEditCategories = computed(() => this.detailsStore.canEditCategories());
 
   showInlineConfirmation = computed(() =>
     this.detailsStore.showManagerValidateInlineConfirmation(),

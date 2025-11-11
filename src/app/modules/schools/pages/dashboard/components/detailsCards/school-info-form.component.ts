@@ -25,7 +25,6 @@ import { SchoolDetailsCardsStore } from './store';
   ],
 })
 export class SchoolInfoFormComponent {
-  // read data from store instead of input
   private detailsStore = inject(SchoolDetailsCardsStore);
 
   @Output() closeForm = new EventEmitter<void>();
@@ -64,9 +63,8 @@ export class SchoolInfoFormComponent {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.onSubmitLoading.set(true);
-    const cur = this.detailsStore.school();
-    const payload = { id: cur?.id ?? '', ...this.form.value } as ISchoolInfoRequest;
-    // use store's editInfo which also updates store state and shows toast
+    const cur = this.detailsStore.school() as ISchoolResponse;
+    const payload = { id: cur.id, ...this.form.value } as ISchoolInfoRequest;
     this.detailsStore.editInfo(payload).subscribe({
       next: (value) => {
         this.onSubmitLoading.set(false);

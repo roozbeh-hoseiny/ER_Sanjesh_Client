@@ -31,3 +31,10 @@ export interface ICreateSubCategoryRequestPayload {
   title: string;
   parentId: number;
 }
+
+export interface IAttachCategoryToSchoolRequestPayload {
+  id: string;
+  categoryId: number;
+}
+export interface IDetachCategoryToSchoolRequestPayload
+  extends IAttachCategoryToSchoolRequestPayload {}

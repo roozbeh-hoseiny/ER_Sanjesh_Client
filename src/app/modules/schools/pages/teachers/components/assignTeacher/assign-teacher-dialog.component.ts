@@ -7,14 +7,13 @@ import { SchoolsTeachersService } from '@/modules/schools/services/schools-teach
 import { effect, EventEmitter, Output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
-import { MultiSelect } from 'primeng/multiselect';
 import { filter } from 'rxjs';
 import { ISchoolTeacherResponse } from '../../models';
 
 @Component({
   selector: 'app-assign-teacher-dialog',
   templateUrl: './assign-teacher-dialog.component.html',
-  imports: [Dialog, InputText, ReactiveFormsModule, MultiSelect],
+  imports: [Dialog, InputText, ReactiveFormsModule],
 })
 export class AssignTeacherDialogComponent {
   private visibleSignal = signal(false);

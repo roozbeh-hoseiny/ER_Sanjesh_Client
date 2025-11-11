@@ -1,0 +1,43 @@
+<div class="flex flex-col gap-2 w-full">
+  <app-key-value label="دسته‌بندی" class="w-full">
+    <div class="flex w-full flex-wrap gap-4">
+      @if (categories.length) {
+        <div class="inline-flex items-center gap-2">
+          @for (category of categories; track category.id) {
+            <p-chip severity="secondary">
+              <div class="flex items-center gap-3">
+                <span>{{ category.title }}</span>
+                @if (editable) {
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-times"
+                    size="small"
+                    text
+                    severity="secondary"
+                    class="w-5 h-5"
+                    [loading]="detachScheduleLoading().includes(category.id)"
+                    (click)="detach(category.id)"
+                  ></button>
+                }
+              </div>
+            </p-chip>
+          }
+        </div>
+      } @else {
+        دسته‌بندی در نظر گرفته نشده است
+      }
+    </div>
+  </app-key-value>
+
+  @if (editable) {
+    <app-schools-categories-tree-select
+      [control]="categoryControl"
+      [filters]="selectedCategories()"
+      [showLabel]="false"
+      [loading]="loading()"
+      class="max-w-xs"
+      placeholder="دسته‌بندی را انتخاب کنید"
+    />
+  }
+</div>

@@ -7,9 +7,11 @@ import { debounceTime, Observable } from 'rxjs';
 import { ADMIN_API_ROUTES } from '../constants/apiRoutes';
 import {
   IAdminSchoolResponse,
+  IAttachCategoryToSchoolRequestPayload,
   ICategoryFullTreeResponse,
   ICreateCategoryRequestPayload,
   ICreateSubCategoryRequestPayload,
+  IDetachCategoryToSchoolRequestPayload,
   ISchoolRequest,
 } from '../pages/schools/models/schools';
 
@@ -133,8 +135,6 @@ export class AdminSchoolsService {
   }
 
   invalidateManagerMobile(schoolId: string): Observable<boolean> {
-    console.log('invalidateManagerMobile');
-
     return this.http.post<boolean>(this.apiRoutes.schools.invalidateManagerMobile(), {
       id: schoolId,
     });
@@ -154,5 +154,12 @@ export class AdminSchoolsService {
   }
   addSubCategory(payload: ICreateSubCategoryRequestPayload): Observable<boolean> {
     return this.http.post<boolean>(this.apiRoutes.schools.addSubCategory(), payload);
+  }
+
+  attachCategory(payload: IAttachCategoryToSchoolRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.attachCategory(), payload);
+  }
+  detachCategory(payload: IDetachCategoryToSchoolRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.detachCategory(), payload);
   }
 }

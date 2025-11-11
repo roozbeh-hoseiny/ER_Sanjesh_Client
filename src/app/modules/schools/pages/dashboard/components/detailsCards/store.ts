@@ -1,5 +1,11 @@
 import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
+import {
+  IAttachCategoryToSchoolRequestPayload,
+  ICategoryFullTreeMapped,
+  ICategoryFullTreeResponse,
+  IDetachCategoryToSchoolRequestPayload,
+} from '@/modules/admin/pages/schools/models/schools';
 import { AdminSchoolsService } from '@/modules/admin/services/admin-schools.service';
 import {
   ISchoolAddressRequest,
@@ -22,6 +28,7 @@ interface ISchoolDetailsCardsState {
   canEditAddress: boolean;
   canEditContact: boolean;
   canEditLoginInfo: boolean;
+  canEditCategories: boolean;
   submitContactLoading: boolean;
 }
 
@@ -34,6 +41,7 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   canEditAddress: false,
   canEditContact: false,
   canEditLoginInfo: false,
+  canEditCategories: false,
   submitContactLoading: false,
 };
 
@@ -43,6 +51,9 @@ export class SchoolDetailsCardsStore {
 
   // selectors
   readonly school = computed(() => this.state$().school as Maybe<ISchoolResponse>);
+  readonly schoolCategories = computed(
+    () => (this.state$().school?.categories || []) as ICategoryFullTreeResponse[],
+  );
   readonly showManagerValidateInlineConfirmation = computed(() =>
     Boolean(this.state$().showManagerValidateInlineConfirmation),
   );
@@ -54,6 +65,7 @@ export class SchoolDetailsCardsStore {
   readonly canEditAddress = computed(() => !!this.state$().canEditAddress);
   readonly canEditContact = computed(() => !!this.state$().canEditContact);
   readonly canEditLoginInfo = computed(() => !!this.state$().canEditLoginInfo);
+  readonly canEditCategories = computed(() => !!this.state$().canEditCategories);
   readonly submitContactLoading = computed(() => !!this.state$().submitContactLoading);
 
   // simple mutators
@@ -83,6 +95,11 @@ export class SchoolDetailsCardsStore {
     invalidateContactMobile: (id: string) => of(true) as Observable<boolean>,
     invalidateManagerEmail: (id: string) => of(true) as Observable<boolean>,
     invalidateManagerMobile: (id: string) => of(true) as Observable<boolean>,
+
+    attachCategory: (payload: IAttachCategoryToSchoolRequestPayload) =>
+      of(true) as Observable<boolean>,
+    detachCategory: (payload: IDetachCategoryToSchoolRequestPayload) =>
+      of(true) as Observable<boolean>,
   };
 
   setService(svc: Partial<SchoolDetailsService>) {
@@ -219,6 +236,23 @@ export class SchoolDetailsCardsStore {
     return this.service.invalidateManagerMobile(id).pipe(
       tap(() => {
         this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
+      }),
+    );
+  }
+
+  attachCategory(payload: ICategoryFullTreeMapped) {
+    if (this.service.attachCategory === undefined) return of();
+    return this.service.attachCategory({ id: this.school()!.id, categoryId: payload.id }).pipe(
+      tap(() => {
+        this.toastService.success({ text: `دسته‌بندی ${payload.label} با موفقیت اضافه شد.` });
+      }),
+    );
+  }
+  detachCategory(categoryId: number) {
+    if (this.service.detachCategory === undefined) return of();
+    return this.service.detachCategory({ id: this.school()!.id, categoryId }).pipe(
+      tap(() => {
+        this.toastService.success({ text: 'دسته‌بندی با موفقیت حذف شد.' });
       }),
     );
   }

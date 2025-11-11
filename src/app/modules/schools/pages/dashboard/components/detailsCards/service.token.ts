@@ -1,4 +1,8 @@
 import {
+  IAttachCategoryToSchoolRequestPayload,
+  IDetachCategoryToSchoolRequestPayload,
+} from '@/modules/admin/pages/schools/models/schools';
+import {
   ISchoolAddressRequest,
   ISchoolContactRequest,
   ISchoolInfoRequest,
@@ -19,6 +23,9 @@ export interface SchoolDetailsService {
   invalidateContactMobile(id: string): Observable<boolean>;
   invalidateManagerEmail(id: string): Observable<boolean>;
   invalidateManagerMobile(id: string): Observable<boolean>;
+
+  attachCategory(payload: IAttachCategoryToSchoolRequestPayload): Observable<boolean>;
+  detachCategory(payload: IDetachCategoryToSchoolRequestPayload): Observable<boolean>;
 }
 
 export const SCHOOL_DETAILS_SERVICE = new InjectionToken<SchoolDetailsService>(
