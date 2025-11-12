@@ -84,7 +84,7 @@ export interface ISchoolResponse {
   examHallCapacity: number;
   isActive: boolean;
   categories: any[];
-  fieldOfStudies: any[];
+  fieldOfStudies: SchoolsFieldOfStudy[];
 }
 
 export interface ISchoolAddress {
@@ -128,4 +128,11 @@ export interface ISchoolAddressRequestPayload {
   number: string;
   latitude: string;
   longitude: string;
+}
+interface SchoolsFieldOfStudy {
+  educationalLevelId: number;
+  educationalLevelTitle: string;
+  educationalLevelLevel: string;
+  id: number;
+  title: string;
 }

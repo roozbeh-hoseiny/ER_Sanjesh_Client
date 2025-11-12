@@ -8,8 +8,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { Divider } from 'primeng/divider';
 import { InputText } from 'primeng/inputtext';
-import { SchoolPersonFormComponent } from './school-person-form.component';
-import { SchoolDetailsCardsStore } from './store';
+import { SchoolPersonFormComponent } from '../school-person-form.component';
+import { SchoolDetailsCardsStore } from '../store';
 
 @Component({
   selector: 'app-school-info-form',

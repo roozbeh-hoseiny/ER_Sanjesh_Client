@@ -28,6 +28,7 @@ export class EducationalLevelsTagsComponent {
   constructor() {}
 
   @Input() educationalLevels!: ISchoolEducationalLevelsResponse[];
+  @Input() editable: boolean = false;
 
   groupedEducationalLevels = signal<IGroupedEducationalLevels[]>([]);
 

@@ -32,7 +32,7 @@ export class TeacherLessonsFormComponent {
   attachLoading = signal<boolean>(false);
   detachLoading = signal<boolean>(false);
 
-  filteredLessenIds = signal<string[]>([]);
+  filteredLessenIds = signal<number[]>([]);
 
   attach() {
     const school = this.selectedSchool.value;
@@ -70,7 +70,7 @@ export class TeacherLessonsFormComponent {
       this.filteredLessenIds.set(
         this.selectedSchoolLessons
           .filter((item) => item.schoolId === this.selectedSchool.value?.id)
-          .map((item) => item.lessonId.toString()),
+          .map((item) => item.lessonId),
       );
     } else {
       this.filteredLessenIds.set([]);

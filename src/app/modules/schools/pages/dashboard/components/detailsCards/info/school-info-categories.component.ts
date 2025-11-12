@@ -12,7 +12,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { Chip } from 'primeng/chip';
 import { filter } from 'rxjs';
-import { SchoolDetailsCardsStore } from './store';
+import { SchoolDetailsCardsStore } from '../store';
 
 @Component({
   selector: 'app-school-info-categories',

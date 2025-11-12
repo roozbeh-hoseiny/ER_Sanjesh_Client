@@ -38,3 +38,9 @@ export interface IAttachCategoryToSchoolRequestPayload {
 }
 export interface IDetachCategoryToSchoolRequestPayload
   extends IAttachCategoryToSchoolRequestPayload {}
+
+export interface IAttachFieldToSchoolRequestPayload {
+  id: string;
+  fieldOfStudyId: number;
+}
+export interface IDetachFieldToSchoolRequestPayload extends IAttachFieldToSchoolRequestPayload {}

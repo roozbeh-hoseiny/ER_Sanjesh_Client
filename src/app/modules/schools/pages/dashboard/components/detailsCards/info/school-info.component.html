@@ -19,15 +19,11 @@
         [editable]="canEditCategories()"
         (onUpdate)="submitForm()"
       />
-      <app-key-value label="رشته‌های تحصیلی">
-        @if (info().fieldOfStudies.length) {
-          <div class="inline-flex">
-            <app-educational-levels-tags [educationalLevels]="info().fieldOfStudies" />
-          </div>
-        } @else {
-          -
-        }
-      </app-key-value>
+      <app-school-info-fields
+        [fields]="info().fieldOfStudies"
+        [editable]="canEditCategories()"
+        (onUpdate)="submitForm()"
+      />
       <p-divider> مدیریت </p-divider>
       <div class="grid grid-cols-3 gap-4">
         <app-key-value label="نام" [value]="info().managerInfo.firstName" />

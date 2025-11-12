@@ -1,12 +1,12 @@
 <div class="flex flex-col gap-2 w-full">
   <app-key-value label="دسته‌بندی" class="w-full">
     <div class="flex w-full flex-wrap gap-4">
-      @if (categories.length) {
+      @if (fields.length) {
         <div class="inline-flex items-center gap-2">
-          @for (category of categories; track category.id) {
-            <p-chip severity="secondary">
+          @for (field of fields; track field.id) {
+            <p-tag severity="info">
               <div class="flex items-center gap-3">
-                <span>{{ category.title }}</span>
+                <span class="text-sm">{{ field.title }}</span>
                 @if (editable) {
                   <button
                     pButton
@@ -16,12 +16,12 @@
                     text
                     severity="secondary"
                     class="w-5 h-5"
-                    [loading]="detachScheduleLoading().includes(category.id)"
-                    (click)="detach(category.id)"
+                    [loading]="detachScheduleLoading().includes(field.id)"
+                    (click)="detach(field.id)"
                   ></button>
                 }
               </div>
-            </p-chip>
+            </p-tag>
           }
         </div>
       } @else {
@@ -31,13 +31,13 @@
   </app-key-value>
 
   @if (editable) {
-    <app-schools-categories-tree-select
-      [control]="categoryControl"
-      [filters]="selectedCategories()"
+    <catalog-fields-select
+      [control]="fieldControl"
+      [filters]="selectedFields()"
       [showLabel]="false"
       [loading]="loading()"
       class="max-w-xs"
-      placeholder="دسته‌بندی را انتخاب کنید"
+      placeholder="رشته را انتخاب کنید"
     />
   }
 </div>

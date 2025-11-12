@@ -4,18 +4,18 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { SelectChangeEvent, SelectModule } from 'primeng/select';
-import { ILessonsInRoot } from '../models';
-import { LessonsService } from '../services';
+import { IFieldOfStudiesResponse } from '../models';
+import { FieldOfStudiesService } from '../services';
 
 @Component({
-  selector: 'catalog-lessons-select',
+  selector: 'catalog-fields-select',
   standalone: true,
   imports: [CommonModule, UikitFieldComponent, SelectModule, ReactiveFormsModule],
-  templateUrl: './lessons-select.component.html',
+  templateUrl: './fields-select.component.html',
 })
-export class LessonsSelectComponent implements OnInit {
-  @Input() control!: FormControl<Maybe<ILessonsInRoot>>;
-  @Input() name: string = 'lesson';
+export class FieldsSelectComponent implements OnInit {
+  @Input() control!: FormControl<Maybe<IFieldOfStudiesResponse>>;
+  @Input() name: string = 'fieldOfStudy';
 
   private _filters: number[] = [];
   @Input()
@@ -29,15 +29,15 @@ export class LessonsSelectComponent implements OnInit {
   @Input() showLabel?: boolean = true;
   @Input() placeholder?: string;
   @Input() loading?: boolean;
-  @Output() selectionChange = new EventEmitter<ILessonsInRoot>();
+  @Output() selectionChange = new EventEmitter<IFieldOfStudiesResponse>();
   @Output() selectionClear = new EventEmitter();
 
-  filteredItems = signal<ILessonsInRoot[]>([]);
+  filteredItems = signal<IFieldOfStudiesResponse[]>([]);
   selectedItemId = signal<Maybe<number>>(null);
 
-  constructor(private lessonsService: LessonsService) {}
+  constructor(private fieldsService: FieldOfStudiesService) {}
 
-  allLessons = signal<ILessonsInRoot[]>([]);
+  allFields = signal<IFieldOfStudiesResponse[]>([]);
   initialLoading = signal<boolean>(false);
 
   ngOnInit(): void {
@@ -47,16 +47,16 @@ export class LessonsSelectComponent implements OnInit {
   filterOptions = (filters: number[]) => {
     this._filters = filters || [];
 
-    const allLessons = JSON.parse(JSON.stringify(this.allLessons())) as ILessonsInRoot[];
-    this.filteredItems.set(allLessons.filter((lesson) => !this._filters.includes(lesson.id)));
+    const allFields = JSON.parse(JSON.stringify(this.allFields())) as IFieldOfStudiesResponse[];
+    this.filteredItems.set(allFields.filter((field) => !this._filters.includes(field.id)));
   };
 
   getAll(): void {
     this.initialLoading.set(true);
 
-    this.lessonsService.getAllInRoot().subscribe({
+    this.fieldsService.getAll().subscribe({
       next: (items) => {
-        this.allLessons.set(items);
+        this.allFields.set(items);
       },
       complete: () => {
         this.initialLoading.set(false);
@@ -64,8 +64,8 @@ export class LessonsSelectComponent implements OnInit {
     });
   }
 
-  onLessonSelect = (lesson: SelectChangeEvent) => {
-    const node = lesson.value as ILessonsInRoot;
+  onSelect = (field: SelectChangeEvent) => {
+    const node = field.value as IFieldOfStudiesResponse;
 
     if (!node) {
       this.onClear();

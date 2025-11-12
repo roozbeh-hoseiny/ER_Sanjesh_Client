@@ -2,8 +2,8 @@ import { IContactInfo, ISchoolContactRequest } from '@/modules/schools/models';
 import { AppCardComponent, CheckVerifiedInfoComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
+import { SchoolDetailsCardsStore } from '../store';
 import { SchoolContactFormComponent } from './school-contact-form.component';
-import { SchoolDetailsCardsStore } from './store';
 
 @Component({
   selector: 'app-school-contact',

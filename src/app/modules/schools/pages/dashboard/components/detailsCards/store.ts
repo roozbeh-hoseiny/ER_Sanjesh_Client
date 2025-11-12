@@ -14,6 +14,7 @@ import {
   ISchoolResponse,
 } from '@/modules/schools/models';
 import { SchoolsInfoService } from '@/modules/schools/services';
+import { IFieldOfStudiesResponse } from '@/shared/catalog';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
@@ -29,6 +30,7 @@ interface ISchoolDetailsCardsState {
   canEditContact: boolean;
   canEditLoginInfo: boolean;
   canEditCategories: boolean;
+  canEditFields: boolean;
   submitContactLoading: boolean;
 }
 
@@ -42,6 +44,7 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   canEditContact: false,
   canEditLoginInfo: false,
   canEditCategories: false,
+  canEditFields: false,
   submitContactLoading: false,
 };
 
@@ -66,6 +69,7 @@ export class SchoolDetailsCardsStore {
   readonly canEditContact = computed(() => !!this.state$().canEditContact);
   readonly canEditLoginInfo = computed(() => !!this.state$().canEditLoginInfo);
   readonly canEditCategories = computed(() => !!this.state$().canEditCategories);
+  readonly canEditFields = computed(() => !!this.state$().canEditFields);
   readonly submitContactLoading = computed(() => !!this.state$().submitContactLoading);
 
   // simple mutators
@@ -253,6 +257,42 @@ export class SchoolDetailsCardsStore {
     return this.service.detachCategory({ id: this.school()!.id, categoryId }).pipe(
       tap(() => {
         this.toastService.success({ text: 'دسته‌بندی با موفقیت حذف شد.' });
+      }),
+    );
+  }
+
+  attachLesson(payload: ICategoryFullTreeMapped) {
+    if (this.service.attachCategory === undefined) return of();
+    return this.service.attachCategory({ id: this.school()!.id, categoryId: payload.id }).pipe(
+      tap(() => {
+        this.toastService.success({ text: `دسته‌بندی ${payload.label} با موفقیت اضافه شد.` });
+      }),
+    );
+  }
+  detachLesson(categoryId: number) {
+    if (this.service.detachCategory === undefined) return of();
+    return this.service.detachCategory({ id: this.school()!.id, categoryId }).pipe(
+      tap(() => {
+        this.toastService.success({ text: 'دسته‌بندی با موفقیت حذف شد.' });
+      }),
+    );
+  }
+
+  attachField(payload: IFieldOfStudiesResponse) {
+    if (this.service.attachField === undefined) return of();
+    return this.service.attachField({ id: this.school()!.id, fieldOfStudyId: payload.id }).pipe(
+      tap(() => {
+        this.toastService.success({
+          text: `رشته ${payload.title} با موفقیت اضافه شد.`,
+        });
+      }),
+    );
+  }
+  detachField(fieldOfStudyId: number) {
+    if (this.service.detachField === undefined) return of();
+    return this.service.detachField({ id: this.school()!.id, fieldOfStudyId }).pipe(
+      tap(() => {
+        this.toastService.success({ text: 'رشته با موفقیت حذف شد.' });
       }),
     );
   }

@@ -1,0 +1,27 @@
+@if (showLabel) {
+  <uikit-field label="دسته‌بندی" for="category">
+    <p-tree-select
+      name="category"
+      [formControl]="control"
+      [options]="filteredCategories()"
+      [loading]="getCategoriesLoading() || loading"
+      (onNodeSelect)="onCategorySelect($event)"
+      appendTo="body"
+      [loading]="loading"
+      [placeholder]="placeholder"
+      class="w-full"
+    />
+  </uikit-field>
+} @else {
+  <p-tree-select
+    name="category"
+    [formControl]="control"
+    [options]="filteredCategories()"
+    [loading]="getCategoriesLoading() || loading"
+    (onNodeSelect)="onCategorySelect($event)"
+    (onClear)="onClear()"
+    appendTo="body"
+    [placeholder]="placeholder"
+    class="w-full"
+  />
+}

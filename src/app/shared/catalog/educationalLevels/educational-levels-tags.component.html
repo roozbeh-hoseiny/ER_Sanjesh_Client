@@ -1,7 +1,24 @@
 <div class="flex items-center gap-2 flex-wrap">
   @for (level of groupedEducationalLevels(); track level.level) {
     @for (field of level.fields; track field.id) {
-      <p-tag>{{ level.level.fullTitle }} - {{ field.title }}</p-tag>
+      <p-tag>
+        <div class="flex items-center gap-2">
+          {{ level.level.fullTitle }} - {{ field.title }}
+          @if (editable) {
+            <button
+              pButton
+              type="button"
+              icon="pi pi-times"
+              size="small"
+              text
+              severity="secondary"
+              class="w-5 h-5"
+            ></button>
+            <!-- [loading]="detachEducationalLevelLoading().includes(field.id)"
+              (click)="detach(level.level.id, field.id)" -->
+          }
+        </div>
+      </p-tag>
     }
   }
 </div>

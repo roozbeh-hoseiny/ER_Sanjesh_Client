@@ -3,7 +3,7 @@ import {
   PageDataListComponent,
 } from '@/shared/components/pageDataList/page-data-list.component';
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { EducationalLevelsService } from '../services';
 
@@ -17,7 +17,9 @@ export class EducationalLevelsListComponent {
   @Input() canEdit: boolean = false;
   @Input() canDelete: boolean = false;
 
-  private educationalLevelsService = inject(EducationalLevelsService);
+  @Output() onOpenForm = new EventEmitter<void>();
+
+  constructor(private educationalLevelsService: EducationalLevelsService) {}
 
   items = signal<any[]>([]);
   loading = signal<boolean>(true);
@@ -26,6 +28,10 @@ export class EducationalLevelsListComponent {
     {
       field: 'title',
       header: 'عنوان',
+    },
+    {
+      field: 'level',
+      header: 'پایه',
     },
   ] as IColumn[];
 
@@ -44,7 +50,9 @@ export class EducationalLevelsListComponent {
     });
   }
 
-  onAdd(): void {}
+  onAdd(): void {
+    this.onOpenForm.emit();
+  }
 
   onEdit(item: any): void {
     console.log(item);

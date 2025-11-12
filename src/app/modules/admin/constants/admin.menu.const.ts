@@ -40,7 +40,7 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
     label: 'مدیریت اطلاعات پایه',
     items: [
       {
-        label: 'اطلاعات پایه دانش‌آموزان',
+        label: 'پایه‌های تحصیلی',
         icon: 'pi pi-fw pi-database',
         routerLink: [adminNamedRoutes.mdmEducationalLevels.path],
       },

@@ -6,7 +6,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
-import { SchoolDetailsCardsStore } from './store';
+import { SchoolDetailsCardsStore } from '../store';
 
 @Component({
   selector: 'app-school-address-form',

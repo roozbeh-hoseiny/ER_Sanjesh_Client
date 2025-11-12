@@ -1,6 +1,8 @@
 import {
   IAttachCategoryToSchoolRequestPayload,
+  IAttachFieldToSchoolRequestPayload,
   IDetachCategoryToSchoolRequestPayload,
+  IDetachFieldToSchoolRequestPayload,
 } from '@/modules/admin/pages/schools/models/schools';
 import {
   ISchoolAddressRequest,
@@ -26,6 +28,9 @@ export interface SchoolDetailsService {
 
   attachCategory(payload: IAttachCategoryToSchoolRequestPayload): Observable<boolean>;
   detachCategory(payload: IDetachCategoryToSchoolRequestPayload): Observable<boolean>;
+
+  attachField(payload: IAttachFieldToSchoolRequestPayload): Observable<boolean>;
+  detachField(payload: IDetachFieldToSchoolRequestPayload): Observable<boolean>;
 }
 
 export const SCHOOL_DETAILS_SERVICE = new InjectionToken<SchoolDetailsService>(

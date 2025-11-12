@@ -1,4 +1,13 @@
-const mdmBaseUrl = `/api/v1/mdm`;
+const mdmBaseUrl = `/api/v1/admin/mdm`;
 export const adminMdmApiRoutes = () => {
-  return {};
+  return {
+    educationalLevels: {
+      create: `${mdmBaseUrl}/AddEducationLevel`,
+      update: `${mdmBaseUrl}/EditEducationLevel`,
+    },
+    fieldOfStudies: {
+      create: `${mdmBaseUrl}/AddFieldOfStudy`,
+      update: `${mdmBaseUrl}/EditFieldOfStudy`,
+    },
+  };
 };

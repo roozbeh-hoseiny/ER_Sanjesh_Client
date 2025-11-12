@@ -3,8 +3,8 @@ import { IContactInfo, ISchoolContactRequest } from '@/modules/schools/models';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
-import { SchoolPersonFormComponent } from './school-person-form.component';
-import { SchoolDetailsCardsStore } from './store';
+import { SchoolPersonFormComponent } from '../school-person-form.component';
+import { SchoolDetailsCardsStore } from '../store';
 
 @Component({
   selector: 'app-school-contact-form',

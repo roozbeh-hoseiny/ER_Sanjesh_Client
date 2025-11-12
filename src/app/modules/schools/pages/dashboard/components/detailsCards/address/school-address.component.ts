@@ -2,8 +2,8 @@ import { ISchoolAddress } from '@/modules/schools/models';
 import { AppCardComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
+import { SchoolDetailsCardsStore } from '../store';
 import { SchoolAddressFormComponent } from './school-address-form.component';
-import { SchoolDetailsCardsStore } from './store';
 
 @Component({
   selector: 'app-school-address',

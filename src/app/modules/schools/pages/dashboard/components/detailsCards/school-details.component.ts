@@ -1,8 +1,8 @@
 import { ISchoolContactRequest } from '@/modules/schools/models';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
-import { SchoolAddress } from './school-address.component';
-import { SchoolContactComponent } from './school-contact.component';
-import { SchoolInfoComponent } from './school-info.component';
+import { SchoolAddress } from './address/school-address.component';
+import { SchoolContactComponent } from './contact/school-contact.component';
+import { SchoolInfoComponent } from './info/school-info.component';
 import { SchoolManagerComponent } from './school-login-info.component';
 import { SchoolDetailsCardsStore } from './store';
 

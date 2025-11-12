@@ -1,12 +1,13 @@
-import { EducationalLevelsTagsComponent, SchoolGendersTag } from '@/shared/catalog';
+import { SchoolGendersTag } from '@/shared/catalog';
 import { AppCardComponent, CheckVerifiedInfoComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
 import { Component, computed, EventEmitter, inject, Output, signal } from '@angular/core';
 import { Badge } from 'primeng/badge';
 import { Divider } from 'primeng/divider';
+import { SchoolDetailsCardsStore } from '../store';
 import { SchoolInfoCategoriesComponent } from './school-info-categories.component';
+import { SchoolInfoFieldsComponent } from './school-info-fields.component';
 import { SchoolInfoFormComponent } from './school-info-form.component';
-import { SchoolDetailsCardsStore } from './store';
 
 @Component({
   selector: 'app-school-info',
@@ -17,9 +18,9 @@ import { SchoolDetailsCardsStore } from './store';
     Badge,
     SchoolInfoFormComponent,
     Divider,
-    EducationalLevelsTagsComponent,
     CheckVerifiedInfoComponent,
     SchoolInfoCategoriesComponent,
+    SchoolInfoFieldsComponent,
   ],
   templateUrl: './school-info.component.html',
 })
@@ -35,6 +36,7 @@ export class SchoolInfoComponent {
 
   canEdit = computed(() => this.detailsStore.canEditInfo());
   canEditCategories = computed(() => this.detailsStore.canEditCategories());
+  canEditFields = computed(() => this.detailsStore.canEditFields());
 
   showInlineConfirmation = computed(() =>
     this.detailsStore.showManagerValidateInlineConfirmation(),

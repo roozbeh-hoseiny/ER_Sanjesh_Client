@@ -5,9 +5,9 @@
       [formControl]="control"
       [options]="filteredItems()"
       optionLabel="fullTitle"
-      placeholder="یکی از درس‌ها را انتخاب کنید"
+      placeholder="یکی از رشته‌ها را انتخاب کنید"
       [loading]="loading"
-      (onChange)="onLessonSelect($event.value)"
+      (onChange)="onSelect($event.value)"
     />
   </uikit-field>
 } @else {
@@ -16,8 +16,8 @@
     [formControl]="control"
     [options]="filteredItems()"
     optionLabel="fullTitle"
-    placeholder="یکی از درس‌ها را انتخاب کنید"
+    placeholder="یکی از رشته‌ها را انتخاب کنید"
     [loading]="loading"
-    (onChange)="onLessonSelect($event.value)"
+    (onChange)="onSelect($event.value)"
   />
 }

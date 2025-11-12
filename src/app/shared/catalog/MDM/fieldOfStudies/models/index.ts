@@ -1,4 +1,8 @@
 export interface IFieldOfStudiesResponse {
-  id: string;
+  educationalLevelId: number;
+  educationalLevelTitle: string;
+  educationalLevelLevel: string;
+  id: number;
+  title: string;
 }
 export interface IFieldOfStudiesRequest {}

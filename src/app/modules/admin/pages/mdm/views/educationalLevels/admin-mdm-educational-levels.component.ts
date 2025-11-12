@@ -18,4 +18,6 @@ export class AdminMdmEducationalLevelsComponent {
       adminNamedRoutes.mdmEducationalLevels.meta,
     ]);
   }
+
+  openForm() {}
 }
