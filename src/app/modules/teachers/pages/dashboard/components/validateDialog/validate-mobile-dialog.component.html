@@ -1,0 +1,12 @@
+<p-dialog header="تایید شماره موبایل" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+  <form (submit)="submit()">
+    <div class="flex flex-col gap-4 mb-6 items-center">
+      <span>برای تایید، کد ارسالی به شماره تلفن خود را وارد کنید</span>
+      <p-inputOtp [(ngModel)]="code" name="code" [length]="6" size="large" dir="ltr" />
+    </div>
+    <div class="flex justify-end gap-2">
+      <p-button label="لغو" severity="secondary" (click)="close()" />
+      <p-button label="تایید" [loading]="submitLoading()" (onClick)="submit()" />
+    </div>
+  </form>
+</p-dialog>

@@ -16,4 +16,7 @@ export const TEACHERS_API_ROUTES = {
 
   emailVerification: () => `${baseUrl}/VerifyEmail`,
   phoneVerification: () => `${baseUrl}/VerifyMobile`,
+
+  approveSchool: () => `${baseUrl}/ApproveTeacherSchool`,
+  rejectSchool: () => `${baseUrl}/RejectTeacherSchool`,
 };

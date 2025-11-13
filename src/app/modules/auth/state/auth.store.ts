@@ -358,7 +358,7 @@ export class AuthStore extends BaseStore<AuthState> {
     const roleRoutes = {
       [ROLES.ADMIN]: '/admin',
       [ROLES.SCHOOL]: '/schools',
-      [ROLES.TEACHERS]: '/teachers',
+      [ROLES.TEACHER]: '/teachers',
       [ROLES.STUDENTS]: '/students',
       [ROLES.GRADER]: '/grader',
       [ROLES.SUPERADMIN]: '/superadmin',

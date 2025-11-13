@@ -1,15 +1,4 @@
-export interface ISchoolAddressRequest {
-  id: string;
-  regionId: number;
-  address: string;
-  postalCode: string;
-  number: string;
-  latitude: string;
-  longitude: string;
-  zoom: number;
-}
-
-export interface ISchoolInfoRequest {
+export interface ITeacherInfoRequest {
   id: string;
   name: string;
   managerInfo: Omit<ManagerInfo, 'mobileIsVerified' | 'emailIsVerified'>;
@@ -18,7 +7,7 @@ export interface ISchoolInfoRequest {
   examHallCapacity: number;
 }
 
-export interface ISchoolLoginInfoRequest {
+export interface ITeacherLoginInfoRequest {
   username: string;
   password: string;
   email: string;
@@ -29,48 +18,42 @@ export interface IVerifyRequest {
   otp: string;
 }
 
-export interface IVerifyManagerEmailRequest extends IVerifyRequest {}
-export interface IVerifyManagerMobileRequest extends IVerifyRequest {}
+export interface IVerifyEmailRequest extends IVerifyRequest {}
+export interface IVerifyMobileRequest extends IVerifyRequest {}
 
-export interface IVerifyContactEmailRequest {}
-export interface IVerifyContactMobileRequest {}
-
-export interface ISchoolResponse {
+export interface ITeacherMeResponse {
   id: string;
-  name: string;
-  address: Address;
-  managerInfo: ManagerInfo;
-  contactInfo: ManagerInfo;
-  username: string;
-  passwordMustBeChangedOnNextLogin: boolean;
-  canLoginWithMobileOrEmail: boolean;
-  boyOrGirl: number;
-  examHallCapacity: number;
-  isActive: boolean;
-  categories: any[];
-  fieldOfStudies: any[];
-}
-
-interface Address {
-  regionId: number;
-  address: string;
-  postalCode: string;
-  number: string;
-  latitude: string;
-  longitude: string;
-  zoom: number;
-  countryName: string;
-  stateName: string;
-  cityName: string;
-  districtName: string;
-}
-
-interface ManagerInfo {
   firstName: string;
   lastName: string;
   gender: boolean;
   mobile: string;
   email: string;
-  mobileIsVerified: boolean;
-  emailIsVerified: boolean;
+  isEmailVerified: boolean;
+  isMobileVerified: boolean;
+  uniqueId: string;
+  lessons: ITeacherLesson[];
 }
+
+export interface ITeacherLesson {
+  lessonId: number;
+  schoolId: string;
+  lessonTitle: string;
+  schoolTitle: string;
+  educationaLevellId: number;
+  educationalLevelTitle: string;
+  fieldOfStudyId: number;
+  fieldOfStudyTitle: string;
+  approved: boolean;
+}
+
+export interface IApproveSchoolRequestPayload {
+  teacherId: string;
+  schoolId: string;
+}
+export interface IRejectSchoolRequestPayload extends IApproveSchoolRequestPayload {}
+
+export interface IApproveSchoolLessonRequestPayload {
+  teacherId: string;
+  teacherLessonId: number;
+}
+export interface IRejectSchoolLessonRequestPayload extends IApproveSchoolLessonRequestPayload {}

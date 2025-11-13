@@ -1,0 +1,26 @@
+<form (ngSubmit)="submit()" [formGroup]="form" class="grid grid-cols-1 gap-4">
+  <div class="grid grid-cols-3 gap-4">
+    <uikit-field label="نام مدرسه" for="name" [control]="form.controls.name">
+      <input
+        pInputText
+        [formControlName]="'name'"
+        required
+        [invalid]="form.controls.name.invalid && form.controls.name.touched"
+      />
+    </uikit-field>
+    <app-gender-select [control]="form.controls.gender" />
+    <uikit-field label="شماره تماس" for="mobile" [control]="form.controls.mobile">
+      <input
+        pInputText
+        formControlName="mobile"
+        required
+        [invalid]="form.controls.mobile.invalid && form.controls.mobile.touched"
+      />
+    </uikit-field>
+  </div>
+
+  <div class="flex gap-2 justify-end mt-4">
+    <button pButton type="button" class="p-button-secondary" (click)="close()">انصراف</button>
+    <button pButton type="submit" class="p-button-primary" [loading]="onSubmitLoading()">ذخیره</button>
+  </div>
+</form>

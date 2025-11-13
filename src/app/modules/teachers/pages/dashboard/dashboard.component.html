@@ -1,0 +1,5 @@
+<div class="">
+  <teacher-details (onRefreshData)="refreshData()" />
+  <teacher-validate-mobile-dialog [(visible)]="isOpenConfirmationMobileModal" (onSubmit)="refreshData()" />
+  <teacher-validate-email-dialog [(visible)]="isOpenConfirmationEmailModal" (onSubmit)="refreshData()" />
+</div>

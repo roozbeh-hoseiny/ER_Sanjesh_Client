@@ -7,9 +7,7 @@ export const teachersNamedRoutes: NamedRoutes<TTeachersRouteNames> = {
     path: '',
     pathMatch: 'full',
     loadComponent: () =>
-      import('../pages/dashboard/teachers-dashboard.component').then(
-        (m) => m.TeachersDashboardComponent,
-      ),
+      import('../pages/dashboard/dashboard.component').then((m) => m.TeachersDashboardComponent),
     meta: {
       title: 'داشبورد',
     },

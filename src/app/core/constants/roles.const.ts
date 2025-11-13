@@ -9,9 +9,9 @@ export default {
     title: 'مدرسه',
     key: 'SCHOOL',
   },
-  TEACHERS: {
+  TEACHER: {
     title: 'دبیر',
-    key: 'TEACHERS',
+    key: 'TEACHER',
   },
   STUDENTS: {
     title: 'دانش‌آموز',

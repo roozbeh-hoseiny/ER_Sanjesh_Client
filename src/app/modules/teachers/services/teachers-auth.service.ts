@@ -1,18 +1,17 @@
-import { ISchoolMeResponse } from '@/modules/schools/models';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TEACHERS_API_ROUTES } from '../constants';
-import { IVerifyManagerEmailRequest, IVerifyManagerMobileRequest } from '../models';
+import { ITeacherMeResponse, IVerifyEmailRequest, IVerifyMobileRequest } from '../models';
 
 @Injectable({ providedIn: 'root' })
-export class SchoolsAuthService {
+export class TeachersAuthService {
   constructor(private http: HttpClient) {}
 
   private apiRoutes = TEACHERS_API_ROUTES;
 
-  me(): Observable<ISchoolMeResponse> {
-    return this.http.get<ISchoolMeResponse>(this.apiRoutes.me());
+  me(): Observable<ITeacherMeResponse> {
+    return this.http.get<ITeacherMeResponse>(this.apiRoutes.me());
   }
 
   sendOTPSms(request: { mobile: string }): Observable<void> {
@@ -22,14 +21,17 @@ export class SchoolsAuthService {
     return this.http.post<void>(this.apiRoutes.sendEmailOTP(), request);
   }
 
-  sendOTPEmailForManagerEmail(): Observable<void> {
+  sendOTPEmailForEmail(): Observable<void> {
     return this.http.post<void>(this.apiRoutes.emailSendOTPVerification(), {});
   }
+  sendOTPSmsForMobile(): Observable<void> {
+    return this.http.post<void>(this.apiRoutes.phoneSendOTPVerification(), {});
+  }
 
-  verifyManagerEmail(request: IVerifyManagerEmailRequest): Observable<void> {
+  verifyEmail(request: IVerifyEmailRequest): Observable<void> {
     return this.http.post<void>(this.apiRoutes.emailVerification(), request);
   }
-  verifyManagerMobile(request: IVerifyManagerMobileRequest): Observable<void> {
+  verifyMobile(request: IVerifyMobileRequest): Observable<void> {
     return this.http.post<void>(this.apiRoutes.phoneVerification(), request);
   }
 }

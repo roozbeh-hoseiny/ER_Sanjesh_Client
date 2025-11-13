@@ -10,16 +10,7 @@ export const TEACHERS_ROUTES: Routes = [
     path: '',
     component: TeachersLayoutComponent,
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: [ROLES.TEACHERS] },
+    data: { roles: [ROLES.TEACHER] },
     children: Object.values(teachersNamedRoutes),
-  },
-
-  {
-    path: 'login',
-    loadComponent: () =>
-      import('./pages/login/teachers-login.component').then((m) => m.TeachersLoginComponent),
-    // meta: {
-    //   title: 'لاگین',
-    // },
   },
 ];

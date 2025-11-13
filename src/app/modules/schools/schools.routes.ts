@@ -13,13 +13,4 @@ export const SCHOOLS_ROUTES: Routes = [
     data: { roles: [ROLES.SCHOOL] },
     children: Object.values(schoolsNamedRoutes),
   },
-
-  {
-    path: 'login',
-    loadComponent: () =>
-      import('./pages/login/schools-login.component').then((m) => m.SchoolsLoginComponent),
-    // meta: {
-    //   title: 'لاگین',
-    // },
-  },
 ];

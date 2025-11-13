@@ -1,0 +1,11 @@
+<app-card-data cardTitle="اطلاعات ورود" class="">
+  <div class="flex flex-col gap-4">
+    <div class="grid grid-cols-3 gap-4">
+      <app-key-value label="نام" [value]="info()?.firstName" />
+      <app-key-value label="نام خانوادگی" [value]="info()?.lastName" />
+      <app-key-value label="جنسیت" [value]="info()?.gender ? 'مرد' : 'زن'" />
+      <app-key-value label="تلفن همراه" [value]="info()?.mobile" />
+      <app-key-value label="ایمیل" [value]="info()?.email" />
+    </div>
+  </div>
+</app-card-data>

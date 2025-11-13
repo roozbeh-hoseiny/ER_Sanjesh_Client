@@ -19,7 +19,7 @@ export class RootComponent {
       case 'ADMIN':
         navigatedUrl = '/admin';
         break;
-      case 'TEACHERS':
+      case 'TEACHER':
         navigatedUrl = '/teachers';
         break;
       case 'SCHOOL':

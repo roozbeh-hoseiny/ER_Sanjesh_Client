@@ -22,7 +22,7 @@ export class AuthService {
   readonly modulesLoginRoutes = {
     ADMIN: ADMIN_API_ROUTES.login(),
     SCHOOL: SCHOOLS_API_ROUTES.login(),
-    TEACHERS: TEACHERS_API_ROUTES.login(),
+    TEACHER: TEACHERS_API_ROUTES.login(),
   } as Record<TRoles, string>;
 
   readonly modulesGetInfoRoutes = {

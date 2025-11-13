@@ -64,7 +64,7 @@ export class AuthComponent {
         case 'ADMIN':
           redirectUrl = '/admin';
           break;
-        case 'TEACHERS':
+        case 'TEACHER':
           redirectUrl = '/teachers';
           break;
         case 'STUDENTS':

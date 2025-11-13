@@ -1,7 +1,7 @@
 import { AppLayout } from '@/layout/component/app.layout.component';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LayoutService } from 'src/app/layout/service/layout.service';
-import { TEACHERS_MENU_ITEMS } from './constants';
+import { TeachersStore } from './dataStore';
 
 @Component({
   selector: 'teachers-layout',
@@ -10,9 +10,16 @@ import { TEACHERS_MENU_ITEMS } from './constants';
   template: `<app-layout> </app-layout>`,
 })
 export class TeachersLayoutComponent implements OnInit {
-  private layoutService = inject(LayoutService);
+  constructor(
+    private teacherStore: TeachersStore,
+    private layoutService: LayoutService,
+  ) {}
 
   ngOnInit() {
-    this.layoutService.setMenuItems(TEACHERS_MENU_ITEMS);
+    // this.layoutService.setMenuItems(TEACHERS_MENU_ITEMS);
+  }
+
+  protected get loading() {
+    return this.teacherStore.initLoading();
   }
 }
