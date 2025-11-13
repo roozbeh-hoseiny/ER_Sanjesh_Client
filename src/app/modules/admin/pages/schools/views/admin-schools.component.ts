@@ -54,8 +54,6 @@ export class AdminSchoolsComponent {
 
   columns = [] as IColumn[];
 
-  checked: boolean = false;
-
   isAddSchoolFormVisible = signal<boolean>(false);
   schoolsChangeStatusSchedules = signal<Record<string, boolean>>({});
   selectedSchoolForEdit = signal<Maybe<IAdminSchoolResponse>>(null);

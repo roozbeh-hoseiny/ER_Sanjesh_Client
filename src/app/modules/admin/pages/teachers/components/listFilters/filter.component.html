@@ -1,0 +1,13 @@
+<div class="flex flex-col gap-4 w-full">
+  <p-message severity="info" icon="pi pi-info-circle" class="mb-5">
+    یکی از فیلتر‌ها در لحظه قابل انتخاب هستند
+  </p-message>
+  <uikit-field label="نمایش دبیران بدون مدرسه" for="search" class="w-full">
+    <p-toggleSwitch [(ngModel)]="withoutSchoolStatus" (ngModelChange)="onWithoutSchoolStatusChange($event)">
+      نمایش دبیران بدون مدرسه
+    </p-toggleSwitch>
+  </uikit-field>
+  <hr />
+
+  <catalog-lessons-select (selectionChange)="onLessonChange($event.id)" />
+</div>

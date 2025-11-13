@@ -3,7 +3,7 @@ import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { SelectChangeEvent, SelectModule } from 'primeng/select';
+import { SelectModule } from 'primeng/select';
 import { ILessonsInRoot } from '../models';
 import { LessonsService } from '../services';
 
@@ -14,7 +14,9 @@ import { LessonsService } from '../services';
   templateUrl: './lessons-select.component.html',
 })
 export class LessonsSelectComponent implements OnInit {
-  @Input() control!: FormControl<Maybe<ILessonsInRoot>>;
+  @Input() control: FormControl<Maybe<ILessonsInRoot>> = new FormControl<Maybe<ILessonsInRoot>>(
+    null,
+  );
   @Input() name: string = 'lesson';
 
   private _filters: number[] = [];
@@ -57,6 +59,7 @@ export class LessonsSelectComponent implements OnInit {
     this.lessonsService.getAllInRoot().subscribe({
       next: (items) => {
         this.allLessons.set(items);
+        this.filterOptions(this.filters);
       },
       complete: () => {
         this.initialLoading.set(false);
@@ -64,13 +67,11 @@ export class LessonsSelectComponent implements OnInit {
     });
   }
 
-  onLessonSelect = (lesson: SelectChangeEvent) => {
-    const node = lesson.value as ILessonsInRoot;
-
-    if (!node) {
+  onLessonSelect = (lesson: ILessonsInRoot) => {
+    if (!lesson) {
       this.onClear();
     } else {
-      this.selectionChange.emit(node);
+      this.selectionChange.emit(lesson);
     }
   };
   onClear = () => {

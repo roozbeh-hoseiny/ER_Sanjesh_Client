@@ -1,18 +1,19 @@
 import { Maybe } from '@/core';
 import { BreadcrumbService } from '@/core/services';
 import { adminNamedRoutes } from '@/modules/admin/constants';
-import { AdminTeachersService } from '@/modules/admin/services';
 import {
   IColumn,
   PageDataListComponent,
 } from '@/shared/components/pageDataList/page-data-list.component';
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { TeachersFilterComponent } from '../components/listFilters/filter.component';
 import { IAdminTeacherEntity } from '../models';
+import { TeachersStore } from '../store';
 
 @Component({
   selector: 'admin-teachers',
@@ -25,39 +26,48 @@ import { IAdminTeacherEntity } from '../models';
     ToggleSwitchModule,
     ButtonModule,
     FormsModule,
+    TeachersFilterComponent,
   ],
 })
 export class AdminTeachersComponent {
-  private services = inject(AdminTeachersService);
-  private breadcrumbService = inject(BreadcrumbService);
+  constructor(
+    private router: Router,
+    private store: TeachersStore,
+    private breadcrumbService: BreadcrumbService,
+  ) {
+    this.breadcrumbService.setItems([adminNamedRoutes.root.meta, adminNamedRoutes.teachers.meta]);
+  }
 
   columns = [] as IColumn[];
 
-  checked: boolean = false;
+  get isFiltered() {
+    return this.store.isFiltered();
+  }
 
-  paginatedItems = signal<IAdminTeacherEntity[][]>([]);
-  totalRecords = signal<number>(0);
-  loading = signal<boolean>(true);
-  lastSeen = signal<string>('');
-  activePageIndex = signal<number>(0);
-  perPage = signal<number>(40);
+  get activePageItems() {
+    return this.store.activePageItems();
+  }
+
+  get loading() {
+    return this.store.loading();
+  }
+
+  get totalRecords() {
+    return this.store.totalRecords();
+  }
+  get activePageIndex() {
+    return this.store.activePageIndex();
+  }
+  get perPage() {
+    return this.store.perPage();
+  }
 
   isAddFormVisible = signal<boolean>(false);
   selectedItemForEdit = signal<Maybe<IAdminTeacherEntity>>(null);
 
-  activePageItems = computed(() => {
-    const pageIndex = this.activePageIndex();
-    const pages = this.paginatedItems();
-    return pages[pageIndex] || [];
-  });
-
-  constructor(private router: Router) {
-    this.breadcrumbService.setItems([adminNamedRoutes.root.meta, adminNamedRoutes.teachers.meta]);
-    this.getData();
-  }
-
   ngOnInit(): void {
     this.setColumns();
+    this.store.initial();
   }
 
   private setColumns() {
@@ -86,19 +96,16 @@ export class AdminTeachersComponent {
     ];
   }
 
-  private getData() {
-    this.loading.set(true);
-    this.getAll();
+  onPageChange(page: number) {
+    this.store.onPageChange(page);
   }
 
-  onPageChange = (page: number) => {
-    this.activePageIndex.set(page - 1);
-    if (this.paginatedItems().length > page) {
-      return;
-    }
-
-    this.getData();
-  };
+  filterByWithoutSchools(status: boolean) {
+    this.store.onFilterWithoutSchools(status);
+  }
+  onLessonFilter(lessonId: Maybe<number>) {
+    this.store.filterByLesson(lessonId);
+  }
 
   openAddForm() {
     this.selectedItemForEdit.set(null);
@@ -120,18 +127,7 @@ export class AdminTeachersComponent {
     this.router.navigateByUrl(detailRoute);
   }
 
-  private getAll() {
-    this.services
-      .getAll({ lastSeen: this.lastSeen(), pageSize: this.perPage() })
-      .subscribe((teachers) => {
-        if (!this.paginatedItems.length) {
-          this.totalRecords.set(teachers.totalCount);
-        }
-        this.paginatedItems.update((prev) => {
-          return [...prev, teachers.items];
-        });
-        this.lastSeen.set(teachers.lastSeen || '');
-        this.loading.set(false);
-      });
+  searchBySchoolsStatus(status: boolean) {
+    console.log(status);
   }
 }

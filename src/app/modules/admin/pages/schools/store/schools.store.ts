@@ -71,28 +71,9 @@ export class SchoolsStore {
     pageSize: this.perPage(),
   }));
 
-  // paginatedItems = signal<IAdminSchoolResponse[][]>([]);
-  // totalRecords = signal<number>(0);
-  // loading = signal<boolean>(true);
-  // lastSeen = signal<string>('');
-  // activePageIndex = signal<number>(0);
-  // perPage = signal<number>(40);
-
-  // simple mutators
   setState(partial: Partial<ISchoolsState>) {
     this.state$.set({ ...this.state$(), ...partial });
   }
-
-  // editInfo(request: ITeacher) {
-  //   // this.setState({ submitInfoLoading: true });
-  //   // return this.adminTeachersService.editInfo(request).pipe(
-  //   //   tap((res) => {
-  //   //     // this.setState({ school: res });
-  //   //     this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
-  //   //   }),
-  //   //   finalize(() => this.setState({ submitContactLoading: false })),
-  //   // );
-  // }
 
   onPageChange = (page: number) => {
     this.setState({ activePageIndex: page - 1 });

@@ -25,6 +25,7 @@ export class SchoolsAuthService {
           ...field,
           id: field.fieldOfStudyId,
           title: field.fieldOfStudyTitle,
+          fullTitle: `${field.fieldOfStudyTitle} - ${field.educationalLevelTitle}`,
         })),
       })),
     );

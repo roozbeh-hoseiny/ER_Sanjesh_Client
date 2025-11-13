@@ -111,6 +111,7 @@ export class AdminSchoolsService {
             ...field,
             id: field.fieldOfStudyId,
             title: field.fieldOfStudyTitle,
+            fullTitle: `${field.fieldOfStudyTitle} - ${field.educationalLevelTitle}`,
           })),
         })),
       );

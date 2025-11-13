@@ -36,6 +36,40 @@ export class AdminTeachersService {
         })),
       );
   }
+
+  filterByWithoutSchools(
+    paginatedQuery: IPaginatedQuery,
+  ): Observable<IPaginatedResponse<IAdminTeacherEntity>> {
+    return this.http
+      .post<IPaginatedResponse<IAdminTeacherResponse>>(this.apiRoutes.teachers.byWithoutSchools(), {
+        ...PAGINATED_QUERY_DEFAULT_VALUES,
+        ...paginatedQuery,
+      })
+      .pipe(
+        map((res) => ({
+          ...res,
+          items: res.items.map(this.mapTeacherData),
+        })),
+      );
+  }
+  byLesson(
+    lessonId: number,
+    paginatedQuery: IPaginatedQuery,
+  ): Observable<IPaginatedResponse<IAdminTeacherEntity>> {
+    return this.http
+      .post<IPaginatedResponse<IAdminTeacherResponse>>(this.apiRoutes.teachers.byLesson(), {
+        ...PAGINATED_QUERY_DEFAULT_VALUES,
+        ...paginatedQuery,
+        lessonId,
+      })
+      .pipe(
+        map((res) => ({
+          ...res,
+          items: res.items.map(this.mapTeacherData),
+        })),
+      );
+  }
+
   byId(id: string): Observable<IAdminTeacherResponse> {
     return this.http.get<IAdminTeacherResponse>(this.apiRoutes.teachers.byId(id));
   }

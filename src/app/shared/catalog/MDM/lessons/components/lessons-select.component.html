@@ -7,6 +7,7 @@
       optionLabel="fullTitle"
       placeholder="یکی از درس‌ها را انتخاب کنید"
       [loading]="loading"
+      appendTo="body"
       (onChange)="onLessonSelect($event.value)"
     />
   </uikit-field>
@@ -18,6 +19,7 @@
     optionLabel="fullTitle"
     placeholder="یکی از درس‌ها را انتخاب کنید"
     [loading]="loading"
+    appendTo="body"
     (onChange)="onLessonSelect($event.value)"
   />
 }

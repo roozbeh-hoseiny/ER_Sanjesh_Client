@@ -143,4 +143,5 @@ interface SchoolsFieldOfStudy
   extends Omit<SchoolsFieldOfStudyRaw, 'fieldOfStudyId' | 'fieldOfStudyTitle'> {
   id: number;
   title: string;
+  fullTitle: string;
 }
