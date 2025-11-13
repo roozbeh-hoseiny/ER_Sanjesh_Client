@@ -8,7 +8,7 @@
         <app-key-value label="جنسیت">
           <app-school-genders-tag [genderId]="info().boyOrGirl" />
         </app-key-value>
-        <app-key-value label="فعال بودن">
+        <app-key-value label="وضعیت">
           <p-badge [value]="info().isActive ? 'فعال' : 'غیرفعال'" [severity]="info().isActive ? 'success' : 'danger'" />
         </app-key-value>
         <app-key-value label="ظرفیت مدرسه" [value]="info().examHallCapacity.toString()" />

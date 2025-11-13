@@ -34,6 +34,8 @@ export class SchoolsStore {
   getInfo(): void {
     this.schoolsAuthService.me().subscribe({
       next: (res) => {
+        console.log(res);
+
         this.info$.set(res);
       },
       error: (err) => {

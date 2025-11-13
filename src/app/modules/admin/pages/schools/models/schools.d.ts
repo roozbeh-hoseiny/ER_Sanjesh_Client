@@ -1,5 +1,10 @@
-import { ISchoolAddressRequestPayload, ISchoolResponse } from '@/modules/schools/models';
+import {
+  ISchoolAddressRequestPayload,
+  ISchoolMeRawResponse,
+  ISchoolResponse,
+} from '@/modules/schools/models';
 
+export interface IAdminSchoolRawResponse extends ISchoolMeRawResponse {}
 export interface IAdminSchoolResponse extends ISchoolResponse {}
 
 export interface ISchoolRequest {

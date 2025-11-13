@@ -13,7 +13,9 @@ import { ProgressSpinner } from 'primeng/progressspinner';
 import {
   IAdminSchoolResponse,
   IAttachCategoryToSchoolRequestPayload,
+  IAttachFieldToSchoolRequestPayload,
   IDetachCategoryToSchoolRequestPayload,
+  IDetachFieldToSchoolRequestPayload,
 } from '../models/schools';
 
 @Component({
@@ -46,6 +48,10 @@ export class AdminSchoolComponent {
         this.schoolService.attachCategory(payload),
       detachCategory: (payload: IDetachCategoryToSchoolRequestPayload) =>
         this.schoolService.detachCategory(payload),
+      attachField: (payload: IAttachFieldToSchoolRequestPayload) =>
+        this.schoolService.attachField(payload),
+      detachField: (payload: IDetachFieldToSchoolRequestPayload) =>
+        this.schoolService.detachField(payload),
       validateContactEmail: (id: string) => this.schoolService.validateContactEmail(id),
       validateContactMobile: (id: string) => this.schoolService.validateContactMobile(id),
       validateManagerEmail: (id: string) => this.schoolService.validateManagerEmail(id),

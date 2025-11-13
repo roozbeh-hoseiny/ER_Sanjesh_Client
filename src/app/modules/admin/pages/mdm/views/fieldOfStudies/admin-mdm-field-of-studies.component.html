@@ -1,1 +1,2 @@
-<field-of-studies-list [canAdd]="true" />
+<field-of-studies-list [canAdd]="true" (onAddClick)="onAddClick()"></field-of-studies-list>
+<field-form-dialog [(visible)]="isOpenAddForm" (onSubmit)="refreshData()" />

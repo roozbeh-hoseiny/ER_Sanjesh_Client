@@ -3,15 +3,18 @@ import { IPaginatedQuery, IPaginatedResponse } from '@/core/models/service.model
 import { ISchoolContactRequest } from '@/modules/schools/models';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { debounceTime, Observable } from 'rxjs';
+import { debounceTime, map, Observable } from 'rxjs';
 import { ADMIN_API_ROUTES } from '../constants/apiRoutes';
 import {
+  IAdminSchoolRawResponse,
   IAdminSchoolResponse,
   IAttachCategoryToSchoolRequestPayload,
+  IAttachFieldToSchoolRequestPayload,
   ICategoryFullTreeResponse,
   ICreateCategoryRequestPayload,
   ICreateSubCategoryRequestPayload,
   IDetachCategoryToSchoolRequestPayload,
+  IDetachFieldToSchoolRequestPayload,
   ISchoolRequest,
 } from '../pages/schools/models/schools';
 
@@ -95,7 +98,18 @@ export class AdminSchoolsService {
   }
 
   getOne(schoolId: string): Observable<IAdminSchoolResponse> {
-    return this.http.post<IAdminSchoolResponse>(this.apiRoutes.schools.single(), { id: schoolId });
+    return this.http
+      .post<IAdminSchoolRawResponse>(this.apiRoutes.schools.single(), { id: schoolId })
+      .pipe(
+        map((info) => ({
+          ...info,
+          fieldOfStudies: info.fieldOfStudies.map((field) => ({
+            ...field,
+            id: field.fieldOfStudyId,
+            title: field.fieldOfStudyTitle,
+          })),
+        })),
+      );
   }
 
   // contact info methods
@@ -161,5 +175,12 @@ export class AdminSchoolsService {
   }
   detachCategory(payload: IDetachCategoryToSchoolRequestPayload): Observable<boolean> {
     return this.http.post<boolean>(this.apiRoutes.schools.detachCategory(), payload);
+  }
+
+  attachField(payload: IAttachFieldToSchoolRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.attachField(), payload);
+  }
+  detachField(payload: IDetachFieldToSchoolRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.detachField(), payload);
   }
 }

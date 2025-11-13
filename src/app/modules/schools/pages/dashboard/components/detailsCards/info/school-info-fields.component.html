@@ -1,12 +1,12 @@
 <div class="flex flex-col gap-2 w-full">
-  <app-key-value label="دسته‌بندی" class="w-full">
+  <app-key-value label="دروس" class="w-full">
     <div class="flex w-full flex-wrap gap-4">
       @if (fields.length) {
         <div class="inline-flex items-center gap-2">
           @for (field of fields; track field.id) {
             <p-tag severity="info">
               <div class="flex items-center gap-3">
-                <span class="text-sm">{{ field.title }}</span>
+                <span class="text-sm">{{ `${field.title} - ${field.educationalLevelTitle}` }}</span>
                 @if (editable) {
                   <button
                     pButton

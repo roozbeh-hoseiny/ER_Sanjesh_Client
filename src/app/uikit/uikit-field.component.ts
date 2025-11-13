@@ -1,6 +1,7 @@
+import { Maybe } from '@/core';
 import { FormErrorsService } from '@/core/services/form-errors.service';
 import { CommonModule } from '@angular/common';
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, computed, inject } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 import { UikitLabelComponent } from './uikit-label.component';
@@ -20,17 +21,18 @@ export class UikitFieldComponent {
   @Input() className?: string;
   @Input() invalid?: boolean = false;
   // accept a FormControl or AbstractControl to display errors for
-  @Input() control?: AbstractControl | null;
+  @Input() control?: Maybe<AbstractControl>;
 
   private errorsService = inject(FormErrorsService);
 
-  get showErrors(): boolean {
+  showErrors = computed(() => {
     if (!this.control) return !!this.invalid;
-    return !!(this.control.invalid && (this.control.touched || this.control.dirty));
-  }
+    return false;
+    // return !!(this.control.invalid && (this.control.touched || this.control.dirty));
+  });
 
-  get errors(): string[] {
+  errors = computed((): string[] => {
     if (!this.control) return this.invalid ? ['خطا'] : [];
     return this.errorsService.getErrors(this.control, this.label).map((m) => m.message);
-  }
+  });
 }

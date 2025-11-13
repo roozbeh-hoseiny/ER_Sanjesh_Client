@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { FIELD_OF_STUDIES_API_ROUTES } from '../constants/fieldOfStudies.api.const';
-import { IFieldOfStudiesResponse } from '../models';
+import { IFieldOfStudiesRawResponse, IFieldOfStudiesResponse } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class FieldOfStudiesService {
@@ -11,6 +11,15 @@ export class FieldOfStudiesService {
   private apiRoutes = FIELD_OF_STUDIES_API_ROUTES;
 
   getAll(): Observable<IFieldOfStudiesResponse[]> {
-    return this.http.get<IFieldOfStudiesResponse[]>(this.apiRoutes.all());
+    return this.http
+      .get<IFieldOfStudiesRawResponse[]>(this.apiRoutes.all())
+      .pipe(
+        map((fields) =>
+          fields.map((field) => ({
+            ...field,
+            fullTitle: `${field.title} - ${field.educationalLevelTitle}`,
+          })),
+        ),
+      );
   }
 }

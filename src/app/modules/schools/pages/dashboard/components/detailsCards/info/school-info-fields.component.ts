@@ -53,8 +53,6 @@ export class SchoolInfoFieldsComponent implements OnInit {
   }
 
   attach = (field: IFieldOfStudiesResponse) => {
-    console.log('start');
-
     this.loading.set(true);
     this.schoolStore.attachField(field).subscribe({
       next: () => {
@@ -79,7 +77,7 @@ export class SchoolInfoFieldsComponent implements OnInit {
 
   detach = (fieldId: number) => {
     this.detachScheduleLoading.update((prev) => [...prev, fieldId]);
-    this.schoolStore.detachCategory(fieldId).subscribe({
+    this.schoolStore.detachField(fieldId).subscribe({
       next: () => {
         this.selectedFields.update((prev) => prev.filter((id) => id !== fieldId));
         this.onChange();

@@ -17,6 +17,9 @@ export class SchoolManagerComponent {
       ? (this.detailsStore.school()!.managerInfo as IManagerInfo)
       : null;
   }
+  get username() {
+    return this.detailsStore.school() ? this.detailsStore.school()!.username : null;
+  }
 
   get canEdit() {
     return this.detailsStore.canEditLoginInfo();

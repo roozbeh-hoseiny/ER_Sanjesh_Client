@@ -15,6 +15,8 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     updateContact: () => `${schoolsBaseUrl}/ChangeContactInfo`,
     attachCategory: () => `${schoolsBaseUrl}/AssignCategory`,
     detachCategory: () => `${schoolsBaseUrl}/UnassignCategory`,
+    attachField: () => `${schoolsBaseUrl}/AssignFieldOfStudy`,
+    detachField: () => `${schoolsBaseUrl}/UnassignFieldOfStudy`,
 
     //categories
     categories: () => `${schoolsBaseUrl}/GetCategoryFullTree`,

@@ -44,7 +44,7 @@ export interface IVerifyManagerMobileRequest extends IVerifyRequest {}
 export interface IVerifyContactEmailRequest {}
 export interface IVerifyContactMobileRequest {}
 
-export interface ISchoolMeResponse {
+export interface ISchoolMeRawResponse {
   id: string;
   name: string;
   phoneNumber: string;
@@ -59,7 +59,10 @@ export interface ISchoolMeResponse {
   isActive: boolean;
   uniqueId: string;
   categories: Category[];
-  fieldOfStudies: any[];
+  fieldOfStudies: SchoolsFieldOfStudyRaw[];
+}
+export interface ISchoolMeResponse extends Omit<ISchoolMeRawResponse, 'fieldOfStudies'> {
+  fieldOfStudies: SchoolsFieldOfStudy[];
 }
 
 interface Category {
@@ -67,7 +70,7 @@ interface Category {
   title: string;
   ordinal: number;
   parent: null;
-  children: any[];
+  children: Category[];
 }
 
 export interface ISchoolResponse {
@@ -129,10 +132,15 @@ export interface ISchoolAddressRequestPayload {
   latitude: string;
   longitude: string;
 }
-interface SchoolsFieldOfStudy {
+interface SchoolsFieldOfStudyRaw {
   educationalLevelId: number;
   educationalLevelTitle: string;
   educationalLevelLevel: string;
+  fieldOfStudyId: number;
+  fieldOfStudyTitle: string;
+}
+interface SchoolsFieldOfStudy
+  extends Omit<SchoolsFieldOfStudyRaw, 'fieldOfStudyId' | 'fieldOfStudyTitle'> {
   id: number;
   title: string;
 }

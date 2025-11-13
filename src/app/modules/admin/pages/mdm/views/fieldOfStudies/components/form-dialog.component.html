@@ -1,0 +1,19 @@
+<p-dialog
+  header="افزودن رشته‌ی تحصیلی"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '25rem' }"
+  className="overflow-visible"
+  (onHide)="close()"
+>
+  <form [formGroup]="form" (submit)="submit()">
+    <div class="flex flex-col gap-4">
+      <uikit-field label="عنوان رشته" [control]="form.controls.title">
+        <input pInputText [formControl]="form.controls.title" name="code" [disabled]="submitLoading()" />
+      </uikit-field>
+
+      <catalog-educational-levels-select [control]="form.controls.educationalId" [disabled]="submitLoading()" />
+      <app-form-footer-actions class="mt-6" [loading]="submitLoading()" (onCancel)="close()" (onSubmit)="submit()" />
+    </div>
+  </form>
+</p-dialog>

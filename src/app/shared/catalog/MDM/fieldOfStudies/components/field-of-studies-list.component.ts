@@ -3,7 +3,7 @@ import {
   PageDataListComponent,
 } from '@/shared/components/pageDataList/page-data-list.component';
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { FieldOfStudiesService } from '../services';
 
@@ -17,6 +17,8 @@ export class FieldOfStudiesListComponent {
   @Input() canEdit: boolean = false;
   @Input() canDelete: boolean = false;
 
+  @Output() onAddClick = new EventEmitter<void>();
+
   private fieldOfStudiesService = inject(FieldOfStudiesService);
 
   items = signal<any[]>([]);
@@ -26,6 +28,10 @@ export class FieldOfStudiesListComponent {
     {
       field: 'title',
       header: 'عنوان',
+    },
+    {
+      field: 'educationalLevelTitle',
+      header: 'سطح تحصیلی',
     },
   ] as IColumn[];
 
@@ -44,7 +50,11 @@ export class FieldOfStudiesListComponent {
     });
   }
 
-  onAdd(): void {}
+  onAdd(): void {
+    console.log('onAdd');
+
+    this.onAddClick.emit();
+  }
 
   onEdit(item: any): void {
     console.log(item);

@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { SCHOOLS_API_ROUTES } from '../constants';
 import {
+  ISchoolMeRawResponse,
   ISchoolMeResponse,
   IVerifyContactEmailRequest,
   IVerifyContactMobileRequest,
@@ -17,7 +18,16 @@ export class SchoolsAuthService {
   private apiRoutes = SCHOOLS_API_ROUTES;
 
   me(): Observable<ISchoolMeResponse> {
-    return this.http.get<ISchoolMeResponse>(this.apiRoutes.me());
+    return this.http.get<ISchoolMeRawResponse>(this.apiRoutes.me()).pipe(
+      map((info) => ({
+        ...info,
+        fieldOfStudies: info.fieldOfStudies.map((field) => ({
+          ...field,
+          id: field.fieldOfStudyId,
+          title: field.fieldOfStudyTitle,
+        })),
+      })),
+    );
   }
 
   verifyContactEmail(request: IVerifyContactEmailRequest): Observable<void> {

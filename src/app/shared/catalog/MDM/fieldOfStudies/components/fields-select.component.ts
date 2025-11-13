@@ -49,6 +49,8 @@ export class FieldsSelectComponent implements OnInit {
 
     const allFields = JSON.parse(JSON.stringify(this.allFields())) as IFieldOfStudiesResponse[];
     this.filteredItems.set(allFields.filter((field) => !this._filters.includes(field.id)));
+
+    console.log(this.filteredItems());
   };
 
   getAll(): void {
@@ -57,6 +59,7 @@ export class FieldsSelectComponent implements OnInit {
     this.fieldsService.getAll().subscribe({
       next: (items) => {
         this.allFields.set(items);
+        this.filterOptions(this.filters);
       },
       complete: () => {
         this.initialLoading.set(false);

@@ -36,7 +36,21 @@ export const appConfig: ApplicationConfig = {
     // interceptors and legacy (DI-provided) class-based interceptors
     provideAnimationsAsync(),
     // ensure PrimeNG uses our preset (applies css variables at app initialization)
-    providePrimeNG({ theme: { preset: MyPreset, options: { darkModeSelector: '.app-dark' } } }),
+    providePrimeNG({
+      theme: { preset: MyPreset, options: { darkModeSelector: '.app-dark' } },
+      translation: {
+        emptySelectionMessage: 'هیچ موردی انتخاب نشده است',
+        emptyMessage: 'هیچ داده‌ای برای نمایش وجود ندارد',
+        emptyFilterMessage: 'هیچ موردی برای نمایش وجود ندارد',
+        emptySearchMessage: 'هیچ موردی برای نمایش وجود ندارد',
+        accept: 'تایید',
+        reject: 'رد کردن',
+        cancel: 'لغو',
+        noFileChosenMessage: 'هیچ فایلی انتخاب نشده است',
+        fileChosenMessage: 'انتخاب فایل',
+        selectionMessage: '{0} مورد انتخاب شده است',
+      },
+    }),
 
     { provide: HTTP_INTERCEPTORS, useClass: ApiBaseUrlInterceptor, multi: true },
 
