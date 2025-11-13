@@ -27,7 +27,6 @@ export class TeacherDetailsCardsStore {
   readonly canEditInfo = computed(() => !!this.state$().canEditInfo);
   readonly canEditAddress = computed(() => !!this.state$().canEditLessons);
 
-  // simple mutators
   setState(partial: Partial<ITeacherDetailsCardsState>) {
     this.state$.set({ ...this.state$(), ...partial });
   }

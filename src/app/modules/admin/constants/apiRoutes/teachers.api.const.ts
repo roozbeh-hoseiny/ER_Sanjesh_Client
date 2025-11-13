@@ -8,5 +8,10 @@ export const adminTeachersApiRoutes = (baseUrl: string) => {
 
     attachLesson: () => `${teachersBaseUrl}/AssignLesson`,
     detachLesson: () => `${teachersBaseUrl}/UnassignLesson`,
+
+    approveSchool: () => `${teachersBaseUrl}/ApproveTeacherSchool`,
+    rejectSchool: () => `${teachersBaseUrl}/RejectTeacherSchool`,
+    approveSchoolLesson: () => `${teachersBaseUrl}/ApproveTeacherSchoolById`,
+    rejectSchoolLesson: () => `${teachersBaseUrl}/RejectTeacherSchoolById`,
   };
 };

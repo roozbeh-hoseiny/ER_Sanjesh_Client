@@ -2,7 +2,15 @@ import { ITeacherLesson } from '@/modules/teachers/models';
 import { AppCardComponent } from '@/shared/components';
 import { IColumn } from '@/shared/components/pageDataList/page-data-list.component';
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  EventEmitter,
+  Output,
+  signal,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Badge } from 'primeng/badge';
@@ -31,14 +39,18 @@ import { TeacherDetailsCardsStore } from '../dataStore';
   ],
 })
 export class LessonsTableComponent {
+  @Output() onSubmitted = new EventEmitter<void>();
+
   constructor(
     private store: TeacherDetailsCardsStore,
     private confirmationService: ConfirmationService,
   ) {}
+
   @ViewChild('status', { static: true }) statusTpl!: TemplateRef<any>;
 
   columns = [] as IColumn[];
   changeStatusSchedules = signal<Record<number, boolean>>({});
+  changeSchoolStatusSchedules = signal<Record<string, boolean>>({});
   lessons = computed(() => this.store.info()?.lessons!);
   canApproveSchools = computed(() => this.store.canApproveSchools());
 
@@ -62,7 +74,11 @@ export class LessonsTableComponent {
     ];
   }
 
-  showConfirmation(item: ITeacherLesson, checked: boolean, event: ToggleSwitchChangeEvent) {
+  showSchoolLessonConfirmation(
+    item: ITeacherLesson,
+    checked: boolean,
+    event: ToggleSwitchChangeEvent,
+  ) {
     this.changeStatusSchedules.update((prev) => ({ ...prev, [item.lessonId]: true }));
     this.confirmationService.confirm({
       target: (event.originalEvent.target as HTMLElement)?.parentNode?.parentNode!,
@@ -73,29 +89,61 @@ export class LessonsTableComponent {
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'بله',
       rejectLabel: 'خیر',
-      accept: () => this.toggleStatus(item, checked),
+      accept: () => this.toggleSchoolLessonStatus(item, checked),
       reject: () => {
         this.removeLessonFromSchedule(item.lessonId);
       },
     });
   }
 
-  toggleStatus(item: ITeacherLesson, checked: boolean) {
-    this.store.changeSchoolStatus(item.schoolId, item.schoolTitle, checked).subscribe({
-      next: () => {
-        item.approved = checked;
-        this.removeLessonFromSchedule(item.lessonId);
-      },
-      error: () => {
-        this.removeLessonFromSchedule(item.lessonId);
-        item.approved = !checked;
-      },
-    });
+  toggleSchoolLessonStatus(item: ITeacherLesson, checked: boolean) {
+    this.store
+      .changeSchoolLessonStatus({
+        teacherLessonId: item.lessonId,
+        schoolTitle: item.schoolTitle,
+        teacherLessonTitle: item.lessonTitle,
+        isActive: checked,
+      })
+      .subscribe({
+        next: () => {
+          item.approved = checked;
+          this.removeLessonFromSchedule(item.lessonId);
+        },
+        error: () => {
+          this.removeLessonFromSchedule(item.lessonId);
+          item.approved = !checked;
+        },
+      });
   }
 
   removeLessonFromSchedule(itemId: number) {
     const updatedSchedules = { ...this.changeStatusSchedules() };
     delete updatedSchedules[itemId];
     this.changeStatusSchedules.update(() => updatedSchedules);
+  }
+
+  approveAllLessons(item: ITeacherLesson) {
+    this.changeSchoolStatusSchedules.update((prev) => ({ ...prev, [item.schoolId]: true }));
+    this.store.approveSchool({ schoolId: item.schoolId, schoolTitle: item.schoolTitle }).subscribe({
+      next: () => {
+        this.onSubmitted.emit();
+        this.removeSchoolFromSchedule(item.schoolId);
+      },
+    });
+  }
+  rejectAllLessons(item: ITeacherLesson) {
+    this.changeSchoolStatusSchedules.update((prev) => ({ ...prev, [item.schoolId]: true }));
+    this.store.rejectSchool({ schoolId: item.schoolId, schoolTitle: item.schoolTitle }).subscribe({
+      next: () => {
+        this.onSubmitted.emit();
+        this.removeSchoolFromSchedule(item.schoolId);
+      },
+    });
+  }
+
+  removeSchoolFromSchedule(itemId: string) {
+    const updatedSchedules = { ...this.changeSchoolStatusSchedules() };
+    delete updatedSchedules[itemId];
+    this.changeSchoolStatusSchedules.set(updatedSchedules);
   }
 }

@@ -23,8 +23,22 @@
 
             @if (canApproveSchools()) {
               <div class="text-end flex justify-end gap-3 shrink-0">
-                <p-button label="تایید تمامی دروس" icon="pi pi-check" severity="success" size="small" />
-                <p-button label="رد تمامی دروس" icon="pi pi-times" severity="danger" size="small" />
+                <p-button
+                  label="تایید تمامی دروس"
+                  icon="pi pi-check"
+                  severity="success"
+                  size="small"
+                  [loading]="changeSchoolStatusSchedules()[item.schoolId]"
+                  (click)="approveAllLessons(item)"
+                />
+                <p-button
+                  label="رد تمامی دروس"
+                  icon="pi pi-times"
+                  severity="danger"
+                  size="small"
+                  [loading]="changeSchoolStatusSchedules()[item.schoolId]"
+                  (click)="rejectAllLessons(item)"
+                />
               </div>
             }
           </div>
@@ -38,7 +52,7 @@
             @if (col.field === "approved") {
               @if (canApproveSchools()) {
                 <p-confirmpopup />
-                @if (changeStatusSchedules()[item.lessonId]) {
+                @if (changeStatusSchedules()[item.lessonId] || changeSchoolStatusSchedules()[item.schoolId]) {
                   <p-progressSpinner
                     strokeWidth="4"
                     fill="transparent"
@@ -47,9 +61,9 @@
                   ></p-progressSpinner>
                 } @else {
                   <p-toggleSwitch
-                    [disabled]="changeStatusSchedules()[item.lessonId]"
+                    [disabled]="changeStatusSchedules()[item.lessonId] || changeSchoolStatusSchedules()[item.schoolId]"
                     [ngModel]="item.approved"
-                    (onChange)="showConfirmation(item, $event.checked, $event)"
+                    (onChange)="showSchoolLessonConfirmation(item, $event.checked, $event)"
                   ></p-toggleSwitch>
                 }
               } @else {

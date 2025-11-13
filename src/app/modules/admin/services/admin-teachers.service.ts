@@ -1,5 +1,11 @@
 import { PAGINATED_QUERY_DEFAULT_VALUES } from '@/core/constants';
 import { IPaginatedQuery, IPaginatedResponse } from '@/core/models/service.model';
+import {
+  IApproveSchoolLessonRequestPayload,
+  IApproveSchoolRequestPayload,
+  IRejectSchoolLessonRequestPayload,
+  IRejectSchoolRequestPayload,
+} from '@/modules/teachers/models';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
@@ -30,18 +36,28 @@ export class AdminTeachersService {
         })),
       );
   }
-  byId(id: string): Observable<IAdminTeacherEntity> {
-    return this.http
-      .get<IAdminTeacherResponse>(this.apiRoutes.teachers.byId(id))
-      .pipe(map(this.mapTeacherData));
+  byId(id: string): Observable<IAdminTeacherResponse> {
+    return this.http.get<IAdminTeacherResponse>(this.apiRoutes.teachers.byId(id));
   }
 
   attachLesson(payload: IAttachLessonToTeacherRequest): Observable<boolean> {
     return this.http.post<boolean>(this.apiRoutes.teachers.attachLesson(), payload);
   }
-
   detachLesson(payload: IDetachLessonFromTeacherRequest): Observable<boolean> {
     return this.http.post<boolean>(this.apiRoutes.teachers.detachLesson(), payload);
+  }
+
+  approveSchool(request: IApproveSchoolRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.teachers.approveSchool(), request);
+  }
+  rejectSchool(request: IRejectSchoolRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.teachers.rejectSchool(), request);
+  }
+  approveSchoolLesson(request: IApproveSchoolLessonRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.teachers.approveSchoolLesson(), request);
+  }
+  rejectSchoolLesson(request: IRejectSchoolLessonRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.teachers.rejectSchoolLesson(), request);
   }
 
   private mapTeacherData(teacher: IAdminTeacherResponse): IAdminTeacherEntity {

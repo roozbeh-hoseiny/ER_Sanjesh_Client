@@ -37,8 +37,7 @@ export class AdminSchoolComponent {
     private schoolsInfoService: SchoolsInfoService,
   ) {
     this.layoutService.changeIsFixedContentSize(true);
-    // Explicitly set the store service adapter to ensure the store uses the
-    // Admin/Schools implementation (works around component-provider resolution edge cases).
+
     this.schoolDetailsStore.setService({
       editInfo: (req: any) => this.schoolsInfoService.editInfo(req),
       editAddress: (req: any) => this.schoolsInfoService.editAddress(req),

@@ -1,17 +1,6 @@
-import { ITeacherLesson } from './mappedData';
+import { ITeacherMeResponse } from '@/modules/teachers/models';
 
-export interface IAdminTeacherResponse {
-  id: string;
-  firstName: string;
-  lastName: string;
-  gender: boolean;
-  mobile: string;
-  email: string;
-  isEmailVerified: boolean;
-  isMobileVerified: boolean;
-  uniqueId: string;
-  lessons: ITeacherLesson[];
-}
+export interface IAdminTeacherResponse extends ITeacherMeResponse {}
 
 export interface IAttachLessonToTeacherRequest {
   id: string;

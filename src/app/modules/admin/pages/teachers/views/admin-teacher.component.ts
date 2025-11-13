@@ -2,17 +2,24 @@ import { BreadcrumbService } from '@/core/services';
 import { LayoutService } from '@/layout/service/layout.service';
 import { adminNamedRoutes } from '@/modules/admin/constants';
 import { AdminTeachersService } from '@/modules/admin/services';
+import {
+  IApproveSchoolLessonRequestPayload,
+  IApproveSchoolRequestPayload,
+  IRejectSchoolLessonRequestPayload,
+  IRejectSchoolRequestPayload,
+} from '@/modules/teachers/models';
+import {
+  TeacherDetailsCardsStore,
+  TeacherDetailsComponent,
+} from '@/modules/teachers/pages/dashboard/components';
 import { Component, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProgressSpinner } from 'primeng/progressspinner';
-import { TeacherDetailsCardsStore } from '../components/detailsCards/store';
-import { TeacherInfoCardComponent } from '../components/detailsCards/teacher-info-card.component';
-import { TeacherLessonsCardComponent } from '../components/detailsCards/teacher-lessons-card.component';
 
 @Component({
   selector: 'app-admin-teacher',
   templateUrl: './admin-teacher.component.html',
-  imports: [ProgressSpinner, TeacherLessonsCardComponent, TeacherInfoCardComponent],
+  imports: [ProgressSpinner, TeacherDetailsComponent],
 })
 export class AdminTeacherComponent {
   teacherId = signal<string>('');
@@ -26,11 +33,20 @@ export class AdminTeacherComponent {
     private teacherCardStore: TeacherDetailsCardsStore,
   ) {
     this.layoutService.changeIsFixedContentSize(true);
+    this.teacherCardStore.setService({
+      approveSchool: (payload: IApproveSchoolRequestPayload) =>
+        this.teacherService.approveSchool(payload),
+      rejectSchool: (payload: IRejectSchoolRequestPayload) =>
+        this.teacherService.rejectSchool(payload),
+      approveSchoolLesson: (payload: IApproveSchoolLessonRequestPayload) =>
+        this.teacherService.approveSchoolLesson(payload),
+      rejectSchoolLesson: (payload: IRejectSchoolLessonRequestPayload) =>
+        this.teacherService.rejectSchoolLesson(payload),
+    });
+    this.teacherCardStore.fillInitial({
+      canApproveSchools: true,
+    });
     this.teacherId.set(this.route.snapshot.paramMap.get('teacherId') || '');
-  }
-
-  get lessons() {
-    return this.teacherCardStore.teacher()?.lessons || [];
   }
 
   ngOnInit() {
@@ -50,14 +66,14 @@ export class AdminTeacherComponent {
       adminNamedRoutes.root.meta,
       adminNamedRoutes.teachers.meta,
       {
-        title: this.teacherCardStore.teacher()?.fullname,
+        title: `${this.teacherCardStore.info()?.firstName} ${this.teacherCardStore.info()?.lastName}`,
       },
     ]);
   }
 
   loadTeacher() {
     return this.teacherService.byId(this.teacherId()).subscribe((teacher) => {
-      this.teacherCardStore.setState({ teacher });
+      this.teacherCardStore.setState({ info: teacher });
       this.setBreadcrumb();
       this.initLoading.set(false);
     });

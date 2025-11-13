@@ -6,6 +6,19 @@ import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { TEACHER_DETAILS_SERVICE, TeacherDetailsService } from './service.token';
 
+export interface IChangeStatusSchoolPayload {
+  schoolId: string;
+  schoolTitle: string;
+  isActive?: boolean;
+}
+
+export interface IChangeStatusSchoolLessonPayload {
+  teacherLessonTitle: string;
+  teacherLessonId: number;
+  schoolTitle: string;
+  isActive?: boolean;
+}
+
 interface ITeacherDetailsCardsState {
   info: Maybe<ITeacherMeResponse>;
   showValidateInlineConfirmation?: boolean;
@@ -48,7 +61,6 @@ export class TeacherDetailsCardsStore {
   // capture injected token first so we can tell if a custom implementation
   // was provided by a parent injector (component/module).
   private _injectedService = inject(TEACHER_DETAILS_SERVICE, { optional: true });
-  private _hasCustomService = !!this._injectedService;
 
   private service: Partial<TeacherDetailsService> = this._injectedService ?? {
     editLoginInfo: (req: any) => of(true) as Observable<any>,
@@ -65,7 +77,6 @@ export class TeacherDetailsCardsStore {
 
   setService(svc: Partial<TeacherDetailsService>) {
     this.service = svc;
-    this._hasCustomService = true;
   }
 
   editLoginInfo(request: any) {
@@ -130,61 +141,64 @@ export class TeacherDetailsCardsStore {
     );
   }
 
-  approveSchool(schoolId: string, schoolTitle: string) {
+  changeSchoolStatus(payload: IChangeStatusSchoolPayload) {
+    if (payload.isActive) {
+      return this.approveSchool(payload);
+    }
+    return this.rejectSchool(payload);
+  }
+
+  approveSchool(payload: IChangeStatusSchoolPayload) {
     if (this.service.approveSchool === undefined) return of();
-    return this.service.approveSchool({ teacherId: this.info()!.id, schoolId }).pipe(
-      tap(() => {
-        this.toastService.success({ text: ` مدرسه${schoolTitle} با موفقیت تایید شد.` });
-      }),
-    );
+    return this.service
+      .approveSchool({ teacherId: this.info()!.id, schoolId: payload.schoolId })
+      .pipe(
+        tap(() => {
+          this.toastService.success({ text: ` مدرسه${payload.schoolTitle} با موفقیت تایید شد.` });
+        }),
+      );
   }
-  rejectSchool(schoolId: string, schoolTitle: string) {
+  rejectSchool(payload: IChangeStatusSchoolPayload) {
     if (this.service.rejectSchool === undefined) return of();
-    return this.service.rejectSchool({ teacherId: this.info()!.id, schoolId }).pipe(
-      tap(() => {
-        this.toastService.success({ text: ` مدرسه${schoolTitle} با موفقیت رد شد.` });
-      }),
-    );
+    return this.service
+      .rejectSchool({ teacherId: this.info()!.id, schoolId: payload.schoolId })
+      .pipe(
+        tap(() => {
+          this.toastService.success({ text: ` مدرسه${payload.schoolTitle} با موفقیت رد شد.` });
+        }),
+      );
   }
 
-  changeSchoolStatus(schoolId: string, schoolTitle: string, isActive: boolean) {
-    if (isActive) {
-      return this.approveSchool(schoolId, schoolTitle);
+  changeSchoolLessonStatus(payload: IChangeStatusSchoolLessonPayload) {
+    if (payload.isActive) {
+      return this.approveSchoolLesson(payload);
     }
-    return this.rejectSchool(schoolId, schoolTitle);
+    return this.rejectSchoolLesson(payload);
   }
 
-  approveSchoolLesson(teacherLessonId: number, schoolTitle: string, teacherLessonTitle: string) {
+  approveSchoolLesson(payload: IChangeStatusSchoolLessonPayload) {
     if (this.service.approveSchoolLesson === undefined) return of();
-    return this.service.approveSchoolLesson({ teacherId: this.info()!.id, teacherLessonId }).pipe(
-      tap(() => {
-        this.toastService.success({
-          text: `درس ${teacherLessonTitle} از مدرسه${schoolTitle} با موفقیت تایید شد.`,
-        });
-      }),
-    );
+    return this.service
+      .approveSchoolLesson({ teacherId: this.info()!.id, teacherLessonId: payload.teacherLessonId })
+      .pipe(
+        tap(() => {
+          this.toastService.success({
+            text: `درس ${payload.teacherLessonTitle} از مدرسه${payload.schoolTitle} با موفقیت تایید شد.`,
+          });
+        }),
+      );
   }
-  rejectSchoolLesson(teacherLessonId: number, schoolTitle: string, teacherLessonTitle: string) {
+  rejectSchoolLesson(payload: IChangeStatusSchoolLessonPayload) {
     if (this.service.rejectSchoolLesson === undefined) return of();
-    return this.service.rejectSchoolLesson({ teacherId: this.info()!.id, teacherLessonId }).pipe(
-      tap(() => {
-        this.toastService.success({
-          text: `درس ${teacherLessonTitle} از مدرسه${schoolTitle} با موفقیت رد شد.`,
-        });
-      }),
-    );
-  }
-
-  changeSchoolStatusLesson(
-    teacherLessonId: number,
-    schoolTitle: string,
-    teacherLessonTitle: string,
-    isActive: boolean,
-  ) {
-    if (isActive) {
-      return this.approveSchoolLesson(teacherLessonId, schoolTitle, teacherLessonTitle);
-    }
-    return this.rejectSchoolLesson(teacherLessonId, schoolTitle, teacherLessonTitle);
+    return this.service
+      .rejectSchoolLesson({ teacherId: this.info()!.id, teacherLessonId: payload.teacherLessonId })
+      .pipe(
+        tap(() => {
+          this.toastService.success({
+            text: `درس ${payload.teacherLessonTitle} از مدرسه${payload.schoolTitle} با موفقیت رد شد.`,
+          });
+        }),
+      );
   }
 
   reset() {
