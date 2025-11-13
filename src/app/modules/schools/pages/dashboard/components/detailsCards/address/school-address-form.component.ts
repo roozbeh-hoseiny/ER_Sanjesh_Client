@@ -1,9 +1,9 @@
 import { ISchoolAddress, ISchoolAddressRequest, ISchoolResponse } from '@/modules/schools/models';
 import { StatesSelectComponent } from '@/shared/catalog';
+import { FormFooterActionsComponent } from '@/shared/components/formFooterActions/form-footer-actions.component';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonDirective } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { SchoolDetailsCardsStore } from '../store';
@@ -17,7 +17,7 @@ import { SchoolDetailsCardsStore } from '../store';
     Textarea,
     StatesSelectComponent,
     InputText,
-    ButtonDirective,
+    FormFooterActionsComponent,
   ],
 })
 export class SchoolAddressFormComponent {
@@ -42,8 +42,7 @@ export class SchoolAddressFormComponent {
       this.form.patchValue(cur.address as ISchoolAddress);
       if (cur.address.regionType === 3) {
         this.form.controls.city.setValue(cur.address.regionId);
-      }
-      if (cur.address.regionType === 2) {
+      } else if (cur.address.regionType === 2) {
         this.form.controls.state.setValue(cur.address.regionId);
       }
     }
@@ -70,6 +69,6 @@ export class SchoolAddressFormComponent {
     });
   }
   close() {
-    // this.closeForm.emit();
+    this.closeForm.emit();
   }
 }

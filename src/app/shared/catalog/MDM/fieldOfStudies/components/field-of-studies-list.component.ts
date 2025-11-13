@@ -51,8 +51,6 @@ export class FieldOfStudiesListComponent {
   }
 
   onAdd(): void {
-    console.log('onAdd');
-
     this.onAddClick.emit();
   }
 

@@ -22,9 +22,6 @@
         [invalid]="form.controls.address.invalid && form.controls.address.touched"
       ></textarea>
     </uikit-field>
-    <div class="flex gap-2 justify-end mt-4">
-      <button pButton type="button" class="p-button-secondary" (click)="close()">انصراف</button>
-      <button pButton type="submit" class="p-button-primary" [loading]="onSubmitLoading()">ذخیره</button>
-    </div>
+    <app-form-footer-actions [loading]="onSubmitLoading()" cancelLabel="انصراف" class="mt-4" (onCancel)="close()" />
   </div>
 </form>

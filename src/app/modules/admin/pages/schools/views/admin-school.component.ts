@@ -3,7 +3,7 @@ import { ToastService } from '@/core/services/toast.service';
 import { LayoutService } from '@/layout/service/layout.service';
 import { adminNamedRoutes } from '@/modules/admin/constants';
 import { AdminSchoolsService } from '@/modules/admin/services';
-import { ISchoolContactRequest } from '@/modules/schools/models';
+import { ISchoolContactRequest, ISchoolInfoRequest } from '@/modules/schools/models';
 import { SchoolDetailsComponent } from '@/modules/schools/pages/dashboard/components/detailsCards/school-details.component';
 import { SchoolDetailsCardsStore } from '@/modules/schools/pages/dashboard/components/detailsCards/store';
 import { SchoolsInfoService } from '@/modules/schools/services';
@@ -41,8 +41,8 @@ export class AdminSchoolComponent {
     this.layoutService.changeIsFixedContentSize(true);
 
     this.schoolDetailsStore.setService({
-      editInfo: (req: any) => this.schoolsInfoService.editInfo(req),
-      editAddress: (req: any) => this.schoolsInfoService.editAddress(req),
+      editInfo: (req: ISchoolInfoRequest) => this.schoolService.updateInfo(req),
+      editAddress: (req: any) => this.schoolService.updateAddress(req),
       updateContact: (req: any) => this.schoolService.updateContact(req),
       attachCategory: (payload: IAttachCategoryToSchoolRequestPayload) =>
         this.schoolService.attachCategory(payload),

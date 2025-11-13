@@ -8,10 +8,13 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     byRegion: () => `${schoolsBaseUrl}/GetByRegion`,
     single: () => `${schoolsBaseUrl}/GetOne`,
 
+    add: () => `${schoolsBaseUrl}/AddSchool`,
+
     //update
     activate: () => `${schoolsBaseUrl}/ActivateSchool`,
     deactivate: () => `${schoolsBaseUrl}/DeactivateSchool`,
-    add: () => `${schoolsBaseUrl}/AddSchool`,
+    updateInfo: () => `${schoolsBaseUrl}/EditSchool`,
+    updateAddress: () => `${schoolsBaseUrl}/ChangeAddress`,
     updateContact: () => `${schoolsBaseUrl}/ChangeContactInfo`,
     attachCategory: () => `${schoolsBaseUrl}/AssignCategory`,
     detachCategory: () => `${schoolsBaseUrl}/UnassignCategory`,

@@ -32,7 +32,7 @@
           </uikit-field>
           <app-states-select
             [stateControl]="form.controls.address.controls.state"
-            [cityControl]="form.controls.address.controls.city"
+            [cityControl]="form.controls.address.controls.regionId"
           ></app-states-select>
           <div class="grid grid-cols-2">
             <uikit-field label="کد پستی" for="postalCode" [control]="form.controls.address.controls.postalCode">
@@ -48,6 +48,7 @@
         </div>
       </div>
       <p-divider align="center"> مدیریت </p-divider>
+
       <div formGroupName="managerInfo" class="grid grid-cols-1 gap-4">
         <div class="grid grid-cols-2 gap-4">
           <uikit-field label="نام مدیر" for="firstName" [control]="form.controls.managerInfo.controls.firstName">
@@ -70,8 +71,6 @@
               "
             />
           </uikit-field>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
           <uikit-field label="موبایل" for="mobile" [control]="form.controls.managerInfo.controls.mobile">
             <input
               pInputText
@@ -90,8 +89,11 @@
               "
             />
           </uikit-field>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
+          @if (isManagerContactInvalid) {
+            <div class="col-span-2">
+              <p-message severity="error" text="لطفاً حداقل یکی از موبایل یا ایمیل را وارد کنید." />
+            </div>
+          }
           <app-gender-select [control]="form.controls.managerInfo.controls.gender" />
         </div>
       </div>
@@ -113,10 +115,7 @@
           />
         </uikit-field>
       </div>
-      <div class="flex gap-2 justify-end mt-4">
-        <button pButton type="button" class="p-button-secondary" (click)="close()">انصراف</button>
-        <button pButton type="submit" class="p-button-primary" [loading]="onSubmitLoading()">ذخیره</button>
-      </div>
     </div>
+    <app-form-footer-actions cancelLabel="انصراف" [loading]="onSubmitLoading()" class="mt-4" (onCancel)="close()" />
   </form>
 </p-dialog>

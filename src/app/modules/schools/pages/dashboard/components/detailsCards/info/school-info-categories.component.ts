@@ -57,8 +57,6 @@ export class SchoolInfoCategoriesComponent implements OnInit {
   }
 
   attachCategory = (category: ICategoryFullTreeMapped) => {
-    console.log('start');
-
     this.loading.set(true);
     this.schoolStore.attachCategory(category).subscribe({
       next: () => {
@@ -68,7 +66,6 @@ export class SchoolInfoCategoriesComponent implements OnInit {
           }
           return prev;
         });
-        console.log('end');
 
         this.onChange();
       },

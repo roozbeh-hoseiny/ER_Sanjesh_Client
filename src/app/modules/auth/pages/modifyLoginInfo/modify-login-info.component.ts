@@ -2,6 +2,7 @@ import { AuthService } from '@/core';
 import { IUserLoginInfo, TRoles } from '@/core/models';
 import { ToastService } from '@/core/services/toast.service';
 import { MustMatch } from '@/core/validators';
+import { password } from '@/core/validators/password.validator';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
@@ -51,13 +52,10 @@ export class ModifyLoginInfoComponent {
   readonly errorMessage = signal<string>('');
   readonly hidePassword = signal<boolean>(true);
 
-  // Password must be minimum 8 characters, include at least one uppercase, one lowercase, one number and one special character
-  private readonly passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
-
   readonly infoForm = this.fb.group(
     {
       username: [this.userLoginInfo?.username, [Validators.required]],
-      password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
+      password: ['', [Validators.required, password()]],
       confirmPassword: ['', [Validators.required]],
       mobile: [this.userLoginInfo?.mobile, [Validators.required]],
       email: [this.userLoginInfo?.email, [Validators.required, Validators.email]],

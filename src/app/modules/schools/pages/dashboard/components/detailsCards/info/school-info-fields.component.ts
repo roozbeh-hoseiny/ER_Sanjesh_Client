@@ -62,7 +62,6 @@ export class SchoolInfoFieldsComponent implements OnInit {
           }
           return prev;
         });
-        console.log('end');
 
         this.onChange();
       },

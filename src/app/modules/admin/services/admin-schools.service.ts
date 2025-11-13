@@ -1,6 +1,10 @@
 import { PAGINATED_QUERY_DEFAULT_VALUES } from '@/core/constants';
 import { IPaginatedQuery, IPaginatedResponse } from '@/core/models/service.model';
-import { ISchoolContactRequest } from '@/modules/schools/models';
+import {
+  ISchoolAddressRequestPayload,
+  ISchoolContactRequest,
+  ISchoolInfoRequest,
+} from '@/modules/schools/models';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { debounceTime, map, Observable } from 'rxjs';
@@ -110,6 +114,13 @@ export class AdminSchoolsService {
           })),
         })),
       );
+  }
+
+  updateInfo(payload: ISchoolInfoRequest) {
+    return this.http.post<boolean>(this.apiRoutes.schools.updateInfo(), payload);
+  }
+  updateAddress(payload: ISchoolAddressRequestPayload) {
+    return this.http.post<boolean>(this.apiRoutes.schools.updateAddress(), payload);
   }
 
   // contact info methods

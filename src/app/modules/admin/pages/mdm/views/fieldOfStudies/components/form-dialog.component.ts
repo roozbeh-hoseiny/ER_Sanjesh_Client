@@ -32,8 +32,6 @@ export class FieldFormDialogComponent {
       this.visibleChange.emit(v);
       if (!v) this.form.reset();
     });
-
-    this.form.controls.educationalId.valueChanges.subscribe((val) => console.log(val));
   }
 
   @Input()

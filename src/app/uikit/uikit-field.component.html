@@ -1,12 +1,12 @@
 <div class="flex flex-col gap-1">
-  <uikit-label [for]="for" [invalid]="!!invalid || showErrors()">
+  <uikit-label [for]="for" [invalid]="!!invalid || showErrors">
     {{ label }}
   </uikit-label>
   <ng-content></ng-content>
-  @if (showErrors()) {
+  @if (showErrors) {
     <ng-container>
       <p-message severity="error" size="small" variant="simple" class="formHint">
-        {{ errors()[0] }}
+        {{ errors[0] }}
       </p-message>
     </ng-container>
   }

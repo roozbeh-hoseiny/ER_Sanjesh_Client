@@ -28,7 +28,7 @@ export class SchoolInfoFormComponent {
   private detailsStore = inject(SchoolDetailsCardsStore);
 
   @Output() closeForm = new EventEmitter<void>();
-  @Output() submitForm = new EventEmitter<ISchoolResponse>();
+  @Output() submitForm = new EventEmitter<void>();
 
   constructor() {}
 
@@ -41,7 +41,7 @@ export class SchoolInfoFormComponent {
     name: ['', [Validators.required]],
     boyOrGirl: [0, [Validators.required]],
     examHallCapacity: [0, [Validators.required, Validators.min(1)]],
-    phoneNumber: ['', [Validators.required, mobileValidator()]],
+    phoneNumber: ['', [Validators.maxLength(11)]],
 
     managerInfo: this.fb.group({
       firstName: ['', [Validators.required]],
@@ -68,7 +68,7 @@ export class SchoolInfoFormComponent {
     this.detailsStore.editInfo(payload).subscribe({
       next: (value) => {
         this.onSubmitLoading.set(false);
-        this.submitForm.emit(value);
+        this.submitForm.emit();
       },
       error: (err) => {
         this.onSubmitLoading.set(false);

@@ -1,3 +1,4 @@
+import { password } from '@/core/validators/password.validator';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -9,7 +10,14 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
@@ -18,10 +26,13 @@ import { TextareaModule } from 'primeng/textarea';
 
 import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
+import { mobileValidator } from '@/core/validators/mobile.validator';
 import { AdminSchoolsService } from '@/modules/admin/services';
 import { StatesSelectComponent } from '@/shared/catalog';
 import { GenderSelectComponent } from '@/shared/catalog/gender/gender-select.component';
+import { FormFooterActionsComponent } from '@/shared/components/formFooterActions/form-footer-actions.component';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
+import { Message } from 'primeng/message';
 import { SelectModule } from 'primeng/select';
 import { ISchoolRequest } from '../models/schools';
 
@@ -40,24 +51,38 @@ import { ISchoolRequest } from '../models/schools';
     StatesSelectComponent,
     SelectModule,
     GenderSelectComponent,
+    Message,
+    FormFooterActionsComponent,
   ],
   templateUrl: './admin-school-form.component.html',
 })
 export class AdminSchoolFormComponent {
   private fb = inject(FormBuilder);
 
+  // Validator that ensures at least one of mobile or email is filled in managerInfo
+  private atLeastOneContactValidator: ValidatorFn = (
+    group: AbstractControl,
+  ): ValidationErrors | null => {
+    const mobile = group.get('mobile')?.value;
+    const email = group.get('email')?.value;
+
+    const hasMobile = !!(mobile && String(mobile).trim().length > 0);
+    const hasEmail = !!(email && String(email).trim().length > 0);
+
+    return hasMobile || hasEmail ? null : { atLeastOneContact: true };
+  };
+
   @Input() visible = false;
   @Input() defaultValues?: Maybe<Partial<ISchoolRequest>>;
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() save = new EventEmitter<ISchoolRequest>();
 
-  adminSchoolsService = inject(AdminSchoolsService);
-  toastService = inject(ToastService);
+  constructor(
+    private adminSchoolsService: AdminSchoolsService,
+    private toastService: ToastService,
+  ) {}
 
   onSubmitLoading = signal<boolean>(false);
-
-  // Password must be minimum 8 characters, include at least one uppercase, one lowercase, one number and one special character
-  private readonly passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 
   form = this.fb.group({
     name: [this.defaultValues?.name || '', [Validators.required]],
@@ -66,26 +91,41 @@ export class AdminSchoolFormComponent {
       postalCode: [this.defaultValues?.address?.postalCode || '', [Validators.required]],
       regionId: [this.defaultValues?.address?.regionId || null, [Validators.required]],
       state: [Number.MAX_SAFE_INTEGER, [Validators.required]],
-      city: [Number.MAX_SAFE_INTEGER, [Validators.required]],
     }),
-    managerInfo: this.fb.group({
-      firstName: [this.defaultValues?.managerInfo?.firstName || '', [Validators.required]],
-      lastName: [this.defaultValues?.managerInfo?.lastName || '', [Validators.required]],
-      mobile: [this.defaultValues?.managerInfo?.mobile || '', [Validators.required]],
-      email: [
-        this.defaultValues?.managerInfo?.email || '',
-        [Validators.required, Validators.email],
-      ],
-      gender: [this.defaultValues?.managerInfo?.gender || '', [Validators.required]],
-    }),
+    managerInfo: this.fb.group(
+      {
+        firstName: [this.defaultValues?.managerInfo?.firstName || '', [Validators.required]],
+        lastName: [this.defaultValues?.managerInfo?.lastName || '', [Validators.required]],
+        mobile: [this.defaultValues?.managerInfo?.mobile || '', [mobileValidator()]],
+        email: [this.defaultValues?.managerInfo?.email || '', [Validators.email]],
+        gender: [this.defaultValues?.managerInfo?.gender || '', [Validators.required]],
+      },
+      { validators: [this.atLeastOneContactValidator] },
+    ),
     username: [this.defaultValues?.username || '', [Validators.required]],
-    password: [
-      this.defaultValues?.password || '',
-      [Validators.required, Validators.pattern(this.passwordPattern)],
-    ],
+    password: [this.defaultValues?.password || '', [Validators.required, password()]],
   });
 
   editMode = computed(() => Boolean(this.defaultValues));
+  get isManagerContactInvalid() {
+    const managerGroup = this.form.controls.managerInfo;
+    const emailControl = managerGroup.controls.email;
+    const mobileControl = managerGroup.controls.mobile;
+
+    const emailTouched = !!(emailControl.touched || emailControl.dirty);
+    const mobileTouched = !!(mobileControl.touched || mobileControl.dirty);
+
+    const emailInvalid = !!(emailControl.invalid && emailTouched);
+    const mobileInvalid = !!(mobileControl.invalid && mobileTouched);
+
+    const groupHasAtLeastOneError = !!(
+      managerGroup.errors && (managerGroup.errors as any).atLeastOneContact
+    );
+    const showGroupError =
+      groupHasAtLeastOneError && (emailTouched || mobileTouched || managerGroup.touched);
+
+    return emailInvalid || mobileInvalid || showGroupError;
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['visible'] && changes['visible'].currentValue === true) {
@@ -115,15 +155,10 @@ export class AdminSchoolFormComponent {
     if (this.form.invalid) return;
     this.onSubmitLoading.set(true);
     const payload = this.form.value as ISchoolRequest;
-    this.adminSchoolsService
-      .addSchool({
-        ...payload,
-        address: { ...payload.address, regionId: this.form.value.address?.city as number },
-      })
-      .subscribe(() => {
-        this.toastService.success({ text: 'مدرسه با موفقیت اضافه شد.' });
-        this.save.emit(payload);
-        this.close();
-      });
+    this.adminSchoolsService.addSchool(payload).subscribe(() => {
+      this.toastService.success({ text: 'مدرسه با موفقیت اضافه شد.' });
+      this.save.emit(payload);
+      this.close();
+    });
   }
 }

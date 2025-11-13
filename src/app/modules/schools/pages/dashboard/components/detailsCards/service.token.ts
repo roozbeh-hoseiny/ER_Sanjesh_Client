@@ -8,14 +8,13 @@ import {
   ISchoolAddressRequest,
   ISchoolContactRequest,
   ISchoolInfoRequest,
-  ISchoolResponse,
 } from '@/modules/schools/models';
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface SchoolDetailsService {
-  editInfo(request: ISchoolInfoRequest): Observable<ISchoolResponse>;
-  editAddress(request: ISchoolAddressRequest): Observable<ISchoolResponse | void>;
+  editInfo(request: ISchoolInfoRequest): Observable<boolean>;
+  editAddress(request: ISchoolAddressRequest): Observable<boolean>;
   updateContact(payload: ISchoolContactRequest): Observable<boolean>;
   validateContactEmail(id: string): Observable<boolean>;
   validateContactMobile(id: string): Observable<boolean>;

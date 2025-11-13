@@ -6,7 +6,6 @@ import {
   ISchoolAddressRequestPayload,
   ISchoolInfoRequest,
   ISchoolLoginInfoRequest,
-  ISchoolResponse,
 } from '../models';
 
 @Injectable({ providedIn: 'root' })
@@ -15,15 +14,15 @@ export class SchoolsInfoService {
 
   private apiRoutes = SCHOOLS_API_ROUTES;
 
-  editAddress(request: ISchoolAddressRequestPayload): Observable<void> {
-    return this.http.post<void>(this.apiRoutes.editAddress(), request);
+  editAddress(request: ISchoolAddressRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.editAddress(), request);
   }
 
-  editLoginInfo(request: ISchoolLoginInfoRequest): Observable<void> {
-    return this.http.post<void>(this.apiRoutes.editLoginInfo(), request);
+  editLoginInfo(request: ISchoolLoginInfoRequest): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.editLoginInfo(), request);
   }
 
-  editInfo(request: ISchoolInfoRequest): Observable<ISchoolResponse> {
-    return this.http.post<ISchoolResponse>(this.apiRoutes.editInfo(), request);
+  editInfo(request: ISchoolInfoRequest): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.editInfo(), request);
   }
 }
