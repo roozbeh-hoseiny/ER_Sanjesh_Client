@@ -24,6 +24,15 @@
             @if (canApproveSchools()) {
               <div class="text-end flex justify-end gap-3 shrink-0">
                 <p-button
+                  severity="danger"
+                  size="small"
+                  [loading]="detachSchoolSchedules()[item.schoolId]"
+                  [disabled]="detachLessonsSchedules()[`${item.lessonId}-${item.schoolId}`]"
+                  (click)="detachSchool(item)"
+                >
+                  حذف مدرسه
+                </p-button>
+                <p-button
                   label="تایید تمامی دروس"
                   icon="pi pi-check"
                   severity="success"
@@ -34,7 +43,7 @@
                 <p-button
                   label="رد تمامی دروس"
                   icon="pi pi-times"
-                  severity="danger"
+                  severity="warn"
                   size="small"
                   [loading]="changeSchoolStatusSchedules()[item.schoolId]"
                   (click)="rejectAllLessons(item)"
@@ -51,21 +60,35 @@
           <td>
             @if (col.field === "approved") {
               @if (canApproveSchools()) {
-                <p-confirmpopup />
-                @if (changeStatusSchedules()[item.lessonId] || changeSchoolStatusSchedules()[item.schoolId]) {
-                  <p-progressSpinner
-                    strokeWidth="4"
-                    fill="transparent"
-                    animationDuration="1s"
-                    [style]="{ width: '24px', height: '24px' }"
-                  ></p-progressSpinner>
-                } @else {
-                  <p-toggleSwitch
-                    [disabled]="changeStatusSchedules()[item.lessonId] || changeSchoolStatusSchedules()[item.schoolId]"
-                    [ngModel]="item.approved"
-                    (onChange)="showSchoolLessonConfirmation(item, $event.checked, $event)"
-                  ></p-toggleSwitch>
-                }
+                <div class="flex items-center gap-2">
+                  <p-confirmpopup />
+                  @if (changeStatusSchedules()[item.lessonId] || changeSchoolStatusSchedules()[item.schoolId]) {
+                    <p-progressSpinner
+                      strokeWidth="4"
+                      fill="transparent"
+                      animationDuration="1s"
+                      [style]="{ width: '24px', height: '24px' }"
+                    ></p-progressSpinner>
+                  } @else {
+                    <p-toggleSwitch
+                      [disabled]="
+                        changeStatusSchedules()[item.lessonId] || changeSchoolStatusSchedules()[item.schoolId]
+                      "
+                      [ngModel]="item.approved"
+                      (onChange)="showSchoolLessonConfirmation(item, $event.checked, $event)"
+                    ></p-toggleSwitch>
+                  }
+
+                  <p-button
+                    outlined
+                    severity="secondary"
+                    size="small"
+                    [loading]="detachLessonsSchedules()[`${item.lessonId}-${item.schoolId}`]"
+                    (click)="detachLesson(item)"
+                  >
+                    حذف درس
+                  </p-button>
+                </div>
               } @else {
                 <p-badge
                   [value]="item.approved ? 'تایید شده' : 'تایید نشده'"

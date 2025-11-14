@@ -65,7 +65,7 @@ export class TeacherLessonsCardComponent {
     this.detachLoading.set(true);
     this.service
       .detachLesson({
-        id: this.teacherId,
+        teacherId: this.teacherId,
         schoolId,
         lessonId,
       })

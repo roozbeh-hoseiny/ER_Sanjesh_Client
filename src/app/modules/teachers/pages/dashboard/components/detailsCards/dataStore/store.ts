@@ -1,6 +1,6 @@
 import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
-import { ITeacherMeResponse } from '@/modules/teachers/models';
+import { ITeacherLesson, ITeacherMeResponse } from '@/modules/teachers/models';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -71,6 +71,7 @@ export class TeacherDetailsCardsStore {
 
     attachLesson: (payload: any) => of(true) as Observable<boolean>,
     detachLesson: (payload: any) => of(true) as Observable<boolean>,
+
     approveSchool: (payload: any) => of(true) as Observable<boolean>,
     rejectSchool: (payload: any) => of(true) as Observable<boolean>,
   };
@@ -124,21 +125,29 @@ export class TeacherDetailsCardsStore {
     );
   }
 
-  attachLesson(payload: any) {
+  attachLesson(payload: ITeacherLesson) {
     if (this.service.attachLesson === undefined) return of();
-    return this.service.attachLesson({ id: this.info()!.id, categoryId: payload.id }).pipe(
+    return this.service.attachLesson({ ...payload, id: this.info()?.id! }).pipe(
       tap(() => {
-        this.toastService.success({ text: `درس ${payload.label} با موفقیت اضافه شد.` });
+        this.toastService.success({ text: `درس ${payload.lessonTitle} با موفقیت فعال شد.` });
       }),
     );
   }
-  detachLesson(lessonId: number) {
+  detachLesson(payload: ITeacherLesson) {
+    console.log(payload);
+
     if (this.service.detachLesson === undefined) return of();
-    return this.service.detachLesson({ id: this.info()!.id, lessonId }).pipe(
-      tap(() => {
-        this.toastService.success({ text: 'دسته‌بندی با موفقیت حذف شد.' });
-      }),
-    );
+    return this.service
+      .detachLesson({
+        teacherId: this.info()?.id!,
+        schoolId: payload.schoolId,
+        lessonId: payload.lessonId,
+      })
+      .pipe(
+        tap(() => {
+          this.toastService.success({ text: `درس ${payload.lessonTitle} با موفقیت غیرفعال شد.` });
+        }),
+      );
   }
 
   changeSchoolStatus(payload: IChangeStatusSchoolPayload) {
@@ -154,7 +163,9 @@ export class TeacherDetailsCardsStore {
       .approveSchool({ teacherId: this.info()!.id, schoolId: payload.schoolId })
       .pipe(
         tap(() => {
-          this.toastService.success({ text: ` مدرسه${payload.schoolTitle} با موفقیت تایید شد.` });
+          this.toastService.success({
+            text: `تمامی دروس مربوط به مدرسه ${payload.schoolTitle} با موفقیت فعال شد.`,
+          });
         }),
       );
   }
@@ -164,7 +175,9 @@ export class TeacherDetailsCardsStore {
       .rejectSchool({ teacherId: this.info()!.id, schoolId: payload.schoolId })
       .pipe(
         tap(() => {
-          this.toastService.success({ text: ` مدرسه${payload.schoolTitle} با موفقیت رد شد.` });
+          this.toastService.success({
+            text: `تمامی دروس مربوط به مدرسه ${payload.schoolTitle} با موفقیت غیرفعال شد.`,
+          });
         }),
       );
   }
@@ -183,7 +196,7 @@ export class TeacherDetailsCardsStore {
       .pipe(
         tap(() => {
           this.toastService.success({
-            text: `درس ${payload.teacherLessonTitle} از مدرسه${payload.schoolTitle} با موفقیت تایید شد.`,
+            text: `درس ${payload.teacherLessonTitle} از مدرسه ${payload.schoolTitle} با موفقیت فعال شد.`,
           });
         }),
       );
@@ -195,7 +208,33 @@ export class TeacherDetailsCardsStore {
       .pipe(
         tap(() => {
           this.toastService.success({
-            text: `درس ${payload.teacherLessonTitle} از مدرسه${payload.schoolTitle} با موفقیت رد شد.`,
+            text: `درس ${payload.teacherLessonTitle} از مدرسه ${payload.schoolTitle} با موفقیت غیرفعال شد.`,
+          });
+        }),
+      );
+  }
+
+  attachSchool(payload: ITeacherLesson) {
+    if (this.service.attachLesson === undefined) return of();
+    return this.service.attachLesson({ ...payload, id: this.info()!.id }).pipe(
+      tap(() => {
+        this.toastService.success({
+          text: `درس ${payload.lessonTitle} از مدرسه ${payload.schoolTitle} با موفقیت ایجاد شد.`,
+        });
+      }),
+    );
+  }
+  detachSchool(payload: ITeacherLesson) {
+    if (this.service.detachSchool === undefined) return of();
+    return this.service
+      .detachSchool({
+        teacherId: this.info()?.id!,
+        schoolId: payload.schoolId,
+      })
+      .pipe(
+        tap(() => {
+          this.toastService.success({
+            text: `اتصال به مدرسه ${payload.schoolTitle} با موفقیت حذف شد.`,
           });
         }),
       );

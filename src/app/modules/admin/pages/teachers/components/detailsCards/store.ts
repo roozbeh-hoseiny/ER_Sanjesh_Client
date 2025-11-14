@@ -1,6 +1,7 @@
 import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
 import { AdminTeachersService } from '@/modules/admin/services';
+import { IDetachLessonRequestPayload } from '@/modules/teachers/models';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { IAdminTeacherEntity, IAttachLessonToTeacherRequest } from '../../models';
 
@@ -49,7 +50,7 @@ export class TeacherDetailsCardsStore {
     return this.adminTeachersService.attachLesson(request);
   }
 
-  detachLesson(request: IAttachLessonToTeacherRequest) {
+  detachLesson(request: IDetachLessonRequestPayload) {
     return this.adminTeachersService.detachLesson(request);
   }
 

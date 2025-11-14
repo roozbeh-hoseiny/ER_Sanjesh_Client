@@ -3,6 +3,7 @@ import { IPaginatedQuery, IPaginatedResponse } from '@/core/models/service.model
 import {
   IApproveSchoolLessonRequestPayload,
   IApproveSchoolRequestPayload,
+  IDetachSchoolRequestPayload,
   IRejectSchoolLessonRequestPayload,
   IRejectSchoolRequestPayload,
 } from '@/modules/teachers/models';
@@ -96,6 +97,10 @@ export class AdminTeachersService {
   }
   detachLesson(payload: IDetachLessonFromTeacherRequest): Observable<boolean> {
     return this.http.post<boolean>(this.apiRoutes.teachers.detachLesson(), payload);
+  }
+
+  detachSchool(payload: IDetachSchoolRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.teachers.detachSchool(), payload);
   }
 
   approveSchool(request: IApproveSchoolRequestPayload): Observable<boolean> {

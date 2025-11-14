@@ -1,6 +1,13 @@
 import {
+  IAttachLessonToTeacherRequest,
+  IDetachLessonFromTeacherRequest,
+} from '@/modules/admin/pages/teachers/models';
+import {
   IApproveSchoolLessonRequestPayload,
   IApproveSchoolRequestPayload,
+  IAttachLessonRequestPayload,
+  IDetachLessonRequestPayload,
+  IDetachSchoolRequestPayload,
   IRejectSchoolLessonRequestPayload,
   IRejectSchoolRequestPayload,
 } from '@/modules/teachers/models';
@@ -15,17 +22,20 @@ export interface TeacherDetailsService {
   invalidateEmail(id: string): Observable<boolean>;
   invalidateMobile(id: string): Observable<boolean>;
 
-  attachLesson(payload: any): Observable<boolean>;
-  detachLesson(payload: any): Observable<boolean>;
+  attachLesson(payload: IAttachLessonToTeacherRequest): Observable<boolean>;
+  detachLesson(payload: IDetachLessonFromTeacherRequest): Observable<boolean>;
 
   // attachSchool(payload: IAttachFieldToSchoolRequestPayload): Observable<boolean>;
-  detachSchool(payload: any): Observable<boolean>;
+  detachSchool(payload: IDetachSchoolRequestPayload): Observable<boolean>;
 
   approveSchool(payload: IApproveSchoolRequestPayload): Observable<boolean>;
   rejectSchool(payload: IRejectSchoolRequestPayload): Observable<boolean>;
 
   approveSchoolLesson(payload: IApproveSchoolLessonRequestPayload): Observable<boolean>;
   rejectSchoolLesson(payload: IRejectSchoolLessonRequestPayload): Observable<boolean>;
+
+  attachLesson(payload: IAttachLessonRequestPayload): Observable<boolean>;
+  detachLesson(payload: IDetachLessonRequestPayload): Observable<boolean>;
 }
 
 export const TEACHER_DETAILS_SERVICE = new InjectionToken<TeacherDetailsService>(

@@ -51,6 +51,8 @@ export class LessonsTableComponent {
   columns = [] as IColumn[];
   changeStatusSchedules = signal<Record<number, boolean>>({});
   changeSchoolStatusSchedules = signal<Record<string, boolean>>({});
+  detachLessonsSchedules = signal<Record<string, boolean>>({});
+  detachSchoolSchedules = signal<Record<string, boolean>>({});
   lessons = computed(() => this.store.info()?.lessons!);
   canApproveSchools = computed(() => this.store.canApproveSchools());
 
@@ -64,14 +66,24 @@ export class LessonsTableComponent {
       { field: 'fieldOfStudyTitle', header: 'رشته', minWidth: '15rem' },
       { field: 'educationalLevelTitle', header: 'پایه', minWidth: '15rem' },
       // { field: 'schoolTitle', header: 'مدرسه', minWidth: '15rem' },
-      {
+    ];
+    if (this.canApproveSchools()) {
+      this.columns.push({
+        field: 'approved',
+        header: '',
+        customDataModel: this.statusTpl,
+        width: '12rem',
+        minWidth: '12rem',
+      });
+    } else {
+      this.columns.push({
         field: 'approved',
         header: 'وضعیت',
         customDataModel: this.statusTpl,
-        width: '6.5rem',
-        minWidth: '6.5rem',
-      },
-    ];
+        width: '5rem',
+        minWidth: '5rem',
+      });
+    }
   }
 
   showSchoolLessonConfirmation(
@@ -145,5 +157,45 @@ export class LessonsTableComponent {
     const updatedSchedules = { ...this.changeSchoolStatusSchedules() };
     delete updatedSchedules[itemId];
     this.changeSchoolStatusSchedules.set(updatedSchedules);
+  }
+
+  detachLesson(item: ITeacherLesson) {
+    this.detachLessonsSchedules.update((prev) => ({
+      ...prev,
+      [`${item.lessonId}-${item.schoolId}`]: true,
+    }));
+    console.log('asdadasdas');
+    this.store.detachLesson(item).subscribe({
+      next: () => {
+        console.log('first');
+        this.onSubmitted.emit();
+        this.removeDetachLessonFromSchedule(item);
+      },
+    });
+  }
+
+  removeDetachLessonFromSchedule(item: ITeacherLesson) {
+    const updatedSchedules = { ...this.detachLessonsSchedules() };
+    delete updatedSchedules[`${item.lessonId}-${item.schoolId}`];
+    this.detachLessonsSchedules.set(updatedSchedules);
+  }
+
+  detachSchool(item: ITeacherLesson) {
+    this.detachSchoolSchedules.update((prev) => ({
+      ...prev,
+      [item.schoolId]: true,
+    }));
+    this.store.detachSchool(item).subscribe({
+      next: () => {
+        this.onSubmitted.emit();
+        this.removeSchoolFromSchedule(item.schoolId);
+      },
+    });
+  }
+
+  removeDetachSchoolFromSchedule(schoolId: string) {
+    const updatedSchedules = { ...this.detachSchoolSchedules() };
+    delete updatedSchedules[schoolId];
+    this.detachSchoolSchedules.set(updatedSchedules);
   }
 }

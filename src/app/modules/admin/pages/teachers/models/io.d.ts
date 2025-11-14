@@ -7,4 +7,8 @@ export interface IAttachLessonToTeacherRequest {
   schoolId: string;
   lessonId: number;
 }
-export interface IDetachLessonFromTeacherRequest extends IAttachLessonToTeacherRequest {}
+export interface IDetachLessonFromTeacherRequest {
+  teacherId: string;
+  schoolId: string;
+  lessonId: number;
+}

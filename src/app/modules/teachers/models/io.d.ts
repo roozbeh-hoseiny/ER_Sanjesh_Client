@@ -57,3 +57,19 @@ export interface IApproveSchoolLessonRequestPayload {
   teacherLessonId: number;
 }
 export interface IRejectSchoolLessonRequestPayload extends IApproveSchoolLessonRequestPayload {}
+
+export interface IAttachLessonRequestPayload {
+  id: string;
+  schoolId: string;
+  lessonId: number;
+}
+export interface IDetachLessonRequestPayload {
+  teacherId: string;
+  schoolId: string;
+  lessonId: number;
+}
+
+export interface IDetachSchoolRequestPayload {
+  teacherId: string;
+  schoolId: string;
+}

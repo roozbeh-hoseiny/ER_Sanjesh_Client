@@ -5,6 +5,9 @@ import { AdminTeachersService } from '@/modules/admin/services';
 import {
   IApproveSchoolLessonRequestPayload,
   IApproveSchoolRequestPayload,
+  IAttachLessonRequestPayload,
+  IDetachLessonRequestPayload,
+  IDetachSchoolRequestPayload,
   IRejectSchoolLessonRequestPayload,
   IRejectSchoolRequestPayload,
 } from '@/modules/teachers/models';
@@ -42,6 +45,12 @@ export class AdminTeacherComponent {
         this.teacherService.approveSchoolLesson(payload),
       rejectSchoolLesson: (payload: IRejectSchoolLessonRequestPayload) =>
         this.teacherService.rejectSchoolLesson(payload),
+      attachLesson: (payload: IAttachLessonRequestPayload) =>
+        this.teacherService.attachLesson(payload),
+      detachLesson: (payload: IDetachLessonRequestPayload) =>
+        this.teacherService.detachLesson(payload),
+      detachSchool: (payload: IDetachSchoolRequestPayload) =>
+        this.teacherService.detachSchool(payload),
     });
     this.teacherCardStore.fillInitial({
       canApproveSchools: true,
@@ -78,17 +87,4 @@ export class AdminTeacherComponent {
       this.initLoading.set(false);
     });
   }
-
-  // onSubmitContact(payload: ISchoolContactRequest) {
-  //   this.teacherService.updateContact({ ...payload, id: this.teacherId() }).subscribe({
-  //     next: (value) => {
-  //       this.submitContactLoading.set(false);
-  //       this.toastService.success({ text: 'اطلاعات رابط مدرسه با موفقیت به‌روزرسانی شد.' });
-  //       this.loadSchool();
-  //     },
-  //     error: (err) => {
-  //       this.submitContactLoading.set(false);
-  //     },
-  //   });
-  // }
 }
