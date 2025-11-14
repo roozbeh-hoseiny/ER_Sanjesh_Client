@@ -4,7 +4,7 @@ import { AdminTeachersService } from '@/modules/admin/services';
 import { computed, Injectable, signal } from '@angular/core';
 import { IAdminTeacherEntity } from '../models';
 
-type TGetDataMode = 'all' | 'withoutSchools' | 'lesson';
+type TGetDataMode = 'all' | 'withoutSchools' | 'lesson' | 'school';
 
 interface ITeachersState {
   schools: Maybe<IAdminTeacherEntity>;
@@ -16,6 +16,7 @@ interface ITeachersState {
   perPage: number;
   isWithoutSchools: boolean;
   selectedLesson: Maybe<number>;
+  selectedSchool: Maybe<string>;
   getDataMode: TGetDataMode;
 }
 
@@ -29,6 +30,7 @@ export const INITIAL_TEACHERS_STATE: ITeachersState = {
   perPage: 40,
   isWithoutSchools: false,
   selectedLesson: null,
+  selectedSchool: null,
   getDataMode: 'all',
 };
 
@@ -42,6 +44,7 @@ export class TeachersStore {
   readonly loading = computed(() => this.state$().loading);
   readonly isWithoutSchools = computed(() => this.state$().isWithoutSchools);
   readonly selectedLesson = computed(() => this.state$().selectedLesson);
+  readonly selectedSchool = computed(() => this.state$().selectedSchool);
   readonly paginatedItems = computed(() => this.state$().paginatedItems);
 
   readonly getDataMode = computed(() => this.state$().getDataMode);
@@ -97,6 +100,15 @@ export class TeachersStore {
     this.getByLesson();
   }
 
+  filterBySchool(schoolId: Maybe<string>) {
+    this.validateFilterData(schoolId, 'school');
+    if (this.selectedSchool() !== schoolId) {
+      this.resetPaginateInfo();
+      this.setState({ selectedSchool: schoolId });
+    }
+    this.getBySchool();
+  }
+
   initial() {
     this.reset();
     this.getData();
@@ -110,6 +122,8 @@ export class TeachersStore {
         return this.getFilteredByWithoutSchools();
       case 'lesson':
         return this.getByLesson();
+      case 'school':
+        return this.getBySchool();
       default:
         return this.getAll();
     }
@@ -150,6 +164,16 @@ export class TeachersStore {
     this.setState({ loading: true });
     this.services
       .byLesson(this.selectedLesson()!, this.paginatedQuery())
+      .subscribe({ ...this.onResponse });
+  }
+
+  private getBySchool() {
+    if (!this.selectedSchool()) {
+      return;
+    }
+    this.setState({ loading: true });
+    this.services
+      .bySchool(this.selectedSchool()!, this.paginatedQuery())
       .subscribe({ ...this.onResponse });
   }
 

@@ -106,6 +106,9 @@ export class AdminTeachersComponent {
   onLessonFilter(lessonId: Maybe<number>) {
     this.store.filterByLesson(lessonId);
   }
+  onSchoolFilter(schoolId: Maybe<string>) {
+    this.store.filterBySchool(schoolId);
+  }
 
   openAddForm() {
     this.selectedItemForEdit.set(null);

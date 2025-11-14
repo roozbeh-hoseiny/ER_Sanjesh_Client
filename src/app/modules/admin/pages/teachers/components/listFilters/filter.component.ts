@@ -27,15 +27,15 @@ export class TeachersFilterComponent {
   @Output() onSearch = new EventEmitter<string>();
   @Output() onWithoutSchoolStatusFilter = new EventEmitter<boolean>();
   @Output() onLessonFilter = new EventEmitter<Maybe<number>>();
-  @Output() onRegionFilter = new EventEmitter<Maybe<number>>();
+  @Output() onSchoolFilter = new EventEmitter<Maybe<string>>();
 
-  search = signal<string>('');
+  schoolId = signal<Maybe<string>>('');
   withoutSchoolStatus = signal<boolean>(false);
   selectedLesson = signal<Maybe<number>>(null);
-  selectedSchool = signal<Maybe<number>>(null);
+  selectedSchool = signal<Maybe<string>>(null);
   private debounceTimer: any;
 
-  onFilterChange = (search: string) => {
+  onFilterChange = (schoolId: string) => {
     this.selectedLesson.set(null);
     this.selectedSchool.set(null);
 
@@ -44,13 +44,13 @@ export class TeachersFilterComponent {
     }
 
     this.debounceTimer = setTimeout(() => {
-      this.onSearch.emit(search);
+      this.onSearch.emit(schoolId);
     }, 300);
   };
 
   clearSearch = () => {
     clearTimeout(this.debounceTimer);
-    this.search.update(() => '');
+    this.schoolId.set('');
     this.onSearch.emit('');
   };
 
@@ -61,21 +61,20 @@ export class TeachersFilterComponent {
   }
 
   onLessonChange(lessonId: Maybe<number>) {
-    console.log(lessonId);
-
     this.resetFilters();
     this.selectedLesson.set(lessonId);
     this.onLessonFilter.emit(lessonId);
   }
 
-  onRegionChange(regionId: Maybe<number> = null) {
+  onSchoolIdChange(schoolId: Maybe<string>) {
     this.resetFilters();
-    this.selectedSchool.set(regionId);
-    this.onRegionFilter.emit(regionId);
+    this.schoolId.set(schoolId);
+    this.onSchoolFilter.emit(schoolId);
   }
 
   resetFilters = () => {
-    this.search.set('');
+    this.schoolId.set('');
     this.selectedLesson.set(null);
+    this.withoutSchoolStatus.set(false);
   };
 }

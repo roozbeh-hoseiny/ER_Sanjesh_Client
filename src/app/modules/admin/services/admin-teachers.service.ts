@@ -69,6 +69,23 @@ export class AdminTeachersService {
         })),
       );
   }
+  bySchool(
+    schoolId: string,
+    paginatedQuery: IPaginatedQuery,
+  ): Observable<IPaginatedResponse<IAdminTeacherEntity>> {
+    return this.http
+      .post<IPaginatedResponse<IAdminTeacherResponse>>(this.apiRoutes.teachers.bySchool(), {
+        ...PAGINATED_QUERY_DEFAULT_VALUES,
+        ...paginatedQuery,
+        schoolId,
+      })
+      .pipe(
+        map((res) => ({
+          ...res,
+          items: res.items.map(this.mapTeacherData),
+        })),
+      );
+  }
 
   byId(id: string): Observable<IAdminTeacherResponse> {
     return this.http.get<IAdminTeacherResponse>(this.apiRoutes.teachers.byId(id));

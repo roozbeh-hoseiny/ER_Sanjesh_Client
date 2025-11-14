@@ -8,6 +8,15 @@
     </p-toggleSwitch>
   </uikit-field>
   <hr />
-
   <catalog-lessons-select (selectionChange)="onLessonChange($event.id)" />
+  <hr />
+
+  <uikit-field label="شناسه مدرسه" for="schoolId" class="w-full">
+    <input
+      pInputText
+      placeholder="شناسه مدرسه را وارد کنید"
+      [(ngModel)]="schoolId"
+      (ngModelChange)="onSchoolIdChange($event)"
+    />
+  </uikit-field>
 </div>

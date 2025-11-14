@@ -7,6 +7,7 @@ export const adminTeachersApiRoutes = (baseUrl: string) => {
     byUniqueId: (id: string) => `${teachersBaseUrl}/GetOneByUniqueId/${id}`,
     byWithoutSchools: () => `${teachersBaseUrl}/FindWithoutSchool`,
     byLesson: () => `${teachersBaseUrl}/FindByLessonId`,
+    bySchool: () => `${teachersBaseUrl}/FindBySchoolId`,
 
     attachLesson: () => `${teachersBaseUrl}/AssignLesson`,
     detachLesson: () => `${teachersBaseUrl}/UnassignLesson`,
