@@ -18,39 +18,12 @@
     <ng-template #groupheader let-item>
       <tr pRowGroupHeader>
         <td [attr.colspan]="columns.length">
-          <div class="flex items-center gap-3 justify-between">
-            دروس مدرسه‌ی "{{ item.schoolTitle }}"
-
-            @if (canApproveSchools()) {
-              <div class="text-end flex justify-end gap-3 shrink-0">
-                <p-button
-                  severity="danger"
-                  size="small"
-                  [loading]="detachSchoolSchedules()[item.schoolId]"
-                  [disabled]="detachLessonsSchedules()[`${item.lessonId}-${item.schoolId}`]"
-                  (click)="detachSchool(item)"
-                >
-                  حذف مدرسه
-                </p-button>
-                <p-button
-                  label="تایید تمامی دروس"
-                  icon="pi pi-check"
-                  severity="success"
-                  size="small"
-                  [loading]="changeSchoolStatusSchedules()[item.schoolId]"
-                  (click)="approveAllLessons(item)"
-                />
-                <p-button
-                  label="رد تمامی دروس"
-                  icon="pi pi-times"
-                  severity="warn"
-                  size="small"
-                  [loading]="changeSchoolStatusSchedules()[item.schoolId]"
-                  (click)="rejectAllLessons(item)"
-                />
-              </div>
-            }
-          </div>
+          <lesson-school-row-subheader
+            [item]="item"
+            [selectedLessonIds]="getLessonIds(item)"
+            [teacherId]="teacherId()"
+            (onSubmitted)="onSubmit()"
+          />
         </td>
       </tr>
     </ng-template>
@@ -62,7 +35,7 @@
               @if (canApproveSchools()) {
                 <div class="flex items-center gap-2">
                   <p-confirmpopup />
-                  @if (changeStatusSchedules()[item.lessonId] || changeSchoolStatusSchedules()[item.schoolId]) {
+                  @if (changeStatusSchedules()[item.lessonId]) {
                     <p-progressSpinner
                       strokeWidth="4"
                       fill="transparent"
@@ -71,9 +44,7 @@
                     ></p-progressSpinner>
                   } @else {
                     <p-toggleSwitch
-                      [disabled]="
-                        changeStatusSchedules()[item.lessonId] || changeSchoolStatusSchedules()[item.schoolId]
-                      "
+                      [disabled]="changeStatusSchedules()[item.lessonId]"
                       [ngModel]="item.approved"
                       (onChange)="showSchoolLessonConfirmation(item, $event.checked, $event)"
                     ></p-toggleSwitch>

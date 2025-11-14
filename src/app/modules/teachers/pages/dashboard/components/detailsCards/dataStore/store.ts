@@ -1,6 +1,10 @@
 import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
-import { ITeacherLesson, ITeacherMeResponse } from '@/modules/teachers/models';
+import {
+  IAttachLessonRequestPayload,
+  ITeacherLesson,
+  ITeacherMeResponse,
+} from '@/modules/teachers/models';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -125,13 +129,9 @@ export class TeacherDetailsCardsStore {
     );
   }
 
-  attachLesson(payload: ITeacherLesson) {
+  attachLesson(payload: IAttachLessonRequestPayload) {
     if (this.service.attachLesson === undefined) return of();
-    return this.service.attachLesson({ ...payload, id: this.info()?.id! }).pipe(
-      tap(() => {
-        this.toastService.success({ text: `درس ${payload.lessonTitle} با موفقیت فعال شد.` });
-      }),
-    );
+    return this.service.attachLesson(payload);
   }
   detachLesson(payload: ITeacherLesson) {
     console.log(payload);

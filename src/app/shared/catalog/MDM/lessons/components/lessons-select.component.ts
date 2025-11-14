@@ -18,6 +18,7 @@ export class LessonsSelectComponent implements OnInit {
     null,
   );
   @Input() name: string = 'lesson';
+  @Input() onlyId: boolean = false;
 
   private _filters: number[] = [];
   @Input()
@@ -31,6 +32,7 @@ export class LessonsSelectComponent implements OnInit {
   @Input() showLabel?: boolean = true;
   @Input() placeholder?: string;
   @Input() loading?: boolean;
+  @Input() disabled: boolean = false;
   @Output() selectionChange = new EventEmitter<ILessonsInRoot>();
   @Output() selectionClear = new EventEmitter();
 
@@ -43,7 +45,9 @@ export class LessonsSelectComponent implements OnInit {
   initialLoading = signal<boolean>(false);
 
   ngOnInit(): void {
-    this.getAll();
+    if (!this.allLessons().length) {
+      this.getAll();
+    }
   }
 
   filterOptions = (filters: number[]) => {

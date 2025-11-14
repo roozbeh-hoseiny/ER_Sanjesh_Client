@@ -5,8 +5,10 @@
       [formControl]="control"
       [options]="filteredItems()"
       optionLabel="fullTitle"
+      [optionValue]="onlyId ? 'id' : ''"
       placeholder="یکی از درس‌ها را انتخاب کنید"
       [loading]="loading"
+      [disabled]="disabled"
       appendTo="body"
       (onChange)="onLessonSelect($event.value)"
     />
@@ -17,8 +19,10 @@
     [formControl]="control"
     [options]="filteredItems()"
     optionLabel="fullTitle"
+    [optionValue]="onlyId ? 'id' : ''"
     placeholder="یکی از درس‌ها را انتخاب کنید"
     [loading]="loading"
+    [disabled]="disabled"
     appendTo="body"
     (onChange)="onLessonSelect($event.value)"
   />

@@ -1,0 +1,41 @@
+<div class="flex items-center gap-3 justify-between">
+  دروس مدرسه‌ی "{{ item.schoolTitle }}"
+
+  @if (canApproveSchools()) {
+    <div class="text-end flex justify-end gap-3 shrink-0">
+      <p-button severity="success" size="small" icon="pi pi-plus" label="افزودن درس" (onClick)="openLessonForm()">
+      </p-button>
+      <p-button
+        severity="danger"
+        size="small"
+        [loading]="detachSchoolSchedules()[item.schoolId]"
+        (click)="detachSchool(item)"
+      >
+        حذف مدرسه
+      </p-button>
+      <p-button
+        label="تایید تمامی دروس"
+        icon="pi pi-check"
+        severity="success"
+        size="small"
+        [loading]="changeSchoolStatusSchedules()[item.schoolId]"
+        (click)="approveAllLessons(item)"
+      />
+      <p-button
+        label="رد تمامی دروس"
+        icon="pi pi-times"
+        severity="warn"
+        size="small"
+        [loading]="changeSchoolStatusSchedules()[item.schoolId]"
+        (click)="rejectAllLessons(item)"
+      />
+    </div>
+  }
+</div>
+<attach-school-lesson-form-dialog
+  [(visible)]="showLessonForm"
+  [schoolId]="item.schoolId"
+  [teacherId]="teacherId"
+  [selectedLessonIds]="selectedLessonIds"
+  (onSubmit)="submitted()"
+/>

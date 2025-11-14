@@ -20,6 +20,7 @@ import { ProgressSpinner } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
 import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
 import { TeacherDetailsCardsStore } from '../dataStore';
+import { lessonSchoolRowSubheaderComponent } from './lesson-school-row.component';
 
 @Component({
   selector: 'app-teacher-lessons-table',
@@ -36,6 +37,7 @@ import { TeacherDetailsCardsStore } from '../dataStore';
     Badge,
     TableModule,
     Button,
+    lessonSchoolRowSubheaderComponent,
   ],
 })
 export class LessonsTableComponent {
@@ -50,10 +52,10 @@ export class LessonsTableComponent {
 
   columns = [] as IColumn[];
   changeStatusSchedules = signal<Record<number, boolean>>({});
-  changeSchoolStatusSchedules = signal<Record<string, boolean>>({});
   detachLessonsSchedules = signal<Record<string, boolean>>({});
-  detachSchoolSchedules = signal<Record<string, boolean>>({});
+
   lessons = computed(() => this.store.info()?.lessons!);
+  teacherId = computed(() => this.store.info()?.id!);
   canApproveSchools = computed(() => this.store.canApproveSchools());
 
   ngOnInit() {
@@ -134,37 +136,11 @@ export class LessonsTableComponent {
     this.changeStatusSchedules.update(() => updatedSchedules);
   }
 
-  approveAllLessons(item: ITeacherLesson) {
-    this.changeSchoolStatusSchedules.update((prev) => ({ ...prev, [item.schoolId]: true }));
-    this.store.approveSchool({ schoolId: item.schoolId, schoolTitle: item.schoolTitle }).subscribe({
-      next: () => {
-        this.onSubmitted.emit();
-        this.removeSchoolFromSchedule(item.schoolId);
-      },
-    });
-  }
-  rejectAllLessons(item: ITeacherLesson) {
-    this.changeSchoolStatusSchedules.update((prev) => ({ ...prev, [item.schoolId]: true }));
-    this.store.rejectSchool({ schoolId: item.schoolId, schoolTitle: item.schoolTitle }).subscribe({
-      next: () => {
-        this.onSubmitted.emit();
-        this.removeSchoolFromSchedule(item.schoolId);
-      },
-    });
-  }
-
-  removeSchoolFromSchedule(itemId: string) {
-    const updatedSchedules = { ...this.changeSchoolStatusSchedules() };
-    delete updatedSchedules[itemId];
-    this.changeSchoolStatusSchedules.set(updatedSchedules);
-  }
-
   detachLesson(item: ITeacherLesson) {
     this.detachLessonsSchedules.update((prev) => ({
       ...prev,
       [`${item.lessonId}-${item.schoolId}`]: true,
     }));
-    console.log('asdadasdas');
     this.store.detachLesson(item).subscribe({
       next: () => {
         console.log('first');
@@ -180,22 +156,15 @@ export class LessonsTableComponent {
     this.detachLessonsSchedules.set(updatedSchedules);
   }
 
-  detachSchool(item: ITeacherLesson) {
-    this.detachSchoolSchedules.update((prev) => ({
-      ...prev,
-      [item.schoolId]: true,
-    }));
-    this.store.detachSchool(item).subscribe({
-      next: () => {
-        this.onSubmitted.emit();
-        this.removeSchoolFromSchedule(item.schoolId);
-      },
-    });
+  getLessonIds(item: ITeacherLesson) {
+    console.log(item);
+
+    return this.lessons()
+      .filter((lesson) => lesson.schoolId === item.schoolId)
+      .map((lesson) => lesson.lessonId);
   }
 
-  removeDetachSchoolFromSchedule(schoolId: string) {
-    const updatedSchedules = { ...this.detachSchoolSchedules() };
-    delete updatedSchedules[schoolId];
-    this.detachSchoolSchedules.set(updatedSchedules);
+  onSubmit() {
+    this.onSubmitted.emit();
   }
 }

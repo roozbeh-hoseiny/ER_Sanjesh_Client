@@ -1,0 +1,13 @@
+<p-dialog header="الصاق درس" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }" (onHide)="close()">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="flex flex-col gap-4">
+      <catalog-lessons-select
+        [control]="form.controls.lessonId"
+        [filters]="selectedLessonIds"
+        [onlyId]="true"
+        [disabled]="submitLoading()"
+      />
+      <app-form-footer-actions class="mt-6" [loading]="submitLoading()" (onCancel)="close()" />
+    </div>
+  </form>
+</p-dialog>
