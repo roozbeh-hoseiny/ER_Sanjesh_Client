@@ -10,11 +10,13 @@
         <input
           pInputText
           formControlName="postalCode"
+          [maxlength]="10"
+          [minlength]="10"
           [invalid]="form.controls.postalCode.invalid && form.controls.postalCode.touched"
         />
       </uikit-field>
     </div>
-    <uikit-field label="آدرس" for="address" [control]="form.controls.address">
+    <uikit-field label="ادامه‌ی آدرس" for="address" [control]="form.controls.address">
       <textarea
         pTextarea
         formControlName="address"

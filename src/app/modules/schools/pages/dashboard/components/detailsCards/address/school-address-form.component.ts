@@ -31,7 +31,7 @@ export class SchoolAddressFormComponent {
 
   form = this.fb.group({
     address: ['', [Validators.required]],
-    postalCode: ['', [Validators.required]],
+    postalCode: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
     state: [0, [Validators.required]],
     city: [0, [Validators.required]],
   });
