@@ -12,7 +12,7 @@
               [disabled]="searchedSchoolLoading()"
               [minLength]="6"
               [maxLength]="6"
-              [invalid]="form.controls.schoolId.touched && form.controls.schoolId.invalid"
+              [invalid]="form.controls.schoolId.touched && (form.controls.schoolId.invalid || !searchedSchool())"
             />
             @if (searchedSchoolLoading()) {
               <p-inputGroupAddon>

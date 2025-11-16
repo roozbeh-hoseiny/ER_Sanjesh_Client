@@ -1,5 +1,5 @@
 @if (showLabel) {
-  <uikit-field label="درس" [for]="name">
+  <uikit-field label="درس" [for]="name" [control]="control">
     <p-select
       [name]="name"
       [formControl]="control"
@@ -9,6 +9,7 @@
       placeholder="یکی از درس‌ها را انتخاب کنید"
       [loading]="loading"
       [disabled]="disabled"
+      [invalid]="control.touched && control.invalid"
       appendTo="body"
       (onChange)="onLessonSelect($event.value)"
     />

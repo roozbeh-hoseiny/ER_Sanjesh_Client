@@ -118,6 +118,10 @@ export class AttachSchoolLessonFormDialogComponent {
       return;
     }
 
+    if (!this.searchedSchool()) {
+      return this.toastService.error({ text: 'لطفا مدرسه را جستجو و انتخاب کنید' });
+    }
+
     this.submitLoading.set(true);
     const payload = {
       id: this.teacherId,

@@ -1,6 +1,7 @@
 import {
   ApiBaseUrlInterceptor,
   authInterceptor,
+  dedupInterceptor,
   errorInterceptor,
   loggingInterceptor,
 } from '@/core/interceptors';
@@ -58,7 +59,7 @@ export const appConfig: ApplicationConfig = {
 
     provideHttpClient(
       withFetch(),
-      withInterceptors([loggingInterceptor, authInterceptor, errorInterceptor]),
+      withInterceptors([loggingInterceptor, authInterceptor, errorInterceptor, dedupInterceptor]),
       withInterceptorsFromDi(),
     ),
   ],
