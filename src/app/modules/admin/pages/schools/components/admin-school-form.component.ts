@@ -26,6 +26,7 @@ import { TextareaModule } from 'primeng/textarea';
 
 import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
+import { postalCodeValidator } from '@/core/validators';
 import { mobileValidator } from '@/core/validators/mobile.validator';
 import { AdminSchoolsService } from '@/modules/admin/services';
 import { StatesSelectComponent } from '@/shared/catalog';
@@ -92,7 +93,7 @@ export class AdminSchoolFormComponent {
       address: [this.defaultValues?.address?.address || '', [Validators.required]],
       postalCode: [
         this.defaultValues?.address?.postalCode || '',
-        [Validators.required, Validators.minLength(10), Validators.maxLength(10)],
+        [Validators.required, postalCodeValidator()],
       ],
       regionId: [this.defaultValues?.address?.regionId || null, [Validators.required]],
       state: [Number.MAX_SAFE_INTEGER, [Validators.required]],

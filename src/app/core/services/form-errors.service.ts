@@ -58,6 +58,12 @@ export class FormErrorsService {
     if (errors['mismatch']) {
       out.push({ key: 'mismatch', message: `${label} تکرار رمز با رمز وارد شده مطابقت ندارد.` });
     }
+    if (errors['postalCode']) {
+      out.push({ key: 'postalCode', message: `${label}  معتبر نیست.` });
+    }
+    if (errors['invalidMobile']) {
+      out.push({ key: 'invalidMobile', message: `${label} معتبر نیست.` });
+    }
     // fallback: include any other error keys
     Object.keys(errors).forEach((k) => {
       if (
