@@ -2,12 +2,11 @@ import { ToastService } from '@/core/services/toast.service';
 import { IFieldOfStudyRequestPayload } from '@/modules/admin/models';
 import { AdminMDMService } from '@/modules/admin/services';
 import { EducationalLevelsSelectComponent } from '@/shared/catalog';
+import { InputComponent } from '@/shared/components';
 import { FormFooterActionsComponent } from '@/shared/components/formFooterActions/form-footer-actions.component';
-import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Component, effect, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
-import { InputText } from 'primeng/inputtext';
 
 @Component({
   selector: 'field-form-dialog',
@@ -16,9 +15,8 @@ import { InputText } from 'primeng/inputtext';
     Dialog,
     ReactiveFormsModule,
     FormFooterActionsComponent,
-    UikitFieldComponent,
     EducationalLevelsSelectComponent,
-    InputText,
+    InputComponent,
   ],
 })
 export class FieldFormDialogComponent {

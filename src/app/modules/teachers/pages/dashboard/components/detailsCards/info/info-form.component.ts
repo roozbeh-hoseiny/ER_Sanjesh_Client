@@ -3,11 +3,10 @@ import { mobileValidator } from '@/core/validators/mobile.validator';
 import { ISchoolInfoRequest } from '@/modules/schools/models';
 import { ITeacherMeResponse } from '@/modules/teachers/models';
 import { GenderSelectComponent } from '@/shared/catalog/gender/gender-select.component';
-import { UikitFieldComponent } from '@/uikit/uikit-field.component';
+import { InputComponent } from '@/shared/components';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
-import { InputText } from 'primeng/inputtext';
 import { TeacherDetailsCardsStore } from '../dataStore/store';
 
 @Component({
@@ -15,10 +14,9 @@ import { TeacherDetailsCardsStore } from '../dataStore/store';
   templateUrl: './info-form.component.html',
   imports: [
     ReactiveFormsModule,
-    UikitFieldComponent,
     GenderSelectComponent,
-    InputText,
     ButtonDirective,
+    InputComponent,
   ],
 })
 export class SchoolInfoFormComponent {

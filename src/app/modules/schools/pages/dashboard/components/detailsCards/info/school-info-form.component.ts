@@ -2,6 +2,7 @@ import { ToastService } from '@/core/services/toast.service';
 import { mobileValidator } from '@/core/validators/mobile.validator';
 import { ISchoolInfoRequest, ISchoolResponse } from '@/modules/schools/models';
 import { SchoolGendersSelect } from '@/shared/catalog';
+import { InputComponent } from '@/shared/components';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -22,6 +23,7 @@ import { SchoolDetailsCardsStore } from '../store';
     ButtonDirective,
     SchoolGendersSelect,
     SchoolPersonFormComponent,
+    InputComponent,
   ],
 })
 export class SchoolInfoFormComponent {

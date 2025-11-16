@@ -6,15 +6,7 @@
         [cityControl]="form.controls.city"
         class="col-span-2"
       ></app-states-select>
-      <uikit-field label="کد پستی" for="postalCode" [control]="form.controls.postalCode">
-        <input
-          pInputText
-          formControlName="postalCode"
-          [maxlength]="10"
-          [minlength]="10"
-          [invalid]="form.controls.postalCode.invalid && form.controls.postalCode.touched"
-        />
-      </uikit-field>
+      <app-input label="کد پستی" name="postalCode" [control]="form.controls.postalCode" type="postalCode" />
     </div>
     <uikit-field label="ادامه‌ی آدرس" for="address" [control]="form.controls.address">
       <textarea

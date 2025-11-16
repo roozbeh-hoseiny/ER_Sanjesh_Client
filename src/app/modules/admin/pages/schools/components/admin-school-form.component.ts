@@ -30,6 +30,7 @@ import { mobileValidator } from '@/core/validators/mobile.validator';
 import { AdminSchoolsService } from '@/modules/admin/services';
 import { StatesSelectComponent } from '@/shared/catalog';
 import { GenderSelectComponent } from '@/shared/catalog/gender/gender-select.component';
+import { InputComponent } from '@/shared/components';
 import { FormFooterActionsComponent } from '@/shared/components/formFooterActions/form-footer-actions.component';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Message } from 'primeng/message';
@@ -53,6 +54,7 @@ import { ISchoolRequest } from '../models/schools';
     GenderSelectComponent,
     Message,
     FormFooterActionsComponent,
+    InputComponent,
   ],
   templateUrl: './admin-school-form.component.html',
 })
@@ -88,7 +90,10 @@ export class AdminSchoolFormComponent {
     name: [this.defaultValues?.name || '', [Validators.required]],
     address: this.fb.group({
       address: [this.defaultValues?.address?.address || '', [Validators.required]],
-      postalCode: [this.defaultValues?.address?.postalCode || '', [Validators.required]],
+      postalCode: [
+        this.defaultValues?.address?.postalCode || '',
+        [Validators.required, Validators.minLength(10), Validators.maxLength(10)],
+      ],
       regionId: [this.defaultValues?.address?.regionId || null, [Validators.required]],
       state: [Number.MAX_SAFE_INTEGER, [Validators.required]],
     }),
@@ -155,10 +160,16 @@ export class AdminSchoolFormComponent {
     if (this.form.invalid) return;
     this.onSubmitLoading.set(true);
     const payload = this.form.value as ISchoolRequest;
-    this.adminSchoolsService.addSchool(payload).subscribe(() => {
-      this.toastService.success({ text: 'مرکز آموزشی با موفقیت اضافه شد.' });
-      this.save.emit(payload);
-      this.close();
+    this.adminSchoolsService.addSchool(payload).subscribe({
+      next: () => {
+        this.toastService.success({ text: `مرکز آموزشی  ${payload.name} با موفقیت اضافه شد.` });
+        this.save.emit(payload);
+        this.close();
+        this.onSubmitLoading.set(false);
+      },
+      error: () => {
+        this.onSubmitLoading.set(false);
+      },
     });
   }
 }

@@ -1,30 +1,18 @@
 <form (ngSubmit)="submit()" [formGroup]="form" class="grid grid-cols-1 gap-4">
   <div class="grid grid-cols-3 gap-4">
-    <uikit-field label="نام مرکز آموزشی" for="name" [control]="form.controls.name">
-      <input
-        pInputText
-        [formControlName]="'name'"
-        required
-        [invalid]="form.controls.name.invalid && form.controls.name.touched"
-      />
-    </uikit-field>
+    <app-input label="نام مرکز آموزشی" name="name" [control]="form.controls.name" />
     <app-school-genders-select [control]="form.controls.boyOrGirl" />
+    <app-input label="ظرفیت" name="examHallCapacity" [control]="form.controls.examHallCapacity" />
     <uikit-field label="ظرفیت" for="examHallCapacity" [control]="form.controls.examHallCapacity">
       <input
         pInputText
         formControlName="examHallCapacity"
         required
+        class="ltrInput"
         [invalid]="form.controls.examHallCapacity.invalid && form.controls.examHallCapacity.touched"
       />
     </uikit-field>
-    <uikit-field label="شماره تماس" for="phoneNumber" [control]="form.controls.phoneNumber">
-      <input
-        pInputText
-        formControlName="phoneNumber"
-        required
-        [invalid]="form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched"
-      />
-    </uikit-field>
+    <app-input label="شماره تماس" name="phoneNumber" [control]="form.controls.phoneNumber" />
   </div>
   <div [formGroup]="form.controls.managerInfo" class="grid grid-cols-1 gap-4">
     <p-divider align="center"> مدیریت </p-divider>

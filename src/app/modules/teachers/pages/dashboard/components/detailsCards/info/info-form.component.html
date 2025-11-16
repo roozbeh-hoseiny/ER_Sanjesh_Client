@@ -1,22 +1,8 @@
 <form (ngSubmit)="submit()" [formGroup]="form" class="grid grid-cols-1 gap-4">
   <div class="grid grid-cols-3 gap-4">
-    <uikit-field label="نام مرکز آموزشی" for="name" [control]="form.controls.name">
-      <input
-        pInputText
-        [formControlName]="'name'"
-        required
-        [invalid]="form.controls.name.invalid && form.controls.name.touched"
-      />
-    </uikit-field>
+    <app-input label="نام مرکز آموزشی" name="name" [control]="form.controls.name" />
     <app-gender-select [control]="form.controls.gender" />
-    <uikit-field label="شماره تماس" for="mobile" [control]="form.controls.mobile">
-      <input
-        pInputText
-        formControlName="mobile"
-        required
-        [invalid]="form.controls.mobile.invalid && form.controls.mobile.touched"
-      />
-    </uikit-field>
+    <app-input label="شماره تماس" name="mobile" [control]="form.controls.mobile" />
   </div>
 
   <div class="flex gap-2 justify-end mt-4">
