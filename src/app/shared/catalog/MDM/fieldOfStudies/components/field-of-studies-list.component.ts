@@ -3,9 +3,9 @@ import {
   PageDataListComponent,
 } from '@/shared/components/pageDataList/page-data-list.component';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { Component, computed, EventEmitter, Input, Output } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { FieldOfStudiesService } from '../services';
+import { FieldOfStudiesStore } from '../dataStore/store';
 
 @Component({
   selector: 'field-of-studies-list',
@@ -19,10 +19,10 @@ export class FieldOfStudiesListComponent {
 
   @Output() onAddClick = new EventEmitter<void>();
 
-  private fieldOfStudiesService = inject(FieldOfStudiesService);
+  constructor(private store: FieldOfStudiesStore) {}
 
-  items = signal<any[]>([]);
-  loading = signal<boolean>(true);
+  items = computed(() => this.store.items());
+  loading = computed(() => this.store.loading());
 
   columns = [
     {
@@ -34,21 +34,6 @@ export class FieldOfStudiesListComponent {
       header: 'سطح تحصیلی',
     },
   ] as IColumn[];
-
-  ngOnInit(): void {
-    this.loading.set(true);
-    this.fieldOfStudiesService.getAll().subscribe({
-      next: (data) => {
-        this.items.set(data);
-      },
-      error: () => {
-        this.items.set([]);
-      },
-      complete: () => {
-        this.loading.set(false);
-      },
-    });
-  }
 
   onAdd(): void {
     this.onAddClick.emit();

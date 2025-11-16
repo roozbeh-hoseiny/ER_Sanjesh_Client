@@ -1,11 +1,11 @@
 import { Maybe } from '@/core';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
+import { Component, computed, EventEmitter, Input, Output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { SelectChangeEvent, SelectModule } from 'primeng/select';
+import { FieldOfStudiesStore } from '../dataStore/store';
 import { IFieldOfStudiesResponse } from '../models';
-import { FieldOfStudiesService } from '../services';
 
 @Component({
   selector: 'catalog-fields-select',
@@ -13,7 +13,7 @@ import { FieldOfStudiesService } from '../services';
   imports: [CommonModule, UikitFieldComponent, SelectModule, ReactiveFormsModule],
   templateUrl: './fields-select.component.html',
 })
-export class FieldsSelectComponent implements OnInit {
+export class FieldsSelectComponent {
   @Input() control!: FormControl<Maybe<IFieldOfStudiesResponse>>;
   @Input() name: string = 'fieldOfStudy';
 
@@ -35,35 +35,17 @@ export class FieldsSelectComponent implements OnInit {
   filteredItems = signal<IFieldOfStudiesResponse[]>([]);
   selectedItemId = signal<Maybe<number>>(null);
 
-  constructor(private fieldsService: FieldOfStudiesService) {}
+  constructor(private store: FieldOfStudiesStore) {}
 
-  allFields = signal<IFieldOfStudiesResponse[]>([]);
-  initialLoading = signal<boolean>(false);
-
-  ngOnInit(): void {
-    this.getAll();
-  }
+  items = computed(() => this.store.items());
+  initialLoading = computed(() => this.store.loading());
 
   filterOptions = (filters: number[]) => {
     this._filters = filters || [];
 
-    const allFields = JSON.parse(JSON.stringify(this.allFields())) as IFieldOfStudiesResponse[];
+    const allFields = JSON.parse(JSON.stringify(this.items())) as IFieldOfStudiesResponse[];
     this.filteredItems.set(allFields.filter((field) => !this._filters.includes(field.id)));
   };
-
-  getAll(): void {
-    this.initialLoading.set(true);
-
-    this.fieldsService.getAll().subscribe({
-      next: (items) => {
-        this.allFields.set(items);
-        this.filterOptions(this.filters);
-      },
-      complete: () => {
-        this.initialLoading.set(false);
-      },
-    });
-  }
 
   onSelect = (field: SelectChangeEvent) => {
     const node = field.value as IFieldOfStudiesResponse;

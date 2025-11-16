@@ -1,25 +1,25 @@
 import { Maybe } from '@/core';
 import { computed, Injectable, signal } from '@angular/core';
-import { IEducationalLevelsResponse } from '../models';
-import { EducationalLevelsService } from '../services';
+import { ILessonsResponse } from '../models';
+import { LessonsService } from '../services';
 
-interface IEducationalLevelStoreState {
-  items: Maybe<IEducationalLevelsResponse[]>;
+interface ILessonsStoreState {
+  items: Maybe<ILessonsResponse[]>;
   loading: boolean;
 }
 
-export const INITIAL_EDUCATIONAL_LEVEL_STORE_STATE: IEducationalLevelStoreState = {
+export const INITIAL_LESSONS_STORE_STATE: ILessonsStoreState = {
   items: null,
   loading: false,
 };
 
 @Injectable({ providedIn: 'root' })
-export class EducationalLevelStore {
-  private state$ = signal<IEducationalLevelStoreState>({
-    ...INITIAL_EDUCATIONAL_LEVEL_STORE_STATE,
+export class LessonsStore {
+  private state$ = signal<ILessonsStoreState>({
+    ...INITIAL_LESSONS_STORE_STATE,
   });
 
-  constructor(private service: EducationalLevelsService) {
+  constructor(private service: LessonsService) {
     if (!this.items()) {
       this.loadItems();
     }
@@ -28,7 +28,7 @@ export class EducationalLevelStore {
   readonly items = computed(() => this.state$().items);
   readonly loading = computed(() => this.state$().loading);
 
-  setState(partial: Partial<IEducationalLevelStoreState>) {
+  setState(partial: Partial<ILessonsStoreState>) {
     this.state$.set({ ...this.state$(), ...partial });
   }
 
@@ -40,7 +40,7 @@ export class EducationalLevelStore {
   }
 
   reset() {
-    this.state$.set({ ...INITIAL_EDUCATIONAL_LEVEL_STORE_STATE });
+    this.state$.set({ ...INITIAL_LESSONS_STORE_STATE });
   }
 
   refresh() {

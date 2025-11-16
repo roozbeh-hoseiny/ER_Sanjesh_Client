@@ -3,9 +3,9 @@ import {
   PageDataListComponent,
 } from '@/shared/components/pageDataList/page-data-list.component';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, computed, EventEmitter, Input, Output } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { EducationalLevelsService } from '../services';
+import { EducationalLevelStore } from '../index';
 
 @Component({
   selector: 'educational-levels-list',
@@ -19,10 +19,10 @@ export class EducationalLevelsListComponent {
 
   @Output() onOpenForm = new EventEmitter<void>();
 
-  constructor(private educationalLevelsService: EducationalLevelsService) {}
+  constructor(private store: EducationalLevelStore) {}
 
-  items = signal<any[]>([]);
-  loading = signal<boolean>(true);
+  items = computed(() => this.store.items() || []);
+  loading = computed(() => this.store.loading());
 
   columns = [
     {
@@ -34,21 +34,6 @@ export class EducationalLevelsListComponent {
       header: 'پایه',
     },
   ] as IColumn[];
-
-  ngOnInit(): void {
-    this.loading.set(true);
-    this.educationalLevelsService.getAll().subscribe({
-      next: (data) => {
-        this.items.set(data);
-      },
-      error: () => {
-        this.items.set([]);
-      },
-      complete: () => {
-        this.loading.set(false);
-      },
-    });
-  }
 
   onAdd(): void {
     this.onOpenForm.emit();

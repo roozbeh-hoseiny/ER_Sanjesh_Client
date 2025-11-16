@@ -1,11 +1,11 @@
 import { Maybe } from '@/core';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
+import { Component, computed, EventEmitter, Input, Output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
+import { LessonsStore } from '../dataStore/store';
 import { ILessonsInRoot } from '../models';
-import { LessonsService } from '../services';
 
 @Component({
   selector: 'catalog-lessons-select',
@@ -13,7 +13,7 @@ import { LessonsService } from '../services';
   imports: [CommonModule, UikitFieldComponent, SelectModule, ReactiveFormsModule],
   templateUrl: './lessons-select.component.html',
 })
-export class LessonsSelectComponent implements OnInit {
+export class LessonsSelectComponent {
   @Input() control: FormControl<Maybe<ILessonsInRoot>> = new FormControl<Maybe<ILessonsInRoot>>(
     null,
   );
@@ -39,37 +39,17 @@ export class LessonsSelectComponent implements OnInit {
   filteredItems = signal<ILessonsInRoot[]>([]);
   selectedItemId = signal<Maybe<number>>(null);
 
-  constructor(private lessonsService: LessonsService) {}
+  constructor(private store: LessonsStore) {}
 
-  allLessons = signal<ILessonsInRoot[]>([]);
-  initialLoading = signal<boolean>(false);
-
-  ngOnInit(): void {
-    if (!this.allLessons().length) {
-      this.getAll();
-    }
-  }
+  items = computed(() => this.store.items());
+  initialLoading = computed(() => this.store.loading());
 
   filterOptions = (filters: number[]) => {
     this._filters = filters || [];
 
-    const allLessons = JSON.parse(JSON.stringify(this.allLessons())) as ILessonsInRoot[];
+    const allLessons = JSON.parse(JSON.stringify(this.items())) as ILessonsInRoot[];
     this.filteredItems.set(allLessons.filter((lesson) => !this._filters.includes(lesson.id)));
   };
-
-  getAll(): void {
-    this.initialLoading.set(true);
-
-    this.lessonsService.getAllInRoot().subscribe({
-      next: (items) => {
-        this.allLessons.set(items);
-        this.filterOptions(this.filters);
-      },
-      complete: () => {
-        this.initialLoading.set(false);
-      },
-    });
-  }
 
   onLessonSelect = (lesson: ILessonsInRoot) => {
     if (!lesson) {

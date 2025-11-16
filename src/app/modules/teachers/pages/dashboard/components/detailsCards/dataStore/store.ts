@@ -237,7 +237,7 @@ export class TeacherDetailsCardsStore {
       .pipe(
         tap(() => {
           this.toastService.success({
-            text: `اتصال به مرکز آموزشی ${payload.schoolTitle} با موفقیت حذف شد.`,
+            text: `الصاق به مرکز آموزشی ${payload.schoolTitle} با موفقیت حذف شد.`,
           });
         }),
       );
