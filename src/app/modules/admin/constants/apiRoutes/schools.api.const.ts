@@ -7,6 +7,7 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     byName: () => `${schoolsBaseUrl}/GetByName`,
     byRegion: () => `${schoolsBaseUrl}/GetByRegion`,
     single: () => `${schoolsBaseUrl}/GetOne`,
+    byUniqueId: () => `${schoolsBaseUrl}/GetByUniqueId`,
 
     add: () => `${schoolsBaseUrl}/AddSchool`,
 

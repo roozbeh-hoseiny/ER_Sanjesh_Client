@@ -1,7 +1,7 @@
 import { BreadcrumbService } from '@/core/services';
 import { LayoutService } from '@/layout/service/layout.service';
 import { adminNamedRoutes } from '@/modules/admin/constants';
-import { AdminTeachersService } from '@/modules/admin/services';
+import { AdminSchoolsService, AdminTeachersService } from '@/modules/admin/services';
 import {
   IApproveSchoolLessonRequestPayload,
   IApproveSchoolRequestPayload,
@@ -34,6 +34,7 @@ export class AdminTeacherComponent {
     private route: ActivatedRoute,
     private breadcrumbService: BreadcrumbService,
     private teacherCardStore: TeacherDetailsCardsStore,
+    private schoolService: AdminSchoolsService,
   ) {
     this.layoutService.changeIsFixedContentSize(true);
     this.teacherCardStore.setService({
@@ -51,9 +52,14 @@ export class AdminTeacherComponent {
         this.teacherService.detachLesson(payload),
       detachSchool: (payload: IDetachSchoolRequestPayload) =>
         this.teacherService.detachSchool(payload),
+      getSchool: (schoolId: string) => this.schoolService.getByUniqueId(schoolId),
     });
     this.teacherCardStore.fillInitial({
       canApproveSchools: true,
+      canAddSchoolLesson: true,
+      canEditLessons: true,
+      canEditSchools: true,
+      canEditLoginInfo: true,
     });
     this.teacherId.set(this.route.snapshot.paramMap.get('teacherId') || '');
   }

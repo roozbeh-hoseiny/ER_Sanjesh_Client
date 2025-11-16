@@ -117,6 +117,12 @@ export class AdminSchoolsService {
       );
   }
 
+  getByUniqueId(schoolUniqueId: string) {
+    return this.http.post<IAdminSchoolRawResponse>(this.apiRoutes.schools.byUniqueId(), {
+      uniqueId: schoolUniqueId,
+    });
+  }
+
   updateInfo(payload: ISchoolInfoRequest) {
     return this.http.post<boolean>(this.apiRoutes.schools.updateInfo(), payload);
   }

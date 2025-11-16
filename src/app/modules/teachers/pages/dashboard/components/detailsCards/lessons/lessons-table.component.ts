@@ -20,6 +20,7 @@ import { ProgressSpinner } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
 import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
 import { TeacherDetailsCardsStore } from '../dataStore';
+import { AttachSchoolLessonFormDialogComponent } from './attach-lesson-form.component';
 import { lessonSchoolRowSubheaderComponent } from './lesson-school-row.component';
 
 @Component({
@@ -38,6 +39,7 @@ import { lessonSchoolRowSubheaderComponent } from './lesson-school-row.component
     TableModule,
     Button,
     lessonSchoolRowSubheaderComponent,
+    AttachSchoolLessonFormDialogComponent,
   ],
 })
 export class LessonsTableComponent {
@@ -53,10 +55,12 @@ export class LessonsTableComponent {
   columns = [] as IColumn[];
   changeStatusSchedules = signal<Record<number, boolean>>({});
   detachLessonsSchedules = signal<Record<string, boolean>>({});
+  showLessonForm = signal(false);
 
   lessons = computed(() => this.store.info()?.lessons!);
   teacherId = computed(() => this.store.info()?.id!);
   canApproveSchools = computed(() => this.store.canApproveSchools());
+  canAddSchoolLesson = computed(() => this.store.canAddSchoolLesson());
 
   ngOnInit() {
     this.setColumns();
@@ -157,14 +161,19 @@ export class LessonsTableComponent {
   }
 
   getLessonIds(item: ITeacherLesson) {
-    console.log(item);
-
     return this.lessons()
       .filter((lesson) => lesson.schoolId === item.schoolId)
       .map((lesson) => lesson.lessonId);
   }
 
+  openAttachLessonDialog() {
+    this.showLessonForm.set(true);
+  }
+
   onSubmit() {
     this.onSubmitted.emit();
+  }
+  submittedNewSchoolLesson() {
+    this.onSubmit();
   }
 }

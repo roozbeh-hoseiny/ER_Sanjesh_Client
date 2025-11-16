@@ -1,5 +1,6 @@
 import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
+import { IAdminSchoolRawResponse } from '@/modules/admin/pages/schools/models/schools';
 import {
   IAttachLessonRequestPayload,
   ITeacherLesson,
@@ -30,6 +31,7 @@ interface ITeacherDetailsCardsState {
   canEditLessons: boolean;
   canEditSchools: boolean;
   canApproveSchools: boolean;
+  canAddSchoolLesson: boolean;
 }
 
 export const INITIAL_TEACHER_DETAILS_CARDS_STATE: ITeacherDetailsCardsState = {
@@ -39,6 +41,7 @@ export const INITIAL_TEACHER_DETAILS_CARDS_STATE: ITeacherDetailsCardsState = {
   canEditLessons: false,
   canEditSchools: false,
   canApproveSchools: false,
+  canAddSchoolLesson: false,
 };
 
 @Injectable({ providedIn: 'any' })
@@ -54,6 +57,7 @@ export class TeacherDetailsCardsStore {
   readonly canEditCategories = computed(() => !!this.state$().canEditLessons);
   readonly canEditSchools = computed(() => !!this.state$().canEditSchools);
   readonly canApproveSchools = computed(() => !!this.state$().canApproveSchools);
+  readonly canAddSchoolLesson = computed(() => !!this.state$().canAddSchoolLesson);
 
   // simple mutators
   setState(partial: Partial<ITeacherDetailsCardsState>) {
@@ -78,6 +82,7 @@ export class TeacherDetailsCardsStore {
 
     approveSchool: (payload: any) => of(true) as Observable<boolean>,
     rejectSchool: (payload: any) => of(true) as Observable<boolean>,
+    getSchool: (schoolUniqueId: string) => of(null) as Observable<Maybe<IAdminSchoolRawResponse>>,
   };
 
   setService(svc: Partial<TeacherDetailsService>) {
@@ -134,8 +139,6 @@ export class TeacherDetailsCardsStore {
     return this.service.attachLesson(payload);
   }
   detachLesson(payload: ITeacherLesson) {
-    console.log(payload);
-
     if (this.service.detachLesson === undefined) return of();
     return this.service
       .detachLesson({
@@ -238,6 +241,11 @@ export class TeacherDetailsCardsStore {
           });
         }),
       );
+  }
+
+  getSchool(schoolUniqueId: string) {
+    if (this.service.getSchool === undefined) return of();
+    return this.service.getSchool(schoolUniqueId);
   }
 
   reset() {

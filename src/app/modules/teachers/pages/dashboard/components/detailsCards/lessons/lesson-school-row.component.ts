@@ -1,8 +1,8 @@
 import { ITeacherLesson } from '@/modules/teachers/models';
 import { Component, computed, EventEmitter, Input, Output, signal } from '@angular/core';
 import { Button } from 'primeng/button';
-import { AttachSchoolLessonFormDialogComponent } from '../attach-lesson-form.component';
 import { TeacherDetailsCardsStore } from '../dataStore';
+import { AttachSchoolLessonFormDialogComponent } from './attach-lesson-form.component';
 
 @Component({
   selector: 'lesson-school-row-subheader',
@@ -24,6 +24,7 @@ export class lessonSchoolRowSubheaderComponent {
   changeSchoolStatusSchedules = signal<Record<string, boolean>>({});
   showLessonForm = signal(false);
 
+  canAddSchoolLesson = computed(() => this.store.canAddSchoolLesson());
   canApproveSchools = computed(() => this.store.canApproveSchools());
 
   // start of school

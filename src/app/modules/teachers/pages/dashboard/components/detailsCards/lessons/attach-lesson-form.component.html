@@ -1,0 +1,47 @@
+<p-dialog header="الصاق درس" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }" (onHide)="close()">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="flex flex-col gap-4">
+      @if (!schoolId) {
+        <uikit-field label="کد مدرسه" for="schoolId" [control]="form.controls.schoolId" class="w-full">
+          <p-inputGroup>
+            <input
+              pInputText
+              id="schoolId"
+              [formControl]="form.controls.schoolId"
+              placeholder="کد مدرسه را وارد کنید"
+              [disabled]="searchedSchoolLoading()"
+              [minLength]="6"
+              [maxLength]="6"
+              [invalid]="form.controls.schoolId.touched && form.controls.schoolId.invalid"
+            />
+            @if (searchedSchoolLoading()) {
+              <p-inputGroupAddon>
+                <p-progressSpinner class="!w-4 !h-4"></p-progressSpinner>
+              </p-inputGroupAddon>
+            }
+          </p-inputGroup>
+        </uikit-field>
+        @if (searchedSchoolLoading()) {
+          <div class="flex items-center justify-center">
+            <p-skeleton />
+          </div>
+        } @else if (searchedSchool()) {
+          <p-message severity="success" [closable]="false" variant="text" icon="pi pi-check-circle">
+            {{ `شما مرکز آموزشی ${searchedSchool()?.name} را انتخاب کردید` }}
+          </p-message>
+        } @else if (form.controls.schoolId.value?.length === 6 && schoolNotFound()) {
+          <p-message severity="error" [closable]="false" variant="text" icon="pi pi-times-circle">
+            مرکز آموزشی‌ای با این کد یافت نشد
+          </p-message>
+        }
+      }
+      <catalog-lessons-select
+        [control]="form.controls.lessonId"
+        [filters]="selectedLessonIds"
+        [onlyId]="true"
+        [disabled]="submitLoading()"
+      />
+      <app-form-footer-actions class="mt-6" [loading]="submitLoading()" (onCancel)="close()" />
+    </div>
+  </form>
+</p-dialog>

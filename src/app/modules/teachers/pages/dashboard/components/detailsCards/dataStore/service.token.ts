@@ -1,3 +1,5 @@
+import { Maybe } from '@/core';
+import { IAdminSchoolRawResponse } from '@/modules/admin/pages/schools/models/schools';
 import {
   IAttachLessonToTeacherRequest,
   IDetachLessonFromTeacherRequest,
@@ -36,6 +38,8 @@ export interface TeacherDetailsService {
 
   attachLesson(payload: IAttachLessonRequestPayload): Observable<boolean>;
   detachLesson(payload: IDetachLessonRequestPayload): Observable<boolean>;
+
+  getSchool(schoolId: string): Observable<Maybe<IAdminSchoolRawResponse>>;
 }
 
 export const TEACHER_DETAILS_SERVICE = new InjectionToken<TeacherDetailsService>(

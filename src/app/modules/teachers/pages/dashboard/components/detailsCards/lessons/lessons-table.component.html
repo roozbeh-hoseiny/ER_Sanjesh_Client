@@ -1,4 +1,12 @@
-<app-card-data cardTitle="دروس در حال تدریس">
+<app-card-data>
+  <ng-template #header>
+    <div class="w-full flex items-center justify-between">
+      <span class="font-bold text-lg">دروس در حال تدریس</span>
+      @if (canAddSchoolLesson()) {
+        <p-button label="اتصال درس جدید" icon="pi pi-plus" (click)="openAttachLessonDialog()"></p-button>
+      }
+    </div>
+  </ng-template>
   <p-table
     [columns]="columns"
     [value]="lessons()"
@@ -78,3 +86,9 @@
     </ng-template> -->
   </p-table>
 </app-card-data>
+
+<attach-school-lesson-form-dialog
+  [(visible)]="showLessonForm"
+  [teacherId]="teacherId()"
+  (onSubmit)="submittedNewSchoolLesson()"
+/>

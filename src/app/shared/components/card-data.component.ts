@@ -1,5 +1,6 @@
+import { Maybe } from '@/core';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
 import { Card } from 'primeng/card';
 
@@ -15,6 +16,8 @@ export class AppCardComponent {
   @Input() editMode: boolean = false;
 
   @Output() onEdit = new EventEmitter<void>();
+
+  @ContentChild('header', { static: true }) header?: Maybe<TemplateRef<any>>;
 
   constructor() {
     if (this.editable) {

@@ -1,19 +1,21 @@
 <p-card>
   <ng-template #title>
-    @if (editable) {
-      <div class="flex items-center gap-10 justify-between">
-        <span>{{ cardTitle }}</span>
-        <button
-          pButton
-          type="button"
-          [icon]="`pi ${editMode ? 'pi-times' : 'pi-pencil'}`"
-          class="p-button-text p-button-plain"
-          (click)="onEditClick()"
-        ></button>
-      </div>
-    } @else {
-      {{ cardTitle }}
-    }
+    <ng-container [ngTemplateOutlet]="header">
+      @if (editable) {
+        <div class="flex items-center gap-10 justify-between">
+          <span>{{ cardTitle }}</span>
+          <button
+            pButton
+            type="button"
+            [icon]="`pi ${editMode ? 'pi-times' : 'pi-pencil'}`"
+            class="p-button-text p-button-plain"
+            (click)="onEditClick()"
+          ></button>
+        </div>
+      } @else {
+        {{ cardTitle }}
+      }
+    </ng-container>
     <hr />
   </ng-template>
   <ng-content></ng-content>

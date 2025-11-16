@@ -1,16 +1,38 @@
+import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
+import { IAdminSchoolRawResponse } from '@/modules/admin/pages/schools/models/schools';
 import { IAttachLessonRequestPayload } from '@/modules/teachers/models';
 import { LessonsSelectComponent } from '@/shared/catalog';
 import { FormFooterActionsComponent } from '@/shared/components/formFooterActions/form-footer-actions.component';
+import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Component, effect, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
-import { TeacherDetailsCardsStore } from './dataStore';
+import { InputGroup } from 'primeng/inputgroup';
+import { InputGroupAddon } from 'primeng/inputgroupaddon';
+import { InputText } from 'primeng/inputtext';
+import { Message } from 'primeng/message';
+import { ProgressSpinner } from 'primeng/progressspinner';
+import { SkeletonModule } from 'primeng/skeleton';
+import { debounceTime, filter } from 'rxjs';
+import { TeacherDetailsCardsStore } from '../dataStore';
 
 @Component({
   selector: 'attach-school-lesson-form-dialog',
   templateUrl: './attach-lesson-form.component.html',
-  imports: [Dialog, ReactiveFormsModule, LessonsSelectComponent, FormFooterActionsComponent],
+  imports: [
+    Dialog,
+    ReactiveFormsModule,
+    LessonsSelectComponent,
+    FormFooterActionsComponent,
+    UikitFieldComponent,
+    InputText,
+    SkeletonModule,
+    InputGroupAddon,
+    InputGroup,
+    ProgressSpinner,
+    Message,
+  ],
 })
 export class AttachSchoolLessonFormDialogComponent {
   @Input() teacherId!: string;
@@ -45,6 +67,9 @@ export class AttachSchoolLessonFormDialogComponent {
 
   private visibleSignal = signal(false);
   submitLoading = signal(false);
+  searchedSchoolLoading = signal(false);
+  searchedSchool = signal<Maybe<IAdminSchoolRawResponse>>(null);
+  schoolNotFound = signal(false);
 
   form = this.fb.group({
     schoolId: [this.schoolId || ''],
@@ -52,10 +77,39 @@ export class AttachSchoolLessonFormDialogComponent {
   });
 
   ngOnInit() {
-    console.log(this.schoolId);
-
     this.form.controls.schoolId.setValue(this.schoolId || '');
+    if (!this.schoolId) {
+      this.form.controls.schoolId.valueChanges.subscribe(() => {
+        this.searchedSchool.set(null);
+        this.schoolNotFound.set(false);
+      });
+
+      this.form.controls.schoolId.valueChanges
+        .pipe(
+          debounceTime(300),
+          filter((val) => !!val && val.length === 6),
+        )
+        .subscribe(() => {
+          console.log('first');
+
+          this.getSchool();
+        });
+    }
     console.log(this.form.controls.schoolId);
+  }
+
+  getSchool() {
+    this.searchedSchoolLoading.set(true);
+    this.store.getSchool(this.form.controls.schoolId.value!).subscribe({
+      next: (school) => {
+        this.searchedSchool.set(school);
+        this.searchedSchoolLoading.set(false);
+      },
+      error: () => {
+        this.searchedSchoolLoading.set(false);
+        this.schoolNotFound.set(true);
+      },
+    });
   }
 
   submit = () => {

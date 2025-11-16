@@ -40,6 +40,7 @@ export class SchoolsDashboardComponent {
       if (info) {
         this.detailsStore.fillInitial({
           school: info,
+          showContactCard: true,
           canEditAddress: true,
           canEditInfo: true,
           canEditLoginInfo: true,
