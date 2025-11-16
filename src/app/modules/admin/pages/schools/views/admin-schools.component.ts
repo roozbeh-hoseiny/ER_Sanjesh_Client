@@ -104,7 +104,7 @@ export class AdminSchoolsComponent {
 
   private setColumns() {
     this.columns = [
-      { field: 'name', header: 'نام مدرسه', minWidth: '15rem' },
+      { field: 'name', header: 'نام مرکز آموزشی', minWidth: '15rem' },
       {
         field: 'uniqueId',
         header: 'شناسه',
@@ -171,8 +171,8 @@ export class AdminSchoolsComponent {
     this.confirmationService.confirm({
       target: (event.originalEvent.target as HTMLElement)?.parentNode?.parentNode!,
       message: !checked
-        ? 'آیا از غیرفعال کردن این مدرسه اطمینان دارید؟'
-        : 'آیا از فعال کردن این مدرسه اطمینان دارید؟',
+        ? 'آیا از غیرفعال کردن این مرکز آموزشی اطمینان دارید؟'
+        : 'آیا از فعال کردن این مرکز آموزشی اطمینان دارید؟',
       header: 'تایید تغییر وضعیت',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'بله',

@@ -6,7 +6,7 @@ export default {
     key: 'ADMIN',
   },
   SCHOOL: {
-    title: 'مدرسه',
+    title: 'مرکز آموزشی',
     key: 'SCHOOL',
   },
   TEACHER: {

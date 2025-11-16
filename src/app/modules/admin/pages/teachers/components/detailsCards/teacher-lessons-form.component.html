@@ -1,7 +1,7 @@
 <!-- <div class="flex flex-col gap-4"> -->
 <!-- @for (item of selectedSchoolLessons; track item.schoolId + item.lessonId) {
     <div class="flex items-center gap-2">
-      <span>مدرسه: {{ item.schoolTitle }}</span>
+      <span>مرکز آموزشی: {{ item.schoolTitle }}</span>
       <span> درس‌: {{ item.lessonTitle + item.fieldOfStudyTitle + item.educationalLevelTitle }}</span>
       <button pButton [loading]="detachLoading()" severity="danger" (click)="detach(item)">حذف درس</button>
     </div>

@@ -110,7 +110,7 @@ export class AdminSchoolComponent {
     this.schoolService.updateContact({ ...payload, id: this.schoolId() }).subscribe({
       next: (value) => {
         this.submitContactLoading.set(false);
-        this.toastService.success({ text: 'اطلاعات رابط مدرسه با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'اطلاعات رابط مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
         this.loadSchool();
       },
       error: (err) => {

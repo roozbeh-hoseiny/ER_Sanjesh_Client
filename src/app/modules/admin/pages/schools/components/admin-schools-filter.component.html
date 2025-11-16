@@ -2,9 +2,14 @@
   <p-message severity="info" icon="pi pi-info-circle" class="mb-5">
     یکی از فیلتر‌ها در لحظه قابل انتخاب هستند
   </p-message>
-  <uikit-field label="بر اساس نام مدرسه" for="search" class="w-full">
+  <uikit-field label="بر اساس نام مرکز آموزشی" for="search" class="w-full">
     <p-inputgroup class="w-full">
-      <input pInputText [(ngModel)]="search" placeholder="جستجوی نام مدرسه" (ngModelChange)="onFilterChange($event)" />
+      <input
+        pInputText
+        [(ngModel)]="search"
+        placeholder="جستجوی نام مرکز آموزشی"
+        (ngModelChange)="onFilterChange($event)"
+      />
       <p-inputgroup-addon>
         <p-button icon="pi pi-times" severity="secondary" (onClick)="clearSearch()"></p-button>
       </p-inputgroup-addon>

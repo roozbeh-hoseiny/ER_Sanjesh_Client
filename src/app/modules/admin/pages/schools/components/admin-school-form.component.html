@@ -1,13 +1,13 @@
 <p-dialog
   [(visible)]="visible"
   [modal]="true"
-  header="ایجاد مدرسه"
+  header="ایجاد مرکز آموزشی"
   [style]="{ width: '600px' }"
   (onHide)="visibleChange.emit(false)"
 >
   <form (ngSubmit)="submit()" [formGroup]="form" class="grid grid-cols-1 gap-4">
     <div class="grid grid-cols-2 gap-4">
-      <uikit-field label="نام مدرسه" for="name" [control]="form.controls.name">
+      <uikit-field label="نام مرکز آموزشی" for="name" [control]="form.controls.name">
         <input
           pInputText
           formControlName="name"

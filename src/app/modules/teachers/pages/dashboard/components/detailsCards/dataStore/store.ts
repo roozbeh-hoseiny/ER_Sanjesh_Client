@@ -167,7 +167,7 @@ export class TeacherDetailsCardsStore {
       .pipe(
         tap(() => {
           this.toastService.success({
-            text: `تمامی دروس مربوط به مدرسه ${payload.schoolTitle} با موفقیت فعال شد.`,
+            text: `تمامی دروس مربوط به مرکز آموزشی ${payload.schoolTitle} با موفقیت فعال شد.`,
           });
         }),
       );
@@ -179,7 +179,7 @@ export class TeacherDetailsCardsStore {
       .pipe(
         tap(() => {
           this.toastService.success({
-            text: `تمامی دروس مربوط به مدرسه ${payload.schoolTitle} با موفقیت غیرفعال شد.`,
+            text: `تمامی دروس مربوط به مرکز آموزشی ${payload.schoolTitle} با موفقیت غیرفعال شد.`,
           });
         }),
       );
@@ -199,7 +199,7 @@ export class TeacherDetailsCardsStore {
       .pipe(
         tap(() => {
           this.toastService.success({
-            text: `درس ${payload.teacherLessonTitle} از مدرسه ${payload.schoolTitle} با موفقیت فعال شد.`,
+            text: `درس ${payload.teacherLessonTitle} از مرکز آموزشی ${payload.schoolTitle} با موفقیت فعال شد.`,
           });
         }),
       );
@@ -211,7 +211,7 @@ export class TeacherDetailsCardsStore {
       .pipe(
         tap(() => {
           this.toastService.success({
-            text: `درس ${payload.teacherLessonTitle} از مدرسه ${payload.schoolTitle} با موفقیت غیرفعال شد.`,
+            text: `درس ${payload.teacherLessonTitle} از مرکز آموزشی ${payload.schoolTitle} با موفقیت غیرفعال شد.`,
           });
         }),
       );
@@ -222,7 +222,7 @@ export class TeacherDetailsCardsStore {
     return this.service.attachLesson({ ...payload, id: this.info()!.id }).pipe(
       tap(() => {
         this.toastService.success({
-          text: `درس ${payload.lessonTitle} از مدرسه ${payload.schoolTitle} با موفقیت ایجاد شد.`,
+          text: `درس ${payload.lessonTitle} از مرکز آموزشی ${payload.schoolTitle} با موفقیت ایجاد شد.`,
         });
       }),
     );
@@ -237,7 +237,7 @@ export class TeacherDetailsCardsStore {
       .pipe(
         tap(() => {
           this.toastService.success({
-            text: `اتصال به مدرسه ${payload.schoolTitle} با موفقیت حذف شد.`,
+            text: `اتصال به مرکز آموزشی ${payload.schoolTitle} با موفقیت حذف شد.`,
           });
         }),
       );

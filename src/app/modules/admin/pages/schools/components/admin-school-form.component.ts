@@ -156,7 +156,7 @@ export class AdminSchoolFormComponent {
     this.onSubmitLoading.set(true);
     const payload = this.form.value as ISchoolRequest;
     this.adminSchoolsService.addSchool(payload).subscribe(() => {
-      this.toastService.success({ text: 'مدرسه با موفقیت اضافه شد.' });
+      this.toastService.success({ text: 'مرکز آموزشی با موفقیت اضافه شد.' });
       this.save.emit(payload);
       this.close();
     });

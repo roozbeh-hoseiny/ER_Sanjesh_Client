@@ -10,7 +10,7 @@ export const adminSchoolNamedRoutes: NamedRoutes<TAdminSchoolsRouteNames> = {
         (m) => m.AdminSchoolsComponent,
       ),
     meta: {
-      title: 'مدارس',
+      title: 'مراکز آموزشی',
     },
   },
   categories: {
@@ -31,7 +31,7 @@ export const adminSchoolNamedRoutes: NamedRoutes<TAdminSchoolsRouteNames> = {
         (m) => m.AdminSchoolComponent,
       ),
     meta: {
-      title: 'مدرسه',
+      title: 'مرکز آموزشی',
       pagePath: (id: string) => `/admin/schools/${id}`,
     },
   },

@@ -40,7 +40,7 @@ export class TeacherDetailsCardsStore {
   //   // return this.adminTeachersService.editInfo(request).pipe(
   //   //   tap((res) => {
   //   //     // this.setState({ school: res });
-  //   //     this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
+  //   //     this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
   //   //   }),
   //   //   finalize(() => this.setState({ submitContactLoading: false })),
   //   // );

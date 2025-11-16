@@ -2,13 +2,13 @@
   <form [formGroup]="form" (ngSubmit)="submit()">
     <div class="flex flex-col gap-4">
       @if (!schoolId) {
-        <uikit-field label="کد مدرسه" for="schoolId" [control]="form.controls.schoolId" class="w-full">
+        <uikit-field label="کد مرکز آموزشی" for="schoolId" [control]="form.controls.schoolId" class="w-full">
           <p-inputGroup>
             <input
               pInputText
               id="schoolId"
               [formControl]="form.controls.schoolId"
-              placeholder="کد مدرسه را وارد کنید"
+              placeholder="کد مرکز آموزشی را وارد کنید"
               [disabled]="searchedSchoolLoading()"
               [minLength]="6"
               [maxLength]="6"

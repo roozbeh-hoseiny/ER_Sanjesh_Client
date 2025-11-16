@@ -71,7 +71,7 @@ export class LessonsTableComponent {
       { field: 'lessonTitle', header: 'عنوان درس', minWidth: '15rem' },
       { field: 'fieldOfStudyTitle', header: 'رشته', minWidth: '15rem' },
       { field: 'educationalLevelTitle', header: 'پایه', minWidth: '15rem' },
-      // { field: 'schoolTitle', header: 'مدرسه', minWidth: '15rem' },
+      // { field: 'schoolTitle', header: 'مرکز آموزشی', minWidth: '15rem' },
     ];
     if (this.canApproveSchools()) {
       this.columns.push({
@@ -101,8 +101,8 @@ export class LessonsTableComponent {
     this.confirmationService.confirm({
       target: (event.originalEvent.target as HTMLElement)?.parentNode?.parentNode!,
       message: !checked
-        ? 'آیا از غیرفعال کردن این درس در این مدرسه اطمینان دارید؟'
-        : 'آیا از فعال کردن این درس در این مدرسه اطمینان دارید؟',
+        ? 'آیا از غیرفعال کردن این درس در این مرکز آموزشی اطمینان دارید؟'
+        : 'آیا از فعال کردن این درس در این مرکز آموزشی اطمینان دارید؟',
       header: 'تایید تغییر وضعیت',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'بله',

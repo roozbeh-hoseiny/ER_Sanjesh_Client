@@ -1,5 +1,5 @@
 <div class="flex items-center gap-3 justify-between">
-  دروس مدرسه‌ی "{{ item.schoolTitle }}"
+  دروس مرکز آموزشی‌ی "{{ item.schoolTitle }}"
 
   @if (canAddSchoolLesson() || canApproveSchools()) {
     <div class="text-end flex justify-end gap-3 shrink-0">
@@ -12,7 +12,7 @@
           [loading]="detachSchoolSchedules()[item.schoolId]"
           (click)="detachSchool(item)"
         >
-          حذف مدرسه
+          حذف مرکز آموزشی
         </p-button>
       }
       @if (canApproveSchools()) {

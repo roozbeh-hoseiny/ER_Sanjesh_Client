@@ -21,15 +21,15 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
   },
 
   {
-    label: 'مدیریت مدارس',
+    label: 'مدیریت مراکز آموزشی',
     items: [
       {
-        label: 'لیست مدارس',
+        label: 'لیست مراکز آموزشی',
         icon: 'pi pi-fw pi-warehouse',
         routerLink: [adminNamedRoutes.schools.path],
       },
       {
-        label: 'مدیریت دسته‌بندی‌های مدارس',
+        label: 'مدیریت دسته‌بندی‌های مراکز آموزشی',
         customIcon: CategoryIcon,
         routerLink: [adminNamedRoutes.categories.path],
       },

@@ -1,4 +1,4 @@
-<uikit-field label="مدرسه">
+<uikit-field label="مرکز آموزشی">
   <p-select
     [options]="schools"
     [formControl]="control"
@@ -8,7 +8,7 @@
     [filter]="true"
     filterBy="name"
     [showClear]="true"
-    placeholder="یکی از مدارس را انتخاب کنید"
+    placeholder="یکی از مراکز آموزشی را انتخاب کنید"
   >
     <ng-template #selectedItem let-selectedOption>
       <div class="flex items-center gap-2">
@@ -17,7 +17,7 @@
     </ng-template>
 
     <ng-template #filter>
-      <input pInputText [formControl]="searchControl" placeholder="جستجوی مدرسه..." class="w-full" />
+      <input pInputText [formControl]="searchControl" placeholder="جستجوی مرکز آموزشی..." class="w-full" />
     </ng-template>
   </p-select>
 </uikit-field>

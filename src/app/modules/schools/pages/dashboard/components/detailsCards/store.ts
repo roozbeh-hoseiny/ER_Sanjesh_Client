@@ -116,7 +116,7 @@ export class SchoolDetailsCardsStore {
       this.setState({ submitContactLoading: true });
       return this.service.editInfo(request).pipe(
         tap((res) => {
-          this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
+          this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
         }),
         finalize(() => this.setState({ submitContactLoading: false })),
       );
@@ -180,7 +180,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.validateContactEmail === undefined) return of();
     return this.service.validateContactEmail(id).pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
       }),
     );
   }
@@ -188,7 +188,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.validateContactMobile === undefined) return of();
     return this.service.validateContactMobile(id).pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
       }),
     );
   }
@@ -197,7 +197,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.validateManagerMobile === undefined) return of();
     return this.service.validateManagerMobile(id)?.pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
       }),
     );
   }
@@ -205,7 +205,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.validateManagerEmail === undefined) return of();
     return this.service.validateManagerEmail(id)?.pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
       }),
     );
   }
@@ -214,7 +214,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.invalidateContactEmail === undefined) return of();
     return this.service.invalidateContactEmail(id).pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
       }),
     );
   }
@@ -222,7 +222,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.invalidateContactMobile === undefined) return of();
     return this.service.invalidateContactMobile(id).pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
       }),
     );
   }
@@ -231,7 +231,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.invalidateManagerEmail === undefined) return of();
     return this.service.invalidateManagerEmail(id).pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
       }),
     );
   }
@@ -239,7 +239,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.invalidateManagerMobile === undefined) return of();
     return this.service.invalidateManagerMobile(id).pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مدرسه با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
       }),
     );
   }

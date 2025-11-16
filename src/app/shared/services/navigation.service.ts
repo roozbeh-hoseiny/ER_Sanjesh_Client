@@ -116,7 +116,7 @@ export class NavigationService {
         },
         {
           key: 'schools',
-          title: 'مدیریت مدارس',
+          title: 'مدیریت مراکز آموزشی',
           icon: 'bank',
           routerLink: '/principal/schools',
         },
