@@ -172,22 +172,23 @@ export class TeachersStore {
       return;
     }
     this.setState({ loading: true });
-    this.services
-      .bySchool(this.selectedSchool()!, this.paginatedQuery())
-      .subscribe({ ...this.onResponse });
+    this.services.bySchool(this.selectedSchool()!).subscribe({
+      next: (res) => this.onResponse.next({ lastSeen: '', totalCount: 1, items: res }),
+      complete: () => this.onResponse.complete(),
+    });
   }
 
   private onResponse = {
-    next: (schools: IPaginatedResponse<IAdminTeacherEntity>) => {
+    next: (teachers: IPaginatedResponse<IAdminTeacherEntity>) => {
       if (!this.paginatedItems.length) {
-        this.setState({ totalRecords: schools.totalCount });
+        this.setState({ totalRecords: teachers.totalCount });
       }
 
       const paginatedItems = [...this.paginatedItems()];
-      paginatedItems[this.activePageIndex()] = schools.items;
+      paginatedItems[this.activePageIndex()] = teachers.items;
       this.setState({
         paginatedItems,
-        lastSeen: schools.lastSeen || '',
+        lastSeen: teachers.lastSeen || '',
       });
     },
     complete: () => {

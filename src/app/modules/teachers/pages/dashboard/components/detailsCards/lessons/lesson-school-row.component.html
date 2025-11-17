@@ -1,38 +1,10 @@
 <div class="flex items-center gap-3 justify-between">
-  دروس مرکز آموزشی‌ی "{{ item.schoolTitle }}"
+  دروس مرکز آموزشی‌ "{{ item.schoolTitle }}"
 
-  @if (canAddSchoolLesson() || canApproveSchools()) {
-    <div class="text-end flex justify-end gap-3 shrink-0">
-      @if (canAddSchoolLesson()) {
-        <p-button severity="success" size="small" icon="pi pi-plus" label="افزودن درس" (onClick)="openLessonForm()">
-        </p-button>
-        <p-button
-          severity="danger"
-          size="small"
-          [loading]="detachSchoolSchedules()[item.schoolId]"
-          (click)="detachSchool(item)"
-        >
-          حذف مرکز آموزشی
-        </p-button>
-      }
-      @if (canApproveSchools()) {
-        <p-button
-          label="تایید تمامی دروس"
-          icon="pi pi-check"
-          severity="success"
-          size="small"
-          [loading]="changeSchoolStatusSchedules()[item.schoolId]"
-          (click)="approveAllLessons(item)"
-        />
-        <p-button
-          label="رد تمامی دروس"
-          icon="pi pi-times"
-          severity="warn"
-          size="small"
-          [loading]="changeSchoolStatusSchedules()[item.schoolId]"
-          (click)="rejectAllLessons(item)"
-        />
-      }
+  @if (menuItems().length) {
+    <div class="shrink-0">
+      <p-menu #actionMenu [model]="menuItems()" [popup]="true" [appendTo]="'body'" />
+      <button pButton icon="pi pi-angle-down" outlined (click)="actionMenu.toggle($event)">عملیات</button>
     </div>
   }
 </div>

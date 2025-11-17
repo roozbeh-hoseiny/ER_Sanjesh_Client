@@ -11,9 +11,7 @@ export class SchoolsTeachersService {
   private apiRoutes = SCHOOLS_API_ROUTES;
 
   getAll(schoolId: string): Observable<ISchoolTeacherResponse[]> {
-    return this.http.post<ISchoolTeacherResponse[]>(this.apiRoutes.teachers.list(), {
-      id: schoolId,
-    });
+    return this.http.get<ISchoolTeacherResponse[]>(this.apiRoutes.teachers.list());
   }
 
   getAllMappedData(schoolId: string): Observable<ISchoolTeacherMappedData[]> {
@@ -29,5 +27,12 @@ export class SchoolsTeachersService {
 
   findByUniqueId(uniqueId: string): Observable<ISchoolTeacherResponse> {
     return this.http.get<ISchoolTeacherResponse>(this.apiRoutes.teachers.findByUniqueId(uniqueId));
+  }
+
+  assignTeacher(teacherId: string, lessonId: number): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.assignTeacher(), {
+      teacherId,
+      lessonId,
+    });
   }
 }

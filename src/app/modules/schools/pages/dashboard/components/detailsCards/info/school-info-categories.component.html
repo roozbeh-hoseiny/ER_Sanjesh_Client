@@ -2,7 +2,7 @@
   <app-key-value label="دسته‌بندی" class="w-full">
     <div class="flex w-full flex-wrap gap-4">
       @if (categories.length) {
-        <div class="inline-flex items-center gap-2">
+        <div class="inline-flex items-center gap-2 flex-wrap">
           @for (category of categories; track category.id) {
             <p-chip severity="secondary">
               <div class="flex items-center gap-3">

@@ -1,0 +1,47 @@
+<p-dialog header="الصاق درس" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }" (onHide)="close()">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="flex flex-col gap-4">
+      @if (!teacherId) {
+        <uikit-field label="شناسه‌ی یکتای دبیر" for="teacherId" [control]="form.controls.teacherId" class="w-full">
+          <p-inputGroup>
+            <input
+              pInputText
+              id="teacherId"
+              [formControl]="form.controls.teacherId"
+              placeholder="شناسه‌ی یکتای دبیر را وارد کنید"
+              [attr.disabled]="searchedLoading()"
+              [minLength]="6"
+              [maxLength]="6"
+              [invalid]="form.controls.teacherId.touched && (form.controls.teacherId.invalid || !searchedTeacher())"
+            />
+            @if (searchedLoading()) {
+              <p-inputGroupAddon>
+                <p-progressSpinner class="!w-4 !h-4"></p-progressSpinner>
+              </p-inputGroupAddon>
+            }
+          </p-inputGroup>
+        </uikit-field>
+        @if (searchedLoading()) {
+          <div class="flex items-center justify-center">
+            <p-skeleton />
+          </div>
+        } @else if (searchedTeacher()) {
+          <p-message severity="success" [closable]="false" variant="text" icon="pi pi-check-circle">
+            {{ `شما مرکز آموزشی ${searchedTeacher()?.firstName} ${searchedTeacher()?.lastName} را انتخاب کردید` }}
+          </p-message>
+        } @else if (form.controls.teacherId.value?.length === 6 && teacherNotFound()) {
+          <p-message severity="error" [closable]="false" variant="text" icon="pi pi-times-circle">
+            دبیری با این کد یافت نشد
+          </p-message>
+        }
+      }
+      <catalog-lessons-select
+        [control]="form.controls.lessonId"
+        [filters]="selectedLessonIds"
+        [onlyId]="true"
+        [attr.disabled]="submitLoading()"
+      />
+      <app-form-footer-actions class="mt-6" [loading]="submitLoading()" (onCancel)="close()" />
+    </div>
+  </form>
+</p-dialog>

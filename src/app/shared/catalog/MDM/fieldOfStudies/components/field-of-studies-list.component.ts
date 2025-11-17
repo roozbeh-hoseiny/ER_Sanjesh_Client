@@ -21,7 +21,7 @@ export class FieldOfStudiesListComponent {
 
   constructor(private store: FieldOfStudiesStore) {}
 
-  items = computed(() => this.store.items());
+  items = computed(() => this.store.items() || []);
   loading = computed(() => this.store.loading());
 
   columns = [

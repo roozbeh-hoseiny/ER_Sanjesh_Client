@@ -8,6 +8,6 @@
     placeholder="یکی از پایه‌های تحصیلی را انتخاب کنید"
     appendTo="body"
     [loading]="loading()"
-    [disabled]="loading() || disabled"
+    [attr.disabled]="loading() || disabled"
   />
 </uikit-field>

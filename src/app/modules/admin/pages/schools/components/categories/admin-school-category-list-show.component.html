@@ -24,11 +24,11 @@
         name="title"
         [(ngModel)]="title"
         placeholder="عنوان دسته‌بندی فرعی"
-        [disabled]="loading()"
+        [attr.disabled]="loading()"
         autocomplete="off"
         spellcheck="false"
       />
-      <p-button type="submit" label="افزودن" [loading]="loading()" [disabled]="!title().length"></p-button>
+      <p-button type="submit" label="افزودن" [loading]="loading()" [attr.disabled]="!title().length"></p-button>
     </p-input-group>
   </form>
 </div>

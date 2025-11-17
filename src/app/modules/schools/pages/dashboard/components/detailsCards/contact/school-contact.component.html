@@ -3,7 +3,7 @@
     <app-school-contact-form (closeForm)="closeForm()" (submitForm)="submitForm($event)" />
   } @else {
     <div class="flex flex-col gap-4">
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid grid-cols-3 gap-4 items-center">
         <app-key-value label="نام" [value]="contact?.firstName" />
         <app-key-value label="نام خانوادگی" [value]="contact?.lastName" />
         <app-key-value label="جنسیت" [value]="contact?.gender ? 'مرد' : 'زن'" />

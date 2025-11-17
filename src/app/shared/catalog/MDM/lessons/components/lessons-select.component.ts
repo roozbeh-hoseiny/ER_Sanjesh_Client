@@ -19,15 +19,16 @@ export class LessonsSelectComponent {
   );
   @Input() name: string = 'lesson';
   @Input() onlyId: boolean = false;
+  @Input() filters: number[] = [];
 
-  private _filters: number[] = [];
-  @Input()
-  set filters(value: number[]) {
-    this.filterOptions(value);
-  }
-  get filters() {
-    return this._filters;
-  }
+  // private _filters: number[] = [];
+  // @Input()
+  // set filters(value: number[]) {
+  //   // this.filterOptions(value);
+  // }
+  // get filters() {
+  //   return this._filters;
+  // }
 
   @Input() showLabel?: boolean = true;
   @Input() placeholder?: string;
@@ -36,20 +37,25 @@ export class LessonsSelectComponent {
   @Output() selectionChange = new EventEmitter<ILessonsInRoot>();
   @Output() selectionClear = new EventEmitter();
 
-  filteredItems = signal<ILessonsInRoot[]>([]);
+  get filteredItems() {
+    // this._filters = this.filters || [];
+
+    const allLessons = (JSON.parse(JSON.stringify(this.items())) || []) as ILessonsInRoot[];
+    return allLessons.filter((lesson) => !this.filters.includes(lesson.id));
+  }
   selectedItemId = signal<Maybe<number>>(null);
 
   constructor(private store: LessonsStore) {}
 
-  items = computed(() => this.store.items());
+  items = computed(() => this.store.mappedItems());
   initialLoading = computed(() => this.store.loading());
 
-  filterOptions = (filters: number[]) => {
-    this._filters = filters || [];
+  // filterOptions = (filters: number[]) => {
+  //   this._filters = filters || [];
 
-    const allLessons = JSON.parse(JSON.stringify(this.items())) as ILessonsInRoot[];
-    this.filteredItems.set(allLessons.filter((lesson) => !this._filters.includes(lesson.id)));
-  };
+  //   const allLessons = JSON.parse(JSON.stringify(this.items())) as ILessonsInRoot[];
+  //   this.filteredItems.set(allLessons.filter((lesson) => !this._filters.includes(lesson.id)));
+  // };
 
   onLessonSelect = (lesson: ILessonsInRoot) => {
     if (!lesson) {

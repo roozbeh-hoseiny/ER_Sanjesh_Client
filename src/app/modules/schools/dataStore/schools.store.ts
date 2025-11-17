@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { Maybe } from '../../../core/models';
 import { ISchoolMeResponse } from '../models';
 import { SchoolsAuthService } from '../services';
@@ -15,7 +15,7 @@ export interface ISchoolStates {
   providedIn: 'root',
 })
 export class SchoolsStore {
-  constructor(private schoolsAuthService: SchoolsAuthService = inject(SchoolsAuthService)) {
+  constructor(private schoolsAuthService: SchoolsAuthService) {
     this.getInfo();
   }
 

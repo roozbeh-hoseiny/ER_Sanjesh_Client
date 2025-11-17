@@ -20,7 +20,7 @@ export class LessonsMultiselectComponent {
 
   constructor(private store: LessonsStore) {}
 
-  items = computed(() => this.store.items());
+  items = computed(() => this.store.items() || []);
   loading = computed(() => this.store.loading());
 
   onSelectItem = (item: ILessonsResponse) => {

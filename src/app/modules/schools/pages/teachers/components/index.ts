@@ -1,1 +1,1 @@
-export * from './assignTeacher/assign-teacher-dialog.component';
+export * from './teacherList';

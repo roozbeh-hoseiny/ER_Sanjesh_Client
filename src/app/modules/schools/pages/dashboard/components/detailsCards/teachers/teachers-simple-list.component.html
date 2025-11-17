@@ -1,0 +1,33 @@
+<app-card-data class="">
+  <ng-template #header>
+    <div class="flex items-center gap-4 justify-between">
+      لیست دبیران
+      @if (teachersManagementPageRoute) {
+        <button pButton icon="pi pi-cog" outlined (click)="toTeachersPage()">مدیریت دبیران</button>
+      }
+    </div>
+  </ng-template>
+  <p-table [value]="teachers" [columns]="columns">
+    <ng-template #header let-columns>
+      <tr>
+        @for (col of columns; track col.header) {
+          <th [style]="{ width: col.width, minWidth: col.minWidth }">{{ col.header }}</th>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-item>
+      <tr>
+        @for (col of columns; track col.field) {
+          <td>
+            @if (col.field === "lessons") {
+              {{ item.lessons.length ? `${item.lessons.length} درس` : "بدون درس" }}
+            } @else {
+              {{ item[col.field] || "-" }}
+            }
+          </td>
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+</app-card-data>

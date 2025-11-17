@@ -29,7 +29,7 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
         routerLink: [adminNamedRoutes.schools.path],
       },
       {
-        label: 'مدیریت دسته‌بندی‌های مراکز آموزشی',
+        label: ' دسته‌بندی‌های مراکز آموزشی',
         customIcon: CategoryIcon,
         routerLink: [adminNamedRoutes.categories.path],
       },

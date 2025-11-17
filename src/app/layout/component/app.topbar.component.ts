@@ -40,6 +40,11 @@ export class AppTopbar {
       disabled: true,
     },
     {
+      label: 'راهنمای سامانه',
+      icon: 'pi pi-question-circle',
+      disabled: true,
+    },
+    {
       label: 'خروج',
       icon: 'pi pi-sign-out',
       command: this.logout,

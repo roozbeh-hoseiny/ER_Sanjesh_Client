@@ -43,7 +43,7 @@ export class FieldsSelectComponent {
   filterOptions = (filters: number[]) => {
     this._filters = filters || [];
 
-    const allFields = JSON.parse(JSON.stringify(this.items())) as IFieldOfStudiesResponse[];
+    const allFields = (JSON.parse(JSON.stringify(this.items())) || []) as IFieldOfStudiesResponse[];
     this.filteredItems.set(allFields.filter((field) => !this._filters.includes(field.id)));
   };
 

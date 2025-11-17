@@ -147,7 +147,6 @@ export class LessonsTableComponent {
     }));
     this.store.detachLesson(item).subscribe({
       next: () => {
-        console.log('first');
         this.onSubmitted.emit();
         this.removeDetachLessonFromSchedule(item);
       },

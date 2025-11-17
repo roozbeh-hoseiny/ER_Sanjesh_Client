@@ -2,6 +2,7 @@ import { BreadcrumbService } from '@/core/services';
 import { ToastService } from '@/core/services/toast.service';
 import { LayoutService } from '@/layout/service/layout.service';
 import { adminNamedRoutes } from '@/modules/admin/constants';
+import { adminSchoolNamedRoutes } from '@/modules/admin/constants/routes';
 import { AdminSchoolsService } from '@/modules/admin/services';
 import { ISchoolContactRequest, ISchoolInfoRequest } from '@/modules/schools/models';
 import { SchoolDetailsComponent } from '@/modules/schools/pages/dashboard/components/detailsCards/school-details.component';
@@ -41,6 +42,8 @@ export class AdminSchoolComponent {
     this.layoutService.changeIsFixedContentSize(true);
 
     this.schoolDetailsStore.setService({
+      getTeachers: (schoolUniqueId: string, schoolId: string) =>
+        this.schoolsInfoService.getTeachers(schoolId),
       editInfo: (req: ISchoolInfoRequest) => this.schoolService.updateInfo(req),
       editAddress: (req: any) => this.schoolService.updateAddress(req),
       updateContact: (req: any) => this.schoolService.updateContact(req),
@@ -74,6 +77,9 @@ export class AdminSchoolComponent {
           canEditCategories: true,
           showContactValidateInlineConfirmation: true,
           showManagerValidateInlineConfirmation: true,
+          showTeachersCard: true,
+          teachersManagementPageRoute: () =>
+            adminSchoolNamedRoutes.schoolTeachers.meta.pagePath!(this.schoolId()),
         });
       }
     });

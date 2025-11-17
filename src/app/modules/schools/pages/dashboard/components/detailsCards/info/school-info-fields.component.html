@@ -2,7 +2,7 @@
   <app-key-value label="دروس" class="w-full">
     <div class="flex w-full flex-wrap gap-4">
       @if (fields.length) {
-        <div class="inline-flex items-center gap-2">
+        <div class="inline-flex items-center gap-2 flex-wrap">
           @for (field of fields; track field.id) {
             <p-tag severity="info">
               <div class="flex items-center gap-3">

@@ -11,6 +11,7 @@ export const schoolsTeachersNamedRoutes: NamedRoutes<TSchoolTeachersRouteNames> 
       ),
     meta: {
       title: 'دبیران',
+      pagePath: () => '/schools/teachers',
     },
   },
 };

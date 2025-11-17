@@ -1,0 +1,44 @@
+<div class="flex items-center gap-3 justify-between">
+  دروس مرکز آموزشی‌ "{{ item.schoolTitle }}"
+
+  @if (canAddTeacherLesson() || canApproveTeachers()) {
+    <div class="text-end flex justify-end gap-3 shrink-0">
+      @if (canAddTeacherLesson()) {
+        <p-button severity="success" size="small" icon="pi pi-plus" label="افزودن درس" (onClick)="openLessonForm()">
+        </p-button>
+        <p-button
+          severity="danger"
+          size="small"
+          [loading]="detachTeacherSchedules()[item.schoolId]"
+          (click)="detachTeacher(item)"
+        >
+          حذف دبیر
+        </p-button>
+      }
+      @if (canApproveTeachers()) {
+        <p-button
+          label="تایید تمامی دروس"
+          icon="pi pi-check"
+          severity="success"
+          size="small"
+          [loading]="changeTeacherStatusSchedules()[item.schoolId]"
+          (click)="approveAllLessons(item)"
+        />
+        <p-button
+          label="رد تمامی دروس"
+          icon="pi pi-times"
+          severity="warn"
+          size="small"
+          [loading]="changeTeacherStatusSchedules()[item.schoolId]"
+          (click)="rejectAllLessons(item)"
+        />
+      }
+    </div>
+  }
+</div>
+<assign-teacher-form-dialog
+  [(visible)]="showLessonForm"
+  [teacherId]="teacherId"
+  [selectedLessonIds]="selectedLessonIds"
+  (onSubmit)="submitted()"
+/>

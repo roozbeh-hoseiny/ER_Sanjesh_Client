@@ -90,12 +90,9 @@ export class AttachSchoolLessonFormDialogComponent {
           filter((val) => !!val && val.length === 6),
         )
         .subscribe(() => {
-          console.log('first');
-
           this.getSchool();
         });
     }
-    console.log(this.form.controls.schoolId);
   }
 
   getSchool() {
@@ -119,7 +116,7 @@ export class AttachSchoolLessonFormDialogComponent {
     }
 
     if (!this.searchedSchool()) {
-      return this.toastService.error({ text: 'لطفا مدرسه را جستجو و انتخاب کنید' });
+      return this.toastService.error({ text: 'لطفا مرکز آموزشی را جستجو و انتخاب کنید' });
     }
 
     this.submitLoading.set(true);

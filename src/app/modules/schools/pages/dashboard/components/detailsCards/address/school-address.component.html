@@ -3,7 +3,7 @@
     <app-school-address-form (closeForm)="closeForm()" (submitForm)="submitForm()" />
   } @else {
     <div class="flex flex-col gap-4">
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid grid-cols-3 gap-4 items-center">
         <app-key-value label="استان" [value]="address?.stateName" />
         <app-key-value label="شهر" [value]="address?.cityName" />
         <app-key-value label="کد پستی" [value]="address?.postalCode" />

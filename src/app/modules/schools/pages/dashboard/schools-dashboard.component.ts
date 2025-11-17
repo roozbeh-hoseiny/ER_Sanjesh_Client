@@ -1,8 +1,10 @@
 import { LayoutService } from '@/layout/service/layout.service';
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, signal } from '@angular/core';
+import { schoolsTeachersNamedRoutes } from '../../constants/routes';
 import { SchoolsStore } from '../../dataStore';
 import { SchoolsInfoService } from '../../services';
+import { SchoolsTeachersService } from '../../services/schools-teachers.service';
 import { SchoolDetailsComponent, ValidateManagerMobileDialogComponent } from './components';
 import { SchoolDetailsCardsStore } from './components/detailsCards/store';
 import { ValidateManagerEmailDialogComponent } from './components/validateDialog/validate-manager-email-dialog.component';
@@ -26,9 +28,11 @@ export class SchoolsDashboardComponent {
     protected layoutService: LayoutService = inject(LayoutService),
     protected detailsStore: SchoolDetailsCardsStore = inject(SchoolDetailsCardsStore),
     protected schoolService: SchoolsInfoService,
+    protected teachersService: SchoolsTeachersService,
   ) {
     this.layoutService.changeIsFixedContentSize(true);
     this.detailsStore.setService({
+      getTeachers: (schoolUniqueId: string) => this.teachersService.getAll(schoolUniqueId),
       editInfo: (req: any) => this.schoolService.editInfo(req),
       editAddress: (req: any) => this.schoolService.editAddress(req),
       validateManagerMobile: (id: string) => this.openConfirmationMobileModal(id),
@@ -40,6 +44,9 @@ export class SchoolsDashboardComponent {
       if (info) {
         this.detailsStore.fillInitial({
           school: info,
+          showTeachersCard: true,
+          teachersManagementPageRoute: () =>
+            schoolsTeachersNamedRoutes.teachers.meta.pagePath!(this.schoolStore.info()?.id),
           showContactCard: true,
           canEditAddress: true,
           canEditInfo: true,
@@ -61,6 +68,8 @@ export class SchoolsDashboardComponent {
 
   refreshData() {
     this.schoolStore.getInfo();
+    this.teachersService.getAll(this.info()?.uniqueId!);
+    this.detailsStore.setState({});
   }
 
   openConfirmationMobileModal(schoolId: string) {

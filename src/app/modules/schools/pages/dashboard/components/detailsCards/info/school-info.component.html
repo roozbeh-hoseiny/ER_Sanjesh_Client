@@ -3,7 +3,7 @@
     <app-school-info-form (closeForm)="closeForm()" (submitForm)="submitForm()" />
   } @else {
     <div class="flex flex-col gap-4">
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid grid-cols-3 gap-4 items-center">
         <app-key-value label="نام مرکز آموزشی" [value]="info().name" />
         <app-key-value label="جنسیت">
           <app-school-genders-tag [genderId]="info().boyOrGirl" />
@@ -25,7 +25,7 @@
         (onUpdate)="submitForm()"
       />
       <p-divider> مدیریت </p-divider>
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid grid-cols-3 gap-4 items-center">
         <app-key-value label="نام" [value]="info().managerInfo.firstName" />
         <app-key-value label="نام خانوادگی" [value]="info().managerInfo.lastName" />
         <app-key-value label="جنسیت" [value]="info().managerInfo.gender ? 'مرد' : 'زن'" />

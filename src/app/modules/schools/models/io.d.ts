@@ -86,6 +86,7 @@ export interface ISchoolResponse {
   boyOrGirl: number;
   examHallCapacity: number;
   isActive: boolean;
+  uniqueId: string;
   categories: any[];
   fieldOfStudies: SchoolsFieldOfStudy[];
 }

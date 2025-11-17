@@ -1,0 +1,97 @@
+<app-card-data>
+  <ng-template #header>
+    <div class="w-full flex items-center justify-between">
+      <span class="font-bold text-lg">لیست دبیران</span>
+      @if (canAddTeacher()) {
+        <p-button label="الصاق دبیر جدید" icon="pi pi-plus" (click)="openAttachLessonDialog()"></p-button>
+      }
+    </div>
+  </ng-template>
+
+  <div class="grid grid-cols-1 gap-4">
+    @for (teacher of teachers() || []; track teacher.id) {
+      <p-panel toggleable collapsed>
+        <ng-template #header>
+          <div class="w-full flex items-center justify-between gap-4 me-4">
+            <span>
+              {{ `لیست دروس دبیر: ${teacher.fullname}` }}
+            </span>
+            <p-button
+              label="الصاق درس جدید"
+              icon="pi pi-plus"
+              size="small"
+              class
+              (click)="openAttachLessonDialog()"
+            ></p-button>
+          </div>
+        </ng-template>
+        <p-table
+          [columns]="columns"
+          [value]="teacher.lessons"
+          columnResizeMode="fit"
+          stripedRows
+          [showFirstLastIcon]="false"
+        >
+          <ng-template #header let-columns>
+            <tr>
+              @for (col of columns; track col.header) {
+                <th [style]="{ width: col.width, minWidth: col.minWidth }">{{ col.header }}</th>
+              }
+            </tr>
+          </ng-template>
+          <ng-template #body let-item>
+            <tr>
+              @for (col of columns; track col.field) {
+                <td>
+                  @if (col.field === "approved") {
+                    @if (canApproveTeachers()) {
+                      <div class="flex items-center gap-2">
+                        <p-confirmpopup />
+                        @if (changeStatusSchedules()[item.lessonId]) {
+                          <p-progressSpinner
+                            strokeWidth="4"
+                            fill="transparent"
+                            animationDuration="1s"
+                            [style]="{ width: '24px', height: '24px' }"
+                          ></p-progressSpinner>
+                        } @else {
+                          <p-toggleSwitch
+                            [attr.disabled]="changeStatusSchedules()[item.lessonId]"
+                            [ngModel]="item.approved"
+                            (onChange)="showTeacherLessonConfirmation(item, $event.checked, $event)"
+                          ></p-toggleSwitch>
+                        }
+
+                        <p-button
+                          outlined
+                          severity="secondary"
+                          size="small"
+                          [loading]="detachLessonsSchedules()[`${item.lessonId}-${item.schoolId}`]"
+                          (click)="detachLesson(item)"
+                        >
+                          حذف درس
+                        </p-button>
+                      </div>
+                    } @else {
+                      <p-badge
+                        [value]="item.approved ? 'تایید شده' : 'تایید نشده'"
+                        [severity]="item.approved ? 'success' : 'danger'"
+                      ></p-badge>
+                    }
+                  } @else {
+                    {{ item[col.field] || "-" }}
+                  }
+                </td>
+              }
+            </tr>
+          </ng-template>
+          <!-- <ng-template #status let-item>
+
+    </ng-template> -->
+        </p-table>
+      </p-panel>
+    }
+  </div>
+</app-card-data>
+
+<assign-teacher-form-dialog [(visible)]="showLessonForm" (onSubmit)="submittedNewTeacher()" />

@@ -4,5 +4,8 @@
     <app-school-contact (onSubmit)="submitContact($event)" (onSubmitted)="refreshData()" />
   }
   <app-school-address (onSubmitted)="refreshData()" />
+  @if (showTeachersCard) {
+    <school-teachers-simple-list />
+  }
   <app-school-login-info (onSubmitted)="refreshData()" />
 </div>

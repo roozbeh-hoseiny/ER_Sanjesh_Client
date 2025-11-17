@@ -22,5 +22,7 @@ export const SCHOOLS_API_ROUTES = {
   contactEmailVerification: () => `${baseUrl}/VerifyContactEmail`,
   contactPhoneVerification: () => `${baseUrl}/VerifyContactMobile`,
 
+  assignTeacher: () => `${baseUrl}/AssignTeacher`,
+
   teachers: schoolsTeachersApiRoutes(baseUrl),
 };

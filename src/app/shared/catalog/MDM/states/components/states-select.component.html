@@ -21,7 +21,7 @@
           optionValue="id"
           [options]="cities() || []"
           [loading]="getStatesLoading()"
-          [disabled]="!isSelectedState()"
+          [attr.disabled]="!isSelectedState()"
           [formControl]="cityControl"
         ></p-select>
       </uikit-field>

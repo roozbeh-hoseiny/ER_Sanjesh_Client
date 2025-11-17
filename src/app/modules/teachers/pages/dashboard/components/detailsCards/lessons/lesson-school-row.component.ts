@@ -1,13 +1,14 @@
 import { ITeacherLesson } from '@/modules/teachers/models';
 import { Component, computed, EventEmitter, Input, Output, signal } from '@angular/core';
-import { Button } from 'primeng/button';
+import { ButtonDirective } from 'primeng/button';
+import { Menu } from 'primeng/menu';
 import { TeacherDetailsCardsStore } from '../dataStore';
 import { AttachSchoolLessonFormDialogComponent } from './attach-lesson-form.component';
 
 @Component({
   selector: 'lesson-school-row-subheader',
   templateUrl: './lesson-school-row.component.html',
-  imports: [Button, AttachSchoolLessonFormDialogComponent],
+  imports: [AttachSchoolLessonFormDialogComponent, Menu, ButtonDirective],
   host: {
     class: 'w-full',
   },
@@ -26,6 +27,35 @@ export class lessonSchoolRowSubheaderComponent {
 
   canAddSchoolLesson = computed(() => this.store.canAddSchoolLesson());
   canApproveSchools = computed(() => this.store.canApproveSchools());
+
+  menuItems = computed(() => {
+    const items = [];
+    if (this.canAddSchoolLesson()) {
+      items.push({
+        label: 'افزودن درس',
+        icon: 'pi pi-plus',
+        command: () => this.openLessonForm(),
+      });
+      items.push({
+        label: 'حذف مرکز آموزشی',
+        icon: 'pi pi-trash',
+        command: () => this.detachSchool(this.item),
+      });
+    }
+    if (this.canApproveSchools()) {
+      items.push({
+        label: 'تایید همه دروس مرکز آموزشی',
+        icon: 'pi pi-check',
+        command: () => this.approveAllLessons(this.item),
+      });
+      items.push({
+        label: 'رد همه دروس مرکز آموزشی',
+        icon: 'pi pi-times',
+        command: () => this.rejectAllLessons(this.item),
+      });
+    }
+    return items;
+  });
 
   // start of school
   detachSchool(item: ITeacherLesson) {
