@@ -73,8 +73,6 @@ export class SchoolInfoBankAccountsComponent {
 
   submitForm() {
     this.selectedBankAccountForEdit.set(null);
-    console.log('submitForm');
-
     this.onSubmit.emit();
   }
 }

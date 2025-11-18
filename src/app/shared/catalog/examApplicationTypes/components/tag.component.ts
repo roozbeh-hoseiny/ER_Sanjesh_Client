@@ -1,4 +1,4 @@
-import { Component, computed, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Tag } from 'primeng/tag';
 import { findExamApplicationTypeById } from '../constants/examApplicationTypes.const';
 
@@ -10,7 +10,7 @@ import { findExamApplicationTypeById } from '../constants/examApplicationTypes.c
 export class ExamApplicationTypesTagComponent {
   @Input() id!: number;
 
-  examApplicationType = computed(() => {
+  get examApplicationType() {
     return findExamApplicationTypeById(this.id);
-  });
+  }
 }

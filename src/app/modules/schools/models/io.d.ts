@@ -15,6 +15,9 @@ export interface ISchoolInfoRequest {
   managerInfo: Omit<ISchoolManagerInfo, 'mobileIsVerified' | 'emailIsVerified'>;
   phoneNumber: string;
   boyOrGirl: number;
+  conductExam: boolean;
+  examApplicantTypeId: number;
+  scannerType: string;
   examHallCapacity: number;
 }
 

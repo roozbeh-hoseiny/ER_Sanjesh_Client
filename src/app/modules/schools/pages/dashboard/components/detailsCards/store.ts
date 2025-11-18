@@ -67,8 +67,6 @@ export class SchoolDetailsCardsStore {
   constructor() {
     effect(() => {
       if (this.state$().showTeachersCard && this.getTeachers !== undefined) {
-        console.log(this.state$().teachers);
-
         if (this.state$().teachers === null && this.school()?.uniqueId) {
           this.getTeachers()!.subscribe((teachers) => {
             this.setState({ teachers });

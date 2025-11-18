@@ -2,16 +2,21 @@
   <div class="grid grid-cols-3 gap-4">
     <app-input label="نام مرکز آموزشی" name="name" [control]="form.controls.name" />
     <app-school-genders-select [control]="form.controls.boyOrGirl" />
-    <app-input label="ظرفیت" name="examHallCapacity" [control]="form.controls.examHallCapacity" />
-    <uikit-field label="ظرفیت" for="examHallCapacity" [control]="form.controls.examHallCapacity">
-      <input
-        pInputText
-        formControlName="examHallCapacity"
-        required
-        class="ltrInput"
-        [invalid]="form.controls.examHallCapacity.invalid && form.controls.examHallCapacity.touched"
-      />
+
+    <uikit-field label="مایل به برگزاری آزمون هستید؟" name="conductExam" [control]="form.controls.conductExam">
+      <p-toggleSwitch formControlName="conductExam" />
     </uikit-field>
+    <app-input label="ظرفیت" name="examHallCapacity" [control]="form.controls.examHallCapacity" />
+    <catalog-exam-application-types-select
+      [control]="form.controls.examApplicantType"
+      placeholder="نوع متقاضیان آزمون را انتخاب کنید"
+    />
+    <app-input
+      label="نوع اسکنر"
+      name="scannerType"
+      [control]="form.controls.scannerType"
+      customPlaceholder="در صورت داشتن اسکنر نوع آن‌را وارد کنید"
+    />
     <app-input label="شماره تماس" name="phoneNumber" [control]="form.controls.phoneNumber" />
   </div>
   <div [formGroup]="form.controls.managerInfo" class="grid grid-cols-1 gap-4">

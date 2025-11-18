@@ -1,14 +1,14 @@
 import { ToastService } from '@/core/services/toast.service';
 import { mobileValidator } from '@/core/validators/mobile.validator';
 import { ISchoolInfoRequest, ISchoolResponse } from '@/modules/schools/models';
-import { SchoolGendersSelect } from '@/shared/catalog';
+import { ExamApplicationTypesSelectComponent, SchoolGendersSelect } from '@/shared/catalog';
 import { InputComponent } from '@/shared/components';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { Divider } from 'primeng/divider';
-import { InputText } from 'primeng/inputtext';
+import { ToggleSwitch } from 'primeng/toggleswitch';
 import { SchoolPersonFormComponent } from '../school-person-form.component';
 import { SchoolDetailsCardsStore } from '../store';
 
@@ -18,12 +18,13 @@ import { SchoolDetailsCardsStore } from '../store';
   imports: [
     ReactiveFormsModule,
     UikitFieldComponent,
-    InputText,
     Divider,
     ButtonDirective,
     SchoolGendersSelect,
     SchoolPersonFormComponent,
     InputComponent,
+    ToggleSwitch,
+    ExamApplicationTypesSelectComponent,
   ],
 })
 export class SchoolInfoFormComponent {
@@ -42,8 +43,11 @@ export class SchoolInfoFormComponent {
   form = this.fb.group({
     name: ['', [Validators.required]],
     boyOrGirl: [0, [Validators.required]],
+    conductExam: [false],
     examHallCapacity: [0, [Validators.required, Validators.min(1)]],
     phoneNumber: ['', [Validators.maxLength(11)]],
+    examApplicantType: [0, Validators.required],
+    scannerType: [''],
 
     managerInfo: this.fb.group({
       firstName: ['', [Validators.required]],
@@ -58,6 +62,9 @@ export class SchoolInfoFormComponent {
     const cur = this.detailsStore.school();
     if (cur) {
       this.form.patchValue(cur as ISchoolResponse);
+      this.form.controls.examApplicantType.setValue(cur.examApplicantTypeId);
+      this.form.controls.conductExam.setValue(cur.conductExam);
+      this.form.controls.scannerType.setValue(cur.scannerType);
     }
   }
 
