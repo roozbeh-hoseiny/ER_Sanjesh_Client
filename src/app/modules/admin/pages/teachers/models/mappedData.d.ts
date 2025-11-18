@@ -7,6 +7,7 @@ export interface ITeacherLesson {
   educationalLevelTitle: string;
   fieldOfStudyId: number;
   fieldOfStudyTitle: string;
+  id: number;
 }
 
 export interface ITeacherLessonGroupedBySchool {

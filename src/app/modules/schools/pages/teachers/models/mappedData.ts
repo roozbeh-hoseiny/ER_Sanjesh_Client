@@ -1,4 +1,4 @@
-import { ISchoolTeacherResponse } from './io';
+import { ISchoolTeacherRawResponse } from './io';
 
 export interface ITeacherLesson {
   lessonId: number;
@@ -11,6 +11,6 @@ export interface ITeacherLesson {
   fieldOfStudyTitle: string;
 }
 
-export interface ISchoolTeacherMappedData extends ISchoolTeacherResponse {
+export interface ISchoolTeacherMappedData extends ISchoolTeacherRawResponse {
   fullname: string;
 }

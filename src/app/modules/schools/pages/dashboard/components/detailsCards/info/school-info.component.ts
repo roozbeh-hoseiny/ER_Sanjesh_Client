@@ -1,4 +1,5 @@
 import { SchoolGendersTag } from '@/shared/catalog';
+import { ExamApplicationTypesTagComponent } from '@/shared/catalog/examApplicationTypes/components/tag.component';
 import { AppCardComponent, CheckVerifiedInfoComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
 import { Component, computed, EventEmitter, inject, Output, signal } from '@angular/core';
@@ -21,6 +22,7 @@ import { SchoolInfoFormComponent } from './school-info-form.component';
     CheckVerifiedInfoComponent,
     SchoolInfoCategoriesComponent,
     SchoolInfoFieldsComponent,
+    ExamApplicationTypesTagComponent,
   ],
   templateUrl: './school-info.component.html',
 })

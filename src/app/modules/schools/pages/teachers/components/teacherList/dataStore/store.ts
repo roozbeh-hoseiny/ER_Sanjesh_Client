@@ -1,7 +1,10 @@
 import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
 import { IAttachLessonToTeacherRequest } from '@/modules/admin/pages/teachers/models';
-import { IAttachLessonRequestPayload } from '@/modules/teachers/models';
+import {
+  IAttachLessonRequestPayload,
+  IDetachLessonRequestPayload,
+} from '@/modules/teachers/models';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { ISchoolTeacherMappedData } from '../../../models';
@@ -93,11 +96,11 @@ export class SchoolTeacherListStore {
       }),
     );
   }
-  detachLesson(payload: IAttachLessonRequestPayload) {
+  detachLesson(payload: IDetachLessonRequestPayload) {
     if (this.service.detachLesson === undefined) return of();
     return this.service
       .detachLesson({
-        teacherId: payload.id,
+        teacherId: payload.teacherId,
         schoolId: payload.schoolId,
         lessonId: payload.lessonId,
       })

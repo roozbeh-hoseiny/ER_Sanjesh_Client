@@ -11,10 +11,10 @@ import {
 } from '@/modules/schools/models';
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ISchoolTeacherResponse } from '../../../teachers/models';
+import { ISchoolTeacherRawResponse } from '../../../teachers/models';
 
 export interface SchoolDetailsService {
-  getTeachers(schoolUniqueId: string, schoolId: string): Observable<ISchoolTeacherResponse[]>;
+  getTeachers(schoolUniqueId: string, schoolId: string): Observable<ISchoolTeacherRawResponse[]>;
   editInfo(request: ISchoolInfoRequest): Observable<boolean>;
   editAddress(request: ISchoolAddressRequest): Observable<boolean>;
   updateContact(payload: ISchoolContactRequest): Observable<boolean>;

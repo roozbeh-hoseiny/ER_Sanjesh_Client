@@ -9,7 +9,7 @@
               id="schoolId"
               [formControl]="form.controls.schoolId"
               placeholder="کد مرکز آموزشی را وارد کنید"
-              [attr.disabled]="searchedSchoolLoading()"
+              [readonly]="searchedSchoolLoading()"
               [minLength]="6"
               [maxLength]="6"
               [invalid]="form.controls.schoolId.touched && (form.controls.schoolId.invalid || !searchedSchool())"
@@ -39,7 +39,7 @@
         [control]="form.controls.lessonId"
         [filters]="selectedLessonIds"
         [onlyId]="true"
-        [attr.disabled]="submitLoading()"
+        [disabled]="submitLoading()"
       />
       <app-form-footer-actions class="mt-6" [loading]="submitLoading()" (onCancel)="close()" />
     </div>

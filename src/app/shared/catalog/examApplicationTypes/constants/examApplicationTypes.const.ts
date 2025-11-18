@@ -39,5 +39,13 @@ export const ExamApplicationTypeList: IExamApplicationType[] = [
 ];
 
 export const findExamApplicationTypeById = (id: number) => {
-  return ExamApplicationTypeList.find((type) => type.id === id) || null;
+  return (
+    ExamApplicationTypeList.find((type) => type.id === id) || {
+      id: 0,
+      title: 'نامشخص',
+      value: -1,
+      severity: 'danger',
+      icon: 'pi pi-fw pi-question-circle',
+    }
+  );
 };

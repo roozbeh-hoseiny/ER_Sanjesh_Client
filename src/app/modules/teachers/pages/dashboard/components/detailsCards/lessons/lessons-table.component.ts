@@ -97,7 +97,7 @@ export class LessonsTableComponent {
     checked: boolean,
     event: ToggleSwitchChangeEvent,
   ) {
-    this.changeStatusSchedules.update((prev) => ({ ...prev, [item.lessonId]: true }));
+    this.changeStatusSchedules.update((prev) => ({ ...prev, [item.id]: true }));
     this.confirmationService.confirm({
       target: (event.originalEvent.target as HTMLElement)?.parentNode?.parentNode!,
       message: !checked
@@ -109,7 +109,7 @@ export class LessonsTableComponent {
       rejectLabel: 'خیر',
       accept: () => this.toggleSchoolLessonStatus(item, checked),
       reject: () => {
-        this.removeLessonFromSchedule(item.lessonId);
+        this.removeLessonFromSchedule(item.id);
       },
     });
   }
@@ -117,7 +117,7 @@ export class LessonsTableComponent {
   toggleSchoolLessonStatus(item: ITeacherLesson, checked: boolean) {
     this.store
       .changeSchoolLessonStatus({
-        teacherLessonId: item.lessonId,
+        teacherLessonId: item.id,
         schoolTitle: item.schoolTitle,
         teacherLessonTitle: item.lessonTitle,
         isActive: checked,
@@ -125,10 +125,10 @@ export class LessonsTableComponent {
       .subscribe({
         next: () => {
           item.approved = checked;
-          this.removeLessonFromSchedule(item.lessonId);
+          this.removeLessonFromSchedule(item.id);
         },
         error: () => {
-          this.removeLessonFromSchedule(item.lessonId);
+          this.removeLessonFromSchedule(item.id);
           item.approved = !checked;
         },
       });
@@ -143,7 +143,7 @@ export class LessonsTableComponent {
   detachLesson(item: ITeacherLesson) {
     this.detachLessonsSchedules.update((prev) => ({
       ...prev,
-      [`${item.lessonId}-${item.schoolId}`]: true,
+      [`${item.id}-${item.schoolId}`]: true,
     }));
     this.store.detachLesson(item).subscribe({
       next: () => {
@@ -155,7 +155,7 @@ export class LessonsTableComponent {
 
   removeDetachLessonFromSchedule(item: ITeacherLesson) {
     const updatedSchedules = { ...this.detachLessonsSchedules() };
-    delete updatedSchedules[`${item.lessonId}-${item.schoolId}`];
+    delete updatedSchedules[`${item.id}-${item.schoolId}`];
     this.detachLessonsSchedules.set(updatedSchedules);
   }
 

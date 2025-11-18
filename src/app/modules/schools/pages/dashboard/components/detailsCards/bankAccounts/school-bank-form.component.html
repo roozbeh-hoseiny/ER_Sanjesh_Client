@@ -1,0 +1,15 @@
+<form [formGroup]="form" (submit)="submit()">
+  <div class="grid grid-cols-1 gap-4">
+    <app-school-person-form
+      [firstNameControl]="form.controls.firstName"
+      [lastNameControl]="form.controls.lastName"
+      [mobileControl]="form.controls.mobile"
+      [emailControl]="form.controls.email"
+      [genderControl]="form.controls.gender"
+    />
+  </div>
+  <div class="flex gap-2 justify-end mt-4">
+    <button pButton type="button" class="p-button-secondary" (click)="close()">انصراف</button>
+    <button pButton type="submit" class="p-button-primary" [loading]="submitLoading()">ذخیره</button>
+  </div>
+</form>

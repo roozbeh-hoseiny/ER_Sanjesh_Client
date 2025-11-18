@@ -144,7 +144,7 @@ export class TeacherDetailsCardsStore {
       .detachLesson({
         teacherId: this.info()?.id!,
         schoolId: payload.schoolId,
-        lessonId: payload.lessonId,
+        lessonId: payload.id,
       })
       .pipe(
         tap(() => {

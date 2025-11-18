@@ -43,7 +43,7 @@
               @if (canApproveSchools()) {
                 <div class="flex items-center gap-2">
                   <p-confirmpopup />
-                  @if (changeStatusSchedules()[item.lessonId]) {
+                  @if (changeStatusSchedules()[item.id]) {
                     <p-progressSpinner
                       strokeWidth="4"
                       fill="transparent"
@@ -52,7 +52,7 @@
                     ></p-progressSpinner>
                   } @else {
                     <p-toggleSwitch
-                      [attr.disabled]="changeStatusSchedules()[item.lessonId]"
+                      [disabled]="changeStatusSchedules()[item.id]"
                       [ngModel]="item.approved"
                       (onChange)="showSchoolLessonConfirmation(item, $event.checked, $event)"
                     ></p-toggleSwitch>
@@ -62,7 +62,7 @@
                     outlined
                     severity="secondary"
                     size="small"
-                    [loading]="detachLessonsSchedules()[`${item.lessonId}-${item.schoolId}`]"
+                    [loading]="detachLessonsSchedules()[`${item.id}-${item.schoolId}`]"
                     (click)="detachLesson(item)"
                   >
                     حذف درس

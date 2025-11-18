@@ -7,11 +7,11 @@ import { SchoolPersonFormComponent } from '../school-person-form.component';
 import { SchoolDetailsCardsStore } from '../store';
 
 @Component({
-  selector: 'app-school-contact-form',
-  templateUrl: './school-contact-form.component.html',
+  selector: 'app-school-bank-form',
+  templateUrl: './school-bank-form.component.html',
   imports: [SchoolPersonFormComponent, ReactiveFormsModule, ButtonDirective],
 })
-export class SchoolContactFormComponent {
+export class SchoolBankFormComponent {
   @Output() closeForm = new EventEmitter();
   @Output() submitForm = new EventEmitter<ISchoolContactRequest>();
 

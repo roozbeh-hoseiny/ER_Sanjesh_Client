@@ -3,7 +3,7 @@
     <div class="w-full flex items-center justify-between">
       <span class="font-bold text-lg">لیست دبیران</span>
       @if (canAddTeacher()) {
-        <p-button label="الصاق دبیر جدید" icon="pi pi-plus" (click)="openAttachLessonDialog()"></p-button>
+        <p-button label="افزودن دبیر جدید" icon="pi pi-plus" (click)="openAttachLessonDialog()"></p-button>
       }
     </div>
   </ng-template>
@@ -45,7 +45,7 @@
                           ></p-progressSpinner>
                         } @else {
                           <p-toggleSwitch
-                            [attr.disabled]="changeStatusSchedules()[item.id]"
+                            [disabled]="changeStatusSchedules()[item.id]"
                             [ngModel]="item.approved"
                             (onChange)="showTeacherLessonConfirmation(item, $event.checked, $event, teacher.id)"
                           ></p-toggleSwitch>

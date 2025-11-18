@@ -1,29 +1,23 @@
-import { ISchoolContactInfo, ISchoolContactRequest } from '@/modules/schools/models';
-import { AppCardComponent, CheckVerifiedInfoComponent } from '@/shared/components';
+import { ISchoolContactRequest } from '@/modules/schools/models';
+import { AppCardComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
+import { Divider } from 'primeng/divider';
 import { SchoolDetailsCardsStore } from '../store';
-import { SchoolContactFormComponent } from './school-contact-form.component';
+import { SchoolBankFormComponent } from './school-bank-form.component';
 
 @Component({
-  selector: 'app-school-contact',
-  imports: [
-    AppCardComponent,
-    KeyValueComponent,
-    SchoolContactFormComponent,
-    CheckVerifiedInfoComponent,
-  ],
-  templateUrl: './school-contact.component.html',
+  selector: 'app-school-info-bank-accounts',
+  templateUrl: './school-info-bank.component.html',
+  imports: [AppCardComponent, KeyValueComponent, SchoolBankFormComponent, Divider],
 })
-export class SchoolContactComponent {
+export class SchoolInfoBankAccountsComponent {
   @Output() onSubmit = new EventEmitter<ISchoolContactRequest>();
 
   private detailsStore = inject(SchoolDetailsCardsStore);
 
-  get contact() {
-    return this.detailsStore.school()
-      ? (this.detailsStore.school()!.contactInfo as ISchoolContactInfo)
-      : null;
+  get bankAccounts() {
+    return this.detailsStore.school() ? this.detailsStore.school()!.bankAccounts : null;
   }
   get canEdit() {
     return this.detailsStore.canEditContact();

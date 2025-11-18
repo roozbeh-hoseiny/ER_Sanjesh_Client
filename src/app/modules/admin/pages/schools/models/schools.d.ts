@@ -1,5 +1,6 @@
 import {
   ISchoolAddressRequestPayload,
+  ISchoolCategory,
   ISchoolMeRawResponse,
   ISchoolResponse,
 } from '@/modules/schools/models';
@@ -14,7 +15,7 @@ export interface ISchoolRequest {
   username: string;
   password: string;
 }
-export interface ICategoryFullTreeResponse {
+export interface ICategoryFullTreeResponse extends ISchoolCategory {
   id: number;
   title: string;
   ordinal: number;

@@ -1,6 +1,6 @@
 import { ITeacherLesson } from './mappedData';
 
-export interface ISchoolTeacherResponse {
+export interface ISchoolTeacherRawResponse {
   id: string;
   firstName: string;
   lastName: string;

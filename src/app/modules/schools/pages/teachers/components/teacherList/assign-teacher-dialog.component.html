@@ -9,7 +9,7 @@
               id="teacherId"
               [formControl]="form.controls.teacherId"
               placeholder="شناسه‌ی یکتای دبیر را وارد کنید"
-              [attr.disabled]="searchedLoading()"
+              [readonly]="searchedLoading()"
               [minLength]="6"
               [maxLength]="6"
               [invalid]="form.controls.teacherId.touched && (form.controls.teacherId.invalid || !searchedTeacher())"
@@ -39,7 +39,7 @@
         [control]="form.controls.lessonId"
         [filters]="selectedLessonIds"
         [onlyId]="true"
-        [attr.disabled]="submitLoading()"
+        [disabled]="submitLoading()"
       />
       <app-form-footer-actions class="mt-6" [loading]="submitLoading()" (onCancel)="close()" />
     </div>

@@ -13,7 +13,7 @@ import { Message } from 'primeng/message';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { SkeletonModule } from 'primeng/skeleton';
 import { debounceTime, filter } from 'rxjs';
-import { ISchoolTeacherResponse } from '../../models';
+import { ISchoolTeacherRawResponse } from '../../models';
 import { SchoolTeacherListStore } from './dataStore';
 
 @Component({
@@ -67,7 +67,7 @@ export class AssignTeacherDialogComponent {
   private visibleSignal = signal(false);
   submitLoading = signal(false);
   searchedLoading = signal(false);
-  searchedTeacher = signal<Maybe<ISchoolTeacherResponse>>(null);
+  searchedTeacher = signal<Maybe<ISchoolTeacherRawResponse>>(null);
   teacherNotFound = signal(false);
 
   form = this.fb.group({

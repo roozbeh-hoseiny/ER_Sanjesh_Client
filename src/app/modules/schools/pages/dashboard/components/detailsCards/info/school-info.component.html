@@ -11,7 +11,17 @@
         <app-key-value label="وضعیت">
           <p-badge [value]="info().isActive ? 'فعال' : 'غیرفعال'" [severity]="info().isActive ? 'success' : 'danger'" />
         </app-key-value>
+        <app-key-value label="مایل به برگزاری آزمون">
+          <p-badge
+            [value]="info().conductExam ? 'بلی' : 'خیر'"
+            [severity]="info().conductExam ? 'success' : 'danger'"
+          />
+        </app-key-value>
         <app-key-value label="ظرفیت مرکز آموزشی" [value]="info().examHallCapacity.toString()" />
+        <app-key-value label="نوع متقاضیان آزمون">
+          <catalog-exam-application-types-tag [id]="info().examApplicantTypeId" />
+        </app-key-value>
+        <app-key-value label="نوع اسکنر" [value]="info().scannerType || 'ندارد'" />
         <app-key-value label="تلفن تماس" [value]="info().phoneNumber" />
       </div>
       <app-school-info-categories

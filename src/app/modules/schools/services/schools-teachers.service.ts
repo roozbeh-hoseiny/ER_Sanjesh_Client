@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { SCHOOLS_API_ROUTES } from '../constants/apiRoutes';
-import { ISchoolTeacherMappedData, ISchoolTeacherResponse } from '../pages/teachers/models';
+import { ISchoolTeacherMappedData, ISchoolTeacherRawResponse } from '../pages/teachers/models';
 
 @Injectable({ providedIn: 'root' })
 export class SchoolsTeachersService {
@@ -10,8 +10,8 @@ export class SchoolsTeachersService {
 
   private apiRoutes = SCHOOLS_API_ROUTES;
 
-  getAll(schoolId: string): Observable<ISchoolTeacherResponse[]> {
-    return this.http.get<ISchoolTeacherResponse[]>(this.apiRoutes.teachers.list());
+  getAll(schoolId: string): Observable<ISchoolTeacherRawResponse[]> {
+    return this.http.get<ISchoolTeacherRawResponse[]>(this.apiRoutes.teachers.list());
   }
 
   getAllMappedData(schoolId: string): Observable<ISchoolTeacherMappedData[]> {
@@ -25,8 +25,10 @@ export class SchoolsTeachersService {
     );
   }
 
-  findByUniqueId(uniqueId: string): Observable<ISchoolTeacherResponse> {
-    return this.http.get<ISchoolTeacherResponse>(this.apiRoutes.teachers.findByUniqueId(uniqueId));
+  findByUniqueId(uniqueId: string): Observable<ISchoolTeacherRawResponse> {
+    return this.http.get<ISchoolTeacherRawResponse>(
+      this.apiRoutes.teachers.findByUniqueId(uniqueId),
+    );
   }
 
   assignTeacher(teacherId: string, lessonId: number): Observable<boolean> {

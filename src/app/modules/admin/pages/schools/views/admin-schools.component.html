@@ -40,7 +40,7 @@
       ></p-progressSpinner>
     } @else {
       <p-toggleSwitch
-        [attr.disabled]="schoolsChangeStatusSchedules()[item.id]"
+        [disabled]="schoolsChangeStatusSchedules()[item.id]"
         [ngModel]="item.isActive"
         (onChange)="showConfirmation(item, $event.checked, $event)"
       ></p-toggleSwitch>

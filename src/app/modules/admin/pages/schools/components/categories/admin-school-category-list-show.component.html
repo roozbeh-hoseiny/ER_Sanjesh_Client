@@ -1,19 +1,22 @@
 <div class="">
   <p-divider align="right">دسته‌بندی {{ category.title }}</p-divider>
-  <div class="flex items-center gap-3">
-    @for (item of category.children; track item.id) {
-      <p-chip class="flex items-center gap-3">
-        <span>{{ item.title }}</span>
-        <!-- <p-button
+  @if (category.children.length) {
+    <div class="flex items-center gap-3">
+      @for (item of category.children; track item.id) {
+        <p-chip class="flex items-center gap-3">
+          <span>{{ item.title }}</span>
+          <!-- <p-button
                 type="button"
                 icon="pi pi-times"
                 size="small"
                 text
                 class="p-button-text p-button-plain"
               ></p-button> -->
-      </p-chip>
-    }
-  </div>
+        </p-chip>
+      }
+    </div>
+  }
+
   <form (ngSubmit)="addSubCategory()" class="flex items-center gap-2 mt-5 max-w-72">
     <p-input-group>
       <!-- Disable browser/autocomplete/spellcheck hooks to avoid external content scripts
@@ -24,11 +27,11 @@
         name="title"
         [(ngModel)]="title"
         placeholder="عنوان دسته‌بندی فرعی"
-        [attr.disabled]="loading()"
+        [readonly]="loading()"
         autocomplete="off"
         spellcheck="false"
       />
-      <p-button type="submit" label="افزودن" [loading]="loading()" [attr.disabled]="!title().length"></p-button>
+      <p-button type="submit" label="افزودن" [loading]="loading()" [disabled]="!title().length"></p-button>
     </p-input-group>
   </form>
 </div>

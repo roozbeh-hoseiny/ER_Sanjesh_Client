@@ -12,7 +12,7 @@ export interface ISchoolAddressRequest {
 export interface ISchoolInfoRequest {
   id: string;
   name: string;
-  managerInfo: Omit<IManagerInfo, 'mobileIsVerified' | 'emailIsVerified'>;
+  managerInfo: Omit<ISchoolManagerInfo, 'mobileIsVerified' | 'emailIsVerified'>;
   phoneNumber: string;
   boyOrGirl: number;
   examHallCapacity: number;
@@ -44,13 +44,13 @@ export interface IVerifyManagerMobileRequest extends IVerifyRequest {}
 export interface IVerifyContactEmailRequest {}
 export interface IVerifyContactMobileRequest {}
 
-export interface ISchoolMeRawResponse {
+export interface ISchoolRawResponse {
   id: string;
   name: string;
   phoneNumber: string;
   address: Address;
-  managerInfo: IManagerInfo;
-  contactInfo: IManagerInfo;
+  managerInfo: ISchoolManagerInfo;
+  contactInfo: ISchoolManagerInfo;
   username: string;
   passwordMustBeChangedOnNextLogin: boolean;
   canLoginWithMobileOrEmail: boolean;
@@ -58,37 +58,29 @@ export interface ISchoolMeRawResponse {
   examHallCapacity: number;
   isActive: boolean;
   uniqueId: string;
-  categories: Category[];
+  conductExam: boolean;
+  examApplicantTypeId: number;
+  examApplicantTypeTitle: number;
+  scannerType: string;
+  categories: ISchoolCategory[];
   fieldOfStudies: SchoolsFieldOfStudyRaw[];
+  bankAccounts: ISchoolBankInfo[];
 }
+export interface ISchoolResponse extends Omit<ISchoolRawResponse, 'fieldOfStudies'> {
+  fieldOfStudies: SchoolsFieldOfStudy[];
+}
+
+export interface ISchoolMeRawResponse extends ISchoolRawResponse {}
 export interface ISchoolMeResponse extends Omit<ISchoolMeRawResponse, 'fieldOfStudies'> {
   fieldOfStudies: SchoolsFieldOfStudy[];
 }
 
-interface Category {
+export interface ISchoolCategory {
   id: number;
   title: string;
   ordinal: number;
-  parent: null;
-  children: Category[];
-}
-
-export interface ISchoolResponse {
-  id: string;
-  name: string;
-  phoneNumber: string;
-  address: Address;
-  managerInfo: IManagerInfo;
-  contactInfo: IContactInfo;
-  username: string;
-  passwordMustBeChangedOnNextLogin: boolean;
-  canLoginWithMobileOrEmail: boolean;
-  boyOrGirl: number;
-  examHallCapacity: number;
-  isActive: boolean;
-  uniqueId: string;
-  categories: any[];
-  fieldOfStudies: SchoolsFieldOfStudy[];
+  parent: number;
+  children: ISchoolCategory[];
 }
 
 export interface ISchoolAddress {
@@ -106,7 +98,7 @@ export interface ISchoolAddress {
   regionType: number;
 }
 
-export interface IManagerInfo {
+export interface ISchoolManagerInfo {
   firstName: string;
   lastName: string;
   gender: boolean;
@@ -115,7 +107,7 @@ export interface IManagerInfo {
   mobileIsVerified: boolean;
   emailIsVerified: boolean;
 }
-export interface IContactInfo extends IManagerInfo {}
+export interface ISchoolContactInfo extends ISchoolManagerInfo {}
 
 export interface ISchoolEducationalLevelsResponse {
   educationalLevelId: number;
@@ -145,4 +137,14 @@ interface SchoolsFieldOfStudy
   id: number;
   title: string;
   fullTitle: string;
+}
+interface ISchoolBankInfo {
+  id: number;
+  bankTypeId: number;
+  bankName: string;
+  branchCode: string;
+  branchName: string;
+  ownerName: string;
+  depositeNumber: string;
+  sheba: string;
 }

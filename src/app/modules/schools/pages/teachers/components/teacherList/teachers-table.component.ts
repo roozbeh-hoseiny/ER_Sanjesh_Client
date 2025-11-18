@@ -149,14 +149,12 @@ export class LessonsTableComponent {
       ...prev,
       [`${item.id}-${item.schoolId}`]: true,
     }));
-    this.store
-      .detachLesson({ id: teacherId, schoolId: item.schoolId, lessonId: item.id })
-      .subscribe({
-        next: () => {
-          this.onSubmitted.emit();
-          this.removeDetachLessonFromSchedule(item);
-        },
-      });
+    this.store.detachLesson({ teacherId, schoolId: item.schoolId, lessonId: item.id }).subscribe({
+      next: () => {
+        this.onSubmitted.emit();
+        this.removeDetachLessonFromSchedule(item);
+      },
+    });
   }
 
   removeDetachLessonFromSchedule(item: ITeacherLesson) {

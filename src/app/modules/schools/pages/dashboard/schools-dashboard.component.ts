@@ -48,6 +48,7 @@ export class SchoolsDashboardComponent {
           teachersManagementPageRoute: () =>
             schoolsTeachersNamedRoutes.teachers.meta.pagePath!(this.schoolStore.info()?.id),
           showContactCard: true,
+          showBankAccountsCard: true,
           canEditAddress: true,
           canEditInfo: true,
           canEditLoginInfo: true,

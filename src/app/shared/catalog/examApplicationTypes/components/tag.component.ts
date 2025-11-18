@@ -8,9 +8,9 @@ import { findExamApplicationTypeById } from '../constants/examApplicationTypes.c
   imports: [Tag],
 })
 export class ExamApplicationTypesTagComponent {
-  @Input() examApplicationTypeId!: number;
+  @Input() id!: number;
 
   examApplicationType = computed(() => {
-    return findExamApplicationTypeById(this.examApplicationTypeId);
+    return findExamApplicationTypeById(this.id);
   });
 }

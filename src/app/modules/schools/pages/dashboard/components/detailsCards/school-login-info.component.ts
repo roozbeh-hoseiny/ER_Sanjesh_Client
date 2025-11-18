@@ -1,4 +1,4 @@
-import { IManagerInfo } from '@/modules/schools/models';
+import { ISchoolManagerInfo } from '@/modules/schools/models';
 import { AppCardComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
 import { Component, inject } from '@angular/core';
@@ -14,7 +14,7 @@ export class SchoolManagerComponent {
 
   get manager() {
     return this.detailsStore.school()
-      ? (this.detailsStore.school()!.managerInfo as IManagerInfo)
+      ? (this.detailsStore.school()!.managerInfo as ISchoolManagerInfo)
       : null;
   }
   get username() {

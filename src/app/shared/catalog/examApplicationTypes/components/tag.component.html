@@ -1,5 +1,8 @@
 @if (examApplicationType()) {
-  <p-tag [severity]="examApplicationType()?.severity" [icon]="examApplicationType()?.icon">
-    {{ examApplicationType()?.title }}
+  <p-tag
+    [severity]="examApplicationType().severity"
+    [icon]="examApplicationType().icon"
+    [value]="examApplicationType().title"
+  >
   </p-tag>
 }

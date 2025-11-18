@@ -18,18 +18,20 @@ import { IFieldOfStudiesResponse } from '@/shared/catalog';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
-import { ISchoolTeacherResponse } from '../../../teachers/models';
+import { ISchoolTeacherMappedData, ISchoolTeacherRawResponse } from '../../../teachers/models';
 import { SCHOOL_DETAILS_SERVICE, SchoolDetailsService } from './service.token';
 
 interface ISchoolDetailsCardsState {
   school: Maybe<ISchoolResponse>;
   showTeachersCard?: boolean;
-  teachers: Maybe<ISchoolTeacherResponse[]>;
+  showBankAccountsCard?: boolean;
+  teachers: Maybe<ISchoolTeacherRawResponse[]>;
   teachersManagementPageRoute?: Maybe<(schoolId: string) => string>;
   showManagerValidateInlineConfirmation?: boolean;
   showContactValidateInlineConfirmation?: boolean;
   showContactCard?: boolean;
   canEditInfo: boolean;
+  canEditBankAccounts: boolean;
   canEditAddress: boolean;
   canEditContact: boolean;
   canEditLoginInfo: boolean;
@@ -41,12 +43,14 @@ interface ISchoolDetailsCardsState {
 export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   school: null,
   showTeachersCard: false,
+  showBankAccountsCard: false,
   teachers: null,
   teachersManagementPageRoute: null,
   showManagerValidateInlineConfirmation: false,
   showContactValidateInlineConfirmation: false,
   showContactCard: false,
   canEditInfo: false,
+  canEditBankAccounts: false,
   canEditAddress: false,
   canEditContact: false,
   canEditLoginInfo: false,
@@ -60,7 +64,9 @@ export class SchoolDetailsCardsStore {
   constructor() {
     effect(() => {
       if (this.state$().showTeachersCard && this.getTeachers !== undefined) {
-        if (this.teachers() === null && this.school()?.uniqueId) {
+        console.log(this.state$().teachers);
+
+        if (this.state$().teachers === null && this.school()?.uniqueId) {
           this.getTeachers()!.subscribe((teachers) => {
             this.setState({ teachers });
           });
@@ -74,7 +80,16 @@ export class SchoolDetailsCardsStore {
   // selectors
   readonly school = computed(() => this.state$().school as Maybe<ISchoolResponse>);
   readonly showTeachersCard = computed(() => this.state$().showTeachersCard);
-  readonly teachers = computed(() => this.state$().teachers);
+  readonly showBankAccountsCard = computed(() => this.state$().showBankAccountsCard);
+  readonly teachers = computed(() => {
+    if (this.state$().teachers) {
+      return [...(this.state$().teachers || [])].map((teacher) => ({
+        ...teacher,
+        fullname: `${teacher.gender ? 'آقای' : 'خانم'} ${teacher.firstName} ${teacher.lastName}`,
+      })) as ISchoolTeacherMappedData[];
+    }
+    return [];
+  });
   readonly teachersManagementPageRoute = computed(() => {
     if (this.school() && this.state$().teachersManagementPageRoute) {
       return this.state$().teachersManagementPageRoute!(this.school()!.uniqueId);
@@ -114,7 +129,7 @@ export class SchoolDetailsCardsStore {
   private _hasCustomService = !!this._injectedService;
 
   private service: Partial<SchoolDetailsService> = this._injectedService ?? {
-    getTeachers: (schoolUniqueId: string) => of([]) as Observable<ISchoolTeacherResponse[]>,
+    getTeachers: (schoolUniqueId: string) => of([]) as Observable<ISchoolTeacherRawResponse[]>,
     editInfo: (req: any) => this._defaultSchoolsInfo.editInfo(req) as Observable<any>,
     editAddress: (req: any) => this._defaultSchoolsInfo.editAddress(req) as Observable<any>,
     updateContact: (payload: any) =>
