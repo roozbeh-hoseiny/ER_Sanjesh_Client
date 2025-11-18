@@ -1,3 +1,4 @@
+import { Maybe } from '@/core';
 import {
   IAttachLessonToTeacherRequest,
   IDetachLessonFromTeacherRequest,
@@ -11,6 +12,7 @@ import {
 } from '@/modules/teachers/models';
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ISchoolTeacherMappedData } from '../../../models';
 
 export interface SchoolTeacherListService {
   attachLesson(payload: IAttachLessonToTeacherRequest): Observable<boolean>;
@@ -24,6 +26,8 @@ export interface SchoolTeacherListService {
 
   approveTeacherLesson(payload: IApproveSchoolLessonRequestPayload): Observable<boolean>;
   rejectTeacherLesson(payload: IRejectSchoolLessonRequestPayload): Observable<boolean>;
+
+  getTeacher(uniqueId: string): Observable<Maybe<ISchoolTeacherMappedData>>;
 }
 
 export const SCHOOL_TEACHER_LIST_SERVICE = new InjectionToken<SchoolTeacherListService>(

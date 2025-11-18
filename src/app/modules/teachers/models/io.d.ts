@@ -44,6 +44,7 @@ export interface ITeacherLesson {
   fieldOfStudyId: number;
   fieldOfStudyTitle: string;
   approved: boolean;
+  id: number;
 }
 
 export interface IApproveSchoolRequestPayload {

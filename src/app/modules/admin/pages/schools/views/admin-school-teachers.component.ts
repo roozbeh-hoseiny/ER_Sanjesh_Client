@@ -1,7 +1,13 @@
 import { BreadcrumbService } from '@/core/services';
-import { AdminTeachersService } from '@/modules/admin/services';
-import { schoolsNamedRoutes } from '@/modules/schools/constants';
+import { adminNamedRoutes } from '@/modules/admin/constants';
+import { AdminSchoolsService, AdminTeachersService } from '@/modules/admin/services';
 import { LessonsTableComponent, SchoolTeacherListStore } from '@/modules/schools/pages/teachers';
+import {
+  IApproveSchoolLessonRequestPayload,
+  IApproveSchoolRequestPayload,
+  IRejectSchoolLessonRequestPayload,
+  IRejectSchoolRequestPayload,
+} from '@/modules/teachers/models';
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -9,6 +15,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import {
+  IAttachLessonToTeacherRequest,
+  IDetachLessonFromTeacherRequest,
+} from '../../teachers/models';
 
 @Component({
   selector: 'app-admin-school-teachers',
@@ -29,11 +39,28 @@ export class AdminSchoolTeachersComponent {
     private services: AdminTeachersService,
     private breadcrumbService: BreadcrumbService,
     private schoolTeacherListStore: SchoolTeacherListStore,
+    private schoolService: AdminSchoolsService,
   ) {
-    this.breadcrumbService.setItems([
-      schoolsNamedRoutes.root.meta,
-      schoolsNamedRoutes.teachers.meta,
-    ]);
+    // this.breadcrumbService.setItems([
+    //   adminSchoolNamedRoutes.schools.meta,
+    //   adminSchoolNamedRoutes.school.meta,
+    // ]);
+    this.schoolTeacherListStore.setService({
+      attachLesson: (payload: IAttachLessonToTeacherRequest) => services.attachLesson(payload),
+      detachLesson: (payload: IDetachLessonFromTeacherRequest) => services.detachLesson(payload),
+
+      approveTeacher: (payload: IApproveSchoolRequestPayload) =>
+        this.services.approveSchool(payload),
+      rejectTeacher: (payload: IRejectSchoolRequestPayload) => this.services.rejectSchool(payload),
+
+      approveTeacherLesson: (payload: IApproveSchoolLessonRequestPayload) =>
+        this.services.approveSchoolLesson(payload),
+      rejectTeacherLesson: (payload: IRejectSchoolLessonRequestPayload) =>
+        this.services.rejectSchoolLesson(payload),
+
+      detachTeacher: (payload: { teacherId: string; schoolId: string }) =>
+        this.services.detachSchool(payload),
+    });
     this.getData();
   }
 
@@ -42,7 +69,17 @@ export class AdminSchoolTeachersComponent {
 
   private getData() {
     this.loading.set(true);
-    this.getAll();
+    this.schoolService.getOne(this.schoolId()).subscribe({
+      next: (res) => {
+        this.setBreadcrumbs(res.name);
+      },
+      error: () => {
+        this.getAll();
+      },
+      complete: () => {
+        this.getAll();
+      },
+    });
   }
 
   private getAll() {
@@ -54,12 +91,28 @@ export class AdminSchoolTeachersComponent {
       }));
       this.schoolTeacherListStore.fillInitial({
         teachers: mappedTeachers,
+        schoolId: this.schoolId(),
         canAddTeacher: true,
         canAddTeacherLesson: true,
         canApproveTeachers: true,
       });
       this.loading.set(false);
     });
+  }
+
+  setBreadcrumbs(schoolTitle: string) {
+    this.breadcrumbService.setItems([
+      adminNamedRoutes.root.meta,
+      adminNamedRoutes.schools.meta,
+      {
+        title: schoolTitle,
+      },
+      adminNamedRoutes.schoolTeachers.meta,
+    ]);
+  }
+
+  refreshData() {
+    this.getAll();
   }
 
   onTeacherAssigned() {

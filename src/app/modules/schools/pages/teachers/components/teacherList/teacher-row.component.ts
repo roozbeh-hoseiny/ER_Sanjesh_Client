@@ -1,6 +1,6 @@
-import { ITeacherLesson } from '@/modules/teachers/models';
 import { Component, computed, EventEmitter, Input, Output, signal } from '@angular/core';
 import { Button } from 'primeng/button';
+import { ISchoolTeacherMappedData } from '../../models';
 import { AssignTeacherDialogComponent } from './assign-teacher-dialog.component';
 import { SchoolTeacherListStore } from './dataStore';
 
@@ -12,80 +12,68 @@ import { SchoolTeacherListStore } from './dataStore';
     class: 'w-full',
   },
 })
-export class lessonSchoolRowSubheaderComponent {
-  @Input() teacherId!: string;
-  @Input() item!: ITeacherLesson;
-  @Input() selectedLessonIds: number[] = [];
+export class TeacherRowSubheaderComponent {
+  @Input() schoolId!: string;
+  @Input() item!: ISchoolTeacherMappedData;
   @Output() onSubmitted = new EventEmitter<void>();
 
   constructor(private store: SchoolTeacherListStore) {}
 
-  detachTeacherSchedules = signal<Record<string, boolean>>({});
-  changeTeacherStatusSchedules = signal<Record<string, boolean>>({});
+  detachTeacherLoading = signal<boolean>(false);
+  changeTeacherStatusLoading = signal<boolean>(false);
   showLessonForm = signal(false);
 
   canAddTeacher = computed(() => this.store.canAddTeacher());
   canAddTeacherLesson = computed(() => this.store.canAddTeacherLesson());
   canApproveTeachers = computed(() => this.store.canApproveTeachers());
+  selectedLessonIds = computed(() => this.item.lessons?.map((lesson) => lesson.lessonId) || []);
 
   // start of teacher
-  detachTeacher(item: ITeacherLesson) {
-    this.detachTeacherSchedules.update((prev) => ({
-      ...prev,
-      [item.schoolId]: true,
-    }));
-    // this.store.detachTeacher(item).subscribe({
-    //   next: () => {
-    //     this.onSubmitted.emit();
-    //     this.removeDetachSchoolFromSchedule(item.schoolId);
-    //   },
+  detachTeacher() {
+    this.detachTeacherLoading.set(true);
+    this.store.detachTeacher(this.item.id).subscribe({
+      next: () => {
+        this.onSubmitted.emit();
+        this.detachTeacherLoading.set(false);
+      },
 
-    //   error: () => {
-    //     this.removeDetachSchoolFromSchedule(item.schoolId);
-    //   },
-    // });
-  }
-
-  removeDetachSchoolFromSchedule(schoolId: string) {
-    const updatedSchedules = { ...this.detachTeacherSchedules() };
-    delete updatedSchedules[schoolId];
-    this.detachTeacherSchedules.set(updatedSchedules);
+      error: () => {
+        this.detachTeacherLoading.set(false);
+      },
+    });
   }
   // end of teacher
 
   // start of all lessons of a teacher
-  approveAllLessons(item: ITeacherLesson) {
-    this.changeTeacherStatusSchedules.update((prev) => ({ ...prev, [item.schoolId]: true }));
-    // this.store
-    //   .approveTeacher({ schoolId: item.schoolId, schoolTitle: item.schoolTitle })
-    //   .subscribe({
-    //     next: () => {
-    //       this.onSubmitted.emit();
-    //       this.removeTeacherFromSchedule(item.schoolId);
-    //     },
-    //     error: () => {
-    //       this.removeTeacherFromSchedule(item.schoolId);
-    //     },
-    //   });
+  approveAllLessons() {
+    this.changeTeacherStatusLoading.set(true);
+    this.store
+      .approveTeacher({ teacherId: this.item.id, teacherName: this.item.fullname })
+      .subscribe({
+        next: () => {
+          this.onSubmitted.emit();
+          this.changeTeacherStatusLoading.set(false);
+        },
+        error: () => {
+          this.changeTeacherStatusLoading.set(false);
+        },
+      });
   }
-  rejectAllLessons(item: ITeacherLesson) {
-    this.changeTeacherStatusSchedules.update((prev) => ({ ...prev, [item.schoolId]: true }));
-    // this.store.rejectTeacher({ schoolId: item.schoolId, schoolTitle: item.schoolTitle }).subscribe({
-    //   next: () => {
-    //     this.onSubmitted.emit();
-    //     this.removeTeacherFromSchedule(item.schoolId);
-    //   },
-    //   error: () => {
-    //     this.removeTeacherFromSchedule(item.schoolId);
-    //   },
-    // });
+  rejectAllLessons() {
+    this.changeTeacherStatusLoading.set(true);
+    this.store
+      .rejectTeacher({ teacherId: this.item.id, teacherName: this.item.fullname })
+      .subscribe({
+        next: () => {
+          this.onSubmitted.emit();
+          this.changeTeacherStatusLoading.set(false);
+        },
+        error: () => {
+          this.changeTeacherStatusLoading.set(false);
+        },
+      });
   }
 
-  removeTeacherFromSchedule(itemId: string) {
-    const updatedSchedules = { ...this.changeTeacherStatusSchedules() };
-    delete updatedSchedules[itemId];
-    this.changeTeacherStatusSchedules.set(updatedSchedules);
-  }
   // end of all lessons of a school
 
   openLessonForm() {

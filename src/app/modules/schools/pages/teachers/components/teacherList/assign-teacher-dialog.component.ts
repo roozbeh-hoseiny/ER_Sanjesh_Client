@@ -1,6 +1,5 @@
 import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
-import { SchoolsTeachersService } from '@/modules/schools/services/schools-teachers.service';
 import { LessonsSelectComponent } from '@/shared/catalog';
 import { FormFooterActionsComponent } from '@/shared/components/formFooterActions/form-footer-actions.component';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
@@ -15,6 +14,7 @@ import { ProgressSpinner } from 'primeng/progressspinner';
 import { SkeletonModule } from 'primeng/skeleton';
 import { debounceTime, filter } from 'rxjs';
 import { ISchoolTeacherResponse } from '../../models';
+import { SchoolTeacherListStore } from './dataStore';
 
 @Component({
   selector: 'assign-teacher-form-dialog',
@@ -34,6 +34,7 @@ import { ISchoolTeacherResponse } from '../../models';
   ],
 })
 export class AssignTeacherDialogComponent {
+  @Input() schoolId?: string;
   @Input() teacherId?: string;
   @Input() selectedLessonIds: number[] = [];
 
@@ -41,7 +42,7 @@ export class AssignTeacherDialogComponent {
 
   constructor(
     private toastService: ToastService,
-    private store: SchoolsTeachersService,
+    private store: SchoolTeacherListStore,
   ) {
     effect(() => {
       const v = this.visibleSignal();
@@ -95,7 +96,7 @@ export class AssignTeacherDialogComponent {
 
   getTeacher() {
     this.searchedLoading.set(true);
-    this.store.findByUniqueId(this.form.controls.teacherId.value!).subscribe({
+    this.store.getTeacher(this.form.controls.teacherId.value!).subscribe({
       next: (teacher) => {
         this.searchedTeacher.set(teacher);
         this.searchedLoading.set(false);
@@ -125,17 +126,23 @@ export class AssignTeacherDialogComponent {
 
     const selectedTeacherId = this.searchedTeacher()?.id || this.teacherId;
 
-    this.store.assignTeacher(selectedTeacherId!, this.form.value.lessonId!).subscribe({
-      next: () => {
-        this.toastService.success({ text: 'دبیر مورد نظر با موفقیت اضافه شد' });
-        this.submitLoading.set(false);
-        this.close();
-        this.onSubmit.emit();
-      },
-      error: () => {
-        this.submitLoading.set(false);
-      },
-    });
+    this.store
+      .attachTeacher({
+        schoolId: this.schoolId!,
+        id: selectedTeacherId!,
+        lessonId: this.form.value.lessonId!,
+      })
+      .subscribe({
+        next: () => {
+          this.toastService.success({ text: 'دبیر مورد نظر با موفقیت اضافه شد' });
+          this.submitLoading.set(false);
+          this.close();
+          this.onSubmit.emit();
+        },
+        error: () => {
+          this.submitLoading.set(false);
+        },
+      });
   };
 
   close = () => {

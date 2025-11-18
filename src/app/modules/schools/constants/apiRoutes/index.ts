@@ -22,7 +22,15 @@ export const SCHOOLS_API_ROUTES = {
   contactEmailVerification: () => `${baseUrl}/VerifyContactEmail`,
   contactPhoneVerification: () => `${baseUrl}/VerifyContactMobile`,
 
+  // teacher lessons management
   assignTeacher: () => `${baseUrl}/AssignTeacher`,
+  detachTeacher: () => `${baseUrl}/UnassignTeacher`,
+
+  approveAllLessons: () => `${baseUrl}/ApproveTeacher`,
+  rejectAllLessons: () => `${baseUrl}/RejectTeacher`,
+
+  approveLesson: () => `${baseUrl}/ApproveTeacherById`,
+  rejectLesson: () => `${baseUrl}/RejectTeacherById`,
 
   teachers: schoolsTeachersApiRoutes(baseUrl),
 };

@@ -1,17 +1,14 @@
 <div class="flex items-center gap-3 justify-between">
-  دروس مرکز آموزشی‌ "{{ item.schoolTitle }}"
+  <span>
+    {{ `${item.fullname}` }}
+  </span>
 
   @if (canAddTeacherLesson() || canApproveTeachers()) {
     <div class="text-end flex justify-end gap-3 shrink-0">
       @if (canAddTeacherLesson()) {
         <p-button severity="success" size="small" icon="pi pi-plus" label="افزودن درس" (onClick)="openLessonForm()">
         </p-button>
-        <p-button
-          severity="danger"
-          size="small"
-          [loading]="detachTeacherSchedules()[item.schoolId]"
-          (click)="detachTeacher(item)"
-        >
+        <p-button severity="danger" size="small" [loading]="detachTeacherLoading()" (click)="detachTeacher()">
           حذف دبیر
         </p-button>
       }
@@ -21,16 +18,16 @@
           icon="pi pi-check"
           severity="success"
           size="small"
-          [loading]="changeTeacherStatusSchedules()[item.schoolId]"
-          (click)="approveAllLessons(item)"
+          [loading]="changeTeacherStatusLoading()"
+          (click)="approveAllLessons()"
         />
         <p-button
           label="رد تمامی دروس"
           icon="pi pi-times"
           severity="warn"
           size="small"
-          [loading]="changeTeacherStatusSchedules()[item.schoolId]"
-          (click)="rejectAllLessons(item)"
+          [loading]="changeTeacherStatusLoading()"
+          (click)="rejectAllLessons()"
         />
       }
     </div>
@@ -38,7 +35,8 @@
 </div>
 <assign-teacher-form-dialog
   [(visible)]="showLessonForm"
-  [teacherId]="teacherId"
-  [selectedLessonIds]="selectedLessonIds"
+  [teacherId]="item.id"
+  [schoolId]="schoolId"
+  [selectedLessonIds]="selectedLessonIds()"
   (onSubmit)="submitted()"
 />

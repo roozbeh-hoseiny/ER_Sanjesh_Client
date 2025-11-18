@@ -22,7 +22,7 @@ import { TableModule } from 'primeng/table';
 import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
 import { AssignTeacherDialogComponent } from './assign-teacher-dialog.component';
 import { SchoolTeacherListStore } from './dataStore';
-import { lessonSchoolRowSubheaderComponent } from './teacher-row.component';
+import { TeacherRowSubheaderComponent } from './teacher-row.component';
 
 @Component({
   selector: 'school-teachers-lessons-table',
@@ -39,7 +39,7 @@ import { lessonSchoolRowSubheaderComponent } from './teacher-row.component';
     Badge,
     TableModule,
     Button,
-    lessonSchoolRowSubheaderComponent,
+    TeacherRowSubheaderComponent,
     AssignTeacherDialogComponent,
     PanelModule,
   ],
@@ -60,6 +60,7 @@ export class LessonsTableComponent {
   showLessonForm = signal(false);
 
   teachers = computed(() => this.store.teachers() || []);
+  schoolId = computed(() => this.store.schoolId() || '');
   canApproveTeachers = computed(() => this.store.canApproveTeachers());
   canAddTeacher = computed(() => this.store.canAddTeacher());
 
@@ -97,8 +98,9 @@ export class LessonsTableComponent {
     item: ITeacherLesson,
     checked: boolean,
     event: ToggleSwitchChangeEvent,
+    teacherId: string,
   ) {
-    this.changeStatusSchedules.update((prev) => ({ ...prev, [item.lessonId]: true }));
+    this.changeStatusSchedules.update((prev) => ({ ...prev, [item.id]: true }));
     this.confirmationService.confirm({
       target: (event.originalEvent.target as HTMLElement)?.parentNode?.parentNode!,
       message: !checked
@@ -108,31 +110,32 @@ export class LessonsTableComponent {
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'بله',
       rejectLabel: 'خیر',
-      accept: () => this.toggleTeacherLessonStatus(item, checked),
+      accept: () => this.toggleTeacherLessonStatus(item, checked, teacherId),
       reject: () => {
-        this.removeLessonFromSchedule(item.lessonId);
+        this.removeLessonFromSchedule(item.id);
       },
     });
   }
 
-  toggleTeacherLessonStatus(item: ITeacherLesson, checked: boolean) {
-    // this.store
-    //   .changeTeacherLessonStatus({
-    //     teacherLessonId: item.lessonId,
-    //     schoolTitle: item.schoolTitle,
-    //     teacherLessonTitle: item.lessonTitle,
-    //     isActive: checked,
-    //   })
-    //   .subscribe({
-    //     next: () => {
-    //       item.approved = checked;
-    //       this.removeLessonFromSchedule(item.lessonId);
-    //     },
-    //     error: () => {
-    //       this.removeLessonFromSchedule(item.lessonId);
-    //       item.approved = !checked;
-    //     },
-    //   });
+  toggleTeacherLessonStatus(item: ITeacherLesson, checked: boolean, teacherId: string) {
+    this.store
+      .changeTeacherLessonStatus({
+        teacherId,
+        teacherLessonId: item.id,
+        schoolTitle: item.schoolTitle,
+        teacherLessonTitle: item.lessonTitle,
+        isActive: checked,
+      })
+      .subscribe({
+        next: () => {
+          item.approved = checked;
+          this.removeLessonFromSchedule(item.id);
+        },
+        error: () => {
+          this.removeLessonFromSchedule(item.id);
+          item.approved = !checked;
+        },
+      });
   }
 
   removeLessonFromSchedule(itemId: number) {
@@ -141,30 +144,25 @@ export class LessonsTableComponent {
     this.changeStatusSchedules.update(() => updatedSchedules);
   }
 
-  detachLesson(item: ITeacherLesson) {
+  detachLesson(item: ITeacherLesson, teacherId: string) {
     this.detachLessonsSchedules.update((prev) => ({
       ...prev,
-      [`${item.lessonId}-${item.schoolId}`]: true,
+      [`${item.id}-${item.schoolId}`]: true,
     }));
-    // this.store.detachLesson(item).subscribe({
-    //   next: () => {
-    //     this.onSubmitted.emit();
-    //     this.removeDetachLessonFromSchedule(item);
-    //   },
-    // });
+    this.store
+      .detachLesson({ id: teacherId, schoolId: item.schoolId, lessonId: item.id })
+      .subscribe({
+        next: () => {
+          this.onSubmitted.emit();
+          this.removeDetachLessonFromSchedule(item);
+        },
+      });
   }
 
   removeDetachLessonFromSchedule(item: ITeacherLesson) {
     const updatedSchedules = { ...this.detachLessonsSchedules() };
-    delete updatedSchedules[`${item.lessonId}-${item.schoolId}`];
+    delete updatedSchedules[`${item.id}-${item.schoolId}`];
     this.detachLessonsSchedules.set(updatedSchedules);
-  }
-
-  getLessonIds(item: ITeacherLesson) {
-    return [];
-    // return this.lessons()
-    //   .filter((lesson) => lesson.schoolId === item.schoolId)
-    //   .map((lesson) => lesson.lessonId);
   }
 
   openAttachLessonDialog() {

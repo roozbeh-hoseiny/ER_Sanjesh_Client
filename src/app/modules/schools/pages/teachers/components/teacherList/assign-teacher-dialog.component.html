@@ -27,7 +27,7 @@
           </div>
         } @else if (searchedTeacher()) {
           <p-message severity="success" [closable]="false" variant="text" icon="pi pi-check-circle">
-            {{ `شما مرکز آموزشی ${searchedTeacher()?.firstName} ${searchedTeacher()?.lastName} را انتخاب کردید` }}
+            {{ `شما دبیر ${searchedTeacher()?.firstName} ${searchedTeacher()?.lastName} را انتخاب کردید` }}
           </p-message>
         } @else if (form.controls.teacherId.value?.length === 6 && teacherNotFound()) {
           <p-message severity="error" [closable]="false" variant="text" icon="pi pi-times-circle">

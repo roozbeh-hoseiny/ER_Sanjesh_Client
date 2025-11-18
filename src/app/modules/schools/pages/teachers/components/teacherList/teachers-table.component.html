@@ -12,18 +12,7 @@
     @for (teacher of teachers() || []; track teacher.id) {
       <p-panel toggleable collapsed>
         <ng-template #header>
-          <div class="w-full flex items-center justify-between gap-4 me-4">
-            <span>
-              {{ `لیست دروس دبیر: ${teacher.fullname}` }}
-            </span>
-            <p-button
-              label="الصاق درس جدید"
-              icon="pi pi-plus"
-              size="small"
-              class
-              (click)="openAttachLessonDialog()"
-            ></p-button>
-          </div>
+          <teacher-row-subheader [item]="teacher" [schoolId]="schoolId()" (onSubmitted)="onSubmit()" />
         </ng-template>
         <p-table
           [columns]="columns"
@@ -47,7 +36,7 @@
                     @if (canApproveTeachers()) {
                       <div class="flex items-center gap-2">
                         <p-confirmpopup />
-                        @if (changeStatusSchedules()[item.lessonId]) {
+                        @if (changeStatusSchedules()[item.id]) {
                           <p-progressSpinner
                             strokeWidth="4"
                             fill="transparent"
@@ -56,9 +45,9 @@
                           ></p-progressSpinner>
                         } @else {
                           <p-toggleSwitch
-                            [attr.disabled]="changeStatusSchedules()[item.lessonId]"
+                            [attr.disabled]="changeStatusSchedules()[item.id]"
                             [ngModel]="item.approved"
-                            (onChange)="showTeacherLessonConfirmation(item, $event.checked, $event)"
+                            (onChange)="showTeacherLessonConfirmation(item, $event.checked, $event, teacher.id)"
                           ></p-toggleSwitch>
                         }
 
@@ -66,8 +55,8 @@
                           outlined
                           severity="secondary"
                           size="small"
-                          [loading]="detachLessonsSchedules()[`${item.lessonId}-${item.schoolId}`]"
-                          (click)="detachLesson(item)"
+                          [loading]="detachLessonsSchedules()[`${item.id}-${item.schoolId}`]"
+                          (click)="detachLesson(item, teacher.id)"
                         >
                           حذف درس
                         </p-button>
