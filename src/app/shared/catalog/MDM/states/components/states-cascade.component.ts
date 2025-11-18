@@ -34,7 +34,7 @@ export class StatesCascadeComponent {
   onChange = (region: any) => {
     this.selectedRegionId.set(region?.id);
     this.control?.setValue(region?.id);
-    this.selectionChange.emit(region.id);
+    this.selectionChange.emit(region?.id);
   };
 
   onClear = () => {
