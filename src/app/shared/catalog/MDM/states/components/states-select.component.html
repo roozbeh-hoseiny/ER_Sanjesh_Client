@@ -27,4 +27,19 @@
       </uikit-field>
     </ng-container>
   }
+  @if (zoneControl) {
+    <ng-container>
+      <uikit-field label="منطقه" for="zone" [control]="zoneControl">
+        <p-select
+          name="zone"
+          optionLabel="title"
+          optionValue="id"
+          [options]="zones() || []"
+          [loading]="getStatesLoading()"
+          [disabled]="!isSelectedCity()"
+          [formControl]="zoneControl"
+        ></p-select>
+      </uikit-field>
+    </ng-container>
+  }
 </div>

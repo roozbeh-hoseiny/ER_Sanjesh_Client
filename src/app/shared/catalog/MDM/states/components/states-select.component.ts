@@ -24,6 +24,7 @@ export class StatesSelectComponent {
   zones = signal<Maybe<IZone[]>>(null);
 
   isSelectedState = computed(() => this.stateControl.value || this.stateControl.value === 0);
+  isSelectedCity = computed(() => this.cityControl?.value || this.cityControl?.value === 0);
 
   constructor(private statesService: StatesService) {
     this.getStatesLoading.set(true);
@@ -32,6 +33,11 @@ export class StatesSelectComponent {
       if (this.stateControl) {
         this.stateControl?.valueChanges.subscribe((val) => {
           this.onStateSelect(val);
+        });
+      }
+      if (this.cityControl) {
+        this.cityControl?.valueChanges.subscribe((val) => {
+          this.onCitySelect(val);
         });
       }
     });
@@ -45,24 +51,39 @@ export class StatesSelectComponent {
     this.statesService.getRegionTree().subscribe((states) => {
       this.states.set(states);
       this.getStatesLoading.set(false);
-      if (this.cityControl?.value && !this.stateControl?.value) {
-        const selectedState = states.find((state) =>
-          state.children?.some((city) => city.id === this.cityControl?.value),
-        );
-        if (selectedState) {
-          this.cities.set(selectedState.children || []);
-          const selectedCity = this.cities()?.find((city) =>
-            city.children?.some((zone) => zone.id === this.zoneControl?.value),
+      const selectedCityId = this.cityControl?.value;
+      const selectedZoneId = this.zoneControl?.value;
+      if (selectedZoneId && !this.cityControl?.value) {
+        const selectedCity = states
+          .flatMap((state) => state.children || [])
+          .find((city) => city.children?.some((zone) => zone.id === selectedZoneId));
+        if (selectedCity) {
+          const selectedState = states.find((state) =>
+            state.children?.some((city) => city.id === selectedCity.id),
           );
-          if (selectedCity) {
+          if (selectedState) {
+            this.cities.set(selectedState.children || []);
             this.zones.set(selectedCity.children || []);
-          } else {
-            this.zones.set(null);
+            this.stateControl.setValue(selectedState.id);
+            this.cityControl?.setValue(selectedCity.id);
+            this.zoneControl?.setValue(selectedZoneId);
           }
         } else {
           this.cities.set(null);
           this.zones.set(null);
-          this.cityControl.setValue(null);
+          this.cityControl?.setValue(null);
+        }
+      } else if (selectedCityId && !this.stateControl?.value) {
+        const selectedState = states.find((state) =>
+          state.children?.some((city) => city.id === selectedCityId),
+        );
+        if (selectedState) {
+          this.cities.set(selectedState.children || []);
+          this.stateControl.setValue(selectedState.id);
+          this.cityControl?.setValue(selectedCityId);
+        } else {
+          this.cities.set(null);
+          this.cityControl?.setValue(null);
         }
       }
     });

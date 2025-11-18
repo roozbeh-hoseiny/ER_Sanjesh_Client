@@ -35,13 +35,16 @@ export class SchoolAddressFormComponent {
     postalCode: ['', [Validators.required, postalCodeValidator()]],
     state: [0, [Validators.required]],
     city: [0, [Validators.required]],
+    zone: [0],
   });
 
   ngOnInit() {
     const cur = this.detailsStore.school();
     if (cur && cur.address) {
       this.form.patchValue(cur.address as ISchoolAddress);
-      if (cur.address.regionType === 3) {
+      if (cur.address.regionType === 4) {
+        this.form.controls.zone.setValue(cur.address.regionId);
+      } else if (cur.address.regionType === 3) {
         this.form.controls.city.setValue(cur.address.regionId);
       } else if (cur.address.regionType === 2) {
         this.form.controls.state.setValue(cur.address.regionId);
@@ -57,7 +60,10 @@ export class SchoolAddressFormComponent {
     const payload = {
       id: cur?.id ?? '',
       ...this.form.value,
-      regionId: this.form.controls.city.value,
+      regionId:
+        this.form.controls.zone.value ||
+        this.form.controls.city.value ||
+        this.form.controls.state.value,
     } as ISchoolAddressRequest;
     this.detailsStore.editAddress(payload).subscribe({
       next: () => {

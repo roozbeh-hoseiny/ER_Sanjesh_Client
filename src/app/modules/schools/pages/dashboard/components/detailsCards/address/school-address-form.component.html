@@ -4,9 +4,16 @@
       <app-states-select
         [stateControl]="form.controls.state"
         [cityControl]="form.controls.city"
-        class="col-span-2"
+        [zoneControl]="form.controls.zone"
+        class="col-span-3"
       ></app-states-select>
-      <app-input label="کد پستی" name="postalCode" [control]="form.controls.postalCode" type="postalCode" />
+      <app-input
+        label="کد پستی"
+        name="postalCode"
+        [control]="form.controls.postalCode"
+        type="postalCode"
+        class="w-full"
+      />
     </div>
     <uikit-field label="ادامه‌ی آدرس" for="address" [control]="form.controls.address">
       <textarea
