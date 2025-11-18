@@ -22,6 +22,11 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     attachField: () => `${schoolsBaseUrl}/AssignFieldOfStudy`,
     detachField: () => `${schoolsBaseUrl}/UnassignFieldOfStudy`,
 
+    //bank info
+    addBankInfo: () => `${schoolsBaseUrl}/AssignBankAccount`,
+    editBankInfo: () => `${schoolsBaseUrl}/EditBankAccount`,
+    removeBankInfo: () => `${schoolsBaseUrl}/UnassignBankAccount`,
+
     //categories
     categories: () => `${schoolsBaseUrl}/GetCategoryFullTree`,
     addCategory: () => `${schoolsBaseUrl}/AddRootCategory`,

@@ -2,6 +2,9 @@ import { PAGINATED_QUERY_DEFAULT_VALUES } from '@/core/constants';
 import { IPaginatedQuery, IPaginatedResponse } from '@/core/models/service.model';
 import {
   ISchoolAddressRequestPayload,
+  ISchoolBankInfoAddRequestPayload,
+  ISchoolBankInfoEditRequestPayload,
+  ISchoolBankInfoRemoveRequestPayload,
   ISchoolContactRequest,
   ISchoolInfoRequest,
 } from '@/modules/schools/models';
@@ -128,6 +131,17 @@ export class AdminSchoolsService {
   }
   updateAddress(payload: ISchoolAddressRequestPayload) {
     return this.http.post<boolean>(this.apiRoutes.schools.updateAddress(), payload);
+  }
+
+  // bank info methods
+  addBankInfo(payload: ISchoolBankInfoAddRequestPayload) {
+    return this.http.post<boolean>(this.apiRoutes.schools.addBankInfo(), payload);
+  }
+  editBankInfo(payload: ISchoolBankInfoEditRequestPayload) {
+    return this.http.post<boolean>(this.apiRoutes.schools.editBankInfo(), payload);
+  }
+  removeBankInfo(payload: ISchoolBankInfoRemoveRequestPayload) {
+    return this.http.post<boolean>(this.apiRoutes.schools.removeBankInfo(), payload);
   }
 
   // contact info methods

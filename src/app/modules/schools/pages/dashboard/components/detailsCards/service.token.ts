@@ -6,6 +6,9 @@ import {
 } from '@/modules/admin/pages/schools/models/schools';
 import {
   ISchoolAddressRequest,
+  ISchoolBankInfoAddRequestPayload,
+  ISchoolBankInfoEditRequestPayload,
+  ISchoolBankInfoRemoveRequestPayload,
   ISchoolContactRequest,
   ISchoolInfoRequest,
 } from '@/modules/schools/models';
@@ -17,6 +20,9 @@ export interface SchoolDetailsService {
   getTeachers(schoolUniqueId: string, schoolId: string): Observable<ISchoolTeacherRawResponse[]>;
   editInfo(request: ISchoolInfoRequest): Observable<boolean>;
   editAddress(request: ISchoolAddressRequest): Observable<boolean>;
+  addBankInfo(request: ISchoolBankInfoAddRequestPayload): Observable<boolean>;
+  editBankInfo(request: ISchoolBankInfoEditRequestPayload): Observable<boolean>;
+  removeBankInfo(request: ISchoolBankInfoRemoveRequestPayload): Observable<boolean>;
   updateContact(payload: ISchoolContactRequest): Observable<boolean>;
   validateContactEmail(id: string): Observable<boolean>;
   validateContactMobile(id: string): Observable<boolean>;

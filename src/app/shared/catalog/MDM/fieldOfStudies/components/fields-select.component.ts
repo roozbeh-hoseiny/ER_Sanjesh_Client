@@ -1,7 +1,7 @@
 import { Maybe } from '@/core';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
-import { Component, computed, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, computed, effect, EventEmitter, Input, Output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { SelectChangeEvent, SelectModule } from 'primeng/select';
 import { FieldOfStudiesStore } from '../dataStore/store';
@@ -35,7 +35,13 @@ export class FieldsSelectComponent {
   filteredItems = signal<IFieldOfStudiesResponse[]>([]);
   selectedItemId = signal<Maybe<number>>(null);
 
-  constructor(private store: FieldOfStudiesStore) {}
+  constructor(private store: FieldOfStudiesStore) {
+    effect(() => {
+      if (this.items()?.length) {
+        this.filterOptions(this._filters);
+      }
+    });
+  }
 
   items = computed(() => this.store.items());
   initialLoading = computed(() => this.store.loading());

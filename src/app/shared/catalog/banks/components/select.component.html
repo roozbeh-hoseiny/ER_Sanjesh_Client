@@ -1,12 +1,13 @@
 @if (showLabel) {
-  <uikit-field label="بانک" [for]="name">
+  <uikit-field label="بانک" [for]="name" [control]="control">
     <p-select
       [name]="name"
       [formControl]="control"
       [options]="items"
       optionLabel="title"
+      optionValue="id"
       placeholder="یکی از بانک‌ها را انتخاب کنید"
-      (onChange)="onSelect($event.value)"
+      [invalid]="control.invalid && (control.dirty || control.touched)"
     />
   </uikit-field>
 } @else {
@@ -15,7 +16,8 @@
     [formControl]="control"
     [options]="items"
     optionLabel="title"
+    optionValue="id"
     placeholder="یکی از بانک‌ها را انتخاب کنید"
-    (onChange)="onSelect($event.value)"
+    [invalid]="control.invalid && (control.dirty || control.touched)"
   />
 }

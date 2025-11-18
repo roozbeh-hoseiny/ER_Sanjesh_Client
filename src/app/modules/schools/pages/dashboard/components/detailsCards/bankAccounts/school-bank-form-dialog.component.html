@@ -1,0 +1,24 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="false"
+  [style]="{ width: '500px' }"
+  [header]="defaultValues ? 'ویرایش اطلاعات حساب بانکی' : 'افزودن حساب بانکی جدید'"
+>
+  <form [formGroup]="form" (submit)="submit()">
+    <div class="grid grid-cols-1 gap-4">
+      <catalog-bank-select [control]="form.controls.bankTypeId" />
+      <app-input label="نام شعبه" name="branchName" [control]="form.controls.branchName" />
+      <app-input label="کد شعبه" name="branchCode" [control]="form.controls.branchCode" />
+      <app-input label="صاحب حساب" name="ownerName" [control]="form.controls.ownerName" />
+      <app-input label="شماره حساب" name="depositeNumber" [control]="form.controls.depositeNumber" />
+      <app-input label="شماره شبا" name="sheba" [control]="form.controls.sheba" />
+    </div>
+    <div class="flex gap-2 justify-end mt-4">
+      <button pButton type="button" class="p-button-secondary" [disabled]="submitLoading()" (click)="close()">
+        انصراف
+      </button>
+      <button pButton type="submit" class="p-button-primary" [loading]="submitLoading()">ذخیره</button>
+    </div>
+  </form>
+</p-dialog>

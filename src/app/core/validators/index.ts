@@ -1,3 +1,4 @@
+export * from './iban.validator';
 export * from './mobile.validator';
 export * from './must-match.validator';
 export * from './password.validator';

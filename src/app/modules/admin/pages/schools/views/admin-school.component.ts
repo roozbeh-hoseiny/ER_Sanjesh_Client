@@ -47,6 +47,9 @@ export class AdminSchoolComponent {
       editInfo: (req: ISchoolInfoRequest) => this.schoolService.updateInfo(req),
       editAddress: (req: any) => this.schoolService.updateAddress(req),
       updateContact: (req: any) => this.schoolService.updateContact(req),
+      addBankInfo: (payload) => this.schoolService.addBankInfo(payload),
+      editBankInfo: (payload) => this.schoolService.editBankInfo(payload),
+      removeBankInfo: (payload) => this.schoolService.removeBankInfo(payload),
       attachCategory: (payload: IAttachCategoryToSchoolRequestPayload) =>
         this.schoolService.attachCategory(payload),
       detachCategory: (payload: IDetachCategoryToSchoolRequestPayload) =>
@@ -73,6 +76,8 @@ export class AdminSchoolComponent {
           canEditAddress: true,
           canEditInfo: true,
           canEditLoginInfo: true,
+          showBankAccountsCard: true,
+          canEditBankAccounts: true,
           canEditContact: true,
           canEditCategories: true,
           showContactValidateInlineConfirmation: true,

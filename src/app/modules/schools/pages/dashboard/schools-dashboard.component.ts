@@ -35,6 +35,9 @@ export class SchoolsDashboardComponent {
       getTeachers: (schoolUniqueId: string) => this.teachersService.getAll(schoolUniqueId),
       editInfo: (req: any) => this.schoolService.editInfo(req),
       editAddress: (req: any) => this.schoolService.editAddress(req),
+      addBankInfo: (payload) => this.schoolService.addBankInfo(payload),
+      editBankInfo: (payload) => this.schoolService.editBankInfo(payload),
+      removeBankInfo: (payload) => this.schoolService.removeBankInfo(payload),
       validateManagerMobile: (id: string) => this.openConfirmationMobileModal(id),
       validateManagerEmail: (id: string) => this.openConfirmationEmailModal(id),
     });
@@ -50,6 +53,7 @@ export class SchoolsDashboardComponent {
           showContactCard: true,
           showBankAccountsCard: true,
           canEditAddress: true,
+          canEditBankAccounts: true,
           canEditInfo: true,
           canEditLoginInfo: true,
         });

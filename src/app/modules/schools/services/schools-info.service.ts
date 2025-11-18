@@ -5,6 +5,9 @@ import { Observable } from 'rxjs';
 import { SCHOOLS_API_ROUTES } from '../constants/apiRoutes';
 import {
   ISchoolAddressRequestPayload,
+  ISchoolBankInfoAddRequestPayload,
+  ISchoolBankInfoEditRequestPayload,
+  ISchoolBankInfoRemoveRequestPayload,
   ISchoolInfoRequest,
   ISchoolLoginInfoRequest,
 } from '../models';
@@ -28,6 +31,16 @@ export class SchoolsInfoService {
 
   editInfo(request: ISchoolInfoRequest): Observable<boolean> {
     return this.http.post<boolean>(this.apiRoutes.editInfo(), request);
+  }
+
+  addBankInfo(request: ISchoolBankInfoAddRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.addBankInfo(), request);
+  }
+  editBankInfo(request: ISchoolBankInfoEditRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.editBankInfo(), request);
+  }
+  removeBankInfo(request: ISchoolBankInfoRemoveRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.removeBankInfo(), request);
   }
 
   getTeachers(schoolId: string): Observable<any> {

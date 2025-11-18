@@ -1,18 +1,26 @@
-import { ISchoolContactRequest } from '@/modules/schools/models';
+import { Maybe } from '@/core';
+import { ISchoolBankInfo } from '@/modules/schools/models';
 import { AppCardComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
+import { ButtonDirective } from 'primeng/button';
 import { Divider } from 'primeng/divider';
 import { SchoolDetailsCardsStore } from '../store';
-import { SchoolBankFormComponent } from './school-bank-form.component';
+import { SchoolBankFormDialogComponent } from './school-bank-form-dialog.component';
 
 @Component({
   selector: 'app-school-info-bank-accounts',
   templateUrl: './school-info-bank.component.html',
-  imports: [AppCardComponent, KeyValueComponent, SchoolBankFormComponent, Divider],
+  imports: [
+    AppCardComponent,
+    KeyValueComponent,
+    Divider,
+    ButtonDirective,
+    SchoolBankFormDialogComponent,
+  ],
 })
 export class SchoolInfoBankAccountsComponent {
-  @Output() onSubmit = new EventEmitter<ISchoolContactRequest>();
+  @Output() onSubmit = new EventEmitter<void>();
 
   private detailsStore = inject(SchoolDetailsCardsStore);
 
@@ -20,30 +28,53 @@ export class SchoolInfoBankAccountsComponent {
     return this.detailsStore.school() ? this.detailsStore.school()!.bankAccounts : null;
   }
   get canEdit() {
-    return this.detailsStore.canEditContact();
-  }
-  get submitLoading() {
-    return this.detailsStore.submitContactLoading();
+    return this.detailsStore.canEditBankAccounts();
   }
 
-  editMode = signal<boolean>(false);
+  get schoolId() {
+    return this.detailsStore.school()?.id;
+  }
 
-  onEdit() {
-    this.editMode.update((prev) => !prev);
+  showForm = signal<boolean>(false);
+  removeLoading = signal<boolean>(false);
+  selectedBankAccountForEdit = signal<Maybe<ISchoolBankInfo>>(null);
+
+  onEdit(item: ISchoolBankInfo) {
+    this.selectedBankAccountForEdit.set(item);
+    this.showForm.update((prev) => !prev);
+  }
+
+  onRemove(item: ISchoolBankInfo) {
+    this.removeLoading.set(true);
+    this.detailsStore
+      .removeBankInfo({
+        id: this.schoolId!,
+        bankAccountId: item.id,
+      })
+      .subscribe({
+        next: () => {
+          this.removeLoading.set(false);
+          this.onSubmit.emit();
+        },
+        error: () => {
+          this.removeLoading.set(false);
+        },
+      });
   }
 
   closeForm() {
-    this.editMode.set(false);
+    this.selectedBankAccountForEdit.set(null);
+    this.showForm.set(false);
   }
 
-  submitForm(payload: ISchoolContactRequest) {
-    // delegate to store
-    this.detailsStore.editContact(payload).subscribe({
-      next: () => {
-        this.onSubmit.emit(payload);
-        this.closeForm();
-      },
-      error: () => {},
-    });
+  onAdd() {
+    this.showForm.set(true);
+  }
+
+  submitForm() {
+    this.selectedBankAccountForEdit.set(null);
+    console.log('submitForm');
+
+    this.onSubmit.emit();
   }
 }

@@ -148,3 +148,22 @@ interface ISchoolBankInfo {
   depositeNumber: string;
   sheba: string;
 }
+
+export interface ISchoolBankInfoAddRequestPayload {
+  bankTypeId: number;
+  bankName: string;
+  branchCode: string;
+  branchName: string;
+  ownerName: string;
+  depositeNumber: string;
+  sheba: string;
+}
+export interface ISchoolBankInfoEditRequestPayload extends ISchoolBankInfoAddRequestPayload {
+  id: string;
+  bankAccountId: number;
+}
+
+export interface ISchoolBankInfoRemoveRequestPayload {
+  id: string;
+  bankAccountId: number;
+}

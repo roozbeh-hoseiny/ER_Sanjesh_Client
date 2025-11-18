@@ -9,6 +9,9 @@ import {
 import { AdminSchoolsService } from '@/modules/admin/services/admin-schools.service';
 import {
   ISchoolAddressRequest,
+  ISchoolBankInfoAddRequestPayload,
+  ISchoolBankInfoEditRequestPayload,
+  ISchoolBankInfoRemoveRequestPayload,
   ISchoolContactRequest,
   ISchoolInfoRequest,
   ISchoolResponse,
@@ -107,6 +110,7 @@ export class SchoolDetailsCardsStore {
   );
   readonly showContactCard = computed(() => Boolean(this.state$().showContactCard));
   readonly canEditInfo = computed(() => !!this.state$().canEditInfo);
+  readonly canEditBankAccounts = computed(() => !!this.state$().canEditBankAccounts);
   readonly canEditAddress = computed(() => !!this.state$().canEditAddress);
   readonly canEditContact = computed(() => !!this.state$().canEditContact);
   readonly canEditLoginInfo = computed(() => !!this.state$().canEditLoginInfo);
@@ -132,6 +136,9 @@ export class SchoolDetailsCardsStore {
     getTeachers: (schoolUniqueId: string) => of([]) as Observable<ISchoolTeacherRawResponse[]>,
     editInfo: (req: any) => this._defaultSchoolsInfo.editInfo(req) as Observable<any>,
     editAddress: (req: any) => this._defaultSchoolsInfo.editAddress(req) as Observable<any>,
+    addBankInfo: (req: ISchoolBankInfoAddRequestPayload) => of(true) as Observable<boolean>,
+    editBankInfo: (req: ISchoolBankInfoEditRequestPayload) => of(true) as Observable<boolean>,
+    removeBankInfo: (req: ISchoolBankInfoRemoveRequestPayload) => of(true) as Observable<boolean>,
     updateContact: (payload: any) =>
       this._defaultAdminSchools.updateContact(payload) as Observable<any>,
     validateContactEmail: (id: string) => of(true) as Observable<boolean>,
@@ -221,6 +228,31 @@ export class SchoolDetailsCardsStore {
       );
     }
     return of();
+  }
+
+  addBankInfo(payload: ISchoolBankInfoAddRequestPayload) {
+    if (this.service.addBankInfo === undefined) return of();
+    return this.service.addBankInfo(payload).pipe(
+      tap(() => {
+        this.toastService.success({ text: 'حساب بانکی جدید با موفقیت ایجاد شد' });
+      }),
+    );
+  }
+  editBankInfo(payload: ISchoolBankInfoEditRequestPayload) {
+    if (this.service.editBankInfo === undefined) return of();
+    return this.service.editBankInfo(payload).pipe(
+      tap(() => {
+        this.toastService.success({ text: 'حساب بانکی با موفقیت ویرایش شد' });
+      }),
+    );
+  }
+  removeBankInfo(payload: ISchoolBankInfoRemoveRequestPayload) {
+    if (this.service.removeBankInfo === undefined) return of();
+    return this.service.removeBankInfo(payload).pipe(
+      tap(() => {
+        this.toastService.success({ text: 'حساب بانکی با موفقیت حذف شد' });
+      }),
+    );
   }
 
   validateContactEmail(id: string) {

@@ -10,6 +10,9 @@ export const SCHOOLS_API_ROUTES = {
   editAddress: () => `${baseUrl}/changeAddress`,
   editLoginInfo: () => `${baseUrl}/changeLoginInfo`,
   editInfo: () => `${baseUrl}/editSchool`,
+  addBankInfo: () => `${baseUrl}/AssignBankAccount`,
+  editBankInfo: () => `${baseUrl}/EditBankAccount`,
+  removeBankInfo: () => `${baseUrl}/UnassignBankAccount`,
 
   //verification routes
   managerEmailSendOTPVerification: () => `${baseUrl}/SendEmailOTPForForManagerEmailVerification`,

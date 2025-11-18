@@ -8,7 +8,7 @@
     <school-teachers-simple-list />
   }
   @if (showBankAccountsCard) {
-    <app-school-info-bank-accounts />
+    <app-school-info-bank-accounts (onSubmit)="refreshData()" />
   }
   <app-school-login-info (onSubmitted)="refreshData()" />
 </div>

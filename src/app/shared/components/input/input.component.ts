@@ -1,4 +1,5 @@
 import { Maybe } from '@/core';
+import { BlockContentScriptsDirective } from '@/core/directives/block-content-scripts.directive';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
@@ -8,7 +9,13 @@ import { InputTextModule } from 'primeng/inputtext';
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule, UikitFieldComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    UikitFieldComponent,
+    BlockContentScriptsDirective,
+  ],
   templateUrl: './input.component.html',
 })
 export class InputComponent {
