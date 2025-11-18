@@ -1,0 +1,21 @@
+@if (showLabel) {
+  <uikit-field label="بانک" [for]="name">
+    <p-select
+      [name]="name"
+      [formControl]="control"
+      [options]="items"
+      optionLabel="title"
+      placeholder="یکی از بانک‌ها را انتخاب کنید"
+      (onChange)="onSelect($event.value)"
+    />
+  </uikit-field>
+} @else {
+  <p-select
+    [name]="name"
+    [formControl]="control"
+    [options]="items"
+    optionLabel="title"
+    placeholder="یکی از بانک‌ها را انتخاب کنید"
+    (onChange)="onSelect($event.value)"
+  />
+}
