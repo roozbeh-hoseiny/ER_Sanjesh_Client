@@ -35,17 +35,24 @@ export class SchoolBankFormDialogComponent {
   constructor() {
     effect(() => {
       const v = this.visibleSignal();
-      this.visibleChange.emit(v);
+
       if (!v) {
         this.form.reset();
-      } else if (this.defaultValues) {
-        this.form.patchValue(this.defaultValues);
+        return;
+      }
+
+      if (this.defaultValues) {
+        Promise.resolve().then(() => {
+          if (this.visibleSignal()) {
+            this.form.patchValue(this.defaultValues as any);
+          }
+        });
       }
     });
   }
 
   form = this.fb.group({
-    bankTypeId: [0, [Validators.required]],
+    bankTypeId: [this.defaultValues?.bankTypeId ?? 0, [Validators.required]],
     branchCode: ['', [Validators.required]],
     branchName: ['', [Validators.required]],
     ownerName: ['', [Validators.required]],
