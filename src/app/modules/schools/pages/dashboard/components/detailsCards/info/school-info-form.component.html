@@ -17,7 +17,27 @@
       [control]="form.controls.scannerType"
       customPlaceholder="در صورت داشتن اسکنر نوع آن‌را وارد کنید"
     />
-    <app-input label="شماره تماس" name="phoneNumber" [control]="form.controls.phoneNumber" />
+    <uikit-field label="شماره تماس" for="phoneNumber" class="w-full">
+      <p-inputgroup class="w-full" dir="ltr">
+        <p-inputgroup-addon>
+          <input
+            p-inputText
+            [formControl]="form.controls.phoneNumber.controls.code"
+            placeholder="021"
+            maxlength="3"
+            class="w-7 text-left ltrInput"
+          />
+        </p-inputgroup-addon>
+        <input
+          pInputText
+          [formControl]="form.controls.phoneNumber.controls.number"
+          placeholder="12345678"
+          maxlength="8"
+          class="ltrInput"
+        />
+      </p-inputgroup>
+    </uikit-field>
+    <!-- <app-input label="شماره تماس" name="phoneNumber" [control]="form.controls.phoneNumber" /> -->
   </div>
   <div [formGroup]="form.controls.managerInfo" class="grid grid-cols-1 gap-4">
     <p-divider align="center"> مدیریت </p-divider>

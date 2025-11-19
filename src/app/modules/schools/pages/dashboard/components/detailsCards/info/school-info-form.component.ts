@@ -8,6 +8,9 @@ import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { Divider } from 'primeng/divider';
+import { InputGroup } from 'primeng/inputgroup';
+import { InputGroupAddon } from 'primeng/inputgroupaddon';
+import { InputText } from 'primeng/inputtext';
 import { ToggleSwitch } from 'primeng/toggleswitch';
 import { SchoolPersonFormComponent } from '../school-person-form.component';
 import { SchoolDetailsCardsStore } from '../store';
@@ -25,6 +28,9 @@ import { SchoolDetailsCardsStore } from '../store';
     InputComponent,
     ToggleSwitch,
     ExamApplicationTypesSelectComponent,
+    InputGroup,
+    InputGroupAddon,
+    InputText,
   ],
 })
 export class SchoolInfoFormComponent {
@@ -45,7 +51,10 @@ export class SchoolInfoFormComponent {
     boyOrGirl: [0, [Validators.required]],
     conductExam: [false],
     examHallCapacity: [0, [Validators.required, Validators.min(1)]],
-    phoneNumber: ['', [Validators.maxLength(11)]],
+    phoneNumber: this.fb.group({
+      code: ['', [Validators.maxLength(3), Validators.minLength(3)]],
+      number: ['', [Validators.maxLength(8)]],
+    }),
     examApplicantType: [0, Validators.required],
     scannerType: [''],
 
@@ -61,7 +70,19 @@ export class SchoolInfoFormComponent {
   ngOnInit() {
     const cur = this.detailsStore.school();
     if (cur) {
-      this.form.patchValue(cur as ISchoolResponse);
+      // Transform phoneNumber from string to object if necessary
+      const phoneNumberObj =
+        typeof cur.phoneNumber === 'string'
+          ? {
+              code: cur.phoneNumber.substring(0, 3) || '',
+              number: cur.phoneNumber.substring(3) || '',
+            }
+          : cur.phoneNumber;
+
+      this.form.patchValue({
+        ...cur,
+        phoneNumber: phoneNumberObj,
+      });
       this.form.controls.examApplicantType.setValue(cur.examApplicantTypeId);
       this.form.controls.conductExam.setValue(cur.conductExam);
       this.form.controls.scannerType.setValue(cur.scannerType);
@@ -73,7 +94,11 @@ export class SchoolInfoFormComponent {
     if (this.form.invalid) return;
     this.onSubmitLoading.set(true);
     const cur = this.detailsStore.school() as ISchoolResponse;
-    const payload = { id: cur.id, ...this.form.value } as ISchoolInfoRequest;
+    const payload = {
+      id: cur.id,
+      ...this.form.value,
+      phoneNumber: `${this.form.value.phoneNumber?.code}${this.form.value.phoneNumber?.number}`,
+    } as ISchoolInfoRequest;
     this.detailsStore.editInfo(payload).subscribe({
       next: (value) => {
         this.onSubmitLoading.set(false);
