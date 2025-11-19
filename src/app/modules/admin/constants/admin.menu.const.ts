@@ -17,6 +17,11 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
         customIcon: TeacherIcon,
         routerLink: [adminNamedRoutes.teachers.path],
       },
+      {
+        label: 'مدیریت امتحانات',
+        customIcon: TeacherIcon,
+        routerLink: [adminNamedRoutes.exams.path],
+      },
     ],
   },
 

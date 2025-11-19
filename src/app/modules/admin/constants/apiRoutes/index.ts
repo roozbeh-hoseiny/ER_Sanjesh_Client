@@ -1,3 +1,4 @@
+import { adminExamsApiRoutes } from './exam.api.const';
 import { adminMdmApiRoutes } from './mdm.api.const';
 import { adminSchoolsApiRoutes } from './schools.api.const';
 import { adminTeachersApiRoutes } from './teachers.api.const';
@@ -8,5 +9,6 @@ export const ADMIN_API_ROUTES = {
   login: () => `${baseUrl}/login`,
   schools: adminSchoolsApiRoutes(baseUrl),
   teachers: adminTeachersApiRoutes(baseUrl),
+  exams: adminExamsApiRoutes(baseUrl),
   mdm: adminMdmApiRoutes(),
 };

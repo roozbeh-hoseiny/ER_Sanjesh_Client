@@ -1,21 +1,21 @@
 {
-  "name": "مرکز آزمون آنلاین سازمان سنجش",
-  "short_name": "آزمون آنلاین",
+  "background_color": "#2967a8",
+  "display": "standalone",
   "icons": [
     {
-      "src": "/web-app-manifest-192x192.png",
+      "purpose": "maskable",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
+      "src": "/web-app-manifest-192x192.png",
+      "type": "image/png"
     },
     {
-      "src": "/web-app-manifest-512x512.png",
+      "purpose": "maskable",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "src": "/web-app-manifest-512x512.png",
+      "type": "image/png"
     }
   ],
-  "theme_color": "#2967a8",
-  "background_color": "#2967a8",
-  "display": "standalone"
+  "name": "امتحانات شبه نهایی سنجش",
+  "short_name": "امتحانات شبه نهایی سنجش",
+  "theme_color": "#2967a8"
 }
