@@ -1,4 +1,4 @@
-<uikit-field label="جنسیت مرکز آموزشی" for="schoolGender" [control]="control">
+<uikit-field label="جنسیت مرکز آموزشی" name="schoolGender" [control]="control">
   <ng-container *ngIf="formControl as fc">
     <p-select [options]="genders" [optionValue]="'id'" optionLabel="title" [formControl]="fc"></p-select>
   </ng-container>

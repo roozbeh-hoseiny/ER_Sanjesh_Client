@@ -37,11 +37,12 @@ import { CENTRAL_AUTH_ROLES } from '../../constants/central-auth-roles.const';
   ],
 })
 export class LoginComponent {
-  @Output() onSuccessfullySubmit = new EventEmitter<IAuthResponse>();
-
   @Input() redirectUrl!: string;
   @Input() loginApiUrl!: string;
   @Input() defaultRole?: TRoles;
+
+  @Output() onSuccessfullySubmit = new EventEmitter<IAuthResponse>();
+  @Output() onToSignup = new EventEmitter<void>();
 
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
@@ -87,6 +88,10 @@ export class LoginComponent {
     // document
     //   .getElementById('captchaImage')
     //   ?.setAttribute('src', this.captchaService.captchaImageSrc()! + `&${new Date().getTime()}`);
+  }
+
+  toSignup() {
+    this.onToSignup.emit();
   }
 
   submit(): void {

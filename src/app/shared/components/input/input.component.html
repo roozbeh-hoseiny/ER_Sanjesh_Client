@@ -1,15 +1,17 @@
-<uikit-field [label]="label" [for]="name" [control]="control">
+<uikit-field [label]="label" [name]="name" [control]="control">
   <input
     pInputText
+    [attr.id]="name"
     [formControl]="control"
-    appBlockContentScripts
     [attr.name]="name"
     [attr.placeholder]="placeholder"
     [attr.inputmode]="inputMode"
     [attr.maxlength]="maxLength || null"
     [attr.type]="htmlType"
-    [class]="inputClass"
+    [attr.autocomplete]="autocomplete"
+    [class]="`${inputClass} w-full ${size === 'large' ? 'p-inputtext-lg' : size === 'small' ? 'p-inputtext-sm' : ''}`"
     [required]="isRequired"
+    [invalid]="control.invalid && (control.touched || control.dirty)"
     (input)="onInput($event)"
   />
 </uikit-field>

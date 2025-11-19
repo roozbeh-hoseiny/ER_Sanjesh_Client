@@ -18,7 +18,10 @@
           [defaultRole]="role"
           class="w-full"
           (onSuccessfullySubmit)="onLoggedIn($event)"
+          (onToSignup)="toSignUp()"
         />
+      } @else if (activeStep() === "signup") {
+        <auth-signup role="TEACHER" class="w-full" />
       } @else if (activeStep() === "otp") {
         <app-otp class="w-full" />
       } @else if (activeStep() === "modifyLoginInfo") {

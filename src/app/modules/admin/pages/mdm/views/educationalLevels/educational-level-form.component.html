@@ -1,6 +1,6 @@
 <p-dialog header="افزودن پایه‌ی تحصیلی" [(visible)]="visible" [modal]="true" class="w-xs">
   <form (ngSubmit)="submit()" class="grid grid-cols-1 gap-8 w-xs">
-    <uikit-field label="عنوان" for="title">
+    <uikit-field label="عنوان" name="title">
       <input pInputText name="title" required [(ngModel)]="title" />
     </uikit-field>
     <app-form-footer-actions

@@ -1,5 +1,5 @@
 <div class="grid grid-cols-2 gap-4">
-  <uikit-field label="استان" for="state" [control]="stateControl">
+  <uikit-field label="استان" name="state" [control]="stateControl">
     <ng-container>
       <p-select
         name="state"
@@ -14,7 +14,7 @@
 
   @if (cityControl) {
     <ng-container>
-      <uikit-field label="شهر" for="city" [control]="cityControl">
+      <uikit-field label="شهر" name="city" [control]="cityControl">
         <p-select
           name="city"
           optionLabel="title"
@@ -29,7 +29,7 @@
   }
   @if (zoneControl) {
     <ng-container>
-      <uikit-field label="منطقه" for="zone" [control]="zoneControl">
+      <uikit-field label="منطقه" name="zone" [control]="zoneControl">
         <p-select
           name="zone"
           optionLabel="title"

@@ -1,12 +1,16 @@
-<uikit-field label="جنسیت" for="gender" [control]="control">
+<uikit-field label="جنسیت" name="gender" [control]="control">
   <ng-container *ngIf="formControl as fc">
     <p-select
       [options]="[
         { label: 'مرد', id: true },
         { label: 'زن', id: false },
       ]"
+      [size]="size"
+      [id]="'gender'"
       [optionValue]="'id'"
+      [attr.name]="'gender'"
       [formControl]="fc"
+      [invalid]="fc.invalid && (fc.dirty || fc.touched)"
     ></p-select>
   </ng-container>
 </uikit-field>

@@ -2,6 +2,7 @@ const baseUrl = '/api/v1/teacher';
 
 export const TEACHERS_API_ROUTES = {
   login: () => `${baseUrl}/login`,
+  signup: () => `${baseUrl}/signup`,
   me: () => `${baseUrl}/me`,
 
   // edit routes

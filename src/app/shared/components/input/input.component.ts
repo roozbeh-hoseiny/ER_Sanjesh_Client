@@ -1,5 +1,4 @@
 import { Maybe } from '@/core';
-import { BlockContentScriptsDirective } from '@/core/directives/block-content-scripts.directive';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
@@ -9,13 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    UikitFieldComponent,
-    BlockContentScriptsDirective,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, InputTextModule, UikitFieldComponent],
   templateUrl: './input.component.html',
 })
 export class InputComponent {
@@ -27,6 +20,7 @@ export class InputComponent {
   @Input() required = false;
   @Input() disabled = false;
   @Input() size?: 'small' | 'large';
+  @Input() autocomplete?: string = 'off';
   @Output() valueChange = new EventEmitter<string>();
 
   onInput(ev: Event) {

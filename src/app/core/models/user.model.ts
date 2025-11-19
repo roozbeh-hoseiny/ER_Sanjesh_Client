@@ -52,3 +52,13 @@ export interface IUserLoginInfo {
   mobile: string;
   email: string;
 }
+
+export interface ISignupRequestPayload {
+  firstName: string;
+  lastName: string;
+  gender: boolean;
+  mobile: string;
+  email: string;
+  username: string;
+  password: string;
+}

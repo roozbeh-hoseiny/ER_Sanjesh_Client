@@ -10,6 +10,6 @@ export function password(): ValidatorFn {
   return (control) => {
     const value = control?.value;
     if (value === null || value === undefined || String(value).length === 0) return null;
-    return PASSWORD_PATTERN.test(String(value)) ? null : { password: true };
+    return PASSWORD_PATTERN.test(String(value)) ? null : { password: 'معتبر نیست' };
   };
 }

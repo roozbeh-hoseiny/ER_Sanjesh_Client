@@ -8,13 +8,13 @@ type PSize = 'small' | 'normal' | 'large';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <label [attr.for]="for" [ngClass]="computedClass" [attr.class]="className" class="select-none">
+    <label [attr.for]="name" [ngClass]="computedClass" [attr.class]="className" class="select-none">
       <ng-content></ng-content>
     </label>
   `,
 })
 export class UikitLabelComponent {
-  @Input() for?: string;
+  @Input() name?: string;
   @Input() pSize: PSize = 'normal';
   @Input() className?: string;
   @Input() invalid?: boolean;

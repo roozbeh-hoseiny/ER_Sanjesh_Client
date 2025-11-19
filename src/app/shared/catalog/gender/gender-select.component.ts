@@ -11,9 +11,8 @@ import { Select } from 'primeng/select';
   imports: [CommonModule, UikitFieldComponent, Select, ReactiveFormsModule],
 })
 export class GenderSelectComponent {
-  constructor() {}
-
   @Input() control!: Maybe<AbstractControl<any, any>>;
+  @Input() size?: 'small' | 'large';
 
   get formControl(): FormControl | undefined {
     return this.control as FormControl | undefined;

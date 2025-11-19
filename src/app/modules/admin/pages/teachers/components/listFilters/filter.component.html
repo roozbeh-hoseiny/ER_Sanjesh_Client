@@ -2,7 +2,7 @@
   <p-message severity="info" icon="pi pi-info-circle" class="mb-5">
     یکی از فیلتر‌ها در لحظه قابل انتخاب هستند
   </p-message>
-  <uikit-field label="نمایش دبیران بدون مرکز آموزشی" for="search" class="w-full">
+  <uikit-field label="نمایش دبیران بدون مرکز آموزشی" name="search" class="w-full">
     <p-toggleSwitch [(ngModel)]="withoutSchoolStatus" (ngModelChange)="onWithoutSchoolStatusChange($event)">
       نمایش دبیران بدون مرکز آموزشی
     </p-toggleSwitch>
@@ -11,7 +11,7 @@
   <catalog-lessons-select (selectionChange)="onLessonChange($event.id)" />
   <hr />
 
-  <uikit-field label="شناسه مرکز آموزشی" for="schoolId" class="w-full">
+  <uikit-field label="شناسه مرکز آموزشی" name="schoolId" class="w-full">
     <input
       pInputText
       placeholder="شناسه مرکز آموزشی را وارد کنید"

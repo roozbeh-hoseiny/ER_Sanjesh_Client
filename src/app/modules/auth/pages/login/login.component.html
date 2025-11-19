@@ -4,13 +4,13 @@
       @for (role of centralAuthRoles; track role.key) {
         <div class="flex items-center gap-1">
           <p-radiobutton [inputId]="role.key" name="role" [value]="role.key" formControlName="role" size="small" />
-          <uikit-label [for]="role.key" class="cursor-pointer">{{ role.title }}</uikit-label>
+          <uikit-label [name]="role.key" class="cursor-pointer">{{ role.title }}</uikit-label>
         </div>
       }
     </div>
   }
 
-  <uikit-field for="username" pSize="large" [control]="loginForm.controls.username" label="نام کاربری">
+  <uikit-field name="username" pSize="large" [control]="loginForm.controls.username" label="نام کاربری">
     <input
       pInputText
       id="username"
@@ -26,7 +26,7 @@
     />
   </uikit-field>
 
-  <uikit-field for="password1" pSize="large" [control]="loginForm.controls.password" label="رمز عبور">
+  <uikit-field name="password1" pSize="large" [control]="loginForm.controls.password" label="رمز عبور">
     <p-password
       id="password1"
       size="large"
@@ -50,7 +50,7 @@
   <!-- <div class="flex items-center justify-between mt-2 mb-8 gap-8">
           <div class="flex items-center">
             <p-checkbox formControlName="rememberMe" id="rememberMe" binary class="me-2"></p-checkbox>
-            <uikit-label for="rememberMe" pSize="small">مرا به خاطر بسپار</uikit-label>
+            <uikit-label name="rememberMe" pSize="small">مرا به خاطر بسپار</uikit-label>
           </div>
           <span class="text-sm font-medium no-underline ms-2 text-right cursor-pointer text-primary">
             رمز را فراموش کردید؟
@@ -94,5 +94,12 @@
       </p-inputgroup-addon>
     </p-inputgroup>
   </div>
-  <p-button label="ورود" styleClass="w-full" size="large" [loading]="isLoading()" type="submit"></p-button>
+  <div class="grid grid-cols-1 gap-3">
+    @if (loginForm.controls.role.value === "TEACHER") {
+      <span class="w-full text-center text-sm select-none">
+        برای ثبت نام در سامانه <a class="text-primary cursor-pointer" (click)="toSignup()">اینجا</a> کلیک کنید.
+      </span>
+    }
+    <p-button label="ورود" styleClass="w-full" size="large" [loading]="isLoading()" type="submit"></p-button>
+  </div>
 </form>

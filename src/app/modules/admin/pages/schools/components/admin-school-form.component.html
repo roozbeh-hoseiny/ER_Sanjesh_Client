@@ -13,7 +13,7 @@
       <div formGroupName="address">
         <p-divider align="center"> آدرس </p-divider>
         <div class="grid grid-cols-1 gap-4">
-          <uikit-field label="آدرس" for="address" [control]="form.controls.address.controls.address">
+          <uikit-field label="آدرس" name="address" [control]="form.controls.address.controls.address">
             <textarea
               pTextarea
               formControlName="address"
@@ -57,7 +57,7 @@
       <p-divider align="center"> اطلاعات کاربری </p-divider>
       <div class="grid grid-cols-2 gap-4">
         <app-input label="نام کاربری" name="username" [control]="form.controls.username" />
-        <uikit-field label="رمز عبور" for="password" [control]="form.controls.password">
+        <uikit-field label="رمز عبور" name="password" [control]="form.controls.password">
           <input
             pInputText
             formControlName="password"

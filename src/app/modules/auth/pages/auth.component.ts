@@ -6,13 +6,14 @@ import images from 'src/assets/images';
 import { LoginComponent } from './login/login.component';
 import { ModifyLoginInfoComponent } from './modifyLoginInfo/modify-login-info.component';
 import { OTPComponent } from './otp/otp.component';
+import { SignupComponent } from './signup/signup.component';
 
-type TSteps = 'login' | 'otp' | 'modifyLoginInfo';
+type TSteps = 'login' | 'otp' | 'modifyLoginInfo' | 'signup';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  imports: [LoginComponent, OTPComponent, ModifyLoginInfoComponent],
+  imports: [LoginComponent, OTPComponent, ModifyLoginInfoComponent, SignupComponent],
 })
 export class AuthComponent {
   @Input() redirectUrl!: string;
@@ -31,6 +32,10 @@ export class AuthComponent {
   activeStep = signal<TSteps>(this.defaultStep);
 
   selectedRole = signal<TRoles | undefined>(this.role);
+
+  toSignUp = () => {
+    this.activeStep.set('signup');
+  };
 
   onLoggedIn = (data: IAuthResponse) => {
     this.toastService.success({ text: 'شما با موفقیت وارد شدید.' });

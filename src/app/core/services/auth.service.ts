@@ -8,7 +8,15 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { LOCAL_STORAGE_KEYS } from 'src/assets/constants';
-import { IAuthResponse, IUserLoginInfo, LoginCredentials, Maybe, TRoles, User } from '../models';
+import {
+  IAuthResponse,
+  ISignupRequestPayload,
+  IUserLoginInfo,
+  LoginCredentials,
+  Maybe,
+  TRoles,
+  User,
+} from '../models';
 import { CaptchaService } from './captcha.service';
 
 @Injectable({
@@ -23,6 +31,10 @@ export class AuthService {
     ADMIN: ADMIN_API_ROUTES.login(),
     SCHOOL: SCHOOLS_API_ROUTES.login(),
     TEACHER: TEACHERS_API_ROUTES.login(),
+  } as Record<TRoles, string>;
+
+  readonly modulesSignupRoutes = {
+    TEACHER: TEACHERS_API_ROUTES.signup(),
   } as Record<TRoles, string>;
 
   readonly modulesGetInfoRoutes = {
@@ -91,6 +103,35 @@ export class AuthService {
         }),
         catchError((error) => {
           console.error('Login error:', error);
+          this.isLoadingSubject.next(false);
+          throw error;
+        }),
+        finalize(() => {
+          this.isLoading.set(false);
+        }),
+      );
+  }
+
+  signup(credentials: ISignupRequestPayload, role: TRoles): Observable<IAuthResponse> {
+    this.isLoading.set(true);
+    this.isLoadingSubject.next(true);
+    // const baseHeaders = this.captchaService.buildCaptchaHeaders({}, captcha);
+
+    return this.http
+      .post<IAuthResponse>(
+        this.modulesSignupRoutes[role],
+        credentials,
+        // {
+        //   headers: baseHeaders,
+        // },
+      )
+      .pipe(
+        tap((response) => {
+          this.handleAuthSuccess(response);
+          return response;
+        }),
+        catchError((error) => {
+          console.error('Signup error:', error);
           this.isLoadingSubject.next(false);
           throw error;
         }),

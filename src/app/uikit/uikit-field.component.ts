@@ -15,7 +15,7 @@ type PSize = 'small' | 'normal' | 'large';
 })
 export class UikitFieldComponent {
   @Input() label!: string;
-  @Input() for!: string;
+  @Input() name!: string;
   @Input() pSize: PSize = 'normal';
   @Input() className?: string;
   @Input() invalid?: boolean = false;

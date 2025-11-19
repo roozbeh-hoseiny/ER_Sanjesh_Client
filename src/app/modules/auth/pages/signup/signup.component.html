@@ -1,0 +1,60 @@
+<form [formGroup]="form" class="w-full flex flex-col gap-4" (ngSubmit)="submit()">
+  <app-input label="نام" name="firstName" size="large" [control]="form.controls.firstName" />
+  <app-input label="نام خانوادگی" name="lastName" size="large" [control]="form.controls.lastName" />
+  <app-gender-select [control]="form.controls.gender" size="large" />
+  <app-input
+    label="شماره تلفن همراه"
+    name="mobile"
+    size="large"
+    autocomplete="tel"
+    [control]="form.controls.mobile"
+    type="mobile"
+  />
+  <app-input
+    label="آدرس ایمیل"
+    name="email"
+    size="large"
+    autocomplete="email"
+    [control]="form.controls.email"
+    type="email"
+  />
+  <app-input
+    label="نام کاربری"
+    name="username"
+    size="large"
+    autocomplete="username"
+    [control]="form.controls.username"
+  />
+  <uikit-field label="رمز عبور" name="password" pSize="large" [control]="form.controls.password">
+    <p-password
+      id="password1"
+      size="large"
+      name="password"
+      formControlName="password"
+      autocomplete="password"
+      [toggleMask]="true"
+      [fluid]="true"
+      [feedback]="false"
+      [invalid]="form.controls.password.touched && form.controls.password.invalid"
+    />
+    <span class="text-xs mt-2 text-muted-color">
+      رمز باید حداقل ۸ کاراکتر بوده و شامل حداقل یک حرف بزرگ، یک حرف کوچک، یک عدد و یک کاراکتر ویژه باشد.
+    </span>
+  </uikit-field>
+
+  <uikit-field label="تکرار رمز عبور" pSize="large" name="confirmPassword" [control]="form.controls.confirmPassword">
+    <p-password
+      id="confirmPassword"
+      size="large"
+      name="confirmPassword"
+      formControlName="confirmPassword"
+      autocomplete="new-password"
+      [toggleMask]="true"
+      [fluid]="true"
+      [feedback]="false"
+      [invalid]="form.controls.confirmPassword.touched && form.controls.confirmPassword.invalid"
+    />
+  </uikit-field>
+
+  <p-button label="تایید" styleClass="w-full mt-4" size="large" [loading]="isLoading()" type="submit"></p-button>
+</form>
