@@ -1,13 +1,15 @@
-import { Component, inject } from '@angular/core';
-import { BreadcrumbModule } from 'primeng/breadcrumb';
-import { MenuItem } from 'primeng/api';
 import { BreadcrumbService } from '@/core/services/breadcrumb.service';
+import { Component, inject } from '@angular/core';
+import { MenuItem } from 'primeng/api';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-breadcrumb',
   standalone: true,
-  imports: [BreadcrumbModule],
-  template: ` <p-breadcrumb [model]="items"></p-breadcrumb> `,
+  imports: [BreadcrumbModule, TooltipModule],
+  templateUrl: './breadcrumb.component.html',
+  host: { class: 'block w-full relative' },
 })
 export class BreadcrumbComponent {
   private breadcrumbService = inject(BreadcrumbService);
