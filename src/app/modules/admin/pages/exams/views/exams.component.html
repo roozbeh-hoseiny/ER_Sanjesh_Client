@@ -1,0 +1,29 @@
+<div class="">
+  <app-page-data-list
+    [pageTitle]="'مدیریت آزمون‌ها'"
+    [addNewCtaLabel]="'افزودن آزمون جدید'"
+    [columns]="columns"
+    [showAdd]="true"
+    [showDetails]="true"
+    [items]="activePageItems"
+    [loading]="loading"
+    [totalRecords]="totalRecords"
+    [currentPage]="activePageIndex + 1"
+    [perPage]="perPage"
+    [fullHeight]="true"
+    [isFiltered]="isFiltered"
+    class="overflow-hidden"
+    (pageChange)="onPageChange($event)"
+    (onAdd)="openAddForm()"
+    (onDetails)="toDetails($event)"
+  >
+    <!-- <ng-template #filter let-columns>
+    <admin-teachers-filter
+      (onWithoutSchoolStatusFilter)="filterByWithoutSchools($event)"
+      (onLessonFilter)="onLessonFilter($event)"
+      (onSchoolFilter)="onSchoolFilter($event)"
+    />
+  </ng-template> -->
+  </app-page-data-list>
+  <exam-form-dialog [(visible)]="isAddFormVisible" (onSubmit)="onFormSave($event)" />
+</div>

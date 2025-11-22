@@ -1,0 +1,73 @@
+<p-dialog
+  header="افزودن آزمون"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '25rem' }"
+  className="overflow-visible"
+  (onHide)="close()"
+>
+  <form [formGroup]="form" (submit)="submit()">
+    <div class="flex flex-col gap-4 mb-6">
+      <app-input label="عنوان" name="title" [control]="form.controls.title" [disabled]="submitLoading()" />
+      <catalog-lessons-select [control]="form.controls.lessonId" [disabled]="submitLoading()" />
+      <uikit-datepicker
+        label="زمان برگزاری"
+        name="examTime"
+        [control]="form.controls.examTime"
+        [options]="{ enableTime: true }"
+        [disabled]="submitLoading()"
+      />
+      <uikit-field label="مدت زمان" name="duration" [control]="form.controls.duration">
+        <p-inputGroup>
+          <input
+            pInputText
+            appPriceMask
+            [appPriceMaskFraction]="0"
+            [appPriceMaskUseComma]="false"
+            [formControl]="form.controls.duration"
+            [disabled]="submitLoading()"
+            min="0"
+          />
+          <p-inputGroupAddon>دقیقه</p-inputGroupAddon>
+        </p-inputGroup>
+      </uikit-field>
+      <uikit-datepicker
+        label="شروع ثبت‌نام"
+        name="registrationStartTime"
+        [control]="form.controls.registrationStartTime"
+        [options]="{ enableTime: true }"
+        [disabled]="submitLoading()"
+      />
+      <uikit-datepicker
+        label="پایان ثبت‌نام"
+        name="registrationEndTime"
+        [control]="form.controls.registrationEndTime"
+        [options]="{
+          enableTime: true,
+          minDate: form.controls.registrationStartTime.value || './',
+          defaultDate: '1404/04/04',
+        }"
+        [disabled]="submitLoading()"
+      />
+
+      <uikit-field label="قیمت" name="price" [control]="form.controls.price">
+        <p-inputGroup>
+          <input
+            pInputText
+            appPriceMask
+            appPriceMaskLocale="fa-IR"
+            [appPriceMaskUseComma]="true"
+            [appPriceMaskFraction]="0"
+            [formControl]="form.controls.price"
+            [disabled]="submitLoading()"
+            min="0"
+          />
+          <p-inputGroupAddon>ریال</p-inputGroupAddon>
+        </p-inputGroup>
+      </uikit-field>
+
+      <app-input label="سقف نمره" name="score" [control]="form.controls.score" [disabled]="submitLoading()" />
+    </div>
+    <app-form-footer-actions [loading]="submitLoading()" (onCancel)="close()" (onSubmit)="submit()" />
+  </form>
+</p-dialog>

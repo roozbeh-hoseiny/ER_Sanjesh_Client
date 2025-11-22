@@ -44,9 +44,21 @@ importers:
       chart.js:
         specifier: 4.4.2
         version: 4.4.2
+      flatpickr:
+        specifier: ^4.6.13
+        version: 4.6.13
+      flatpickr-jalali-support:
+        specifier: ^1.0.3
+        version: 1.0.3
+      flatpickr-wrap:
+        specifier: ^1.0.0
+        version: 1.0.0
       jest-editor-support:
         specifier: '*'
         version: 32.0.0-beta.1
+      ng2-flatpickr:
+        specifier: ^9.0.0
+        version: 9.0.0(flatpickr@4.6.13)
       primeclt:
         specifier: ^0.1.5
         version: 0.1.5(@types/node@24.7.0)(encoding@0.1.13)(ws@8.18.3)(zod@3.25.76)
@@ -3451,6 +3463,15 @@ packages:
     resolution: {integrity: sha512-b6suED+5/3rTpUBdG1gupIl8MPFCAMA0QXwmljLhvCUKcUvdE4gWky9zpuGCcXHOsz4J9wPGNWq6OKpmIzz3hQ==}
     hasBin: true
 
+  flatpickr-jalali-support@1.0.3:
+    resolution: {integrity: sha512-IbU+5Y5wYbKqP05WC0ZA3YBvOUXuplyNmezU/UtxqK49miXyuGcnaf6ANOBSKR9FchQvAszGniWfylPmY+R+dw==}
+
+  flatpickr-wrap@1.0.0:
+    resolution: {integrity: sha512-ctthNBZyDJe1P2fpLF7N7ivwDQGkWAAr7R5BLZ2BSlz9O+w4NEc68M7FNvK/UPUPNj3FQ2pGV8UNZV/9WBU9/Q==}
+
+  flatpickr@4.6.13:
+    resolution: {integrity: sha512-97PMG/aywoYpB4IvbvUJi0RQi8vearvU0oov1WW3k0WZPBMrTQVqekSX5CjSG/M4Q3i6A/0FKXC7RyAoAUUSPw==}
+
   flatted@3.3.3:
     resolution: {integrity: sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==}
 
@@ -4524,6 +4545,9 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  native-date-adapter@1.0.3:
+    resolution: {integrity: sha512-WXA6496dHy79BS35CWbeBha1A1QV5LjezaTA5bFWV3LXrwiRT9YXE5LJc+SSEgbN7QHz++xJnjhMHZAXMKIqAg==}
+
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
@@ -4546,6 +4570,11 @@ packages:
 
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
+
+  ng2-flatpickr@9.0.0:
+    resolution: {integrity: sha512-lqoiVNOj0UukHrIHiMI0+ei34IlTaDFhYLnSv1U3iAbix+nsZ8RWHWXmW0noVYwALYbUf1U4IpGOWgLb3brAiA==}
+    peerDependencies:
+      flatpickr: ^4.6.0
 
   node-addon-api@6.1.0:
     resolution: {integrity: sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==}
@@ -5569,6 +5598,9 @@ packages:
 
   tsconfig-paths@3.15.0:
     resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}
+
+  tslib@1.14.1:
+    resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
@@ -9668,6 +9700,14 @@ snapshots:
 
   flat@5.0.2: {}
 
+  flatpickr-jalali-support@1.0.3: {}
+
+  flatpickr-wrap@1.0.0:
+    dependencies:
+      native-date-adapter: 1.0.3
+
+  flatpickr@4.6.13: {}
+
   flatted@3.3.3: {}
 
   follow-redirects@1.15.11(debug@4.4.3):
@@ -10840,6 +10880,8 @@ snapshots:
 
   nanoid@3.3.11: {}
 
+  native-date-adapter@1.0.3: {}
+
   natural-compare@1.4.0: {}
 
   needle@3.3.1:
@@ -10855,6 +10897,11 @@ snapshots:
   negotiator@1.0.0: {}
 
   neo-async@2.6.2: {}
+
+  ng2-flatpickr@9.0.0(flatpickr@4.6.13):
+    dependencies:
+      flatpickr: 4.6.13
+      tslib: 1.14.1
 
   node-addon-api@6.1.0:
     optional: true
@@ -12054,6 +12101,8 @@ snapshots:
       json5: 1.0.2
       minimist: 1.2.8
       strip-bom: 3.0.0
+
+  tslib@1.14.1: {}
 
   tslib@2.8.1: {}
 

@@ -1,0 +1,20 @@
+<uikit-field [label]="label" [control]="control" class="w-full datepicker">
+  <div #wrapper [attr.data-disable]="disabled" [attr.data-name]="name" class="w-full">
+    <input pInputText data-input [attr.placeholder]="placeholder" [name]="name" class="w-full" />
+  </div>
+  <div class="flat"></div>
+</uikit-field>
+
+<!--
+
+<div #wrapper class="flex items-center gap-2" data-enable-time="false" data-click-opens="true">
+  <input pInputText class="w-full bg-white text-sm rounded border p-2" data-input [attr.placeholder]="placeholder" />
+
+  <button pButton type="button" class="p-button-text text-gray-500" data-toggle aria-label="toggle">
+    <i class="pi pi-calendar"></i>
+  </button>
+
+  <button pButton type="button" class="p-button-text text-gray-500" data-clear aria-label="clear">
+    <i class="pi pi-times"></i>
+  </button>
+</div> -->

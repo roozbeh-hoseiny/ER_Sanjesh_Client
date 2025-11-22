@@ -4,7 +4,7 @@ export const adminExamsApiRoutes = (baseUrl: string) => {
     activate: () => `${examsBaseUrl}/ActivateExam`,
     deactivate: () => `${examsBaseUrl}/DeactiveExam`,
 
-    getAll: () => `${examsBaseUrl}/GetAll`,
+    list: () => `${examsBaseUrl}/GetAll`,
     byEducationalLevel: () => `${examsBaseUrl}/GetByEducationalLevel`,
     byField: () => `${examsBaseUrl}/GetByFieldOfStudy`,
     byLesson: () => `${examsBaseUrl}/GetByLesson`,

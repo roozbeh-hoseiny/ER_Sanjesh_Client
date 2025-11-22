@@ -14,9 +14,9 @@ import { ILessonsInRoot } from '../models';
   templateUrl: './lessons-select.component.html',
 })
 export class LessonsSelectComponent {
-  @Input() control: FormControl<Maybe<ILessonsInRoot>> = new FormControl<Maybe<ILessonsInRoot>>(
-    null,
-  );
+  @Input() control: FormControl<Maybe<ILessonsInRoot | number>> = new FormControl<
+    Maybe<ILessonsInRoot | number>
+  >(null);
   @Input() name: string = 'lesson';
   @Input() onlyId: boolean = false;
   @Input() filters: number[] = [];
