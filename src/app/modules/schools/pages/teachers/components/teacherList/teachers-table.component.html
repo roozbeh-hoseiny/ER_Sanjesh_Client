@@ -9,78 +9,88 @@
   </ng-template>
 
   <div class="grid grid-cols-1 gap-4">
-    @for (teacher of teachers() || []; track teacher.id) {
-      <p-panel toggleable collapsed>
-        <ng-template #header>
-          <teacher-row-subheader [item]="teacher" [schoolId]="schoolId()" (onSubmitted)="onSubmit()" />
-        </ng-template>
-        <p-table
-          [columns]="columns"
-          [value]="teacher.lessons"
-          columnResizeMode="fit"
-          stripedRows
-          [showFirstLastIcon]="false"
-        >
-          <ng-template #header let-columns>
-            <tr>
-              @for (col of columns; track col.header) {
-                <th [style]="{ width: col.width, minWidth: col.minWidth }">{{ col.header }}</th>
-              }
-            </tr>
+    @if (teachers() && teachers().length === 0 && !loading) {
+      <uikit-empty-state
+        icon="pi pi-users"
+        title="هیچ دبیر ثبت شده‌ای وجود ندارد"
+        description="برای افزودن دبیر جدید، روی دکمه زیر کلیک کنید."
+        ctaLabel="افزودن دبیر جدید"
+        (ctaClick)="openAttachLessonDialog()"
+      />
+    } @else {
+      @for (teacher of teachers() || []; track teacher.id) {
+        <p-panel toggleable collapsed>
+          <ng-template #header>
+            <teacher-row-subheader [item]="teacher" [schoolId]="schoolId()" (onSubmitted)="onSubmit()" />
           </ng-template>
-          <ng-template #body let-item>
-            <tr>
-              @for (col of columns; track col.field) {
-                <td>
-                  @if (col.field === "approved") {
-                    @if (canApproveTeachers()) {
-                      <div class="flex items-center gap-2">
-                        <p-confirmpopup />
-                        @if (changeStatusSchedules()[item.id]) {
-                          <p-progressSpinner
-                            strokeWidth="4"
-                            fill="transparent"
-                            animationDuration="1s"
-                            [style]="{ width: '24px', height: '24px' }"
-                          ></p-progressSpinner>
-                        } @else {
-                          <p-toggleSwitch
-                            [disabled]="changeStatusSchedules()[item.id]"
-                            [ngModel]="item.approved"
-                            (onChange)="showTeacherLessonConfirmation(item, $event.checked, $event, teacher.id)"
-                          ></p-toggleSwitch>
-                        }
+          <p-table
+            [columns]="columns"
+            [value]="teacher.lessons"
+            columnResizeMode="fit"
+            stripedRows
+            [showFirstLastIcon]="false"
+          >
+            <ng-template #header let-columns>
+              <tr>
+                @for (col of columns; track col.header) {
+                  <th [style]="{ width: col.width, minWidth: col.minWidth }">{{ col.header }}</th>
+                }
+              </tr>
+            </ng-template>
+            <ng-template #body let-item>
+              <tr>
+                @for (col of columns; track col.field) {
+                  <td>
+                    @if (col.field === "approved") {
+                      @if (canApproveTeachers()) {
+                        <div class="flex items-center gap-2">
+                          <p-confirmpopup />
+                          @if (changeStatusSchedules()[item.id]) {
+                            <p-progressSpinner
+                              strokeWidth="4"
+                              fill="transparent"
+                              animationDuration="1s"
+                              [style]="{ width: '24px', height: '24px' }"
+                            ></p-progressSpinner>
+                          } @else {
+                            <p-toggleSwitch
+                              [disabled]="changeStatusSchedules()[item.id]"
+                              [ngModel]="item.approved"
+                              (onChange)="showTeacherLessonConfirmation(item, $event.checked, $event, teacher.id)"
+                            ></p-toggleSwitch>
+                          }
 
-                        <p-button
-                          outlined
-                          severity="secondary"
-                          size="small"
-                          [loading]="detachLessonsSchedules()[`${item.id}-${item.schoolId}`]"
-                          (click)="detachLesson(item, teacher.id)"
-                        >
-                          حذف درس
-                        </p-button>
-                      </div>
+                          <p-button
+                            outlined
+                            severity="secondary"
+                            size="small"
+                            [loading]="detachLessonsSchedules()[`${item.id}-${item.schoolId}`]"
+                            (click)="detachLesson(item, teacher.id)"
+                          >
+                            حذف درس
+                          </p-button>
+                        </div>
+                      } @else {
+                        <p-badge
+                          [value]="item.approved ? 'تایید شده' : 'تایید نشده'"
+                          [severity]="item.approved ? 'success' : 'danger'"
+                        ></p-badge>
+                      }
                     } @else {
-                      <p-badge
-                        [value]="item.approved ? 'تایید شده' : 'تایید نشده'"
-                        [severity]="item.approved ? 'success' : 'danger'"
-                      ></p-badge>
+                      {{ item[col.field] || "-" }}
                     }
-                  } @else {
-                    {{ item[col.field] || "-" }}
-                  }
-                </td>
-              }
-            </tr>
-          </ng-template>
-          <!-- <ng-template #status let-item>
+                  </td>
+                }
+              </tr>
+            </ng-template>
+            <!-- <ng-template #status let-item>
 
     </ng-template> -->
-        </p-table>
-      </p-panel>
+          </p-table>
+        </p-panel>
+      }
     }
   </div>
 </app-card-data>
 
-<assign-teacher-form-dialog [(visible)]="showLessonForm" (onSubmit)="submittedNewTeacher()" />
+<assign-teacher-form-dialog [(visible)]="showLessonForm" [schoolId]="schoolId()" (onSubmit)="submittedNewTeacher()" />

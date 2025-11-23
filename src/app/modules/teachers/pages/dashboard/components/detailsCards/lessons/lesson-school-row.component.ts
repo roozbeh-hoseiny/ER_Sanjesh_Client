@@ -85,27 +85,31 @@ export class lessonSchoolRowSubheaderComponent {
   // start of all lessons of a school
   approveAllLessons(item: ITeacherLesson) {
     this.changeSchoolStatusSchedules.update((prev) => ({ ...prev, [item.schoolId]: true }));
-    this.store.approveSchool({ schoolId: item.schoolId, schoolTitle: item.schoolTitle }).subscribe({
-      next: () => {
-        this.onSubmitted.emit();
-        this.removeSchoolFromSchedule(item.schoolId);
-      },
-      error: () => {
-        this.removeSchoolFromSchedule(item.schoolId);
-      },
-    });
+    this.store
+      .approveAllLessons({ schoolId: item.schoolId, schoolTitle: item.schoolTitle })
+      .subscribe({
+        next: () => {
+          this.onSubmitted.emit();
+          this.removeSchoolFromSchedule(item.schoolId);
+        },
+        error: () => {
+          this.removeSchoolFromSchedule(item.schoolId);
+        },
+      });
   }
   rejectAllLessons(item: ITeacherLesson) {
     this.changeSchoolStatusSchedules.update((prev) => ({ ...prev, [item.schoolId]: true }));
-    this.store.rejectSchool({ schoolId: item.schoolId, schoolTitle: item.schoolTitle }).subscribe({
-      next: () => {
-        this.onSubmitted.emit();
-        this.removeSchoolFromSchedule(item.schoolId);
-      },
-      error: () => {
-        this.removeSchoolFromSchedule(item.schoolId);
-      },
-    });
+    this.store
+      .rejectAllLessons({ schoolId: item.schoolId, schoolTitle: item.schoolTitle })
+      .subscribe({
+        next: () => {
+          this.onSubmitted.emit();
+          this.removeSchoolFromSchedule(item.schoolId);
+        },
+        error: () => {
+          this.removeSchoolFromSchedule(item.schoolId);
+        },
+      });
   }
 
   removeSchoolFromSchedule(itemId: string) {

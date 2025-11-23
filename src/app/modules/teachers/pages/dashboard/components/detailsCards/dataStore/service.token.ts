@@ -5,13 +5,13 @@ import {
   IDetachLessonFromTeacherRequest,
 } from '@/modules/admin/pages/teachers/models';
 import {
+  IApproveAllLessonsRequestPayload,
   IApproveSchoolLessonRequestPayload,
-  IApproveSchoolRequestPayload,
   IAttachLessonRequestPayload,
   IDetachLessonRequestPayload,
   IDetachSchoolRequestPayload,
+  IRejectAllLessonsRequestPayload,
   IRejectSchoolLessonRequestPayload,
-  IRejectSchoolRequestPayload,
 } from '@/modules/teachers/models';
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -30,8 +30,8 @@ export interface TeacherDetailsService {
   // attachSchool(payload: IAttachFieldToSchoolRequestPayload): Observable<boolean>;
   detachSchool(payload: IDetachSchoolRequestPayload): Observable<boolean>;
 
-  approveSchool(payload: IApproveSchoolRequestPayload): Observable<boolean>;
-  rejectSchool(payload: IRejectSchoolRequestPayload): Observable<boolean>;
+  approveAllLessons(payload: IApproveAllLessonsRequestPayload): Observable<boolean>;
+  rejectAllLessons(payload: IRejectAllLessonsRequestPayload): Observable<boolean>;
 
   approveSchoolLesson(payload: IApproveSchoolLessonRequestPayload): Observable<boolean>;
   rejectSchoolLesson(payload: IRejectSchoolLessonRequestPayload): Observable<boolean>;

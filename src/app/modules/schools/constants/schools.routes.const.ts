@@ -13,6 +13,7 @@ export const schoolsNamedRoutes: NamedRoutes<TSchoolsRouteNames> = {
       ),
     meta: {
       title: 'داشبورد',
+      pagePath: () => '/schools',
     },
   },
   ...schoolsTeachersNamedRoutes,

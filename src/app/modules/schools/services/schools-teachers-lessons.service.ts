@@ -15,10 +15,9 @@ export class SchoolsTeachersLessonsService {
       lessonId,
     });
   }
-  removeTeacher(teacherId: string, lessonId: number): Observable<boolean> {
+  removeTeacher(teacherId: string): Observable<boolean> {
     return this.http.post<boolean>(this.apiRoutes.detachTeacher(), {
       teacherId,
-      lessonId,
     });
   }
 

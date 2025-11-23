@@ -2,7 +2,7 @@ import { LayoutService } from '@/layout/service/layout.service';
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, signal } from '@angular/core';
 import { TeachersStore } from '../../dataStore';
-import { IApproveSchoolRequestPayload, IRejectSchoolRequestPayload } from '../../models';
+import { IApproveAllLessonsRequestPayload, IRejectAllLessonsRequestPayload } from '../../models';
 import { TeachersInfoService } from '../../services';
 import {
   TeacherDetailsComponent,
@@ -33,9 +33,9 @@ export class TeachersDashboardComponent {
   ) {
     this.layoutService.changeIsFixedContentSize(true);
     this.detailsStore.setService({
-      approveSchool: (payload: IApproveSchoolRequestPayload) =>
+      approveAllLessons: (payload: IApproveAllLessonsRequestPayload) =>
         this.teacherService.approveSchool(payload),
-      rejectSchool: (payload: IRejectSchoolRequestPayload) =>
+      rejectAllLessons: (payload: IRejectAllLessonsRequestPayload) =>
         this.teacherService.rejectSchool(payload),
       validateMobile: (id: string) => this.openConfirmationMobileModal(id),
       validateEmail: (id: string) => this.openConfirmationEmailModal(id),

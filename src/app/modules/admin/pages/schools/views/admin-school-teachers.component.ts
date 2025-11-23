@@ -3,10 +3,10 @@ import { adminNamedRoutes } from '@/modules/admin/constants';
 import { AdminSchoolsService, AdminTeachersService } from '@/modules/admin/services';
 import { LessonsTableComponent, SchoolTeacherListStore } from '@/modules/schools/pages/teachers';
 import {
+  IApproveAllLessonsRequestPayload,
   IApproveSchoolLessonRequestPayload,
-  IApproveSchoolRequestPayload,
+  IRejectAllLessonsRequestPayload,
   IRejectSchoolLessonRequestPayload,
-  IRejectSchoolRequestPayload,
 } from '@/modules/teachers/models';
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
@@ -49,15 +49,17 @@ export class AdminSchoolTeachersComponent {
       attachLesson: (payload: IAttachLessonToTeacherRequest) => services.attachLesson(payload),
       detachLesson: (payload: IDetachLessonFromTeacherRequest) => services.detachLesson(payload),
 
-      approveTeacher: (payload: IApproveSchoolRequestPayload) =>
+      approveTeacher: (payload: IApproveAllLessonsRequestPayload) =>
         this.services.approveSchool(payload),
-      rejectTeacher: (payload: IRejectSchoolRequestPayload) => this.services.rejectSchool(payload),
+      rejectTeacher: (payload: IRejectAllLessonsRequestPayload) =>
+        this.services.rejectSchool(payload),
 
       approveTeacherLesson: (payload: IApproveSchoolLessonRequestPayload) =>
         this.services.approveSchoolLesson(payload),
       rejectTeacherLesson: (payload: IRejectSchoolLessonRequestPayload) =>
         this.services.rejectSchoolLesson(payload),
 
+      getTeacher: (payload) => this.services.byUniqueId(payload),
       detachTeacher: (payload: { teacherId: string; schoolId: string }) =>
         this.services.detachSchool(payload),
     });
@@ -102,7 +104,7 @@ export class AdminSchoolTeachersComponent {
 
   setBreadcrumbs(schoolTitle: string) {
     this.breadcrumbService.setItems([
-      adminNamedRoutes.root.meta,
+      { ...adminNamedRoutes.root.meta, routerLink: '/admin' },
       adminNamedRoutes.schools.meta,
       {
         title: schoolTitle,

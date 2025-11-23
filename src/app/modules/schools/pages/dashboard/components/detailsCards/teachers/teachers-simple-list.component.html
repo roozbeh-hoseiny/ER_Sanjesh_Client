@@ -7,13 +7,25 @@
       }
     </div>
   </ng-template>
-  <p-table [value]="teachers" [columns]="columns">
+  <p-table [value]="teachers" [columns]="columns" [loading]="loading">
     <ng-template #header let-columns>
       <tr>
         @for (col of columns; track col.header) {
           <th [style]="{ width: col.width, minWidth: col.minWidth }">{{ col.header }}</th>
         }
       </tr>
+    </ng-template>
+
+    <ng-template #loadingbody let-columns>
+      @for (i of [1, 2, 3, 4, 5]; track i) {
+        <tr style="height: 46px">
+          @for (col of columns; track col) {
+            <td>
+              <p-skeleton></p-skeleton>
+            </td>
+          }
+        </tr>
+      }
     </ng-template>
 
     <ng-template #body let-item>
@@ -28,6 +40,17 @@
           </td>
         }
       </tr>
+    </ng-template>
+
+    <ng-template #empty>
+      <uikit-empty-state
+        title="دبیری یافت نشد"
+        description="در حال حاضر هیچ دبیری برای این مدرسه ثبت نشده است."
+        icon="pi pi-users"
+        ctaLabel="مدیریت دبیران"
+        (ctaClick)="toTeachersPage()"
+      >
+      </uikit-empty-state>
     </ng-template>
   </p-table>
 </app-card-data>

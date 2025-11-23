@@ -1,11 +1,12 @@
 import { PAGINATED_QUERY_DEFAULT_VALUES } from '@/core/constants';
 import { IPaginatedQuery, IPaginatedResponse } from '@/core/models/service.model';
+import { ISchoolTeacherMappedData } from '@/modules/schools/pages/teachers';
 import {
+  IApproveAllLessonsRequestPayload,
   IApproveSchoolLessonRequestPayload,
-  IApproveSchoolRequestPayload,
   IDetachSchoolRequestPayload,
+  IRejectAllLessonsRequestPayload,
   IRejectSchoolLessonRequestPayload,
-  IRejectSchoolRequestPayload,
 } from '@/modules/teachers/models';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -82,6 +83,15 @@ export class AdminTeachersService {
     return this.http.get<IAdminTeacherResponse>(this.apiRoutes.teachers.byId(id));
   }
 
+  byUniqueId(id: string): Observable<ISchoolTeacherMappedData> {
+    return this.http.get<IAdminTeacherResponse>(this.apiRoutes.teachers.byUniqueId(id)).pipe(
+      map((teacher) => ({
+        ...teacher,
+        fullname: `${teacher.firstName} ${teacher.lastName}`,
+      })),
+    );
+  }
+
   attachLesson(payload: IAttachLessonToTeacherRequest): Observable<boolean> {
     return this.http.post<boolean>(this.apiRoutes.teachers.attachLesson(), payload);
   }
@@ -93,10 +103,10 @@ export class AdminTeachersService {
     return this.http.post<boolean>(this.apiRoutes.teachers.detachSchool(), payload);
   }
 
-  approveSchool(request: IApproveSchoolRequestPayload): Observable<boolean> {
+  approveSchool(request: IApproveAllLessonsRequestPayload): Observable<boolean> {
     return this.http.post<boolean>(this.apiRoutes.teachers.approveSchool(), request);
   }
-  rejectSchool(request: IRejectSchoolRequestPayload): Observable<boolean> {
+  rejectSchool(request: IRejectAllLessonsRequestPayload): Observable<boolean> {
     return this.http.post<boolean>(this.apiRoutes.teachers.rejectSchool(), request);
   }
   approveSchoolLesson(request: IApproveSchoolLessonRequestPayload): Observable<boolean> {

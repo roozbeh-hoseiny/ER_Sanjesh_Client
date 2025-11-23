@@ -3,13 +3,13 @@ import { LayoutService } from '@/layout/service/layout.service';
 import { adminNamedRoutes } from '@/modules/admin/constants';
 import { AdminSchoolsService, AdminTeachersService } from '@/modules/admin/services';
 import {
+  IApproveAllLessonsRequestPayload,
   IApproveSchoolLessonRequestPayload,
-  IApproveSchoolRequestPayload,
   IAttachLessonRequestPayload,
   IDetachLessonRequestPayload,
   IDetachSchoolRequestPayload,
+  IRejectAllLessonsRequestPayload,
   IRejectSchoolLessonRequestPayload,
-  IRejectSchoolRequestPayload,
 } from '@/modules/teachers/models';
 import {
   TeacherDetailsCardsStore,
@@ -38,9 +38,9 @@ export class AdminTeacherComponent {
   ) {
     this.layoutService.changeIsFixedContentSize(true);
     this.teacherCardStore.setService({
-      approveSchool: (payload: IApproveSchoolRequestPayload) =>
+      approveAllLessons: (payload: IApproveAllLessonsRequestPayload) =>
         this.teacherService.approveSchool(payload),
-      rejectSchool: (payload: IRejectSchoolRequestPayload) =>
+      rejectAllLessons: (payload: IRejectAllLessonsRequestPayload) =>
         this.teacherService.rejectSchool(payload),
       approveSchoolLesson: (payload: IApproveSchoolLessonRequestPayload) =>
         this.teacherService.approveSchoolLesson(payload),

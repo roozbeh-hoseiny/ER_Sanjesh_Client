@@ -80,8 +80,8 @@ export class TeacherDetailsCardsStore {
     attachLesson: (payload: any) => of(true) as Observable<boolean>,
     detachLesson: (payload: any) => of(true) as Observable<boolean>,
 
-    approveSchool: (payload: any) => of(true) as Observable<boolean>,
-    rejectSchool: (payload: any) => of(true) as Observable<boolean>,
+    approveAllLessons: (payload: any) => of(true) as Observable<boolean>,
+    rejectAllLessons: (payload: any) => of(true) as Observable<boolean>,
     getSchool: (schoolUniqueId: string) => of(null) as Observable<Maybe<IAdminSchoolRawResponse>>,
   };
 
@@ -155,15 +155,15 @@ export class TeacherDetailsCardsStore {
 
   changeSchoolStatus(payload: IChangeStatusSchoolPayload) {
     if (payload.isActive) {
-      return this.approveSchool(payload);
+      return this.approveAllLessons(payload);
     }
-    return this.rejectSchool(payload);
+    return this.rejectAllLessons(payload);
   }
 
-  approveSchool(payload: IChangeStatusSchoolPayload) {
-    if (this.service.approveSchool === undefined) return of();
+  approveAllLessons(payload: IChangeStatusSchoolPayload) {
+    if (this.service.approveAllLessons === undefined) return of();
     return this.service
-      .approveSchool({ teacherId: this.info()!.id, schoolId: payload.schoolId })
+      .approveAllLessons({ teacherId: this.info()!.id, schoolId: payload.schoolId })
       .pipe(
         tap(() => {
           this.toastService.success({
@@ -172,10 +172,10 @@ export class TeacherDetailsCardsStore {
         }),
       );
   }
-  rejectSchool(payload: IChangeStatusSchoolPayload) {
-    if (this.service.rejectSchool === undefined) return of();
+  rejectAllLessons(payload: IChangeStatusSchoolPayload) {
+    if (this.service.rejectAllLessons === undefined) return of();
     return this.service
-      .rejectSchool({ teacherId: this.info()!.id, schoolId: payload.schoolId })
+      .rejectAllLessons({ teacherId: this.info()!.id, schoolId: payload.schoolId })
       .pipe(
         tap(() => {
           this.toastService.success({
@@ -204,6 +204,7 @@ export class TeacherDetailsCardsStore {
         }),
       );
   }
+
   rejectSchoolLesson(payload: IChangeStatusSchoolLessonPayload) {
     if (this.service.rejectSchoolLesson === undefined) return of();
     return this.service
@@ -227,6 +228,7 @@ export class TeacherDetailsCardsStore {
       }),
     );
   }
+
   detachSchool(payload: ITeacherLesson) {
     if (this.service.detachSchool === undefined) return of();
     return this.service

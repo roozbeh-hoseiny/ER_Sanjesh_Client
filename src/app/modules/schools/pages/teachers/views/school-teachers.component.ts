@@ -35,7 +35,7 @@ export class SchoolTeachersComponent {
     private schoolTeacherListStore: SchoolTeacherListStore,
   ) {
     this.breadcrumbService.setItems([
-      schoolsNamedRoutes.root.meta,
+      { ...schoolsNamedRoutes.root.meta, routerLink: '/schools' },
       schoolsNamedRoutes.teachers.meta,
     ]);
     schoolTeacherListStore.setService({
@@ -60,7 +60,7 @@ export class SchoolTeachersComponent {
       // detachLesson: (payload) =>
       //   this.teachersLessonsService.removeTeacher(payload.teacherId, payload.lessonId),
 
-      detachTeacher: (payload) => this.teachersLessonsService.rejectAllLessons(payload.teacherId),
+      detachTeacher: (payload) => this.teachersLessonsService.removeTeacher(payload.teacherId),
     });
     this.getData();
   }

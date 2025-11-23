@@ -145,7 +145,7 @@ export class LessonsTableComponent {
       ...prev,
       [`${item.id}-${item.schoolId}`]: true,
     }));
-    this.store.detachLesson(item).subscribe({
+    this.store.detachLesson({ ...item, id: item.lessonId }).subscribe({
       next: () => {
         this.onSubmitted.emit();
         this.removeDetachLessonFromSchedule(item);

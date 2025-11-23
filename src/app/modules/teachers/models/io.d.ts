@@ -47,11 +47,11 @@ export interface ITeacherLesson {
   id: number;
 }
 
-export interface IApproveSchoolRequestPayload {
+export interface IApproveAllLessonsRequestPayload {
   teacherId: string;
   schoolId: string;
 }
-export interface IRejectSchoolRequestPayload extends IApproveSchoolRequestPayload {}
+export interface IRejectAllLessonsRequestPayload extends IApproveAllLessonsRequestPayload {}
 
 export interface IApproveSchoolLessonRequestPayload {
   teacherId: string;

@@ -126,6 +126,12 @@ export class AssignTeacherDialogComponent {
 
     const selectedTeacherId = this.searchedTeacher()?.id || this.teacherId;
 
+    console.log({
+      schoolId: this.schoolId!,
+      id: selectedTeacherId!,
+      lessonId: this.form.value.lessonId!,
+    });
+
     this.store
       .attachTeacher({
         schoolId: this.schoolId!,
@@ -134,7 +140,6 @@ export class AssignTeacherDialogComponent {
       })
       .subscribe({
         next: () => {
-          this.toastService.success({ text: 'دبیر مورد نظر با موفقیت اضافه شد' });
           this.submitLoading.set(false);
           this.close();
           this.onSubmit.emit();

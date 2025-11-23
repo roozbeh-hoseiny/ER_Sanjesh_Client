@@ -115,7 +115,8 @@ export class AttachSchoolLessonFormDialogComponent {
       return;
     }
 
-    if (!this.searchedSchool()) {
+    const schoolId = this.schoolId || this.searchedSchool()?.id;
+    if (!schoolId) {
       return this.toastService.error({ text: 'لطفا مرکز آموزشی را جستجو و انتخاب کنید' });
     }
 
@@ -123,7 +124,7 @@ export class AttachSchoolLessonFormDialogComponent {
     const payload = {
       id: this.teacherId,
       lessonId: this.form.value.lessonId!,
-      schoolId: this.form.value.schoolId!,
+      schoolId,
     } as IAttachLessonRequestPayload;
 
     this.store.attachLesson(payload).subscribe({

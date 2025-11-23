@@ -1,11 +1,13 @@
 import { ITeacherLesson } from '@/modules/teachers/models';
 import { AppCardComponent } from '@/shared/components';
 import { IColumn } from '@/shared/components/pageDataList/page-data-list.component';
+import { UikitEmptyStateComponent } from '@/uikit';
 import { CommonModule } from '@angular/common';
 import {
   Component,
   computed,
   EventEmitter,
+  Input,
   Output,
   signal,
   TemplateRef,
@@ -42,9 +44,11 @@ import { TeacherRowSubheaderComponent } from './teacher-row.component';
     TeacherRowSubheaderComponent,
     AssignTeacherDialogComponent,
     PanelModule,
+    UikitEmptyStateComponent,
   ],
 })
 export class LessonsTableComponent {
+  @Input() loading = false;
   @Output() onSubmitted = new EventEmitter<void>();
 
   constructor(
