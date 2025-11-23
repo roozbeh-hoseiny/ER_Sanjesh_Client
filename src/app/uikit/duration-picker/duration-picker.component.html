@@ -1,0 +1,23 @@
+<uikit-field [label]="label" [name]="name" [control]="control">
+  <div class="grid grid-cols-2 items-center gap-4">
+    <p-autoComplete
+      [formControl]="hoursCtrl"
+      [suggestions]="filteredHours"
+      (completeMethod)="filterHours($event)"
+      [dropdown]="true"
+      [forceSelection]="false"
+      placeholder="ساعت"
+      inputClass="w-full"
+    ></p-autoComplete>
+
+    <p-autoComplete
+      [formControl]="minutesCtrl"
+      [suggestions]="filteredMinutes"
+      (completeMethod)="filterMinutes($event)"
+      [dropdown]="true"
+      [forceSelection]="false"
+      placeholder="دقیقه"
+      inputClass="w-full"
+    ></p-autoComplete>
+  </div>
+</uikit-field>

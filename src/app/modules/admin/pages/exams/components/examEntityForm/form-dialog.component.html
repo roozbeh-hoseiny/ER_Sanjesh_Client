@@ -17,6 +17,7 @@
         [options]="{ enableTime: true }"
         [disabled]="submitLoading()"
       />
+      <uikit-duration [control]="form.controls.duration" label="مدت زمان" name="duration" />
       <uikit-field label="مدت زمان" name="duration" [control]="form.controls.duration">
         <p-inputGroup>
           <input
