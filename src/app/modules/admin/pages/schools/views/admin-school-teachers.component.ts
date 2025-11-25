@@ -104,7 +104,7 @@ export class AdminSchoolTeachersComponent {
 
   setBreadcrumbs(schoolTitle: string) {
     this.breadcrumbService.setItems([
-      { ...adminNamedRoutes.root.meta, routerLink: '/admin' },
+      { ...adminNamedRoutes.root.meta },
       adminNamedRoutes.schools.meta,
       {
         title: schoolTitle,

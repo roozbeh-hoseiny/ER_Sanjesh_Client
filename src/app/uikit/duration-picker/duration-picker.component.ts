@@ -54,8 +54,11 @@ export class UikitDurationPickerComponent implements OnInit {
     const h = this.toNumberSafe(this.hoursCtrl.value);
     const m = this.toNumberSafe(this.minutesCtrl.value);
     const total = h * 60 + m;
-    // write numeric minutes into parent control
-    this.control.setValue(String(total));
+    // write numeric minutes into parent control only when changed
+    const current = this.control.value;
+    if (String(current) !== String(total)) {
+      this.control.setValue(String(total), { emitEvent: false });
+    }
   }
 
   syncFromParent(v: any) {
