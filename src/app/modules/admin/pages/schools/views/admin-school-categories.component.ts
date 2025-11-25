@@ -31,8 +31,8 @@ export class AdminSchoolCategoriesComponent {
     private router: Router,
   ) {
     this.breadcrumbService.setItems([
-      { ...adminNamedRoutes.root.meta, routerLink: '/admin' },
-      { ...adminNamedRoutes.schools.meta, routerLink: '/admin/schools' },
+      { ...adminNamedRoutes.root.meta },
+      { ...adminNamedRoutes.schools.meta },
       { ...adminNamedRoutes.categories.meta },
     ]);
     this.getData();

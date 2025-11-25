@@ -35,7 +35,7 @@ export class SchoolTeachersComponent {
     private schoolTeacherListStore: SchoolTeacherListStore,
   ) {
     this.breadcrumbService.setItems([
-      { ...schoolsNamedRoutes.root.meta, routerLink: '/schools' },
+      { ...schoolsNamedRoutes.root.meta },
       schoolsNamedRoutes.teachers.meta,
     ]);
     schoolTeacherListStore.setService({
