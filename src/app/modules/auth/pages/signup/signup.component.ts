@@ -73,7 +73,6 @@ export class SignupComponent {
 
   submit(): void {
     this.form.markAllAsTouched();
-    console.log(this.form.invalid);
 
     if (this.form.invalid) return;
     const credentials = this.form.value as ISignupRequestPayload;

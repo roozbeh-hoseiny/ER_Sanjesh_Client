@@ -1,0 +1,17 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  header="ایجاد کارگزار"
+  [style]="{ width: '600px' }"
+  (onHide)="visibleChange.emit(false)"
+>
+  <form (ngSubmit)="submit()" [formGroup]="form" class="grid grid-cols-1 gap-4">
+    <app-input label="نام" name="firstName" [control]="form.controls.firstName" />
+    <app-input label="نام خانوادگی" name="lastName" [control]="form.controls.lastName" />
+    <app-gender-select label="جنسیت" name="gender" [control]="form.controls.gender" />
+    <app-input label="شماره‌ موبایل" name="mobile" [control]="form.controls.mobile" type="mobile" />
+    <app-input label="ایمیل" name="email" [control]="form.controls.email" type="email" />
+
+    <app-form-footer-actions cancelLabel="انصراف" [loading]="onSubmitLoading()" class="mt-4" (onCancel)="close()" />
+  </form>
+</p-dialog>

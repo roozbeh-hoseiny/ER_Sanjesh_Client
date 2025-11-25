@@ -1,10 +1,10 @@
-export interface IPaginatedQuery {
-  lastSeen: string;
+export interface IPaginatedQuery<LastSeen = string> {
+  lastSeen: LastSeen;
   pageSize: number;
 }
 
-export interface IPaginatedResponse<T> {
-  lastSeen: string;
+export interface IPaginatedResponse<T, LastSeen = string> {
+  lastSeen: LastSeen;
   totalCount: number;
   items: T[];
 }

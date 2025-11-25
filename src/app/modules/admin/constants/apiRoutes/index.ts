@@ -1,3 +1,4 @@
+import { adminAgentsApiRoutes } from './agents.api.const';
 import { adminExamsApiRoutes } from './exam.api.const';
 import { adminMdmApiRoutes } from './mdm.api.const';
 import { adminSchoolsApiRoutes } from './schools.api.const';
@@ -11,4 +12,5 @@ export const ADMIN_API_ROUTES = {
   teachers: adminTeachersApiRoutes(baseUrl),
   exams: adminExamsApiRoutes(baseUrl),
   mdm: adminMdmApiRoutes(),
+  agents: adminAgentsApiRoutes(baseUrl),
 };

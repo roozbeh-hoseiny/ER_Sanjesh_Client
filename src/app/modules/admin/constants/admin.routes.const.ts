@@ -4,18 +4,21 @@ import {
   adminMDMNamedRoutes,
   adminSchoolNamedRoutes,
   adminTeachersNamedRoutes,
+  TAdminAgentsRouteNames,
   TAdminExamsRouteNames,
   TAdminMDMRouteNames,
   TAdminSchoolsRouteNames,
   TAdminTeachersRouteNames,
 } from './routes';
+import { adminAgentsNamedRoutes } from './routes/agents.const';
 
 export type AdminRouteNames =
   | 'root'
   | TAdminSchoolsRouteNames
   | TAdminMDMRouteNames
   | TAdminTeachersRouteNames
-  | TAdminExamsRouteNames;
+  | TAdminExamsRouteNames
+  | TAdminAgentsRouteNames;
 
 export const adminNamedRoutes: NamedRoutes<AdminRouteNames> = {
   root: {
@@ -30,6 +33,7 @@ export const adminNamedRoutes: NamedRoutes<AdminRouteNames> = {
   ...adminSchoolNamedRoutes,
   ...adminTeachersNamedRoutes,
   ...adminExamsNamedRoutes,
+  ...adminAgentsNamedRoutes,
 };
 
 export const ADMIN_ROUTES = Object.entries(adminNamedRoutes).reduce(

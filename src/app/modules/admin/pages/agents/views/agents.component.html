@@ -1,0 +1,30 @@
+<app-page-data-list
+  [pageTitle]="'مدیریت کارگزاران'"
+  [addNewCtaLabel]="'افزودن کارگزار جدید'"
+  [columns]="columns"
+  [showAdd]="true"
+  [showEdit]="true"
+  [items]="activePageItems"
+  [loading]="loading"
+  [totalRecords]="totalRecords"
+  [currentPage]="activePageIndex + 1"
+  [perPage]="perPage"
+  [fullHeight]="true"
+  [isFiltered]="isFiltered"
+  class="overflow-hidden"
+  (pageChange)="onPageChange($event)"
+  (onAdd)="openAddForm()"
+  (onEdit)="openEditForm($event)"
+>
+  <ng-template #filter let-columns>
+    <admin-agents-filter (onSearch)="onNameFilter($event)" />
+  </ng-template>
+  <ng-template #gender let-item>
+    <catalog-gender-tag [gender]="item.gender" />
+  </ng-template>
+</app-page-data-list>
+<admin-agent-form-dialog
+  [(visible)]="isAddFormVisible"
+  [defaultValues]="selectedItemForEdit()"
+  (save)="onFormSave($event)"
+/>
