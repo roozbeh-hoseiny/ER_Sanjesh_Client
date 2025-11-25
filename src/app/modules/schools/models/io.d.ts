@@ -1,3 +1,5 @@
+import { Maybe } from '@/core';
+
 export interface ISchoolAddressRequest {
   id: string;
   regionId: number;
@@ -68,6 +70,9 @@ export interface ISchoolRawResponse {
   categories: ISchoolCategory[];
   fieldOfStudies: SchoolsFieldOfStudyRaw[];
   bankAccounts: ISchoolBankInfo[];
+  canBuyExamByCredit: boolean;
+  agentInfo: Maybe<any>;
+  remainedCredit: string;
 }
 export interface ISchoolResponse extends Omit<ISchoolRawResponse, 'fieldOfStudies'> {
   fieldOfStudies: SchoolsFieldOfStudy[];

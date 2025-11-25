@@ -49,6 +49,7 @@ export class AdminSchoolsComponent {
     this.breadcrumbService.setItems([adminNamedRoutes.root.meta, adminNamedRoutes.schools.meta]);
   }
 
+  @ViewChild('title', { static: true }) titleTpl!: TemplateRef<any>;
   @ViewChild('boyOrGirl', { static: true }) boyOrGirlTpl!: TemplateRef<any>;
   @ViewChild('status', { static: true }) statusTpl!: TemplateRef<any>;
 
@@ -104,10 +105,16 @@ export class AdminSchoolsComponent {
 
   private setColumns() {
     this.columns = [
-      { field: 'name', header: 'نام مرکز آموزشی', minWidth: '15rem' },
+      {
+        field: 'title',
+        header: 'نام مرکز آموزشی',
+        minWidth: '15rem',
+        customDataModel: this.titleTpl,
+      },
       {
         field: 'uniqueId',
         header: 'شناسه',
+        canCopy: true,
         width: '5rem',
         minWidth: '5rem',
       },

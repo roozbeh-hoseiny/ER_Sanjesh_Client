@@ -1,4 +1,4 @@
-import { PaginatorComponent, UikitEmptyStateComponent } from '@/uikit';
+import { PaginatorComponent, UikitCopyComponent, UikitEmptyStateComponent } from '@/uikit';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -24,6 +24,7 @@ export interface IColumn {
   header: string;
   width?: string;
   minWidth?: string;
+  canCopy?: boolean;
   customDataModel?: TemplateRef<any> | ((item: any) => string | number | boolean);
 }
 
@@ -40,6 +41,7 @@ export interface IColumn {
     PaginatorModule,
     DrawerModule,
     PaginatorComponent,
+    UikitCopyComponent,
   ],
 })
 export class PageDataListComponent<I> {

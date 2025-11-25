@@ -1,0 +1,12 @@
+<div
+  class="relative w-full flex items-center justify-center gap-2 cursor-pointer"
+  (click)="copy($event)"
+  aria-label="کپی"
+>
+  <div class="flex items-center gap-2">
+    <i class="pi pi-copy text-lg"></i>
+  </div>
+
+  {{ text }}
+  <p-popover #op>کپی شد</p-popover>
+</div>

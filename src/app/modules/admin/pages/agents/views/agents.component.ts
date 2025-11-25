@@ -84,6 +84,7 @@ export class AdminAgentsComponent {
       {
         field: 'uniqueId',
         header: 'شناسه',
+        canCopy: true,
         width: '5rem',
         minWidth: '5rem',
       },

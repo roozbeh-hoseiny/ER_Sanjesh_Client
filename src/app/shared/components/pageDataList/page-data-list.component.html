@@ -56,6 +56,9 @@
                   [ngTemplateOutlet]="getTemplate(col)"
                   [ngTemplateOutletContext]="{ $implicit: item }"
                 ></ng-container>
+              } @else if (col.canCopy) {
+                <uikit-copy [text]="getCell(item, col)"></uikit-copy>
+
               } @else {
                 <span>
                   {{ getCell(item, col) }}

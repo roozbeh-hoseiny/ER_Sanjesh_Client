@@ -56,6 +56,10 @@
           />
         </app-key-value>
       </div>
+      @if (info().canBuyExamByCredit) {
+        <p-divider> اطلاعات اعتباری </p-divider>
+        <app-key-value label="اعتبار باقی‌مانده" [value]="`${info().remainedCredit} تومان`" />
+      }
     </div>
   }
 </app-card-data>

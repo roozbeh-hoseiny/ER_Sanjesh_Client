@@ -26,6 +26,15 @@
     />
   </ng-template>
 
+  <ng-template #title let-item>
+    <div class="flex items-center gap-1">
+      {{ item.name }}
+      <i class="pi pi-dollar" [style]="{ color: item.canBuyExamByCredit ? 'text-green-500' : 'text-gray-300' }"></i>
+      @if (item.agentInfo) {
+        <i class="pi pi-user" [style]="{ color: 'text-gray-400' }"></i>
+      }
+    </div>
+  </ng-template>
   <ng-template #boyOrGirl let-item>
     <app-school-genders-tag [genderId]="item.boyOrGirl"></app-school-genders-tag>
   </ng-template>

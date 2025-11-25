@@ -24,7 +24,7 @@ export class TeachersSimpleListComponent {
   columns = [
     { field: 'fullname', header: 'نام دبیر', minWidth: '14rem' },
     { field: 'mobile', header: 'شماره موبایل', width: '10rem' },
-    { field: 'uniqueId', header: 'شناسه', width: '5rem' },
+    { field: 'uniqueId', header: 'شناسه', canCopy: true, width: '5rem' },
     { field: 'lessons', header: 'تعداد دروس', customDataModel: this.lessonsTpl, width: '8rem' },
   ] as IColumn[];
 

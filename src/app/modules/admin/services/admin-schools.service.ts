@@ -93,6 +93,42 @@ export class AdminSchoolsService {
     );
   }
 
+  filterByCanUseCredit(
+    paginatedQuery: IPaginatedQuery,
+  ): Observable<IPaginatedResponse<IAdminSchoolResponse>> {
+    return this.http.post<IPaginatedResponse<IAdminSchoolResponse>>(
+      this.apiRoutes.schools.byCanUseCredit(),
+      {
+        ...PAGINATED_QUERY_DEFAULT_VALUES,
+        ...paginatedQuery,
+      },
+    );
+  }
+
+  filterByCanNotUseCredit(
+    paginatedQuery: IPaginatedQuery,
+  ): Observable<IPaginatedResponse<IAdminSchoolResponse>> {
+    return this.http.post<IPaginatedResponse<IAdminSchoolResponse>>(
+      this.apiRoutes.schools.byCanNotUseCredit(),
+      {
+        ...PAGINATED_QUERY_DEFAULT_VALUES,
+        ...paginatedQuery,
+      },
+    );
+  }
+
+  filterByWithoutAgent(
+    paginatedQuery: IPaginatedQuery,
+  ): Observable<IPaginatedResponse<IAdminSchoolResponse>> {
+    return this.http.post<IPaginatedResponse<IAdminSchoolResponse>>(
+      this.apiRoutes.schools.byWithoutAgent(),
+      {
+        ...PAGINATED_QUERY_DEFAULT_VALUES,
+        ...paginatedQuery,
+      },
+    );
+  }
+
   addSchool(data?: ISchoolRequest): Observable<IAdminSchoolResponse> {
     return this.http.post<IAdminSchoolResponse>(this.apiRoutes.schools.add(), data);
   }
