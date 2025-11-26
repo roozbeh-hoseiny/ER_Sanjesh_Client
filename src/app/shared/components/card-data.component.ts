@@ -18,6 +18,7 @@ export class AppCardComponent {
   @Output() onEdit = new EventEmitter<void>();
 
   @ContentChild('header', { static: true }) header?: Maybe<TemplateRef<any>>;
+  @ContentChild('moreAction', { static: true }) moreAction?: Maybe<TemplateRef<any>>;
 
   constructor() {
     if (this.editable) {

@@ -28,6 +28,13 @@ export interface SchoolDetailsService {
   editBankInfo(request: ISchoolBankInfoEditRequestPayload): Observable<boolean>;
   removeBankInfo(request: ISchoolBankInfoRemoveRequestPayload): Observable<boolean>;
   updateContact(payload: ISchoolContactRequest): Observable<boolean>;
+
+  enableCanEdit(schoolId: string): Observable<boolean>;
+  disableCanEdit(schoolId: string): Observable<boolean>;
+
+  enableCanPurchaseByCredit(schoolId: string): Observable<boolean>;
+  disableCanPurchaseByCredit(schoolId: string): Observable<boolean>;
+
   validateContactEmail(id: string): Observable<boolean>;
   validateContactMobile(id: string): Observable<boolean>;
   validateManagerEmail(id: string): Observable<boolean> | void;

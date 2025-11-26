@@ -1,4 +1,18 @@
 <app-card-data cardTitle="اطلاعات کارگزار" [editable]="canEdit" [editMode]="editMode()" (onEdit)="onEdit()">
+  <ng-template #moreAction>
+    @if (agent) {
+      <button
+        pButton
+        type="button"
+        icon="pi pi-times"
+        outlined
+        severity="danger"
+        [loading]="onRemoveLoading()"
+        (click)="removeAgent()"
+        label="حذف کارگزار"
+      ></button>
+    }
+  </ng-template>
   @if (agent) {
     <div class="flex flex-col gap-4">
       <div class="grid grid-cols-3 gap-4 items-center">

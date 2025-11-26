@@ -34,6 +34,7 @@ interface ISchoolDetailsCardsState {
   showContactValidateInlineConfirmation?: boolean;
   showContactCard?: boolean;
   canEditInfo: boolean;
+  canEditEditStatus: boolean;
   canEditBankAccounts: boolean;
   canEditAddress: boolean;
   canEditContact: boolean;
@@ -55,6 +56,7 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   showContactValidateInlineConfirmation: false,
   showContactCard: false,
   canEditInfo: false,
+  canEditEditStatus: false,
   canEditBankAccounts: false,
   canEditAddress: false,
   canEditContact: false,
@@ -112,6 +114,7 @@ export class SchoolDetailsCardsStore {
   readonly showContactCard = computed(() => Boolean(this.state$().showContactCard));
   readonly showAgentCard = computed(() => Boolean(this.state$().showAgentCard));
   readonly canEditInfo = computed(() => !!this.state$().canEditInfo);
+  readonly canEditEditStatus = computed(() => !!this.state$().canEditEditStatus);
   readonly canEditBankAccounts = computed(() => !!this.state$().canEditBankAccounts);
   readonly canEditAddress = computed(() => !!this.state$().canEditAddress);
   readonly canEditContact = computed(() => !!this.state$().canEditContact);
@@ -302,6 +305,42 @@ export class SchoolDetailsCardsStore {
         this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
       }),
     );
+  }
+
+  updateCanEditInfo(schoolId: string, status: boolean) {
+    if (status) {
+      if (this.service.enableCanEdit === undefined) return of();
+      return this.service.enableCanEdit(schoolId).pipe(
+        tap(() => {
+          this.toastService.success({ text: 'امکان ویرایش با موفقیت فعال شد.' });
+        }),
+      );
+    } else {
+      if (this.service.disableCanEdit === undefined) return of();
+      return this.service.disableCanEdit(schoolId).pipe(
+        tap(() => {
+          this.toastService.success({ text: 'امکان ویرایش با موفقیت غیر فعال شد.' });
+        }),
+      );
+    }
+  }
+
+  updateCanPurchaseByCredit(schoolId: string, status: boolean) {
+    if (status) {
+      if (this.service.enableCanPurchaseByCredit === undefined) return of();
+      return this.service.enableCanPurchaseByCredit(schoolId).pipe(
+        tap(() => {
+          this.toastService.success({ text: 'امکان خرید اعتباری با موفقیت فعال شد.' });
+        }),
+      );
+    } else {
+      if (this.service.disableCanPurchaseByCredit === undefined) return of();
+      return this.service.disableCanPurchaseByCredit(schoolId).pipe(
+        tap(() => {
+          this.toastService.success({ text: 'امکان خرید اعتباری با موفقیت غیر فعال شد.' });
+        }),
+      );
+    }
   }
 
   attachAgent(payload: IAttachAgentToSchoolRequestPayload) {

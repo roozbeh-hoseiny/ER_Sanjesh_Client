@@ -52,21 +52,29 @@ export class AdminSchoolComponent {
       editInfo: (req: ISchoolInfoRequest) => this.schoolService.updateInfo(req),
       editAddress: (req: any) => this.schoolService.updateAddress(req),
       updateContact: (req: any) => this.schoolService.updateContact(req),
+
       addBankInfo: (payload) => this.schoolService.addBankInfo(payload),
       editBankInfo: (payload) => this.schoolService.editBankInfo(payload),
       removeBankInfo: (payload) => this.schoolService.removeBankInfo(payload),
+
+      enableCanEdit: (schoolId: string) => this.schoolService.enableEdit(schoolId),
+      disableCanEdit: (schoolId: string) => this.schoolService.disableEdit(schoolId),
+
       attachAgent: (payload: IAttachAgentToSchoolRequestPayload) =>
         this.schoolService.attachAgent(payload),
       detachAgent: (payload: IDetachAgentToSchoolRequestPayload) =>
         this.schoolService.detachAgent(payload),
+
       attachCategory: (payload: IAttachCategoryToSchoolRequestPayload) =>
         this.schoolService.attachCategory(payload),
       detachCategory: (payload: IDetachCategoryToSchoolRequestPayload) =>
         this.schoolService.detachCategory(payload),
+
       attachField: (payload: IAttachFieldToSchoolRequestPayload) =>
         this.schoolService.attachField(payload),
       detachField: (payload: IDetachFieldToSchoolRequestPayload) =>
         this.schoolService.detachField(payload),
+
       validateContactEmail: (id: string) => this.schoolService.validateContactEmail(id),
       validateContactMobile: (id: string) => this.schoolService.validateContactMobile(id),
       validateManagerEmail: (id: string) => this.schoolService.validateManagerEmail(id),

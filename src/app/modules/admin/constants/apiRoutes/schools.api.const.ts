@@ -19,6 +19,11 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     deactivate: () => `${schoolsBaseUrl}/DeactivateSchool`,
     updateInfo: () => `${schoolsBaseUrl}/EditSchool`,
     updateAddress: () => `${schoolsBaseUrl}/ChangeAddress`,
+    enableEdit: () => `${schoolsBaseUrl}/EnableEdit`,
+    disableEdit: () => `${schoolsBaseUrl}/DisableEdit`,
+    enablePurchaseOnCredit: () => `${schoolsBaseUrl}/EnablePurchaseOnCredit`,
+    disablePurchaseOnCredit: () => `${schoolsBaseUrl}/DisablePurchaseOnCredit`,
+
     updateContact: () => `${schoolsBaseUrl}/ChangeContactInfo`,
     attachAgent: () => `${schoolsBaseUrl}/AssignAgent`,
     detachAgent: () => `${schoolsBaseUrl}/UnassignAgent`,

@@ -171,6 +171,24 @@ export class AdminSchoolsService {
     return this.http.post<boolean>(this.apiRoutes.schools.updateAddress(), payload);
   }
 
+  enableEdit(schoolId: string) {
+    return this.http.post<boolean>(this.apiRoutes.schools.enableEdit(), { id: schoolId });
+  }
+  disableEdit(schoolId: string) {
+    return this.http.post<boolean>(this.apiRoutes.schools.disableEdit(), { id: schoolId });
+  }
+
+  enablePurchaseOnCredit(schoolId: string) {
+    return this.http.post<boolean>(this.apiRoutes.schools.enablePurchaseOnCredit(), {
+      id: schoolId,
+    });
+  }
+  disablePurchaseOnCredit(schoolId: string) {
+    return this.http.post<boolean>(this.apiRoutes.schools.disablePurchaseOnCredit(), {
+      id: schoolId,
+    });
+  }
+
   // bank info methods
   addBankInfo(payload: ISchoolBankInfoAddRequestPayload) {
     return this.http.post<boolean>(this.apiRoutes.schools.addBankInfo(), payload);

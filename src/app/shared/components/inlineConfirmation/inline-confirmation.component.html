@@ -1,0 +1,9 @@
+<div class="inline-flex items-center gap-2 flex-wrap">
+  <p-badge
+    [value]="value ? confirmedMessage : rejectedMessage"
+    [severity]="value ? 'success' : 'danger'"
+    class="cursor-pointer"
+    (click)="onClick($event)"
+  />
+  <p-confirmpopup />
+</div>

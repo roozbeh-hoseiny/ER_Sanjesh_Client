@@ -23,6 +23,18 @@
         </app-key-value>
         <app-key-value label="نوع اسکنر" [value]="info().scannerType || 'ندارد'" />
         <app-key-value label="تلفن تماس" [value]="info().phoneNumber" />
+        <app-key-value label="امکان ویرایش">
+          <inline-confirmation
+            [value]="info().canEdit"
+            confirmedMessage="بله"
+            rejectedMessage="خیر"
+            confirmationHeader="آیا مطمینید؟"
+            [onConfirmMessage]="'آیا از دادن امکان ویرایش به این مدرسه مطمینید؟'"
+            [onRejectMessage]="'آیا از لغو امکان ویرایش این مدرسه مطمینید؟'"
+            (onConfirm)="updateCanEdit(true)"
+            (onReject)="updateCanEdit(false)"
+          />
+        </app-key-value>
       </div>
       <p-divider> دسته‌بندی مدرسه </p-divider>
       <app-school-info-categories
