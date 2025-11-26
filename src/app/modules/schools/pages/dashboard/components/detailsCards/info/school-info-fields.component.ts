@@ -2,10 +2,12 @@ import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
 import { FieldsSelectComponent, IFieldOfStudiesResponse } from '@/shared/catalog';
 import { KeyValueComponent } from '@/shared/components';
+import { UikitLabelComponent } from '@/uikit';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
+import { Message } from 'primeng/message';
 import { Tag } from 'primeng/tag';
 import { filter } from 'rxjs';
 import { SchoolDetailsCardsStore } from '../store';
@@ -20,6 +22,8 @@ import { SchoolDetailsCardsStore } from '../store';
     ButtonDirective,
     FieldsSelectComponent,
     Tag,
+    UikitLabelComponent,
+    Message,
   ],
   host: {
     class: 'w-full block',

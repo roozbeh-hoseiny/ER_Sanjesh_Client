@@ -12,6 +12,7 @@ import { IFieldOfStudiesResponse } from '../models';
   standalone: true,
   imports: [CommonModule, UikitFieldComponent, SelectModule, ReactiveFormsModule],
   templateUrl: './fields-select.component.html',
+  host: { class: 'w-full' },
 })
 export class FieldsSelectComponent {
   @Input() control!: FormControl<Maybe<IFieldOfStudiesResponse>>;

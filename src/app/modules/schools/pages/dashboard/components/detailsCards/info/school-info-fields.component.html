@@ -1,43 +1,46 @@
 <div class="flex flex-col gap-2 w-full">
-  <app-key-value label="دروس" class="w-full">
-    <div class="flex w-full flex-wrap gap-4">
-      @if (fields.length) {
-        <div class="inline-flex items-center gap-2 flex-wrap">
-          @for (field of fields; track field.id) {
-            <p-tag severity="info">
-              <div class="flex items-center gap-3">
-                <span class="text-sm">{{ `${field.title} - ${field.educationalLevelTitle}` }}</span>
-                @if (editable) {
-                  <button
-                    pButton
-                    type="button"
-                    icon="pi pi-times"
-                    size="small"
-                    text
-                    severity="secondary"
-                    class="w-5 h-5"
-                    [loading]="detachScheduleLoading().includes(field.id)"
-                    (click)="detach(field.id)"
-                  ></button>
-                }
-              </div>
-            </p-tag>
-          }
-        </div>
-      } @else {
-        دسته‌بندی در نظر گرفته نشده است
-      }
-    </div>
-  </app-key-value>
+  <div class="flex w-full flex-wrap gap-4">
+    @if (fields.length) {
+      <div class="inline-flex items-center gap-2 flex-wrap">
+        @for (field of fields; track field.id) {
+          <p-tag severity="info">
+            <div class="flex items-center gap-3">
+              <span class="text-sm">{{ `${field.title} - ${field.educationalLevelTitle}` }}</span>
+              @if (editable) {
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-times"
+                  size="small"
+                  text
+                  severity="secondary"
+                  class="w-5 h-5"
+                  [loading]="detachScheduleLoading().includes(field.id)"
+                  (click)="detach(field.id)"
+                ></button>
+              }
+            </div>
+          </p-tag>
+        }
+      </div>
+    } @else {
+      <div class="w-full flex items-center justify-center">
+        <p-message severity="warn" icon="pi pi-exclamation-triangle">درسی در نظر گرفته نشده است</p-message>
+      </div>
+    }
+  </div>
 
   @if (editable) {
-    <catalog-fields-select
-      [control]="fieldControl"
-      [filters]="selectedFields()"
-      [showLabel]="false"
-      [loading]="loading()"
-      class="max-w-xs"
-      placeholder="رشته را انتخاب کنید"
-    />
+    <div class="w-full flex items-center justify-center gap-4 mt-8">
+      <uikit-label>افزودن درس جدید:</uikit-label>
+      <catalog-fields-select
+        [control]="fieldControl"
+        [filters]="selectedFields()"
+        [showLabel]="false"
+        [loading]="loading()"
+        class="max-w-xs"
+        placeholder="درس را انتخاب کنید"
+      />
+    </div>
   }
 </div>

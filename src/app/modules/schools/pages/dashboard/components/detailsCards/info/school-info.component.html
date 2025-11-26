@@ -24,11 +24,13 @@
         <app-key-value label="نوع اسکنر" [value]="info().scannerType || 'ندارد'" />
         <app-key-value label="تلفن تماس" [value]="info().phoneNumber" />
       </div>
+      <p-divider> دسته‌بندی مدرسه </p-divider>
       <app-school-info-categories
         [categories]="categories()"
         [editable]="canEditCategories()"
         (onUpdate)="submitForm()"
       />
+      <p-divider> لیست دروس </p-divider>
       <app-school-info-fields
         [fields]="info().fieldOfStudies"
         [editable]="canEditCategories()"

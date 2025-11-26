@@ -6,11 +6,13 @@ import {
   ICategoryFullTreeResponse,
 } from '@/modules/admin/pages/schools/models/schools';
 import { KeyValueComponent } from '@/shared/components';
+import { UikitLabelComponent } from '@/uikit';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { Chip } from 'primeng/chip';
+import { Message } from 'primeng/message';
 import { filter } from 'rxjs';
 import { SchoolDetailsCardsStore } from '../store';
 
@@ -24,6 +26,8 @@ import { SchoolDetailsCardsStore } from '../store';
     CommonModule,
     Chip,
     ButtonDirective,
+    Message,
+    UikitLabelComponent,
   ],
   host: {
     class: 'w-full block',
