@@ -5,7 +5,15 @@ import { ISchoolResponse } from '@/modules/schools/models';
 import { computed, Injectable, signal } from '@angular/core';
 import { IAdminSchoolResponse } from '../models/schools';
 
-type TGetDataMode = 'all' | 'search' | 'gender' | 'category' | 'region';
+type TGetDataMode =
+  | 'all'
+  | 'search'
+  | 'gender'
+  | 'category'
+  | 'region'
+  | 'withoutAgent'
+  | 'canUseCredit'
+  | 'canNotUseCredit';
 
 interface ISchoolsState {
   schools: Maybe<ISchoolResponse>;
@@ -19,6 +27,9 @@ interface ISchoolsState {
   selectedGender: Maybe<number>;
   selectedRegion: Maybe<number>;
   selectedCategories: Maybe<number>;
+  selectedWithoutAgent: Maybe<boolean>;
+  selectedCanUseCredit: Maybe<boolean>;
+  selectedCanNotUseCredit: Maybe<boolean>;
 
   getDataMode: TGetDataMode;
 }
@@ -35,6 +46,9 @@ export const INITIAL_SCHOOLS_STATE: ISchoolsState = {
   selectedGender: null,
   selectedRegion: null,
   selectedCategories: null,
+  selectedWithoutAgent: null,
+  selectedCanUseCredit: null,
+  selectedCanNotUseCredit: null,
   getDataMode: 'all',
 };
 
@@ -50,6 +64,9 @@ export class SchoolsStore {
   readonly selectedGender = computed(() => this.state$().selectedGender);
   readonly selectedRegion = computed(() => this.state$().selectedRegion);
   readonly selectedCategories = computed(() => this.state$().selectedCategories);
+  readonly selectedWithoutAgent = computed(() => this.state$().selectedWithoutAgent);
+  readonly selectedCanUseCredit = computed(() => this.state$().selectedCanUseCredit);
+  readonly selectedCanNotUseCredit = computed(() => this.state$().selectedCanNotUseCredit);
   readonly paginatedItems = computed(() => this.state$().paginatedItems);
 
   readonly getDataMode = computed(() => this.state$().getDataMode);
@@ -120,6 +137,35 @@ export class SchoolsStore {
     this.getByRegion();
   }
 
+  onWithoutAgentFilter(withoutAgent: Maybe<boolean>) {
+    this.validateFilterData(withoutAgent, 'withoutAgent');
+    if (this.selectedWithoutAgent() !== withoutAgent) {
+      this.resetPaginateInfo();
+      this.setState({ selectedWithoutAgent: withoutAgent });
+    }
+    this.getByWithoutAgent();
+  }
+
+  onCanUseCreditFilter(canUseCredit: Maybe<boolean>) {
+    this.validateFilterData(canUseCredit, 'canUseCredit');
+    if (this.selectedCanUseCredit() !== canUseCredit) {
+      this.resetPaginateInfo();
+      this.setState({ selectedCanUseCredit: canUseCredit });
+    }
+    this.getByCanUseCredit();
+  }
+
+  onCanNotUseCreditFilter(canNotUseCredit: Maybe<boolean>) {
+    this.validateFilterData(canNotUseCredit, 'canNotUseCredit');
+    console.log('onCanNotUseCreditFilter called with:', canNotUseCredit);
+
+    if (this.selectedCanNotUseCredit() !== canNotUseCredit) {
+      this.resetPaginateInfo();
+      this.setState({ selectedCanNotUseCredit: canNotUseCredit });
+    }
+    this.getByCanNotUseCredit();
+  }
+
   initial() {
     this.reset();
     this.getData();
@@ -137,13 +183,21 @@ export class SchoolsStore {
         return this.getByCategories();
       case 'region':
         return this.getByRegion();
+      case 'withoutAgent':
+        return this.getByWithoutAgent();
+      case 'canUseCredit':
+        return this.getByCanUseCredit();
+      case 'canNotUseCredit':
+        return this.getByCanNotUseCredit();
       default:
         return this.getAll();
     }
   }
 
-  private validateFilterData(value: Maybe<string | number>, mode: TGetDataMode) {
-    if (!value) {
+  private validateFilterData(value: Maybe<string | number | boolean>, mode: TGetDataMode) {
+    console.log(typeof value);
+
+    if ((typeof value !== 'boolean' && !value) || value === null) {
       this.changeGetDataMode('all');
       return this.getData();
     }
@@ -199,6 +253,30 @@ export class SchoolsStore {
     this.services
       .filterByRegion(this.selectedRegion()!, this.paginatedQuery())
       .subscribe({ ...this.onResponse });
+  }
+
+  private getByWithoutAgent() {
+    if (!this.selectedWithoutAgent()) {
+      return;
+    }
+    this.setState({ loading: true });
+    this.services.filterByWithoutAgent(this.paginatedQuery()).subscribe({ ...this.onResponse });
+  }
+
+  private getByCanUseCredit() {
+    if (!this.selectedCanUseCredit()) {
+      return;
+    }
+    this.setState({ loading: true });
+    this.services.filterByCanUseCredit(this.paginatedQuery()).subscribe({ ...this.onResponse });
+  }
+
+  private getByCanNotUseCredit() {
+    if (this.selectedCanNotUseCredit() === null) {
+      return;
+    }
+    this.setState({ loading: true });
+    this.services.filterByCanNotUseCredit(this.paginatedQuery()).subscribe({ ...this.onResponse });
   }
 
   private onResponse = {

@@ -97,6 +97,15 @@ export class AdminSchoolsComponent {
   onRegionFilter(regionId: Maybe<number>) {
     this.store.onRegionFilter(regionId);
   }
+  onCanUseCreditFilter(canUseCredit: Maybe<boolean>) {
+    this.store.onCanUseCreditFilter(canUseCredit);
+  }
+  onCanNotUseCreditFilter(canNotUseCredit: Maybe<boolean>) {
+    this.store.onCanNotUseCreditFilter(canNotUseCredit);
+  }
+  onWithoutAgentFilter(withoutAgent: Maybe<boolean>) {
+    this.store.onWithoutAgentFilter(withoutAgent);
+  }
 
   ngOnInit(): void {
     this.setColumns();

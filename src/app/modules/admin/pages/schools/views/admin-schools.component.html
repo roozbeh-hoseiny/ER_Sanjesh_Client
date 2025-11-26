@@ -23,15 +23,18 @@
       (onGenderFilter)="onGenderFilter($event)"
       (onCategoryFilter)="onCategoriesFilter($event)"
       (onRegionFilter)="onRegionFilter($event)"
+      (onCanUseCreditFilter)="onCanUseCreditFilter($event)"
+      (onCanNotUseCreditFilter)="onCanNotUseCreditFilter($event)"
+      (onWithoutAgentFilter)="onWithoutAgentFilter($event)"
     />
   </ng-template>
 
   <ng-template #title let-item>
     <div class="flex items-center gap-1">
       {{ item.name }}
-      <i class="pi pi-dollar" [style]="{ color: item.canBuyExamByCredit ? 'text-green-500' : 'text-gray-300' }"></i>
+      <i class="pi pi-dollar" [class]="item.canBuyExamByCredit ? 'text-green-500' : 'text-gray-400'"></i>
       @if (item.agentInfo) {
-        <i class="pi pi-user" [style]="{ color: 'text-gray-400' }"></i>
+        <i class="pi pi-user" [class]="'text-gray-400'"></i>
       }
     </div>
   </ng-template>

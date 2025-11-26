@@ -22,16 +22,10 @@
 
   <hr />
 
-  <!-- <app-schools-categories-cascade (selectionChange)="onCategoryChange($event)" (selectionClear)="onCategoryChange()" /> -->
   <app-schools-categories-tree-select
     (selectionChange)="onCategoryChange($event.id)"
     (selectionClear)="onCategoryChange()"
   />
-  <!-- <p-inputgroup class="w-full">
-    <p-inputgroup-addon>
-      <p-button icon="pi pi-times" severity="secondary" (onClick)="clearSearch()"></p-button>
-    </p-inputgroup-addon>
-  </p-inputgroup> -->
 
   <hr />
 
@@ -47,5 +41,39 @@
         ></p-button>
       }
     </div>
+  </div>
+
+  <hr />
+
+  <uikit-field label="امکان استفاده از اعتبار">
+    <p-select
+      [showClear]="true"
+      placeholder="انتخاب کنید"
+      [options]="[
+        {
+          label: 'بله',
+          value: 'true',
+        },
+        {
+          label: 'خیر',
+          value: 'false',
+        },
+      ]"
+      (onChange)="onUseCreditValueChange($event.value === 'true')"
+      (onClear)="onCanNotUseCreditChange()"
+    >
+    </p-select>
+  </uikit-field>
+  <hr />
+
+  <div class="flex gap-3">
+    <p-checkbox
+      value="مدارس بدون کارگزار"
+      inputId="withoutAgentFilter"
+      [ngModel]="selectedWithoutAgent()"
+      [binary]="true"
+      (ngModelChange)="onWithoutAgentChange($event)"
+    ></p-checkbox>
+    <uikit-label name="withoutAgentFilter"> مدارس بدون کارگزار </uikit-label>
   </div>
 </div>
