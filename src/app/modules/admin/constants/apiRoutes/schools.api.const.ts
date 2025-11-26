@@ -20,6 +20,8 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     updateInfo: () => `${schoolsBaseUrl}/EditSchool`,
     updateAddress: () => `${schoolsBaseUrl}/ChangeAddress`,
     updateContact: () => `${schoolsBaseUrl}/ChangeContactInfo`,
+    attachAgent: () => `${schoolsBaseUrl}/AssignAgent`,
+    detachAgent: () => `${schoolsBaseUrl}/UnassignAgent`,
     attachCategory: () => `${schoolsBaseUrl}/AssignCategory`,
     detachCategory: () => `${schoolsBaseUrl}/UnassignCategory`,
     attachField: () => `${schoolsBaseUrl}/AssignFieldOfStudy`,

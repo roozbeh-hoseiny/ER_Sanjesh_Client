@@ -15,11 +15,13 @@ import { ADMIN_API_ROUTES } from '../constants/apiRoutes';
 import {
   IAdminSchoolRawResponse,
   IAdminSchoolResponse,
+  IAttachAgentToSchoolRequestPayload,
   IAttachCategoryToSchoolRequestPayload,
   IAttachFieldToSchoolRequestPayload,
   ICategoryFullTreeResponse,
   ICreateCategoryRequestPayload,
   ICreateSubCategoryRequestPayload,
+  IDetachAgentToSchoolRequestPayload,
   IDetachCategoryToSchoolRequestPayload,
   IDetachFieldToSchoolRequestPayload,
   ISchoolRequest,
@@ -236,6 +238,13 @@ export class AdminSchoolsService {
   }
   addSubCategory(payload: ICreateSubCategoryRequestPayload): Observable<boolean> {
     return this.http.post<boolean>(this.apiRoutes.schools.addSubCategory(), payload);
+  }
+
+  attachAgent(payload: IAttachAgentToSchoolRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.attachAgent(), payload);
+  }
+  detachAgent(payload: IDetachAgentToSchoolRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.schools.detachAgent(), payload);
   }
 
   attachCategory(payload: IAttachCategoryToSchoolRequestPayload): Observable<boolean> {

@@ -122,8 +122,6 @@ export class AdminSchoolsFilterComponent {
   onCanNotUseCreditChange(canNotUseCredit: Maybe<boolean> = null) {
     this.resetFilters();
     this.selectedCanNotUseCredit.set(canNotUseCredit);
-    console.log('first', 'onCanNotUseCreditChange called with:', canNotUseCredit);
-
     this.onCanNotUseCreditFilter.emit(canNotUseCredit);
   }
 

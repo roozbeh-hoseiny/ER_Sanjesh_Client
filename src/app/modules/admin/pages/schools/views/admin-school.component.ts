@@ -4,6 +4,7 @@ import { LayoutService } from '@/layout/service/layout.service';
 import { adminNamedRoutes } from '@/modules/admin/constants';
 import { adminSchoolNamedRoutes } from '@/modules/admin/constants/routes';
 import { AdminSchoolsService } from '@/modules/admin/services';
+import { AdminAgentsService } from '@/modules/admin/services/admin-agents.service';
 import { ISchoolContactRequest, ISchoolInfoRequest } from '@/modules/schools/models';
 import { SchoolDetailsComponent } from '@/modules/schools/pages/dashboard/components/detailsCards/school-details.component';
 import { SchoolDetailsCardsStore } from '@/modules/schools/pages/dashboard/components/detailsCards/store';
@@ -13,8 +14,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import {
   IAdminSchoolResponse,
+  IAttachAgentToSchoolRequestPayload,
   IAttachCategoryToSchoolRequestPayload,
   IAttachFieldToSchoolRequestPayload,
+  IDetachAgentToSchoolRequestPayload,
   IDetachCategoryToSchoolRequestPayload,
   IDetachFieldToSchoolRequestPayload,
 } from '../models/schools';
@@ -38,18 +41,24 @@ export class AdminSchoolComponent {
     private breadcrumbService: BreadcrumbService,
     private schoolDetailsStore: SchoolDetailsCardsStore,
     private schoolsInfoService: SchoolsInfoService,
+    private agentsService: AdminAgentsService,
   ) {
     this.layoutService.changeIsFixedContentSize(true);
 
     this.schoolDetailsStore.setService({
       getTeachers: (schoolUniqueId: string, schoolId: string) =>
         this.schoolsInfoService.getTeachers(schoolId),
+      searchForAgent: (uniqueId: string) => this.agentsService.getByUniqueId(uniqueId),
       editInfo: (req: ISchoolInfoRequest) => this.schoolService.updateInfo(req),
       editAddress: (req: any) => this.schoolService.updateAddress(req),
       updateContact: (req: any) => this.schoolService.updateContact(req),
       addBankInfo: (payload) => this.schoolService.addBankInfo(payload),
       editBankInfo: (payload) => this.schoolService.editBankInfo(payload),
       removeBankInfo: (payload) => this.schoolService.removeBankInfo(payload),
+      attachAgent: (payload: IAttachAgentToSchoolRequestPayload) =>
+        this.schoolService.attachAgent(payload),
+      detachAgent: (payload: IDetachAgentToSchoolRequestPayload) =>
+        this.schoolService.detachAgent(payload),
       attachCategory: (payload: IAttachCategoryToSchoolRequestPayload) =>
         this.schoolService.attachCategory(payload),
       detachCategory: (payload: IDetachCategoryToSchoolRequestPayload) =>
@@ -73,8 +82,10 @@ export class AdminSchoolComponent {
         this.schoolDetailsStore.fillInitial({
           school: info,
           showContactCard: true,
+          showAgentCard: true,
           canEditAddress: true,
           canEditInfo: true,
+          canEditAgent: true,
           canEditLoginInfo: true,
           showBankAccountsCard: true,
           canEditBankAccounts: true,

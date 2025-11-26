@@ -1,6 +1,7 @@
 import { ISchoolContactRequest } from '@/modules/schools/models';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { SchoolAddress } from './address/school-address.component';
+import { SchoolAgentComponent } from './agent';
 import { SchoolInfoBankAccountsComponent } from './bankAccounts';
 import { SchoolContactComponent } from './contact/school-contact.component';
 import { SchoolInfoComponent } from './info/school-info.component';
@@ -18,6 +19,7 @@ import { TeachersSimpleListComponent } from './teachers/teachers-simple-list.com
     SchoolContactComponent,
     TeachersSimpleListComponent,
     SchoolInfoBankAccountsComponent,
+    SchoolAgentComponent,
   ],
 })
 export class SchoolDetailsComponent {
@@ -40,6 +42,9 @@ export class SchoolDetailsComponent {
 
   get showContactCard() {
     return this.detailsStore.showContactCard();
+  }
+  get showAgentCard() {
+    return this.detailsStore.showAgentCard();
   }
 
   get canEditInfo() {

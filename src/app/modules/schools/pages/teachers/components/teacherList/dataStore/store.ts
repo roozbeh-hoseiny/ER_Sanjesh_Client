@@ -212,8 +212,6 @@ export class SchoolTeacherListStore {
   }
 
   getTeacher(uniqueId: string) {
-    console.log(this.service.getTeacher);
-
     if (this.service.getTeacher === undefined) return of();
     return this.service.getTeacher(uniqueId);
   }

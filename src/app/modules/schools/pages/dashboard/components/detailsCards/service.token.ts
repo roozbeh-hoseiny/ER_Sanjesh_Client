@@ -1,6 +1,9 @@
+import { IAdminAgentResponse } from '@/modules/admin/pages/agents/models';
 import {
+  IAttachAgentToSchoolRequestPayload,
   IAttachCategoryToSchoolRequestPayload,
   IAttachFieldToSchoolRequestPayload,
+  IDetachAgentToSchoolRequestPayload,
   IDetachCategoryToSchoolRequestPayload,
   IDetachFieldToSchoolRequestPayload,
 } from '@/modules/admin/pages/schools/models/schools';
@@ -18,6 +21,7 @@ import { ISchoolTeacherRawResponse } from '../../../teachers/models';
 
 export interface SchoolDetailsService {
   getTeachers(schoolUniqueId: string, schoolId: string): Observable<ISchoolTeacherRawResponse[]>;
+  searchForAgent(uniqueId: string): Observable<IAdminAgentResponse>;
   editInfo(request: ISchoolInfoRequest): Observable<boolean>;
   editAddress(request: ISchoolAddressRequest): Observable<boolean>;
   addBankInfo(request: ISchoolBankInfoAddRequestPayload): Observable<boolean>;
@@ -32,6 +36,9 @@ export interface SchoolDetailsService {
   invalidateContactMobile(id: string): Observable<boolean>;
   invalidateManagerEmail(id: string): Observable<boolean>;
   invalidateManagerMobile(id: string): Observable<boolean>;
+
+  attachAgent(payload: IAttachAgentToSchoolRequestPayload): Observable<boolean>;
+  detachAgent(payload: IDetachAgentToSchoolRequestPayload): Observable<boolean>;
 
   attachCategory(payload: IAttachCategoryToSchoolRequestPayload): Observable<boolean>;
   detachCategory(payload: IDetachCategoryToSchoolRequestPayload): Observable<boolean>;

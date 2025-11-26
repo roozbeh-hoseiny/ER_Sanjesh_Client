@@ -38,6 +38,12 @@ export interface ICreateSubCategoryRequestPayload {
   parentId: number;
 }
 
+export interface IAttachAgentToSchoolRequestPayload {
+  id: string;
+  agentId: number;
+}
+export interface IDetachAgentToSchoolRequestPayload extends IAttachAgentToSchoolRequestPayload {}
+
 export interface IAttachCategoryToSchoolRequestPayload {
   id: string;
   categoryId: number;

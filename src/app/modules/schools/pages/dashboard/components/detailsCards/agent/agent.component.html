@@ -1,0 +1,22 @@
+<app-card-data cardTitle="اطلاعات کارگزار" [editable]="canEdit" [editMode]="editMode()" (onEdit)="onEdit()">
+  @if (agent) {
+    <div class="flex flex-col gap-4">
+      <div class="grid grid-cols-3 gap-4 items-center">
+        <app-key-value label="نام" [value]="agent.firstName" />
+        <app-key-value label="نام خانوادگی" [value]="agent.lastName" />
+        <app-key-value label="جنسیت" [value]="agent.gender === null ? '-' : agent.gender ? 'مرد' : 'زن'" />
+        <app-key-value label="تلفن همراه" [value]="agent.mobile" />
+        <app-key-value label="ایمیل" [value]="agent.email" />
+      </div>
+    </div>
+  } @else {
+    <div class="w-full flex items-center justify-center">
+      <p-message severity="warn" icon="pi pi-exclamation-triangle">کارگزاری در نظر گرفته نشده است</p-message>
+    </div>
+  }
+  @if (canEdit && editMode()) {
+    <div class="mt-8">
+      <app-school-agent-form (closeForm)="closeForm()" (submitForm)="onSubmitForm()" />
+    </div>
+  }
+</app-card-data>

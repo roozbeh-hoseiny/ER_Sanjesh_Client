@@ -3,6 +3,9 @@
   @if (showContactCard) {
     <app-school-contact (onSubmit)="submitContact($event)" (onSubmitted)="refreshData()" />
   }
+  @if (showAgentCard) {
+    <app-school-agent (onSubmitted)="refreshData()" />
+  }
   <app-school-address (onSubmitted)="refreshData()" />
   @if (showTeachersCard) {
     <school-teachers-simple-list />

@@ -1,10 +1,9 @@
 import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
 import {
-  IAttachCategoryToSchoolRequestPayload,
+  IAttachAgentToSchoolRequestPayload,
   ICategoryFullTreeMapped,
   ICategoryFullTreeResponse,
-  IDetachCategoryToSchoolRequestPayload,
 } from '@/modules/admin/pages/schools/models/schools';
 import { AdminSchoolsService } from '@/modules/admin/services/admin-schools.service';
 import {
@@ -19,7 +18,7 @@ import {
 import { SchoolsInfoService } from '@/modules/schools/services';
 import { IFieldOfStudiesResponse } from '@/shared/catalog';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 import { ISchoolTeacherMappedData, ISchoolTeacherRawResponse } from '../../../teachers/models';
 import { SCHOOL_DETAILS_SERVICE, SchoolDetailsService } from './service.token';
@@ -28,6 +27,7 @@ interface ISchoolDetailsCardsState {
   school: Maybe<ISchoolResponse>;
   showTeachersCard?: boolean;
   showBankAccountsCard?: boolean;
+  showAgentCard?: boolean;
   teachers: Maybe<ISchoolTeacherRawResponse[]>;
   teachersManagementPageRoute?: Maybe<(schoolId: string) => string>;
   showManagerValidateInlineConfirmation?: boolean;
@@ -37,6 +37,7 @@ interface ISchoolDetailsCardsState {
   canEditBankAccounts: boolean;
   canEditAddress: boolean;
   canEditContact: boolean;
+  canEditAgent: boolean;
   canEditLoginInfo: boolean;
   canEditCategories: boolean;
   canEditFields: boolean;
@@ -47,6 +48,7 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   school: null,
   showTeachersCard: false,
   showBankAccountsCard: false,
+  showAgentCard: false,
   teachers: null,
   teachersManagementPageRoute: null,
   showManagerValidateInlineConfirmation: false,
@@ -56,6 +58,7 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   canEditBankAccounts: false,
   canEditAddress: false,
   canEditContact: false,
+  canEditAgent: false,
   canEditLoginInfo: false,
   canEditCategories: false,
   canEditFields: false,
@@ -107,10 +110,12 @@ export class SchoolDetailsCardsStore {
     Boolean(this.state$().showContactValidateInlineConfirmation),
   );
   readonly showContactCard = computed(() => Boolean(this.state$().showContactCard));
+  readonly showAgentCard = computed(() => Boolean(this.state$().showAgentCard));
   readonly canEditInfo = computed(() => !!this.state$().canEditInfo);
   readonly canEditBankAccounts = computed(() => !!this.state$().canEditBankAccounts);
   readonly canEditAddress = computed(() => !!this.state$().canEditAddress);
   readonly canEditContact = computed(() => !!this.state$().canEditContact);
+  readonly canEditAgent = computed(() => !!this.state$().canEditAgent);
   readonly canEditLoginInfo = computed(() => !!this.state$().canEditLoginInfo);
   readonly canEditCategories = computed(() => !!this.state$().canEditCategories);
   readonly canEditFields = computed(() => !!this.state$().canEditFields);
@@ -125,42 +130,20 @@ export class SchoolDetailsCardsStore {
   private _defaultSchoolsInfo = inject(SchoolsInfoService);
   private _defaultAdminSchools = inject(AdminSchoolsService);
 
-  // capture injected token first so we can tell if a custom implementation
-  // was provided by a parent injector (component/module).
   private _injectedService = inject(SCHOOL_DETAILS_SERVICE, { optional: true });
-  private _hasCustomService = !!this._injectedService;
 
-  private service: Partial<SchoolDetailsService> = this._injectedService ?? {
-    getTeachers: (schoolUniqueId: string) => of([]) as Observable<ISchoolTeacherRawResponse[]>,
-    editInfo: (req: any) => this._defaultSchoolsInfo.editInfo(req) as Observable<any>,
-    editAddress: (req: any) => this._defaultSchoolsInfo.editAddress(req) as Observable<any>,
-    addBankInfo: (req: ISchoolBankInfoAddRequestPayload) => of(true) as Observable<boolean>,
-    editBankInfo: (req: ISchoolBankInfoEditRequestPayload) => of(true) as Observable<boolean>,
-    removeBankInfo: (req: ISchoolBankInfoRemoveRequestPayload) => of(true) as Observable<boolean>,
-    updateContact: (payload: any) =>
-      this._defaultAdminSchools.updateContact(payload) as Observable<any>,
-    validateContactEmail: (id: string) => of(true) as Observable<boolean>,
-    validateContactMobile: (id: string) => of(true) as Observable<boolean>,
-    validateManagerEmail: (id: string) => of(true) as Observable<boolean>,
-    validateManagerMobile: (id: string) => of(true) as Observable<boolean>,
-    invalidateContactEmail: (id: string) => of(true) as Observable<boolean>,
-    invalidateContactMobile: (id: string) => of(true) as Observable<boolean>,
-    invalidateManagerEmail: (id: string) => of(true) as Observable<boolean>,
-    invalidateManagerMobile: (id: string) => of(true) as Observable<boolean>,
-
-    attachCategory: (payload: IAttachCategoryToSchoolRequestPayload) =>
-      of(true) as Observable<boolean>,
-    detachCategory: (payload: IDetachCategoryToSchoolRequestPayload) =>
-      of(true) as Observable<boolean>,
-  };
+  private service: Partial<SchoolDetailsService> = this._injectedService ?? {};
 
   setService(svc: Partial<SchoolDetailsService>) {
     this.service = svc;
-    this._hasCustomService = true;
   }
 
   getTeachers() {
     return this.service.getTeachers!(this.school()!.uniqueId, this.school()!.id);
+  }
+
+  searchForAgent(uniqueId: string) {
+    return this.service.searchForAgent!(uniqueId);
   }
 
   editInfo(request: ISchoolInfoRequest) {
@@ -317,6 +300,23 @@ export class SchoolDetailsCardsStore {
     return this.service.invalidateManagerMobile(id).pipe(
       tap(() => {
         this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
+      }),
+    );
+  }
+
+  attachAgent(payload: IAttachAgentToSchoolRequestPayload) {
+    if (this.service.attachAgent === undefined) return of();
+    return this.service.attachAgent({ id: this.school()!.id, agentId: payload.agentId }).pipe(
+      tap(() => {
+        this.toastService.success({ text: `کارگزار با موفقیت اضافه شد.` });
+      }),
+    );
+  }
+  detachAgent(agentId: number) {
+    if (this.service.detachAgent === undefined) return of();
+    return this.service.detachAgent({ id: this.school()!.id, agentId }).pipe(
+      tap(() => {
+        this.toastService.success({ text: 'کارگزار با موفقیت حذف شد.' });
       }),
     );
   }

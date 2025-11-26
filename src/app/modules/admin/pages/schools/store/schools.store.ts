@@ -157,7 +157,6 @@ export class SchoolsStore {
 
   onCanNotUseCreditFilter(canNotUseCredit: Maybe<boolean>) {
     this.validateFilterData(canNotUseCredit, 'canNotUseCredit');
-    console.log('onCanNotUseCreditFilter called with:', canNotUseCredit);
 
     if (this.selectedCanNotUseCredit() !== canNotUseCredit) {
       this.resetPaginateInfo();
@@ -195,8 +194,6 @@ export class SchoolsStore {
   }
 
   private validateFilterData(value: Maybe<string | number | boolean>, mode: TGetDataMode) {
-    console.log(typeof value);
-
     if ((typeof value !== 'boolean' && !value) || value === null) {
       this.changeGetDataMode('all');
       return this.getData();

@@ -1,0 +1,33 @@
+<div class="flex flex-col gap-3">
+  <uikit-field [label]="label" [control]="control" class="w-full">
+    <p-inputGroup>
+      <input
+        pInputText
+        [formControl]="control"
+        [placeholder]="placeholder"
+        [readonly]="searchedLoading()"
+        [minLength]="6"
+        [maxLength]="6"
+        [invalid]="control.touched && (control.invalid || !searchedItem())"
+      />
+      @if (searchedLoading()) {
+        <p-inputGroupAddon>
+          <p-progressSpinner class="!w-4 !h-4"></p-progressSpinner>
+        </p-inputGroupAddon>
+      }
+    </p-inputGroup>
+  </uikit-field>
+  @if (searchedLoading()) {
+    <div class="flex items-center justify-center">
+      <p-skeleton />
+    </div>
+  } @else if (searchedItem()) {
+    <p-message severity="success" [closable]="false" variant="text" icon="pi pi-check-circle">
+      {{ foundedMessage(searchedItem()!) }}
+    </p-message>
+  } @else if (control.value!.length === 6 && itemNotFound()) {
+    <p-message severity="error" [closable]="false" variant="text" icon="pi pi-times-circle">
+      {{ notFoundMessage }}
+    </p-message>
+  }
+</div>
