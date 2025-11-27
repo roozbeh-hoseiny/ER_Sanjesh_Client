@@ -51,11 +51,12 @@ export class SchoolsDashboardComponent {
           teachersManagementPageRoute: () =>
             schoolsTeachersNamedRoutes.teachers.meta.pagePath!(this.schoolStore.info()?.id),
           showContactCard: true,
+          showAgentCard: true,
           showBankAccountsCard: true,
-          canEditAddress: true,
-          canEditBankAccounts: true,
-          canEditInfo: true,
-          canEditLoginInfo: true,
+          canEditAddress: info.canEdit,
+          canEditBankAccounts: info.canEdit,
+          canEditInfo: info.canEdit,
+          canEditLoginInfo: info.canEdit,
         });
       }
     });
