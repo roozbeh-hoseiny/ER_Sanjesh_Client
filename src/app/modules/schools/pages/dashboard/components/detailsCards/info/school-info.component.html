@@ -35,6 +35,12 @@
             (onReject)="updateCanEdit(false)"
           />
         </app-key-value>
+        <app-key-value label="امکان ثبت‌نام در آزمون">
+          <p-badge
+            [value]="info().canRegisterToExam ? 'دارد' : 'ندارد'"
+            [severity]="info().canRegisterToExam ? 'success' : 'danger'"
+          />
+        </app-key-value>
       </div>
       <p-divider> دسته‌بندی مدرسه </p-divider>
       <app-school-info-categories

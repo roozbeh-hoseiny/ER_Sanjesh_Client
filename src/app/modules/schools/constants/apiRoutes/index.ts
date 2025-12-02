@@ -1,4 +1,5 @@
 import { schoolsTeachersApiRoutes } from './schools-teachers-api.const';
+import { schoolsStudentsApiRoutes } from './students-api.const';
 
 const baseUrl = '/api/v1/school';
 
@@ -36,4 +37,5 @@ export const SCHOOLS_API_ROUTES = {
   rejectLesson: () => `${baseUrl}/RejectTeacherById`,
 
   teachers: schoolsTeachersApiRoutes(baseUrl),
+  students: schoolsStudentsApiRoutes(baseUrl),
 };

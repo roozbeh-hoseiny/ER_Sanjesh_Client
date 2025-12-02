@@ -22,6 +22,7 @@ import { ISchoolTeacherRawResponse } from '../../../teachers/models';
 export interface SchoolDetailsService {
   getTeachers(schoolUniqueId: string, schoolId: string): Observable<ISchoolTeacherRawResponse[]>;
   searchForAgent(uniqueId: string): Observable<IAdminAgentResponse>;
+  searchForAgentByName(name: string): Observable<IAdminAgentResponse[]>;
   editInfo(request: ISchoolInfoRequest): Observable<boolean>;
   editAddress(request: ISchoolAddressRequest): Observable<boolean>;
   addBankInfo(request: ISchoolBankInfoAddRequestPayload): Observable<boolean>;

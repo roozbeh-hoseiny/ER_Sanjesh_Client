@@ -49,6 +49,8 @@ export class AdminSchoolComponent {
       getTeachers: (schoolUniqueId: string, schoolId: string) =>
         this.schoolsInfoService.getTeachers(schoolId),
       searchForAgent: (uniqueId: string) => this.agentsService.getByUniqueId(uniqueId),
+      searchForAgentByName: (name: string) =>
+        this.agentsService.searchByName(name, { pageSize: 100, lastSeen: 0 }),
       editInfo: (req: ISchoolInfoRequest) => this.schoolService.updateInfo(req),
       editAddress: (req: any) => this.schoolService.updateAddress(req),
       updateContact: (req: any) => this.schoolService.updateContact(req),

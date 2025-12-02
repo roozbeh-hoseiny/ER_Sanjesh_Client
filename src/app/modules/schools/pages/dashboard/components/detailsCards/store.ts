@@ -5,7 +5,6 @@ import {
   ICategoryFullTreeMapped,
   ICategoryFullTreeResponse,
 } from '@/modules/admin/pages/schools/models/schools';
-import { AdminSchoolsService } from '@/modules/admin/services/admin-schools.service';
 import {
   ISchoolAddressRequest,
   ISchoolBankInfoAddRequestPayload,
@@ -15,7 +14,6 @@ import {
   ISchoolInfoRequest,
   ISchoolResponse,
 } from '@/modules/schools/models';
-import { SchoolsInfoService } from '@/modules/schools/services';
 import { IFieldOfStudiesResponse } from '@/shared/catalog';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { of } from 'rxjs';
@@ -130,8 +128,6 @@ export class SchoolDetailsCardsStore {
   }
 
   private toastService = inject(ToastService);
-  private _defaultSchoolsInfo = inject(SchoolsInfoService);
-  private _defaultAdminSchools = inject(AdminSchoolsService);
 
   private _injectedService = inject(SCHOOL_DETAILS_SERVICE, { optional: true });
 
@@ -147,6 +143,14 @@ export class SchoolDetailsCardsStore {
 
   searchForAgent(uniqueId: string) {
     return this.service.searchForAgent!(uniqueId);
+  }
+  searchForAgentByName(name: string) {
+    console.log(name);
+
+    console.log('this.service.searchForAgentByName');
+    console.log(this.service.searchForAgentByName);
+
+    return this.service.searchForAgentByName!(name);
   }
 
   editInfo(request: ISchoolInfoRequest) {

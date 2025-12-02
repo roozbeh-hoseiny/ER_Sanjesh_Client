@@ -1,2 +1,2 @@
-export * from './agent-form.component';
 export * from './agent.component';
+export * from './by-unique-id-form.component';

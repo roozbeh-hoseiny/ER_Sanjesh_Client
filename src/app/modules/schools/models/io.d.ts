@@ -74,6 +74,7 @@ export interface ISchoolRawResponse {
   agentInfo: Maybe<any>;
   remainedCredit: string;
   canEdit: boolean;
+  canRegisterToExam: boolean;
 }
 export interface ISchoolResponse extends Omit<ISchoolRawResponse, 'fieldOfStudies'> {
   fieldOfStudies: SchoolsFieldOfStudy[];

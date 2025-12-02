@@ -14,6 +14,7 @@ import { ConfirmationService } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
+import { Tooltip } from 'primeng/tooltip';
 import { AdminSchoolsService } from '../../../services';
 import { AdminSchoolFormComponent } from '../components/admin-school-form.component';
 import { AdminSchoolsFilterComponent } from '../components/admin-schools-filter.component';
@@ -35,6 +36,7 @@ import { SchoolsStore } from '../store/schools.store';
     AdminSchoolsFilterComponent,
     ProgressSpinnerModule,
     ConfirmPopupModule,
+    Tooltip,
   ],
   providers: [ConfirmationService],
 })

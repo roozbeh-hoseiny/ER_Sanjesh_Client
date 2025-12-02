@@ -14,6 +14,11 @@ export const SCHOOLS_MENU_ITEMS: MenuItem[] = [
         icon: 'pi pi-fw pi-graduation-cap',
         routerLink: schoolsNamedRoutes.teachers.path,
       },
+      {
+        label: 'دانش‌آموزان',
+        icon: 'pi pi-fw pi-users',
+        routerLink: schoolsNamedRoutes.students.path,
+      },
     ],
   },
 ];

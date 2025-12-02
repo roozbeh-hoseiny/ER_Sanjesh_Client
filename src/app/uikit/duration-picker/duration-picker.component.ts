@@ -33,8 +33,18 @@ export class UikitDurationPickerComponent implements OnInit {
       this.hoursCtrl.setValue(String(h));
       this.minutesCtrl.setValue(String(m));
 
-      this.hoursCtrl.valueChanges.subscribe(() => this.syncToParent());
-      this.minutesCtrl.valueChanges.subscribe(() => this.syncToParent());
+      this.hoursCtrl.valueChanges.subscribe(() => {
+        if (this.toNumberSafe(this.hoursCtrl.value) > 23) {
+          this.hoursCtrl.setValue('23', { emitEvent: false });
+        }
+        this.syncToParent();
+      });
+      this.minutesCtrl.valueChanges.subscribe(() => {
+        if (this.toNumberSafe(this.minutesCtrl.value) > 59) {
+          this.minutesCtrl.setValue('59', { emitEvent: false });
+        }
+        this.syncToParent();
+      });
 
       this.control.valueChanges.subscribe((v) => this.syncFromParent(v));
     } else {

@@ -3,7 +3,6 @@ import {
   IAdminAgentRequestPayload,
   IAdminAgentResponse,
 } from '@/modules/admin/pages/agents/models';
-import { UikitFieldComponent } from '@/uikit';
 import { UikitSearchFieldComponent } from '@/uikit/searchField/search-field.component';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -11,11 +10,11 @@ import { ButtonDirective } from 'primeng/button';
 import { SchoolDetailsCardsStore } from '../store';
 
 @Component({
-  selector: 'app-school-agent-form',
-  templateUrl: './agent-form.component.html',
-  imports: [ReactiveFormsModule, ButtonDirective, UikitFieldComponent, UikitSearchFieldComponent],
+  selector: 'school-agent-by-unique-id-form',
+  templateUrl: './by-unique-id-form.component.html',
+  imports: [ReactiveFormsModule, ButtonDirective, UikitSearchFieldComponent],
 })
-export class SchoolAgentFormComponent {
+export class SchoolAgentByUniqueIdFormComponent {
   @Output() closeForm = new EventEmitter();
   @Output() submitForm = new EventEmitter<IAdminAgentRequestPayload>();
 

@@ -8,16 +8,16 @@ import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
 import { Message } from 'primeng/message';
 import { SchoolDetailsCardsStore } from '../store';
-import { SchoolAgentFormComponent } from './agent-form.component';
+import { SchoolAgentAssignCardComponent } from './assign.component';
 
 @Component({
   selector: 'app-school-agent',
   imports: [
     AppCardComponent,
     KeyValueComponent,
-    SchoolAgentFormComponent,
     Message,
     ButtonDirective,
+    SchoolAgentAssignCardComponent,
   ],
   templateUrl: './agent.component.html',
 })

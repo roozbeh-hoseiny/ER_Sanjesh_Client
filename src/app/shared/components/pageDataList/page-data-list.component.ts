@@ -69,6 +69,7 @@ export class PageDataListComponent<I> {
   @Input() fullHeight: boolean = false;
 
   @ContentChild('filter', { static: true }) filter!: TemplateRef<any> | null;
+  @ContentChild('caption', { static: true }) caption!: TemplateRef<any> | null;
 
   @Output() onEdit = new EventEmitter<I>();
   @Output() onDelete = new EventEmitter<I>();

@@ -1,0 +1,19 @@
+<div class="">
+  <div class="flex items-center justify-center gap-3">
+    <button pButton type="button" (click)="openByUniqueId()">افزودن با استفاده از شناسه یکتا</button>
+    <button pButton type="button" (click)="openByName()">افزودن با استفاده از نام</button>
+  </div>
+  <p-dialog
+    header="افزودن کارگزار"
+    [modal]="true"
+    [style]="{ width: formType() === 'uniqueId' ? '400px' : '600px' }"
+    (onHide)="closeForm()"
+    [(visible)]="isOpenedDialogForm"
+  >
+    @if (formType() === "uniqueId") {
+      <school-agent-by-unique-id-form (close)="closeForm()" (submitForm)="onSubmitForm()" />
+    } @else {
+      <school-agent-by-name-form (close)="closeForm()" (submitForm)="onSubmitForm()" />
+    }
+  </p-dialog>
+</div>

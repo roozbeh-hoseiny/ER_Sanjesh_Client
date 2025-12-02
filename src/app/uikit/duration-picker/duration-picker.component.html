@@ -8,6 +8,7 @@
       [forceSelection]="false"
       placeholder="ساعت"
       inputClass="w-full"
+      type="number"
     ></p-autoComplete>
 
     <p-autoComplete
@@ -17,7 +18,13 @@
       [dropdown]="true"
       [forceSelection]="false"
       placeholder="دقیقه"
+      type="number"
       inputClass="w-full"
     ></p-autoComplete>
   </div>
+  @if (hoursCtrl.value || minutesCtrl.value) {
+    <span class="text-xs mt-1 text-muted-color">
+      مدت زمان آزمون را {{ hoursCtrl.value || 0 }} ساعت و {{ minutesCtrl.value || 0 }} دقیقه انتخاب کردید.
+    </span>
+  }
 </uikit-field>
