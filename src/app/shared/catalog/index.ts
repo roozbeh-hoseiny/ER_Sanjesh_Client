@@ -1,3 +1,4 @@
+export * from './academicYears';
 export * from './educationalLevels';
 export * from './examApplicationTypes';
 export * from './MDM';

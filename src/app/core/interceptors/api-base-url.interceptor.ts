@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -14,7 +14,9 @@ export class ApiBaseUrlInterceptor implements HttpInterceptor {
     };
 
     const headersToSet: Record<string, string> = {};
+    const isFormData = req.body instanceof FormData;
     Object.keys(defaultHeaders).forEach((k) => {
+      if (k === 'Content-Type' && isFormData) return;
       if (!req.headers.has(k)) {
         headersToSet[k] = defaultHeaders[k];
       }

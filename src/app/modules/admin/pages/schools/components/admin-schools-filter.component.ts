@@ -11,7 +11,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputText, InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
-import { Select, SelectItem } from 'primeng/select';
+import { Select } from 'primeng/select';
 import { SchoolsCategoriesTreeSelectComponent } from './categories/admin-schools-categories-tree-select.component';
 
 @Component({
@@ -30,7 +30,6 @@ import { SchoolsCategoriesTreeSelectComponent } from './categories/admin-schools
     StatesCascadeComponent,
     SchoolsCategoriesTreeSelectComponent,
     Select,
-    SelectItem,
     Checkbox,
   ],
 })

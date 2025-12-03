@@ -1,0 +1,53 @@
+<div class="">
+  <div class="flex flex-col gap-3">
+    <p-message severity="info" icon="pi pi-info-circle">
+      برای دانلود الگوی فایل
+      <a href="/sample-students.xlsx" target="_blank" class="underline font-bold"> اینجا </a> کلیک کنید
+    </p-message>
+    <p-message severity="warn" icon="pi pi-exclamation-triangle">
+      دقت کنید که در صورت وجود خطا در فایل آپلود شده، هیچ‌یک از دانش‌آموزان اضافه نخواهند شد و لازم است ابتدا خطاها
+      اصلاح شوند.
+    </p-message>
+
+    @if (submitLoading()) {
+      <div class="flex flex-col items-center justify-center mt-4 gap-5">
+        <p-progressSpinner mode="indeterminate" class="w-full" />
+        <span class="text-center mt-2">در حال بارگذاری فایل و ثبت دانش‌آموزان...</span>
+      </div>
+    } @else {
+      <p-fileupload name="file" accept=".xlsx" maxFileSize="1000000" class="mt-4" (onSelect)="onSelectedFile($event)">
+        <ng-template #header let-chooseCallback="chooseCallback">
+          <div class="flex items-center justify-center flex-col cursor-pointer py-5 w-full" (click)="chooseCallback()">
+            <i class="pi pi-cloud-upload !border-2 !rounded-full !p-8 !text-4xl !text-muted-color"></i>
+            <p class="mt-6 mb-0">فایل مورد نظر خود را در اینجا رها کنید</p>
+          </div>
+        </ng-template>
+      </p-fileupload>
+    }
+
+    @if (hasErrorOnUploadedResult() && isUploaded()) {
+      <p-message severity="error" icon="pi pi-times-circle" class="mt-4">
+        در ثبت برخی از دانش‌آموزان خطا رخ داده است. لطفا نتیجه آپلود را بررسی کنید.
+      </p-message>
+
+      <p-accordion [value]="" [multiple]="true">
+        @for (item of uploadedResult(); track $index) {
+          @if (item.hasError) {
+            <p-accordion-panel [value]="$index">
+              <p-accordion-header>{{ `ردیف ${$index + 1} - ${item.firstName} ${item.lastName}` }}</p-accordion-header>
+              <p-accordion-content>
+                <ul>
+                  @for (err of item.errorMessages; track err) {
+                    <li class="text-red-600 list-inside list-decimal">
+                      {{ err }}
+                    </li>
+                  }
+                </ul>
+              </p-accordion-content>
+            </p-accordion-panel>
+          }
+        }
+      </p-accordion>
+    }
+  </div>
+</div>

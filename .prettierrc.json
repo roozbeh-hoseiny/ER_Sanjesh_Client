@@ -1,20 +1,14 @@
 {
-  "semi": true,
-  "trailingComma": "es5",
-  "singleQuote": true,
-  "printWidth": 100,
-  "tabWidth": 2,
-  "useTabs": false,
-  "bracketSpacing": true,
-  "bracketSameLine": false,
   "arrowParens": "always",
+  "bracketSameLine": false,
+  "bracketSpacing": true,
   "endOfLine": "lf",
   "overrides": [
     {
       "files": "*.html",
       "options": {
-        "printWidth": 120,
-        "bracketSameLine": true
+        "bracketSameLine": true,
+        "printWidth": 120
       }
     },
     {
@@ -38,5 +32,14 @@
       }
     }
   ],
-  "plugins": ["prettier-plugin-organize-imports"]
+  "plugins": [
+    "prettier-plugin-organize-imports",
+    "prettier-plugin-tailwindcss"
+  ],
+  "printWidth": 100,
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "useTabs": false
 }

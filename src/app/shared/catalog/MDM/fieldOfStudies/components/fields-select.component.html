@@ -5,8 +5,10 @@
       [formControl]="control"
       [options]="filteredItems()"
       optionLabel="fullTitle"
+      [optionValue]="onlyId ? 'id' : ''"
       placeholder="یکی از رشته‌ها را انتخاب کنید"
       class="w-full"
+      appendTo="body"
       [loading]="loading"
       (onChange)="onSelect($event.value)"
     />
@@ -17,8 +19,10 @@
     [formControl]="control"
     [options]="filteredItems()"
     optionLabel="fullTitle"
+    [optionValue]="onlyId ? 'id' : ''"
     placeholder="یکی از رشته‌ها را انتخاب کنید"
     class="w-full"
+    appendTo="body"
     [loading]="loading"
     (onChange)="onSelect($event.value)"
   />

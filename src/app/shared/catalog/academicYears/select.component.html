@@ -1,0 +1,25 @@
+@if (showLabel) {
+  <uikit-field label="سال‌ تحصیلی" [name]="name" [control]="control">
+    <p-select
+      [name]="name"
+      [formControl]="control"
+      [options]="items"
+      optionLabel="label"
+      optionValue="value"
+      appendTo="body"
+      placeholder="یکی از سال‌ تحصیلی‌ها را انتخاب کنید"
+      [invalid]="control.invalid && (control.dirty || control.touched)"
+    />
+  </uikit-field>
+} @else {
+  <p-select
+    [name]="name"
+    [formControl]="control"
+    [options]="items"
+    optionLabel="label"
+    optionValue="value"
+    appendTo="body"
+    placeholder="یکی از سال‌ تحصیلی‌ها را انتخاب کنید"
+    [invalid]="control.invalid && (control.dirty || control.touched)"
+  />
+}

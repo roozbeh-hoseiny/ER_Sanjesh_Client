@@ -145,11 +145,6 @@ export class SchoolDetailsCardsStore {
     return this.service.searchForAgent!(uniqueId);
   }
   searchForAgentByName(name: string) {
-    console.log(name);
-
-    console.log('this.service.searchForAgentByName');
-    console.log(this.service.searchForAgentByName);
-
     return this.service.searchForAgentByName!(name);
   }
 

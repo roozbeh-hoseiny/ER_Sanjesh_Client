@@ -1,0 +1,8 @@
+<form [formGroup]="form" (submit)="submit()">
+  <div class="flex flex-col gap-4">
+    <catalog-academic-years-select [control]="form.controls.academicYear" />
+    <catalog-educational-levels-select [control]="form.controls.educationalLevelId" />
+    <catalog-fields-select [control]="form.controls.fieldOfStudyId" [onlyId]="true" />
+    <button pButton type="submit" class="w-full max-w-xs mx-auto">اعمال فیلترها</button>
+  </div>
+</form>

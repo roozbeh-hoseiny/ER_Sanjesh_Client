@@ -5,7 +5,6 @@ import {
   ICategoryFullTreeMapped,
   ICategoryFullTreeResponse,
 } from '@/modules/admin/pages/schools/models/schools';
-import { KeyValueComponent } from '@/shared/components';
 import { UikitLabelComponent } from '@/uikit';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
@@ -20,7 +19,6 @@ import { SchoolDetailsCardsStore } from '../store';
   selector: 'app-school-info-categories',
   templateUrl: './school-info-categories.component.html',
   imports: [
-    KeyValueComponent,
     SchoolsCategoriesTreeSelectComponent,
     ReactiveFormsModule,
     CommonModule,

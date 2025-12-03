@@ -1,38 +1,42 @@
 <p-dialog
-  label="افزودن گروهی دانش‌آموزان"
+  header="افزودن گروهی دانش‌آموزان"
   [(visible)]="visible"
+  [modal]="true"
   [style]="{ width: '500px' }"
   [closable]="true"
   (onHide)="onClose()"
 >
-  <p-fileupload name="file" accept=".xlsx" maxFileSize="1000000">
-    <!-- (onUpload)="onTemplatedUpload()" (onSelect)="onSelectedFiles($event)" -->
-    <ng-template
-      #header
-      let-files
-      let-chooseCallback="chooseCallback"
-      let-clearCallback="clearCallback"
-      let-uploadCallback="uploadCallback"
-    >
-    </ng-template>
-    <ng-template
-      #content
-      let-files
-      let-uploadedFiles="uploadedFiles"
-      let-removeFileCallback="removeFileCallback"
-      let-removeUploadedFileCallback="removeUploadedFileCallback"
-    >
-      <div class="flex flex-col gap-8 pt-4">
-        <div *ngIf="files?.length > 0"></div>
-        <div *ngIf="uploadedFiles?.length > 0"></div>
-      </div>
-    </ng-template>
-    <ng-template #file></ng-template>
-    <ng-template #empty>
-      <div class="flex items-center justify-center flex-col">
-        <i class="pi pi-cloud-upload !border-2 !rounded-full !p-8 !text-4xl !text-muted-color"></i>
-        <p class="mt-6 mb-0">فایل مورد نظر خود را در اینجا رها کنید</p>
-      </div>
-    </ng-template>
-  </p-fileupload>
+  <div class="flex flex-col gap-3">
+    <p-message severity="info" icon="pi pi-info-circle">
+      برای دانلود الگوی فایل
+      <a href="/sample-students.xlsx" target="_blank" class="underline font-bold"> اینجا </a> کلیک کنید
+    </p-message>
+    <p-message severity="warn" icon="pi pi-exclamation-triangle">
+      دقت کنید که در صورت وجود خطا در فایل آپلود شده، هیچ‌یک از دانش‌آموزان اضافه نخواهند شد و لازم است ابتدا خطاها
+      اصلاح شوند.
+    </p-message>
+
+    <p-fileupload name="file" accept=".xlsx" maxFileSize="1000000" class="mt-4" (onSelect)="onSelectedFile($event)">
+      <ng-template
+        #header
+        let-files
+        let-chooseCallback="chooseCallback"
+        let-clearCallback="clearCallback"
+        let-uploadCallback="uploadCallback"
+      >
+      </ng-template>
+      <!-- <ng-template #content>
+        <div class="flex flex-col gap-8 pt-4">
+          <div *ngIf="files?.length > 0"></div>
+          <div *ngIf="uploadedFiles?.length > 0"></div>
+        </div>
+      </ng-template> -->
+      <ng-template #empty>
+        <div class="flex items-center justify-center flex-col cursor-pointer">
+          <i class="pi pi-cloud-upload !border-2 !rounded-full !p-8 !text-4xl !text-muted-color"></i>
+          <p class="mt-6 mb-0">فایل مورد نظر خود را در اینجا رها کنید</p>
+        </div>
+      </ng-template>
+    </p-fileupload>
+  </div>
 </p-dialog>

@@ -15,6 +15,7 @@ import { EducationalLevelStore } from '../index';
 export class EducationalLevelsSelectComponent {
   @Input() control!: FormControl<Maybe<number>>;
   @Input() disabled: boolean = false;
+
   @Output() onLevelChange = new EventEmitter<Maybe<number>>();
 
   constructor(private store: EducationalLevelStore) {}

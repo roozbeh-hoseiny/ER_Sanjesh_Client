@@ -15,7 +15,7 @@ import { IFieldOfStudiesResponse } from '../models';
   host: { class: 'w-full' },
 })
 export class FieldsSelectComponent {
-  @Input() control!: FormControl<Maybe<IFieldOfStudiesResponse>>;
+  @Input() control!: FormControl<Maybe<IFieldOfStudiesResponse | number>>;
   @Input() name: string = 'fieldOfStudy';
 
   private _filters: number[] = [];
@@ -30,6 +30,8 @@ export class FieldsSelectComponent {
   @Input() showLabel?: boolean = true;
   @Input() placeholder?: string;
   @Input() loading?: boolean;
+  @Input() onlyId: boolean = false;
+
   @Output() selectionChange = new EventEmitter<IFieldOfStudiesResponse>();
   @Output() selectionClear = new EventEmitter();
 

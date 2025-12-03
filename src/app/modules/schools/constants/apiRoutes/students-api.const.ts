@@ -1,5 +1,6 @@
 export const schoolsStudentsApiRoutes = (baseUrl: string) => {
   return {
-    list: () => `${baseUrl}/getStudents`,
+    list: () => `${baseUrl}/GetSchoolStudents`,
+    bulkAdd: () => `${baseUrl}/UploadStudentsExcelFile`,
   };
 };

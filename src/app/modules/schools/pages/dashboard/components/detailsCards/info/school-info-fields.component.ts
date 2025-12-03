@@ -1,7 +1,6 @@
 import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
 import { FieldsSelectComponent, IFieldOfStudiesResponse } from '@/shared/catalog';
-import { KeyValueComponent } from '@/shared/components';
 import { UikitLabelComponent } from '@/uikit';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
@@ -16,7 +15,6 @@ import { SchoolDetailsCardsStore } from '../store';
   selector: 'app-school-info-fields',
   templateUrl: './school-info-fields.component.html',
   imports: [
-    KeyValueComponent,
     ReactiveFormsModule,
     CommonModule,
     ButtonDirective,

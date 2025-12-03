@@ -7,13 +7,12 @@ import { Component, effect, EventEmitter, inject, Input, Output, signal } from '
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 // import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { PriceMaskDirective } from '@/shared/directives/price-mask.directive';
-import { UikitDurationPickerComponent } from "@/uikit";
+import { UikitDurationPickerComponent } from '@/uikit';
 import { UikitFlatpickrJalaliComponent } from '@/uikit/datepicker/datepicker.component';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Dialog } from 'primeng/dialog';
 import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddon } from 'primeng/inputgroupaddon';
-import { InputNumber } from 'primeng/inputnumber';
 import { InputText } from 'primeng/inputtext';
 import { IExamRequestPayload } from '../../models';
 
@@ -28,14 +27,13 @@ import { IExamRequestPayload } from '../../models';
     LessonsSelectComponent,
     UikitFlatpickrJalaliComponent,
     ReactiveFormsModule,
-    InputNumber,
     PriceMaskDirective,
     UikitFieldComponent,
     InputText,
     InputGroupAddon,
     InputGroup,
-    UikitDurationPickerComponent
-],
+    UikitDurationPickerComponent,
+  ],
 })
 export class ExamFormDialogComponent {
   constructor(

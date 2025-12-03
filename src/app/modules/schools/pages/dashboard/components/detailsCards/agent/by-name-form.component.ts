@@ -52,8 +52,6 @@ export class SchoolAgentByNameFormComponent implements OnDestroy {
     this.searchTerm.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((value) => {
-        console.log('first');
-
         this.searchedItem.set(null);
         this.search();
       });

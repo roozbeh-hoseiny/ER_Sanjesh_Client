@@ -40,8 +40,6 @@ export class AdminAgentsService {
     name: string,
     paginatedQuery: IPaginatedQuery<number>,
   ): Observable<IAdminAgentResponse[]> {
-    console.log('first');
-
     return this.http
       .post<IPaginatedResponse<IAdminAgentRawResponse, number>>(this.apiRoutes.agents.byName(), {
         ...PAGINATED_QUERY_DEFAULT_VALUES,
@@ -50,8 +48,6 @@ export class AdminAgentsService {
       })
       .pipe(
         map((res) => {
-          console.log(res);
-
           return res.items.map((item) => ({
             ...item,
             fullname: `${item.firstName} ${item.lastName}`,
