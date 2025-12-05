@@ -3,6 +3,7 @@ import {
   EducationalLevelsSelectComponent,
   FieldsSelectComponent,
 } from '@/shared/catalog';
+import { UikitFieldComponent } from '@/uikit';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
@@ -17,6 +18,7 @@ import { IGetSchoolStudentsRequestPayload } from '../../models';
     FieldsSelectComponent,
     AcademicYearsSelectComponent,
     ButtonDirective,
+    UikitFieldComponent,
   ],
 })
 export class SchoolStudentsMainFiltersComponent {

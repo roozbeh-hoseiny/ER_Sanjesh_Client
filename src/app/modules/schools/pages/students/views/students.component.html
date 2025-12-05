@@ -1,16 +1,16 @@
-<p-dialog
-  header="فیلترهای دانش آموزان"
-  [(visible)]="isMainFilterOpened"
-  [modal]="true"
-  [style]="{ width: '500px' }"
-  modal
+<app-page-data-list
+  [pageTitle]="'مدیریت دانش‌آموزان'"
+  [columns]="columns"
+  [items]="students || []"
+  [loading]="loading()"
+  addNewCtaLabel="افزودن تجمیعی دانش‌آموزان"
+  [showAdd]="true"
+  [showDetails]="true"
+  style="height: 100cqmin"
+  class="overflow-hidden"
+  (onAdd)="toAddBulkPage()"
 >
-  <school-students-main-filters (onSubmit)="onSubmitMainFilter($event)" />
-</p-dialog>
-
-<div class="d-flex items-center w-full justify-center h-full">
-  <button pButton type="button" class="p-button-plain" routerLink="/schools/students/bulk-add">
-    افزودن دانش آموز جدید
-  </button>
-  <students-bulk-upload-dialog [(visible)]="openedUploadDialog" />
-</div>
+  <ng-template #caption let-columns>
+    <school-students-main-filters (onSubmit)="onSubmitMainFilter($event)" />
+  </ng-template>
+</app-page-data-list>

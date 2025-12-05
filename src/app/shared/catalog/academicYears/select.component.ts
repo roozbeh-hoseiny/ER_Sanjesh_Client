@@ -22,7 +22,7 @@ export class AcademicYearsSelectComponent {
   //TODO: add dayjs and get current year dynamically
   currentYear = 1404;
 
-  items = Array.from({ length: 10 }, (_, i) => ({
+  items = Array.from({ length: 1 }, (_, i) => ({
     value: this.currentYear - i,
     label: `${this.currentYear - i}-${this.currentYear - i + 1}`,
   }));

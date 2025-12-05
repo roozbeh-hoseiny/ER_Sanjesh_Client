@@ -1,33 +1,31 @@
 import { SchoolsStore } from '@/modules/schools/dataStore';
 import { SchoolsStudentsService } from '@/modules/schools/services';
-import { Component, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ButtonDirective } from 'primeng/button';
-import { Dialog } from 'primeng/dialog';
 import {
-  SchoolStudentListStore,
-  SchoolStudentsMainFiltersComponent,
-  StudentsBulkUploadDialogComponent,
-} from '../components';
+  IColumn,
+  PageDataListComponent,
+} from '@/shared/components/pageDataList/page-data-list.component';
+import { Component, computed, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SchoolStudentListStore, SchoolStudentsMainFiltersComponent } from '../components';
 import { IGetSchoolStudentsRequestPayload } from '../models';
 
 @Component({
   selector: 'school-students',
   templateUrl: './students.component.html',
-  imports: [
-    ButtonDirective,
-    StudentsBulkUploadDialogComponent,
-    Dialog,
-    SchoolStudentsMainFiltersComponent,
-    RouterLink,
-  ],
+  imports: [SchoolStudentsMainFiltersComponent, PageDataListComponent],
 })
 export class SchoolStudentsComponent {
   private schoolsStore = inject(SchoolsStore);
-  loading = signal<boolean>(true);
+  loading = signal<boolean>(false);
   schoolId = signal(this.schoolsStore.info()?.id!);
   openedUploadDialog = signal(false);
   isMainFilterOpened = signal(false);
+
+  columns = [] as IColumn[];
+
+  get students() {
+    return this.schoolStudentListStore.students();
+  }
 
   constructor(
     private services: SchoolsStudentsService,
@@ -91,5 +89,9 @@ export class SchoolStudentsComponent {
     this.schoolStudentListStore.updateMainFilterState(queryParams);
 
     this.getData();
+  }
+
+  toAddBulkPage() {
+    this.router.navigate(['/schools/students/bulk-add']);
   }
 }
