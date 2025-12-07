@@ -7,7 +7,7 @@ import {
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SchoolStudentListStore, SchoolStudentsMainFiltersComponent } from '../components';
-import { IGetSchoolStudentsRequestPayload } from '../models';
+import { IGetSchoolStudentsRequestPayload, IStudentResponse } from '../models';
 
 @Component({
   selector: 'school-students',
@@ -33,6 +33,7 @@ export class SchoolStudentsComponent {
     private activatedRoute: ActivatedRoute,
     private router: Router,
   ) {
+    this.setColumns();
     this.schoolStudentListStore.setService({
       addBulk: (payload: FormData) => this.services.bulkAdd(payload),
     });
@@ -45,6 +46,20 @@ export class SchoolStudentsComponent {
   }
 
   mainFilter = computed(() => this.schoolStudentListStore.mainFilter());
+
+  setColumns() {
+    this.columns = [
+      {
+        field: 'firstName',
+        header: 'نام',
+        customDataModel: (item: IStudentResponse) => `${item.firstName} ${item.lastName}`,
+      },
+      { field: 'fatherName', header: 'نام پدر' },
+      { field: 'nationalCode', header: 'کد ملی' },
+      { field: 'mobile', header: 'شماره موبایل' },
+      { field: 'isAlreadyInThisSchool', header: 'حاضر در مدرسه', type: 'boolean' },
+    ];
+  }
 
   private getData() {
     this.loading.set(true);

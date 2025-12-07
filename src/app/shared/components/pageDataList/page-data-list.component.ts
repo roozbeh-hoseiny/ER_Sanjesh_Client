@@ -19,13 +19,14 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
 import { TableActionRowComponent } from '../table-action-row.component';
 
-export interface IColumn {
+export interface IColumn<T = any> {
   field: string;
   header: string;
   width?: string;
   minWidth?: string;
   canCopy?: boolean;
-  customDataModel?: TemplateRef<any> | ((item: any) => string | number | boolean);
+  type?: 'text' | 'price' | 'boolean' | 'date';
+  customDataModel?: TemplateRef<any> | ((item: T) => string | number | boolean);
 }
 
 @Component({
