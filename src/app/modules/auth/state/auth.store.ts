@@ -1,9 +1,19 @@
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '@/core';
+import { ToastService } from '@/core/services/toast.service';
 import { computed, inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, of, tap } from 'rxjs';
+import { catchError, finalize, of, tap } from 'rxjs';
 import { LOCAL_STORAGE_KEYS, ROLES } from 'src/assets/constants';
-import { IAuthResponse, LoginCredentials, Maybe, TRoles, User } from '../../../core/models';
+import {
+  IAuthResponse,
+  ISignupRequestPayload,
+  IUserLoginInfo,
+  LoginCredentials,
+  Maybe,
+  SendSmsOtpCredentials,
+  TRoles,
+  User,
+} from '../../../core/models';
 import { BaseState, BaseStore } from '../../../core/state/base-store';
 
 /**
@@ -18,6 +28,13 @@ export interface AuthState extends BaseState {
   loginAttempts: number;
   lastLoginTime: Maybe<number>;
   sessionExpiry: Maybe<number>;
+  selectedRole: TRoles;
+  redirectUrl: string;
+  authStep: TAuthSteps;
+  loginType: TLoginType;
+  loginStep: TLoginSteps;
+  captchaCode: Maybe<string>;
+  pendingUserInfo?: Partial<IUserLoginInfo>;
 }
 
 /**
@@ -28,6 +45,9 @@ export interface LoginState {
   isRefreshing: boolean;
   loginError: Maybe<string>;
 }
+export type TAuthSteps = 'login' | 'otp' | 'modifyLoginInfo' | 'signup' | 'forgetPassword';
+export type TLoginType = 'PASSWORD' | 'OTP';
+export type TLoginSteps = 'SEND_OTP' | 'VERIFY_OTP';
 
 /**
  * Authentication state store
@@ -36,8 +56,10 @@ export interface LoginState {
   providedIn: 'root',
 })
 export class AuthStore extends BaseStore<AuthState> {
-  private readonly http = inject(HttpClient);
+  // private readonly http = inject(HttpClient);
+  private readonly service = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly toastService = inject(ToastService);
 
   // Login-specific state
   private readonly _loginState = {
@@ -58,6 +80,12 @@ export class AuthStore extends BaseStore<AuthState> {
       loginAttempts: 0,
       lastLoginTime: null,
       sessionExpiry: null,
+      selectedRole: ROLES.SCHOOL,
+      redirectUrl: '',
+      authStep: 'login',
+      loginType: 'PASSWORD',
+      loginStep: 'SEND_OTP',
+      captchaCode: null,
     });
 
     this.initializeAuth();
@@ -73,6 +101,14 @@ export class AuthStore extends BaseStore<AuthState> {
   readonly loginAttempts = computed(() => this._state().loginAttempts);
   readonly lastLoginTime = computed(() => this._state().lastLoginTime);
   readonly sessionExpiry = computed(() => this._state().sessionExpiry);
+  readonly selectedRole = computed(() => this._state().selectedRole);
+  readonly redirectUrl = computed(() => this._state().redirectUrl);
+  readonly authStep = computed(() => this._state().authStep);
+  readonly loginType = computed(() => this._state().loginType);
+  readonly loginStep = computed(() => this._state().loginStep);
+  readonly captchaCode = computed(() => this._state().captchaCode);
+  readonly pendingUserInfo = computed(() => this._state().pendingUserInfo);
+  readonly canChangeRole = computed(() => this.selectedRole() !== 'ADMIN');
 
   // Login state selectors
   readonly isLoggingIn = computed(() => this._loginState.isLoggingIn);
@@ -117,22 +153,170 @@ export class AuthStore extends BaseStore<AuthState> {
     }
   }
 
+  setSelectedRole(role: TRoles) {
+    this.patchState({ selectedRole: role });
+  }
+  setRedirectUrl(url: string) {
+    this.patchState({ redirectUrl: url });
+  }
+  setAuthStep(authStep: TAuthSteps) {
+    this.patchState({ authStep });
+  }
+  setLoginType(loginType: TLoginType) {
+    this.patchState({ loginType });
+  }
+  setCaptchaCode(captchaCode: string) {
+    this.patchState({ captchaCode });
+  }
+  private setLoginStep(loginStep: TLoginSteps) {
+    this.patchState({ loginStep });
+  }
+
+  resetCaptcha() {
+    this.patchState({ captchaCode: null });
+  }
+
+  private redirectToDashboard() {
+    let redirectUrl = this._state().redirectUrl.replace(/\/[^/]*$/, '');
+    if (!this._state().redirectUrl) {
+      switch (this.selectedRole()) {
+        case 'SCHOOL':
+          redirectUrl = '/schools';
+          break;
+        case 'ADMIN':
+          redirectUrl = '/admin';
+          break;
+        case 'TEACHER':
+          redirectUrl = '/teachers';
+          break;
+        case 'STUDENTS':
+          redirectUrl = '/students';
+          break;
+      }
+    }
+    this.router.navigateByUrl(redirectUrl);
+  }
+
   /**
    * Login with credentials
    */
   login(credentials: LoginCredentials) {
+    if (!this._state().captchaCode) {
+      this.toastService.error({ text: 'مقدار کپچا را وارد کنید' });
+      return of(null);
+    }
     this._loginState.isLoggingIn = true;
     this._loginState.loginError = null;
     this.setLoading(true);
 
-    return this.http.post<IAuthResponse>('/api/auth/login', credentials).pipe(
+    return this.service
+      .login({ ...credentials, captcha: this.captchaCode()! }, this.selectedRole())
+      .pipe(
+        tap((response) => {
+          this.handleAuthSuccess(response);
+          this.resetCaptcha();
+          if (response.mustChangePassword) {
+            // @TODO: check below to fill pendingUserInfo correctly
+            this.patchState({ pendingUserInfo: { username: credentials.username } });
+            this.setAuthStep('modifyLoginInfo');
+          }
+        }),
+        catchError((error) => {
+          this.handleAuthError(error);
+          return of(null);
+        }),
+        finalize(() => {
+          this._loginState.isLoggingIn = false;
+          this.setLoading(false);
+        }),
+      );
+  }
+
+  sendOtp(credentials: SendSmsOtpCredentials) {
+    this._loginState.isLoggingIn = true;
+    this._loginState.loginError = null;
+    this.setLoading(true);
+    return this.service
+      .sendOTP({ ...credentials, captcha: this.captchaCode()! }, this.selectedRole())
+      .pipe(
+        tap((response) => {
+          this.patchState({ pendingUserInfo: { mobile: credentials.mobile } });
+          this.setLoginStep('SEND_OTP');
+        }),
+        catchError((error) => {
+          this.handleAuthError(error);
+          return of(null);
+        }),
+        finalize(() => {
+          this._loginState.isLoggingIn = false;
+          this.setLoading(false);
+        }),
+      );
+  }
+
+  loginWithOtp(otp: string) {
+    this._loginState.isLoggingIn = true;
+    this._loginState.loginError = null;
+    this.setLoading(true);
+
+    return this.service
+      .loginWithOTP({ otp, mobile: this.pendingUserInfo()?.mobile! }, this.selectedRole())
+      .pipe(
+        tap((response) => {
+          this.handleAuthSuccess(response);
+          this.resetCaptcha();
+        }),
+        catchError((error) => {
+          this.handleAuthError(error);
+          return of(null);
+        }),
+        finalize(() => {
+          this._loginState.isLoggingIn = false;
+          this.setLoading(false);
+        }),
+      );
+  }
+
+  resendOtp() {
+    // const credentials: SendSmsOtpCredentials = {
+    // captcha: this.captchaCode()!,
+    // };
+    // this.sendOtp(credentials).subscribe();
+  }
+
+  modifyInfo(updatedInfo: IUserLoginInfo) {
+    this.setLoading(true);
+    return this.service.changeInfo(updatedInfo, this.selectedRole()).pipe(
       tap((response) => {
-        this.handleAuthSuccess(response);
-        this._loginState.isLoggingIn = false;
+        this.toastService.success({
+          text: 'اطلاعات با موفقیت به‌روزرسانی شد',
+        });
+        this.setAuthStep('login');
       }),
       catchError((error) => {
-        this.handleAuthError(error);
         return of(null);
+      }),
+      finalize(() => {
+        this.setLoading(false);
+      }),
+    );
+  }
+
+  signup(credentials: ISignupRequestPayload) {
+    this.setLoading(true);
+
+    return this.service.signup(credentials, this.selectedRole()).pipe(
+      tap(() => {
+        this.toastService.success({
+          text: 'ثبت نام با موفقیت انجام شد. لطفا وارد شوید.',
+        });
+        this.setAuthStep('login');
+      }),
+      catchError((error) => {
+        return of(null);
+      }),
+      finalize(() => {
+        this.setLoading(false);
       }),
     );
   }
@@ -182,7 +366,7 @@ export class AuthStore extends BaseStore<AuthState> {
     this._loginState.isRefreshing = true;
     this.setLoading(true);
 
-    return this.http.post<IAuthResponse>('/api/auth/refresh', { refreshToken }).pipe(
+    return this.service.refreshToken().pipe(
       tap((response) => {
         this.handleAuthSuccess(response);
         this._loginState.isRefreshing = false;
@@ -301,7 +485,7 @@ export class AuthStore extends BaseStore<AuthState> {
   /**
    * Handle successful authentication
    */
-  private handleAuthSuccess(response: IAuthResponse): void {
+  private handleAuthSuccess(response: IAuthResponse, withoutRedirect?: boolean): void {
     const sessionExpiry = this.getTokenExpiry(response.token);
     const currentTime = Date.now();
 
@@ -320,6 +504,7 @@ export class AuthStore extends BaseStore<AuthState> {
       // permissions: response.user.permissions?.map((p) => `${p.resource}:${p.action}`) || [],
       lastLoginTime: currentTime,
       sessionExpiry,
+      pendingUserInfo: undefined,
       loading: false,
       error: null,
     });
@@ -327,8 +512,9 @@ export class AuthStore extends BaseStore<AuthState> {
     // Reset login attempts on successful login
     localStorage.removeItem(LOCAL_STORAGE_KEYS.LOGIN_ATTEMPTS);
 
-    // Navigate based on user role
-    // this.navigateByRole(response.user.role);
+    if (!withoutRedirect) {
+      this.redirectToDashboard();
+    }
   }
 
   /**
@@ -395,6 +581,12 @@ export class AuthStore extends BaseStore<AuthState> {
       loginAttempts: 0,
       lastLoginTime: null,
       sessionExpiry: null,
+      selectedRole: ROLES.SCHOOL,
+      redirectUrl: '',
+      authStep: 'login',
+      loginType: 'PASSWORD',
+      loginStep: 'SEND_OTP',
+      captchaCode: null,
     });
 
     this._loginState.isLoggingIn = false;

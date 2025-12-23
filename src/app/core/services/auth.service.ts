@@ -6,13 +6,15 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, finalize, map, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { LOCAL_STORAGE_KEYS } from 'src/assets/constants';
 import {
   IAuthResponse,
+  ILoginRequestPayload,
+  ISendSmsOtpRequestPayload,
   ISignupRequestPayload,
   IUserLoginInfo,
-  LoginCredentials,
+  LoginOtpCredentials,
   Maybe,
   TRoles,
   User,
@@ -33,8 +35,23 @@ export class AuthService {
     TEACHER: TEACHERS_API_ROUTES.login(),
   } as Record<TRoles, string>;
 
+  readonly modulesSendSmsOtpForgetPasswordRoutes = {
+    SCHOOL: SCHOOLS_API_ROUTES.sendSmsOtpForForgetPassword(),
+  } as Record<TRoles, string>;
+
+  readonly modulesResetPasswordRoutes = {
+    SCHOOL: SCHOOLS_API_ROUTES.resetPassword(),
+  } as Record<TRoles, string>;
+
   readonly modulesSignupRoutes = {
     TEACHER: TEACHERS_API_ROUTES.signup(),
+  } as Record<TRoles, string>;
+
+  readonly modulesSendSmsOtpRoutes = {
+    SCHOOL: SCHOOLS_API_ROUTES.sendSmsOtpForLogin(),
+  } as Record<TRoles, string>;
+  readonly modulesLoginWithOtpRoutes = {
+    SCHOOL: SCHOOLS_API_ROUTES.loginWithSmsOtp(),
   } as Record<TRoles, string>;
 
   readonly modulesGetInfoRoutes = {
@@ -82,63 +99,65 @@ export class AuthService {
     }
   }
 
-  login(credentials: LoginCredentials, role: TRoles): Observable<IAuthResponse> {
-    const { username, password, captcha } = credentials;
-    this.isLoading.set(true);
-    this.isLoadingSubject.next(true);
+  sendOTP(credentials: ISendSmsOtpRequestPayload, role: TRoles): Observable<void> {
+    const endpoint = this.modulesSendSmsOtpRoutes[role];
+    const { mobile, captcha } = credentials;
     const baseHeaders = this.captchaService.buildCaptchaHeaders({}, captcha);
 
-    return this.http
-      .post<IAuthResponse>(
-        this.modulesLoginRoutes[role],
-        { username, password },
-        {
-          headers: baseHeaders,
-        },
-      )
-      .pipe(
-        tap((response) => {
-          this.handleAuthSuccess(response);
-          return response;
-        }),
-        catchError((error) => {
-          console.error('Login error:', error);
-          this.isLoadingSubject.next(false);
-          throw error;
-        }),
-        finalize(() => {
-          this.isLoading.set(false);
-        }),
-      );
+    return this.http.post<void>(
+      endpoint,
+      { mobile },
+      {
+        headers: baseHeaders,
+      },
+    );
+  }
+
+  loginWithOTP(credentials: LoginOtpCredentials, role: TRoles): Observable<IAuthResponse> {
+    return this.http.post<IAuthResponse>(this.modulesLoginWithOtpRoutes[role], credentials);
+  }
+
+  login(credentials: ILoginRequestPayload, role: TRoles): Observable<IAuthResponse> {
+    const { username, password, captcha } = credentials;
+    const baseHeaders = this.captchaService.buildCaptchaHeaders({}, captcha);
+
+    return this.http.post<IAuthResponse>(
+      this.modulesLoginRoutes[role],
+      { username, password },
+      {
+        headers: baseHeaders,
+      },
+    );
   }
 
   signup(credentials: ISignupRequestPayload, role: TRoles): Observable<IAuthResponse> {
-    this.isLoading.set(true);
-    this.isLoadingSubject.next(true);
     // const baseHeaders = this.captchaService.buildCaptchaHeaders({}, captcha);
 
-    return this.http
-      .post<IAuthResponse>(
-        this.modulesSignupRoutes[role],
-        credentials,
-        // {
-        //   headers: baseHeaders,
-        // },
-      )
-      .pipe(
-        tap((response) => {
-          this.handleAuthSuccess(response);
-          return response;
-        }),
-        catchError((error) => {
-          console.error('Signup error:', error);
-          this.isLoadingSubject.next(false);
-          throw error;
-        }),
-        finalize(() => {
-          this.isLoading.set(false);
-        }),
-      );
+    return this.http.post<IAuthResponse>(
+      this.modulesSignupRoutes[role],
+      credentials,
+      // {
+      //   headers: baseHeaders,
+      // },
+    );
+  }
+
+  sendOtpForResetPassword(credentials: ISendSmsOtpRequestPayload, role: TRoles): Observable<void> {
+    const endpoint = this.modulesSendSmsOtpForgetPasswordRoutes[role];
+    const { mobile, captcha } = credentials;
+    const baseHeaders = this.captchaService.buildCaptchaHeaders({}, captcha);
+
+    return this.http.post<void>(
+      endpoint,
+      { mobile },
+      {
+        headers: baseHeaders,
+      },
+    );
+  }
+
+  resetPasswordWithOtp(credentials: LoginOtpCredentials, role: TRoles): Observable<IAuthResponse> {
+    return this.http.post<IAuthResponse>(this.modulesResetPasswordRoutes[role], credentials);
   }
 
   logout(): void {

@@ -4,7 +4,11 @@ import { schoolsStudentsApiRoutes } from './students-api.const';
 const baseUrl = '/api/v1/school';
 
 export const SCHOOLS_API_ROUTES = {
+  sendSmsOtpForLogin: () => `${baseUrl}/SendSmsOTPForLogin`,
+  loginWithSmsOtp: () => `${baseUrl}/loginBySmsOTP`,
   login: () => `${baseUrl}/login`,
+  sendSmsOtpForForgetPassword: () => `${baseUrl}/SendSmsOTPForResetPassword`,
+  resetPassword: () => `${baseUrl}/SchoolResetPasswordByMobile`,
   me: () => `${baseUrl}/me`,
 
   // edit routes

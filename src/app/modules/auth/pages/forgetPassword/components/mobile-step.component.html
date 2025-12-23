@@ -1,0 +1,18 @@
+<form [formGroup]="form" class="w-full flex flex-col gap-4" (ngSubmit)="submit()">
+  <app-input
+    name="mobile"
+    label="شماره تلفن همراه"
+    size="large"
+    [control]="form.controls.mobile"
+    type="mobile"
+  ></app-input>
+
+  <app-auth-captcha class="block mb-6" />
+
+  <div class="grid grid-cols-1 gap-3">
+    <span class="w-full text-center text-sm select-none">
+      <a class="text-primary cursor-pointer font-bold" (click)="toPasswordLogin()">بازگشت به صفحه‌ی ورود</a>
+    </span>
+    <p-button label="ارسال کد" styleClass="w-full" size="large" [loading]="loading" type="submit"></p-button>
+  </div>
+</form>

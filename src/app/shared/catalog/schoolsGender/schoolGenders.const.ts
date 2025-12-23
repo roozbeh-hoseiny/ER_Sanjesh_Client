@@ -13,7 +13,7 @@ export const schoolGenders = [
   },
   {
     id: 3,
-    title: 'پسرانه و دخترانه',
+    title: 'هردو',
     color: 'warn',
   },
 ] as ISchoolGender[];

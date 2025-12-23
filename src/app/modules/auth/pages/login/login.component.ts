@@ -1,22 +1,11 @@
-import { AuthService } from '@/core';
-import { IAuthResponse, LoginCredentials, TRoles } from '@/core/models';
-import { ToastService } from '@/core/services/toast.service';
-import { UikitLabelComponent } from '@/uikit';
-import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
-import { Component, computed, EventEmitter, inject, Input, Output, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Button } from 'primeng/button';
-import { ImageModule } from 'primeng/image';
-import { InputGroupModule } from 'primeng/inputgroup';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { InputText } from 'primeng/inputtext';
-import { Password } from 'primeng/password';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { Component, inject } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { CaptchaService } from 'src/app/core/services/captcha.service';
-import { CENTRAL_AUTH_ROLES } from '../../constants/central-auth-roles.const';
+import { AuthSelectRolesComponent } from '../../components/select-roles.component';
+import { AuthStore } from '../../state';
+import { LoginWithPasswordFormComponent } from './components/with-password-form.component';
+import { LoginWithOTPFormComponent } from './components/withOTP/with-otp-form.component';
 
 @Component({
   selector: 'app-login',
@@ -24,100 +13,15 @@ import { CENTRAL_AUTH_ROLES } from '../../constants/central-auth-roles.const';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    Button,
-    Password,
-    InputText,
-    ImageModule,
-    ProgressSpinnerModule,
-    UikitLabelComponent,
     RadioButtonModule,
-    InputGroupModule,
-    InputGroupAddonModule,
-    UikitFieldComponent,
+    LoginWithPasswordFormComponent,
+    LoginWithOTPFormComponent,
+    AuthSelectRolesComponent,
   ],
 })
 export class LoginComponent {
-  @Input() redirectUrl!: string;
-  @Input() loginApiUrl!: string;
-  @Input() defaultRole?: TRoles;
+  private readonly store = inject(AuthStore);
 
-  @Output() onSuccessfullySubmit = new EventEmitter<IAuthResponse>();
-  @Output() onToSignup = new EventEmitter<void>();
-
-  private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
-  private readonly fb = inject(FormBuilder);
-  private readonly captchaService = inject(CaptchaService);
-  private readonly toastService = inject(ToastService);
-
-  readonly isLoading = computed(() => this.authService.isLoading());
-  readonly errorMessage = signal<string>('');
-  readonly hidePassword = signal<boolean>(true);
-  readonly isCaptchaExpired = this.captchaService.captchaIsExpired;
-  readonly isCaptchaLoading = this.captchaService.loading;
-  readonly captchaImageSrc = this.captchaService.captchaImageSrc;
-  readonly centralAuthRoles = CENTRAL_AUTH_ROLES;
-
-  readonly loginForm = this.fb.group({
-    username: ['', [Validators.required]],
-    password: ['', [Validators.required]],
-    rememberMe: [false],
-    captcha: ['', [Validators.required]],
-    role: [this.defaultRole || this.centralAuthRoles[0].key, [Validators.required]],
-  });
-
-  selectedRole = signal<TRoles>('SCHOOL');
-  ngOnInit() {
-    this.captchaService.requestNewCaptcha();
-  }
-
-  togglePasswordVisibility(): void {
-    this.hidePassword.set(!this.hidePassword());
-  }
-
-  resetCaptcha(): void {
-    this.fb.control('captcha').setValue('');
-    this.captchaService.renewCaptcha();
-  }
-
-  onRefreshCaptcha(): void {
-    this.resetCaptcha();
-  }
-  onRefreshCaptchaImage(): void {
-    this.resetCaptcha();
-    // document
-    //   .getElementById('captchaImage')
-    //   ?.setAttribute('src', this.captchaService.captchaImageSrc()! + `&${new Date().getTime()}`);
-  }
-
-  toSignup() {
-    this.onToSignup.emit();
-  }
-
-  submit(): void {
-    this.loginForm.markAllAsTouched();
-    if (this.loginForm.invalid) return;
-    if (!this.captchaService.captchaId()) {
-      this.toastService.error({ text: 'مقدار کپچا را وارد کنید' });
-    }
-    const credentials: LoginCredentials = this.loginForm.value as LoginCredentials;
-
-    this.authService
-      .login(credentials, (this.defaultRole || this.loginForm.value.role)!)
-      .subscribe({
-        next: (data) => {
-          this.errorMessage.set('');
-          if (this.redirectUrl) {
-            this.router.navigateByUrl(this.redirectUrl.replace(/\/[^/]*$/, ''));
-          } else {
-            this.onSuccessfullySubmit.emit(data);
-          }
-        },
-        error: (error) => {
-          this.resetCaptcha();
-          this.errorMessage.set('نام کاربری یا رمز عبور اشتباه است');
-          console.error('Login failed:', error);
-        },
-      });
-  }
+  loginType = this.store.loginType;
+  canChangeRole = this.store.canChangeRole;
 }

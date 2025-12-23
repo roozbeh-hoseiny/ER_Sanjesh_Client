@@ -1,15 +1,12 @@
-import { AuthService } from '@/core';
-import { ISignupRequestPayload, IUserLoginInfo, Maybe, TRoles } from '@/core/models';
-import { ToastService } from '@/core/services/toast.service';
+import { ISignupRequestPayload, Maybe } from '@/core/models';
 import { mobileValidator, MustMatch } from '@/core/validators';
 import { password } from '@/core/validators/password.validator';
 import { GenderSelectComponent } from '@/shared/catalog/gender/gender-select.component';
 import { InputComponent } from '@/shared/components';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Button } from 'primeng/button';
 import { ImageModule } from 'primeng/image';
 import { InputGroupModule } from 'primeng/inputgroup';
@@ -17,6 +14,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { Password } from 'primeng/password';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { AuthStore } from '../../state';
 
 @Component({
   selector: 'auth-signup',
@@ -37,17 +35,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
   ],
 })
 export class SignupComponent {
-  @Input() userLoginInfo!: Partial<IUserLoginInfo>;
-  @Input() role!: TRoles;
-
-  @Output() onSubmit = new EventEmitter<IUserLoginInfo>();
-  @Output() toLogin = new EventEmitter<void>();
-
-  constructor(
-    private readonly authService: AuthService,
-    private readonly toastService: ToastService,
-    private readonly router: Router,
-  ) {}
+  constructor(private readonly store: AuthStore) {}
 
   private readonly fb = inject(FormBuilder);
 
@@ -77,13 +65,9 @@ export class SignupComponent {
     if (this.form.invalid) return;
     const credentials = this.form.value as ISignupRequestPayload;
     this.isLoading.set(true);
-    this.authService.signup(credentials, this.role).subscribe({
+    this.store.signup(credentials).subscribe({
       next: () => {
-        this.toastService.success({
-          text: 'ثبت نام با موفقیت انجام شد. لطفا وارد شوید.',
-        });
-        this.errorMessage.set('');
-        this.onSubmit?.emit();
+        this.form.reset();
         this.isLoading.set(false);
       },
       error: (error) => {

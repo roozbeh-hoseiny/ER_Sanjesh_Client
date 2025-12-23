@@ -16,11 +16,12 @@ export class InputComponent {
   @Input() control!: FormControl<Maybe<any>>;
   @Input() name!: string;
   @Input() label: string = '';
-  @Input() customPlaceholder?: string;
+  @Input() placeholder?: string;
   @Input() required = false;
   @Input() disabled = false;
   @Input() size?: 'small' | 'large';
   @Input() autocomplete?: string = 'off';
+  @Input() isLtrInput = false;
   @Output() valueChange = new EventEmitter<string>();
 
   onInput(ev: Event) {
@@ -28,8 +29,8 @@ export class InputComponent {
     this.valueChange.emit(v);
   }
 
-  get placeholder(): string | null {
-    if (this.customPlaceholder) return this.customPlaceholder;
+  get _placeholder(): string | null {
+    if (this.placeholder) return this.placeholder;
     switch (this.type) {
       case 'mobile':
         return '09xxxxxxxx';
@@ -69,16 +70,22 @@ export class InputComponent {
   }
 
   get inputClass(): string {
+    let inputClass = [];
     switch (this.type) {
       case 'mobile':
       case 'phone':
-        return 'ltrInput';
+        inputClass.push('ltrInput');
+        break;
       case 'email':
       case 'postalCode':
-        return 'ltrInput rtlPlaceholder';
-      default:
-        return '';
+        inputClass.push('ltrInput', 'rtlPlaceholder');
+        break;
     }
+    if (this.isLtrInput) {
+      inputClass.push('ltrInput', 'rtlPlaceholder');
+    }
+
+    return inputClass.join(' ');
   }
 
   get htmlType(): string {

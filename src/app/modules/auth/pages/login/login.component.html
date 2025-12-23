@@ -1,105 +1,11 @@
-<form [formGroup]="loginForm" class="w-full flex flex-col gap-4" (ngSubmit)="submit()">
-  @if (!defaultRole) {
-    <div class="flex items-center gap-4 justify-center mb-10">
-      @for (role of centralAuthRoles; track role.key) {
-        <div class="flex items-center gap-1">
-          <p-radiobutton [inputId]="role.key" name="role" [value]="role.key" formControlName="role" size="small" />
-          <uikit-label [name]="role.key" class="cursor-pointer">{{ role.title }}</uikit-label>
-        </div>
-      }
-    </div>
+<div class="w-full flex flex-col gap-4">
+  @if (canChangeRole()) {
+    <app-auth-select-roles />
   }
 
-  <uikit-field name="username" pSize="large" [control]="loginForm.controls.username" label="نام کاربری">
-    <input
-      pInputText
-      id="username"
-      name="username"
-      type="text"
-      placeholder="نام کاربری"
-      class="w-full placeholder:text-right"
-      pSize="large"
-      dir="ltr"
-      autocomplete="username"
-      formControlName="username"
-      [invalid]="loginForm.controls.username.touched && loginForm.controls.username.invalid"
-    />
-  </uikit-field>
-
-  <uikit-field name="password1" pSize="large" [control]="loginForm.controls.password" label="رمز عبور">
-    <p-password
-      id="password1"
-      size="large"
-      name="password"
-      formControlName="password"
-      autocomplete="password"
-      placeholder="رمز عبور"
-      [toggleMask]="true"
-      [fluid]="true"
-      [feedback]="false"
-      inputStyleClass="placeholder:text-right"
-      [inputStyle]="{
-        direction: 'ltr',
-        'padding-inline-start': 'calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size))',
-        'padding-inline-end': 'var(--p-inputtext-lg-padding-x)',
-      }"
-      [invalid]="loginForm.controls.password.touched && loginForm.controls.password.invalid"
-    />
-  </uikit-field>
-
-  <!-- <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-          <div class="flex items-center">
-            <p-checkbox formControlName="rememberMe" id="rememberMe" binary class="me-2"></p-checkbox>
-            <uikit-label name="rememberMe" pSize="small">مرا به خاطر بسپار</uikit-label>
-          </div>
-          <span class="text-sm font-medium no-underline ms-2 text-right cursor-pointer text-primary">
-            رمز را فراموش کردید؟
-          </span>
-        </div> -->
-  <div class="mb-6 flex flex-col items-center gap-4 w-[16rem] mx-auto">
-    <div
-      class="relative bg-surface-ground rounded-xl overflow-hidden shadow shrink-0 border border-[var(--p-inputtext-border-color)] w-full aspect-[2]"
-    >
-      <img p-image id="captchaImage" [src]="captchaImageSrc()" class="w-full object-contain" />
-      @if (isCaptchaLoading()) {
-        <div class="!absolute inset-0 bg-surface-hover/50 flex items-center justify-center">
-          <p-progress-spinner
-            strokeWidth="4"
-            fill="transparent"
-            animationDuration="1s"
-            [style]="{ width: '48px', height: '48px' }"
-          />
-        </div>
-      } @else if (isCaptchaExpired()) {
-        <div
-          class="!absolute inset-0 bg-surface-hover/70 flex items-center justify-center text-center p-2 text-sm font-medium cursor-pointer"
-          (click)="onRefreshCaptcha()"
-        >
-          <i class="pi pi-refresh !text-3xl text-gray-500"></i>
-        </div>
-      }
-    </div>
-    <p-inputgroup>
-      <input
-        pInputText
-        id="captcha"
-        type="text"
-        placeholder="کد کپچا را وارد کنید"
-        class="w-full"
-        formControlName="captcha"
-      />
-
-      <p-inputgroup-addon>
-        <p-button icon="pi pi-refresh" severity="secondary" variant="text" (click)="onRefreshCaptchaImage()" />
-      </p-inputgroup-addon>
-    </p-inputgroup>
-  </div>
-  <div class="grid grid-cols-1 gap-3">
-    @if (loginForm.controls.role.value === "TEACHER") {
-      <span class="w-full text-center text-sm select-none">
-        برای ثبت نام در سامانه <a class="text-primary cursor-pointer" (click)="toSignup()">اینجا</a> کلیک کنید.
-      </span>
-    }
-    <p-button label="ورود" styleClass="w-full" size="large" [loading]="isLoading()" type="submit"></p-button>
-  </div>
-</form>
+  @if (loginType() === "OTP") {
+    <app-login-with-otp-form />
+  } @else {
+    <app-login-with-password-form />
+  }
+</div>

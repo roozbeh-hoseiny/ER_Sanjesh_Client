@@ -1,0 +1,14 @@
+<div class="flex items-center gap-4 justify-center mb-10">
+  @for (role of centralAuthRoles; track role.key) {
+    <div class="flex items-center gap-1">
+      <p-radiobutton
+        [inputId]="role.key"
+        name="role"
+        [value]="role.key"
+        [formControl]="selectedRoleControl"
+        size="small"
+      />
+      <uikit-label [name]="role.key" class="cursor-pointer inline-block">{{ role.title }}</uikit-label>
+    </div>
+  }
+</div>

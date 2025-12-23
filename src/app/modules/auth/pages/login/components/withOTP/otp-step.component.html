@@ -1,0 +1,12 @@
+<form class="flex justify-center flex-col gap-3 items-center px-6" (ngSubmit)="submit()">
+  <p-inputotp name="otp" size="large" [length]="5" [(ngModel)]="otpCode" />
+  <span class="text-muted-color"> کد ارسال شده را وارد کنید. </span>
+  <div class="flex items-center justify-center">
+    @if (countdown() > 0) {
+      <span class="text-sm text-muted-color ml-2">ارسال مجدد کد در {{ countdown() }} ثانیه</span>
+    } @else {
+      <button pButton outlined (click)="resendOtp()" [loading]="submitLoading()">ارسال مجدد کد</button>
+    }
+  </div>
+  <button pButton class="w-full mt-5" [loading]="submitLoading()" [disabled]="countdown() <= 0">ورود</button>
+</form>

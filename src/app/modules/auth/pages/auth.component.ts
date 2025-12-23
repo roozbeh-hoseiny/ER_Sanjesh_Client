@@ -1,82 +1,39 @@
-import { IAuthResponse, TRoles } from '@/core';
-import { ToastService } from '@/core/services/toast.service';
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { TRoles } from '@/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import images from 'src/assets/images';
+import { AuthStore } from '../state';
 import { LoginComponent } from './login/login.component';
 import { ModifyLoginInfoComponent } from './modifyLoginInfo/modify-login-info.component';
 import { OTPComponent } from './otp/otp.component';
 import { SignupComponent } from './signup/signup.component';
-
-type TSteps = 'login' | 'otp' | 'modifyLoginInfo' | 'signup';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   imports: [LoginComponent, OTPComponent, ModifyLoginInfoComponent, SignupComponent],
 })
-export class AuthComponent {
-  @Input() redirectUrl!: string;
-  @Input() loginApiUrl!: string;
+export class AuthComponent implements OnInit {
+  @Input() redirectUrl?: string;
   @Input() role?: TRoles;
-  @Input() defaultStep: TSteps = 'login';
 
-  @Output() submit = new EventEmitter<Promise<boolean>>();
-
-  private readonly toastService = inject(ToastService);
-  private readonly router = inject(Router);
+  private readonly store = inject(AuthStore);
 
   readonly logo = images.logo;
   readonly authVector = images.login;
 
-  activeStep = signal<TSteps>(this.defaultStep);
-
-  selectedRole = signal<TRoles | undefined>(this.role);
-
-  toSignUp = () => {
-    this.activeStep.set('signup');
-  };
-
-  onLoggedIn = (data: IAuthResponse) => {
-    this.toastService.success({ text: 'شما با موفقیت وارد شدید.' });
-    this.selectedRole.set(data.role.toUpperCase() as TRoles);
-    if (data.mustChangePassword) {
-      this.activeStep.set('modifyLoginInfo');
-      return;
+  ngOnInit(): void {
+    if (this.role) {
+      this.store.setSelectedRole(this.role);
     }
-
-    if (this.submit.observed) {
-      return this.submit.emit(Promise.resolve(true));
+    if (this.redirectUrl) {
+      this.store.setRedirectUrl(this.redirectUrl);
     }
-    this.redirectToDashboard();
-  };
+  }
 
-  onModifyLoginInfo = () => {
-    if (this.submit.observed) {
-      return this.submit.emit(Promise.resolve(true));
-    }
-    this.redirectToDashboard();
-  };
-
-  private redirectToDashboard() {
-    let redirectUrl = this.redirectUrl;
-
-    if (!redirectUrl) {
-      switch (this.selectedRole()) {
-        case 'SCHOOL':
-          redirectUrl = '/schools';
-          break;
-        case 'ADMIN':
-          redirectUrl = '/admin';
-          break;
-        case 'TEACHER':
-          redirectUrl = '/teachers';
-          break;
-        case 'STUDENTS':
-          redirectUrl = '/students';
-          break;
-      }
-    }
-    this.router.navigateByUrl(redirectUrl);
+  get selectedRole() {
+    return this.store.selectedRole();
+  }
+  get activeStep() {
+    return this.store.authStep();
   }
 }

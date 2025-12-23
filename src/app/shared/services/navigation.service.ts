@@ -1,13 +1,13 @@
+import { AuthStore } from '@/modules/auth/state';
 import { inject, Injectable, signal } from '@angular/core';
 import { ROLES } from 'src/assets/constants';
 import { MenuItem, NavigationConfig } from '../../core/models';
-import { AuthService } from '../../core/services/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NavigationService {
-  private readonly authService = inject(AuthService);
+  private readonly authStore = inject(AuthStore);
 
   readonly isCollapsed = signal(false);
 
@@ -194,7 +194,7 @@ export class NavigationService {
   ];
 
   getMenuItems(): MenuItem[] {
-    const currentRole = this.authService.userRole();
+    const currentRole = this.authStore.userRole();
     if (!currentRole) return [];
 
     const config = this.navigationConfigs.find((c) => c.role === currentRole);

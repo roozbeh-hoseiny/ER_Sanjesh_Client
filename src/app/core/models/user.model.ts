@@ -40,9 +40,22 @@ export interface IAuthResponse {
   expiresIn: number;
 }
 
+export interface SendSmsOtpCredentials {
+  mobile: string;
+}
+export interface ISendSmsOtpRequestPayload extends SendSmsOtpCredentials {
+  captcha: string;
+}
+export interface LoginOtpCredentials {
+  mobile: string;
+  otp: string;
+}
+
 export interface LoginCredentials {
   username: string;
   password: string;
+}
+export interface ILoginRequestPayload extends LoginCredentials {
   captcha: string;
 }
 

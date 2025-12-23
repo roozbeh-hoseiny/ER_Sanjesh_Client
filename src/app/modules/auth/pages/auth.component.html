@@ -11,26 +11,19 @@
         <span class="text-lg font-bold"> به پنل امتحانات شبه نهایی سنجش خوش آمدید. </span>
       </div>
 
-      @if (activeStep() === "login") {
-        <app-login
-          [redirectUrl]="redirectUrl"
-          [loginApiUrl]="loginApiUrl"
-          [defaultRole]="role"
-          class="w-full"
-          (onSuccessfullySubmit)="onLoggedIn($event)"
-          (onToSignup)="toSignUp()"
-        />
-      } @else if (activeStep() === "signup") {
-        <auth-signup role="TEACHER" class="w-full" />
-      } @else if (activeStep() === "otp") {
-        <app-otp class="w-full" />
-      } @else if (activeStep() === "modifyLoginInfo") {
-        <app-modify-login-info
-          [userLoginInfo]="{}"
-          [role]="selectedRole()!"
-          (onSubmit)="onModifyLoginInfo()"
-          class="w-full"
-        />
+      @switch (activeStep) {
+        @case ("login") {
+          <app-login class="w-full" />
+        }
+        @case ("signup") {
+          <auth-signup role="TEACHER" class="w-full" />
+        }
+        @case ("otp") {
+          <app-otp class="w-full" />
+        }
+        @case ("modifyLoginInfo") {
+          <app-modify-login-info class="w-full" />
+        }
       }
     </div>
   </div>
