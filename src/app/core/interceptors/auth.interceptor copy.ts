@@ -1,8 +1,8 @@
+import { AuthStore } from '@/modules/auth/state';
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service';
 
 /**
  * HTTP Interceptor for token management
@@ -11,14 +11,14 @@ import { AuthService } from '../services/auth.service';
  * - Prevents duplicate refresh token requests
  */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
+  const authStore = inject(AuthStore);
 
   // Skip auth for certain endpoints
   if (shouldSkipAuth(req.url)) {
     return next(req);
   }
 
-  const token = authService.getToken();
+  const token = authStore.getToken();
 
   // Add token to request if available
   const authReq = token
@@ -31,11 +31,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error) => {
       // Handle 401 Unauthorized - token might be expired
       if (error.status === 401 && !isRefreshTokenRequest(req.url)) {
-        return handleTokenRefresh(authService, req, next);
+        return handleTokenRefresh(authStore, req, next);
       }
 
       return throwError(() => error);
-    })
+    }),
   );
 };
 
@@ -45,33 +45,37 @@ const isRefreshing = new BehaviorSubject<boolean>(false);
 /**
  * Handle token refresh logic
  */
-function handleTokenRefresh(authService: AuthService, req: any, next: any): Observable<any> {
+function handleTokenRefresh(authStore: AuthStore, req: any, next: any): Observable<any> {
   if (!isRefreshing.value) {
     isRefreshing.next(true);
 
-    const refreshToken = authService.getRefreshToken();
+    const refreshToken = authStore.getRefreshToken();
     if (!refreshToken) {
       isRefreshing.next(false);
-      authService.logout();
+      authStore.logout();
       return throwError(() => new Error('توکنی یافت نشد'));
     }
 
-    return authService.refreshToken().pipe(
+    return authStore.refreshAuthToken()?.pipe(
       switchMap((response) => {
         isRefreshing.next(false);
 
         // Retry original request with new token
+        if (response == null) {
+          authStore.logout();
+          return throwError(() => new Error('خطا در بروزرسانی توکن'));
+        }
         const newAuthReq = req.clone({
-          headers: req.headers.set('Authorization', `Bearer ${response.token}`),
+          headers: req.headers.set('Authorization', `Bearer ${response?.token}`),
         });
 
         return next(newAuthReq);
       }),
       catchError((refreshError) => {
         isRefreshing.next(false);
-        authService.logout();
+        authStore.logout();
         return throwError(() => refreshError);
-      })
+      }),
     );
   } else {
     // Wait for refresh to complete, then retry request
@@ -79,7 +83,7 @@ function handleTokenRefresh(authService: AuthService, req: any, next: any): Obse
       filter((refreshing) => !refreshing),
       take(1),
       switchMap(() => {
-        const token = authService.getToken();
+        const token = authStore.getToken();
         const newAuthReq = token
           ? req.clone({
               headers: req.headers.set('Authorization', `Bearer ${token}`),
@@ -87,7 +91,7 @@ function handleTokenRefresh(authService: AuthService, req: any, next: any): Obse
           : req;
 
         return next(newAuthReq);
-      })
+      }),
     );
   }
 }

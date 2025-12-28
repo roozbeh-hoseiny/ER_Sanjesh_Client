@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from './core';
+import { AuthStore } from './modules/auth/state';
 
 @Component({
   selector: 'app-root-component',
@@ -9,10 +9,10 @@ import { AuthService } from './core';
 })
 export class RootComponent {
   constructor(private router: Router) {}
-  authService = inject(AuthService);
+  private authStore = inject(AuthStore);
 
   ngOnInit() {
-    const role = this.authService.userRole();
+    const role = this.authStore.userRole();
 
     let navigatedUrl = '/auth';
     switch (role?.toUpperCase()) {

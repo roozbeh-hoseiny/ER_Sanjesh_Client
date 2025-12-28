@@ -1,14 +1,14 @@
+import { AuthStore } from '@/modules/auth/state';
 import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
 import { ToastService } from '../services/toast.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  private readonly authService = inject(AuthService);
+  private readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
   private readonly toastService = inject(ToastService);
 
@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
     _route: ActivatedRouteSnapshot,
     _state: RouterStateSnapshot,
   ): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.authService.isAuthenticated()) {
+    if (this.authStore.isAuthenticated()) {
       return true;
     }
 

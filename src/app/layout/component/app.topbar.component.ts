@@ -1,4 +1,4 @@
-import { AuthService } from '@/core/services/auth.service';
+import { AuthStore } from '@/modules/auth/state';
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -19,7 +19,7 @@ export class AppTopbar {
   items!: MenuItem[];
 
   constructor(public layoutService: LayoutService) {}
-  private authService: AuthService = inject(AuthService);
+  private readonly authStore = inject(AuthStore);
 
   readonly logo = images.logo;
 
@@ -27,10 +27,10 @@ export class AppTopbar {
     this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
   }
 
-  username = computed(() => this.authService.currentUser()?.fullName || 'کاربر ناشناس');
+  username = computed(() => this.authStore.user()?.fullName || 'کاربر ناشناس');
 
   logout = () => {
-    this.authService.logout();
+    this.authStore.logout();
   };
 
   profileMenuItems: MenuItem[] = [

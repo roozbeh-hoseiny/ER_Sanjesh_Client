@@ -1,18 +1,18 @@
+import { AuthStore } from '@/modules/auth/state';
 import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoleGuard implements CanActivate {
-  private readonly authService = inject(AuthService);
+  private readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ): Observable<boolean> | Promise<boolean> | boolean {
     return true;
     // const requiredRoles = route.data['roles'] as UserRole[];

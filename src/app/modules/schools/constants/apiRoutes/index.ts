@@ -5,9 +5,11 @@ const baseUrl = '/api/v1/school';
 
 export const SCHOOLS_API_ROUTES = {
   sendSmsOtpForLogin: () => `${baseUrl}/SendSmsOTPForLogin`,
+  resendSmsOtpForLogin: () => `${baseUrl}/reSendSmsOTPForLogin`,
   loginWithSmsOtp: () => `${baseUrl}/loginBySmsOTP`,
   login: () => `${baseUrl}/login`,
   sendSmsOtpForForgetPassword: () => `${baseUrl}/SendSmsOTPForResetPassword`,
+  resendSmsOtpForForgetPassword: () => `${baseUrl}/reSendSmsOTPForResetPassword`,
   resetPassword: () => `${baseUrl}/SchoolResetPasswordByMobile`,
   me: () => `${baseUrl}/me`,
 
