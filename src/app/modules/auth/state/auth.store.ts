@@ -26,7 +26,6 @@ export interface AuthState extends BaseState {
   user: Maybe<User>;
   token: Maybe<string>;
   refreshToken: Maybe<string>;
-  isAuthenticated: boolean;
   permissions: string[];
   loginAttempts: number;
   lastLoginTime: Maybe<number>;
@@ -79,7 +78,6 @@ export class AuthStore extends BaseStore<AuthState> {
       user: null,
       token: null,
       refreshToken: null,
-      isAuthenticated: false,
       permissions: [],
       loginAttempts: 0,
       lastLoginTime: null,
@@ -99,7 +97,7 @@ export class AuthStore extends BaseStore<AuthState> {
   readonly user = computed(() => this._state().user);
   readonly token = computed(() => this._state().token);
   readonly refreshToken = computed(() => this._state().refreshToken);
-  readonly isAuthenticated = computed(() => this._state().isAuthenticated);
+  readonly isAuthenticated = computed(() => this._state().token !== null);
   readonly userRole = computed(() => this._state().user?.role);
   readonly permissions = computed(() => this._state().permissions);
   readonly loginAttempts = computed(() => this._state().loginAttempts);
@@ -137,24 +135,7 @@ export class AuthStore extends BaseStore<AuthState> {
     if (token && refreshToken && userData) {
       try {
         const user = JSON.parse(userData) as User;
-        const sessionExpiry = this.getTokenExpiry(token);
-
-        this.patchState({
-          user,
-          token,
-          refreshToken,
-          isAuthenticated: true,
-          permissions: [],
-          // permissions: user.permissions?.map((p) => `${p.resource}:${p.action}`) || [],
-          loginAttempts,
-          lastLoginTime: lastLoginTime || null,
-          sessionExpiry,
-        });
-
-        // Check if token is expired
-        if (this.isTokenExpired()) {
-          this.refreshAuthToken().subscribe();
-        }
+        this.patchState({ token, user, refreshToken });
       } catch (error) {
         console.error('Error parsing stored user data:', error);
         this.logout();
@@ -463,7 +444,6 @@ export class AuthStore extends BaseStore<AuthState> {
       user: null,
       token: null,
       refreshToken: null,
-      isAuthenticated: false,
       permissions: [],
       lastLoginTime: null,
       sessionExpiry: null,
@@ -549,7 +529,7 @@ export class AuthStore extends BaseStore<AuthState> {
    * Check if user can access resource
    */
   canAccess(requiredRoles?: TRoles[], requiredPermissions?: string[]): boolean {
-    if (!this._state().isAuthenticated) return false;
+    if (!this.isAuthenticated()) return false;
 
     if (requiredRoles && !this.hasAnyRole(requiredRoles)) {
       return false;
@@ -615,11 +595,14 @@ export class AuthStore extends BaseStore<AuthState> {
   private handleAuthSuccess(response: IAuthResponse, withoutRedirect?: boolean): void {
     const sessionExpiry = this.getTokenExpiry(response.token);
     const currentTime = Date.now();
+    const user = { fullName: response.fullName, role: response.role as TRoles };
+
+    // this.isLoading.set(false);
 
     // Store in localStorage
     localStorage.setItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN, response.token);
     localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken);
-    // localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(response.user));
+    localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(user));
     localStorage.setItem(LOCAL_STORAGE_KEYS.LAST_LOGIN_TIME, currentTime.toString());
 
     // Update state
@@ -627,7 +610,6 @@ export class AuthStore extends BaseStore<AuthState> {
       user: { fullName: response.fullName, role: response.role as TRoles },
       token: response.token,
       refreshToken: response.refreshToken,
-      isAuthenticated: true,
       // permissions: response.user.permissions?.map((p) => `${p.resource}:${p.action}`) || [],
       lastLoginTime: currentTime,
       sessionExpiry,
@@ -705,7 +687,6 @@ export class AuthStore extends BaseStore<AuthState> {
       user: null,
       token: null,
       refreshToken: null,
-      isAuthenticated: false,
       permissions: [],
       loginAttempts: 0,
       lastLoginTime: null,

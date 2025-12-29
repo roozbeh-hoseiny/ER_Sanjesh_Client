@@ -9,7 +9,7 @@ import { SchoolDetailsCardsStore } from './store';
   imports: [AppCardComponent, KeyValueComponent],
   templateUrl: './school-login-info.component.html',
 })
-export class SchoolManagerComponent {
+export class SchoolLoginInfoComponent {
   private detailsStore = inject(SchoolDetailsCardsStore);
 
   get manager() {

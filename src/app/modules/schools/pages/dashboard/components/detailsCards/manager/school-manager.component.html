@@ -1,0 +1,29 @@
+<app-card-data cardTitle="اطلاعات مدیریت" [editable]="canEdit" [editMode]="editMode()" (onEdit)="onEdit()">
+  @if (canEdit && editMode()) {
+    <app-school-manager-form (closeForm)="closeForm()" (submitForm)="submitForm()" />
+  } @else {
+    <div class="flex flex-col gap-4">
+      <div class="grid grid-cols-3 gap-4 items-center">
+        <app-key-value label="نام" [value]="managerInfo?.firstName" />
+        <app-key-value label="نام خانوادگی" [value]="managerInfo?.lastName" />
+        <app-key-value label="جنسیت" [value]="managerInfo?.gender ? 'مرد' : 'زن'" />
+        <app-key-value label="تلفن همراه">
+          <app-check-verified-info
+            [value]="managerInfo?.mobile"
+            [isVerified]="managerInfo?.mobileIsVerified"
+            [inlineConfirmation]="showInlineConfirmation"
+            (onToggleVerify)="toggleVerifyMobile($event)"
+          />
+        </app-key-value>
+        <app-key-value label="ایمیل">
+          <app-check-verified-info
+            [value]="managerInfo?.email"
+            [inlineConfirmation]="showInlineConfirmation"
+            [isVerified]="managerInfo?.emailIsVerified"
+            (onToggleVerify)="toggleVerifyEmail($event)"
+          />
+        </app-key-value>
+      </div>
+    </div>
+  }
+</app-card-data>

@@ -103,7 +103,7 @@ export class StateSelectors {
    */
   readonly appState$ = combineLatest([this.authStore.state$, this.globalStore.state$]).pipe(
     map(([authState, globalState]) => ({
-      isAuthenticated: authState.isAuthenticated,
+      isAuthenticated: this.authStore.isAuthenticated(),
       user: authState.user,
       userRole: authState.user?.role,
       loading: authState.loading || globalState.loading,
@@ -123,7 +123,7 @@ export class StateSelectors {
    */
   readonly userAccess$ = this.authStore.state$.pipe(
     map((authState) => ({
-      isAuthenticated: authState.isAuthenticated,
+      isAuthenticated: this.authStore.isAuthenticated(),
       role: authState.user?.role,
       permissions: authState.permissions,
       canAccessAdmin: authState.user?.role === 'ADMIN' || authState.user?.role === 'SUPERADMIN',
@@ -196,7 +196,7 @@ export class StateUtils {
   canAccessRoute(requiredRoles?: string[], requiredPermissions?: string[]): boolean {
     const authState = this.authStore.getCurrentState();
 
-    if (!authState.isAuthenticated) {
+    if (!this.authStore.isAuthenticated()) {
       return false;
     }
 

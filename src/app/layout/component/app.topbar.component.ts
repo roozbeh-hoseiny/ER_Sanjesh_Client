@@ -40,6 +40,10 @@ export class AppTopbar {
       disabled: true,
     },
     {
+      label: 'تغییر گذرواژه',
+      icon: 'pi pi-key',
+    },
+    {
       label: 'راهنمای سامانه',
       icon: 'pi pi-question-circle',
       disabled: true,
