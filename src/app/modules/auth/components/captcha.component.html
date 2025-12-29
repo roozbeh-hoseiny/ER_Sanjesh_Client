@@ -1,1 +1,7 @@
-<app-shared-captcha [control]="captchaControl" />
+<app-captcha-template
+  [control]="captchaControl"
+  [captchaImageSrc]="captchaImageSrc()"
+  [isCaptchaExpired]="isCaptchaExpired()"
+  [isCaptchaLoading]="isCaptchaLoading()"
+  (onRenewCaptcha)="resetCaptcha()"
+/>

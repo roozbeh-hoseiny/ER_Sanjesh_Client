@@ -1,6 +1,8 @@
 <form class="flex justify-center flex-col gap-3 items-center px-6" (ngSubmit)="submit()">
-  <p-inputotp name="otp" size="large" [length]="5" [(ngModel)]="otpCode" />
-  <span class="text-muted-color"> کد ارسال شده را وارد کنید. </span>
+  <p-inputotp name="otp" size="large" [length]="6" [(ngModel)]="otpCode" dir="ltr" />
+  <span class="text-muted-color text-sm font-bold mt-1">
+    کد ارسال شده برای شماره {{ pendingUserInfo()?.mobile }} را وارد کنید.
+  </span>
   <div class="flex items-center justify-center">
     @if (countdown() > 0) {
       <span class="text-sm text-muted-color ml-2">ارسال مجدد کد در {{ countdown() }} ثانیه</span>
@@ -8,5 +10,10 @@
       <button pButton outlined (click)="resendOtp()" [loading]="submitLoading()">ارسال مجدد کد</button>
     }
   </div>
-  <button pButton class="w-full mt-5" [loading]="submitLoading()" [disabled]="countdown() <= 0">ورود</button>
+  <app-auth-captcha class="block mb-6" />
+
+  <span class="w-full text-center text-sm select-none mt-5">
+    <a class="text-primary cursor-pointer font-bold" (click)="modifyPhone()">تغییر شماره تلفن</a>
+  </span>
+  <button pButton class="w-full" [loading]="submitLoading()" [disabled]="countdown() <= 0">ورود</button>
 </form>

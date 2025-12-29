@@ -1,43 +1,58 @@
-<form class="flex justify-center flex-col gap-3 items-center px-6" (ngSubmit)="submit()">
-  <uikit-field label="رمز عبور" name="password" pSize="large" [control]="form.controls.password">
-    <p-password
-      id="password1"
-      size="large"
-      name="password"
-      formControlName="password"
-      autocomplete="password"
-      [toggleMask]="true"
-      [fluid]="true"
-      [feedback]="false"
-      [invalid]="form.controls.password.touched && form.controls.password.invalid"
-    />
-    <span class="text-xs mt-2 text-muted-color">
-      رمز باید حداقل ۸ کاراکتر بوده و شامل حداقل یک حرف بزرگ، یک حرف کوچک، یک عدد و یک کاراکتر ویژه باشد.
-    </span>
-  </uikit-field>
+<div class="flex justify-center flex-col gap-3 items-center px-6">
+  <form [formGroup]="form" class="flex justify-center flex-col gap-3 items-center" (ngSubmit)="submit()">
+    <uikit-field label="رمز عبور" name="password" pSize="large" class="w-full" [control]="form.controls.password">
+      <p-password
+        id="password1"
+        size="large"
+        name="password"
+        formControlName="password"
+        autocomplete="password"
+        [toggleMask]="true"
+        [fluid]="true"
+        [feedback]="false"
+        [invalid]="form.controls.password.touched && form.controls.password.invalid"
+      />
+      <span class="text-xs mt-2 text-muted-color">
+        رمز باید حداقل ۸ کاراکتر بوده و شامل حداقل یک حرف بزرگ، یک حرف کوچک، یک عدد و یک کاراکتر ویژه باشد.
+      </span>
+    </uikit-field>
 
-  <uikit-field label="تکرار رمز عبور" pSize="large" name="confirmPassword" [control]="form.controls.confirmPassword">
-    <p-password
-      id="confirmPassword"
-      size="large"
+    <uikit-field
+      label="تکرار رمز عبور"
+      pSize="large"
       name="confirmPassword"
-      formControlName="confirmPassword"
-      autocomplete="new-password"
-      [toggleMask]="true"
-      [fluid]="true"
-      [feedback]="false"
-      [invalid]="form.controls.confirmPassword.touched && form.controls.confirmPassword.invalid"
-    />
-  </uikit-field>
+      class="w-full"
+      [control]="form.controls.confirmPassword"
+    >
+      <p-password
+        id="confirmPassword"
+        size="large"
+        name="confirmPassword"
+        formControlName="confirmPassword"
+        autocomplete="new-password"
+        [toggleMask]="true"
+        [fluid]="true"
+        [feedback]="false"
+        [invalid]="form.controls.confirmPassword.touched && form.controls.confirmPassword.invalid"
+      />
+    </uikit-field>
+  </form>
 
-  <p-inputotp name="otp" size="large" [length]="5" [(ngModel)]="otpCode" />
-  <span class="text-muted-color"> کد ارسال شده را وارد کنید. </span>
+  <span class="text-muted-color text-sm font-bold mt-3">
+    کد ارسال شده برای شماره {{ pendingUserInfo()?.mobile }} را وارد کنید.
+  </span>
+  <p-inputotp name="otp" size="large" [length]="6" [(ngModel)]="otpCode" dir="ltr" />
   <div class="flex items-center justify-center">
     @if (countdown() > 0) {
       <span class="text-sm text-muted-color ml-2">ارسال مجدد کد در {{ countdown() }} ثانیه</span>
     } @else {
-      <button pButton outlined (click)="resendOtp()" [loading]="submitLoading()">ارسال مجدد کد</button>
+      <button pButton outlined (click)="resendOtp()" [loading]="loading()">ارسال مجدد کد</button>
     }
   </div>
-  <button pButton class="w-full mt-5" [loading]="submitLoading()" [disabled]="countdown() <= 0">ورود</button>
-</form>
+  <app-auth-captcha class="block mb-6" />
+
+  <span class="w-full text-center text-sm select-none mt-5">
+    <a class="text-primary cursor-pointer font-bold" (click)="toLogin()">بازگشت به صفحه‌ی ورود</a>
+  </span>
+  <button pButton class="w-full" [loading]="loading()" [disabled]="countdown() <= 0" (click)="submit()">ورود</button>
+</div>

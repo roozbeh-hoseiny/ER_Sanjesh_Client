@@ -47,8 +47,20 @@ export interface ISendSmsOtpRequestPayload extends SendSmsOtpCredentials {
   captcha: string;
 }
 export interface LoginOtpCredentials {
-  mobile: string;
   otp: string;
+}
+export interface LoginOtpRequestPayload extends LoginOtpCredentials {
+  mobile: string;
+  captcha: string;
+}
+
+export interface ResetPasswordOtpCredentials {
+  otp: string;
+  password: string;
+}
+export interface ResetPasswordOtpRequestPayload extends ResetPasswordOtpCredentials {
+  mobile: string;
+  captcha: string;
 }
 
 export interface LoginCredentials {

@@ -1,4 +1,5 @@
 import { AuthService } from '@/core';
+import { CaptchaService } from '@/core/services/captcha.service';
 import { ToastService } from '@/core/services/toast.service';
 import { computed, inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -9,7 +10,9 @@ import {
   ISignupRequestPayload,
   IUserLoginInfo,
   LoginCredentials,
+  LoginOtpCredentials,
   Maybe,
+  ResetPasswordOtpCredentials,
   SendSmsOtpCredentials,
   TRoles,
   User,
@@ -60,6 +63,7 @@ export class AuthStore extends BaseStore<AuthState> {
   private readonly service = inject(AuthService);
   private readonly router = inject(Router);
   private readonly toastService = inject(ToastService);
+  private readonly captchaService = inject(CaptchaService);
 
   // Login-specific state
   private readonly _loginState = {
@@ -115,6 +119,11 @@ export class AuthStore extends BaseStore<AuthState> {
   readonly isRefreshing = computed(() => this._loginState.isRefreshing);
   readonly loginError = computed(() => this._loginState.loginError);
 
+  //captcha selectors
+  readonly captchaIsExpired = this.captchaService.captchaIsExpired;
+  readonly captchaLoading = this.captchaService.loading;
+  readonly captchaImageSrc = this.captchaService.captchaImageSrc;
+
   /**
    * Initialize authentication from stored data
    */
@@ -160,7 +169,7 @@ export class AuthStore extends BaseStore<AuthState> {
     this.patchState({ redirectUrl: url });
   }
   setAuthStep(authStep: TAuthSteps) {
-    this.patchState({ authStep });
+    this.patchState({ authStep, loginStep: 'SEND_OTP' });
   }
   setLoginType(loginType: TLoginType) {
     this.patchState({ loginType });
@@ -168,12 +177,15 @@ export class AuthStore extends BaseStore<AuthState> {
   setCaptchaCode(captchaCode: string) {
     this.patchState({ captchaCode });
   }
-  private setLoginStep(loginStep: TLoginSteps) {
+  setLoginStep(loginStep: TLoginSteps) {
     this.patchState({ loginStep });
   }
-
   resetCaptcha() {
+    this.captchaService.renewCaptcha();
     this.patchState({ captchaCode: null });
+  }
+  requestNewCaptcha() {
+    this.captchaService.requestNewCaptcha();
   }
 
   private redirectToDashboard() {
@@ -241,29 +253,7 @@ export class AuthStore extends BaseStore<AuthState> {
       .pipe(
         tap((response) => {
           this.patchState({ pendingUserInfo: { mobile: credentials.mobile } });
-          this.setLoginStep('SEND_OTP');
-        }),
-        catchError((error) => {
-          this.handleAuthError(error);
-          return of(null);
-        }),
-        finalize(() => {
-          this._loginState.isLoggingIn = false;
-          this.setLoading(false);
-        }),
-      );
-  }
-
-  loginWithOtp(otp: string) {
-    this._loginState.isLoggingIn = true;
-    this._loginState.loginError = null;
-    this.setLoading(true);
-
-    return this.service
-      .loginWithOTP({ otp, mobile: this.pendingUserInfo()?.mobile! }, this.selectedRole())
-      .pipe(
-        tap((response) => {
-          this.handleAuthSuccess(response);
+          this.setLoginStep('VERIFY_OTP');
           this.resetCaptcha();
         }),
         catchError((error) => {
@@ -278,10 +268,147 @@ export class AuthStore extends BaseStore<AuthState> {
   }
 
   resendOtp() {
-    // const credentials: SendSmsOtpCredentials = {
-    // captcha: this.captchaCode()!,
-    // };
-    // this.sendOtp(credentials).subscribe();
+    if (this.pendingUserInfo()?.mobile) {
+      this._loginState.isLoggingIn = true;
+      this._loginState.loginError = null;
+      this.setLoading(true);
+      return this.service
+        .resendOTP({ mobile: this.pendingUserInfo()!.mobile! }, this.selectedRole())
+        .pipe(
+          tap((response) => {
+            this.toastService.success({
+              text: 'کد تایید مجددا ارسال شد',
+            });
+            return of(response);
+          }),
+          catchError((error) => {
+            this.handleAuthError(error);
+            return of(null);
+          }),
+          finalize(() => {
+            this._loginState.isLoggingIn = false;
+            this.setLoading(false);
+          }),
+        );
+    } else {
+      return of(null);
+    }
+  }
+
+  loginWithOtp(credentials: LoginOtpCredentials) {
+    this._loginState.isLoggingIn = true;
+    this._loginState.loginError = null;
+    this.setLoading(true);
+
+    return this.service
+      .loginWithOTP(
+        {
+          otp: credentials.otp,
+          mobile: this.pendingUserInfo()?.mobile!,
+          captcha: this.captchaCode()!,
+        },
+        this.selectedRole(),
+      )
+      .pipe(
+        tap((response) => {
+          this.handleAuthSuccess(response);
+        }),
+        catchError((error) => {
+          this.handleAuthError(error);
+          return of(null);
+        }),
+        finalize(() => {
+          this._loginState.isLoggingIn = false;
+          this.setLoading(false);
+        }),
+      );
+  }
+
+  sendForgetPasswordOtp(credentials: SendSmsOtpCredentials) {
+    this._loginState.isLoggingIn = true;
+    this._loginState.loginError = null;
+    this.setLoading(true);
+    return this.service
+      .sendOtpForResetPassword(
+        { ...credentials, captcha: this.captchaCode()! },
+        this.selectedRole(),
+      )
+      .pipe(
+        tap((response) => {
+          this.patchState({ pendingUserInfo: { mobile: credentials.mobile } });
+          this.setLoginStep('VERIFY_OTP');
+          this.resetCaptcha();
+        }),
+        catchError((error) => {
+          this.handleAuthError(error);
+          return of(null);
+        }),
+        finalize(() => {
+          this._loginState.isLoggingIn = false;
+          this.setLoading(false);
+        }),
+      );
+  }
+
+  resendForgetPasswordOtp() {
+    if (this.pendingUserInfo()?.mobile) {
+      this._loginState.isLoggingIn = true;
+      this._loginState.loginError = null;
+      this.setLoading(true);
+      return this.service
+        .resendOtpForResetPassword({ mobile: this.pendingUserInfo()!.mobile! }, this.selectedRole())
+        .pipe(
+          tap((response) => {
+            this.toastService.success({
+              text: 'کد تایید مجددا ارسال شد',
+            });
+            return of(response);
+          }),
+          catchError((error) => {
+            this.handleAuthError(error);
+            return of(null);
+          }),
+          finalize(() => {
+            this._loginState.isLoggingIn = false;
+            this.setLoading(false);
+          }),
+        );
+    } else {
+      return of(null);
+    }
+  }
+
+  resetPasswordWithOtp(credentials: ResetPasswordOtpCredentials) {
+    this._loginState.isLoggingIn = true;
+    this._loginState.loginError = null;
+    this.setLoading(true);
+
+    return this.service
+      .resetPasswordWithOtp(
+        {
+          ...credentials,
+          mobile: this.pendingUserInfo()?.mobile!,
+          captcha: this.captchaCode()!,
+        },
+        this.selectedRole(),
+      )
+      .pipe(
+        tap((response) => {
+          this.toastService.success({
+            text: 'رمز عبور با موفقیت تغییر کرد. لطفا وارد شوید.',
+          });
+          this.setAuthStep('login');
+          this.resetCaptcha();
+        }),
+        catchError((error) => {
+          this.handleAuthError(error);
+          return of(null);
+        }),
+        finalize(() => {
+          this._loginState.isLoggingIn = false;
+          this.setLoading(false);
+        }),
+      );
   }
 
   modifyInfo(updatedInfo: IUserLoginInfo) {
@@ -515,12 +642,14 @@ export class AuthStore extends BaseStore<AuthState> {
     if (!withoutRedirect) {
       this.redirectToDashboard();
     }
+    this.resetCaptcha();
   }
 
   /**
    * Handle authentication error
    */
   private handleAuthError(error: any): void {
+    this.resetCaptcha();
     console.error('Authentication error:', error);
 
     // Increment login attempts

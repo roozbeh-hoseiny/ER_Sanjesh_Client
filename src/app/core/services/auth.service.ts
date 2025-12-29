@@ -14,8 +14,10 @@ import {
   ISendSmsOtpRequestPayload,
   ISignupRequestPayload,
   IUserLoginInfo,
-  LoginOtpCredentials,
+  LoginOtpRequestPayload,
   Maybe,
+  ResetPasswordOtpRequestPayload,
+  SendSmsOtpCredentials,
   TRoles,
   User,
 } from '../models';
@@ -38,6 +40,9 @@ export class AuthService {
   readonly modulesSendSmsOtpForgetPasswordRoutes = {
     SCHOOL: SCHOOLS_API_ROUTES.sendSmsOtpForForgetPassword(),
   } as Record<TRoles, string>;
+  readonly modulesResendSmsOtpForgetPasswordRoutes = {
+    SCHOOL: SCHOOLS_API_ROUTES.resendSmsOtpForForgetPassword(),
+  } as Record<TRoles, string>;
 
   readonly modulesResetPasswordRoutes = {
     SCHOOL: SCHOOLS_API_ROUTES.resetPassword(),
@@ -50,6 +55,11 @@ export class AuthService {
   readonly modulesSendSmsOtpRoutes = {
     SCHOOL: SCHOOLS_API_ROUTES.sendSmsOtpForLogin(),
   } as Record<TRoles, string>;
+
+  readonly modulesResendSmsOtpRoutes = {
+    SCHOOL: SCHOOLS_API_ROUTES.resendSmsOtpForLogin(),
+  } as Record<TRoles, string>;
+
   readonly modulesLoginWithOtpRoutes = {
     SCHOOL: SCHOOLS_API_ROUTES.loginWithSmsOtp(),
   } as Record<TRoles, string>;
@@ -113,8 +123,20 @@ export class AuthService {
     );
   }
 
-  loginWithOTP(credentials: LoginOtpCredentials, role: TRoles): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(this.modulesLoginWithOtpRoutes[role], credentials);
+  resendOTP(credentials: SendSmsOtpCredentials, role: TRoles): Observable<void> {
+    const endpoint = this.modulesResendSmsOtpRoutes[role];
+    const { mobile } = credentials;
+
+    return this.http.post<void>(endpoint, { mobile });
+  }
+
+  loginWithOTP(credentials: LoginOtpRequestPayload, role: TRoles): Observable<IAuthResponse> {
+    const { captcha, ...rest } = credentials;
+
+    const baseHeaders = this.captchaService.buildCaptchaHeaders({}, captcha);
+    return this.http.post<IAuthResponse>(this.modulesLoginWithOtpRoutes[role], rest, {
+      headers: baseHeaders,
+    });
   }
 
   login(credentials: ILoginRequestPayload, role: TRoles): Observable<IAuthResponse> {
@@ -156,8 +178,22 @@ export class AuthService {
     );
   }
 
-  resetPasswordWithOtp(credentials: LoginOtpCredentials, role: TRoles): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(this.modulesResetPasswordRoutes[role], credentials);
+  resendOtpForResetPassword(credentials: SendSmsOtpCredentials, role: TRoles): Observable<void> {
+    const endpoint = this.modulesResendSmsOtpForgetPasswordRoutes[role];
+    const { mobile } = credentials;
+
+    return this.http.post<void>(endpoint, { mobile });
+  }
+
+  resetPasswordWithOtp(
+    credentials: ResetPasswordOtpRequestPayload,
+    role: TRoles,
+  ): Observable<IAuthResponse> {
+    const { captcha, ...rest } = credentials;
+    const baseHeaders = this.captchaService.buildCaptchaHeaders({}, captcha);
+    return this.http.post<IAuthResponse>(this.modulesResetPasswordRoutes[role], rest, {
+      headers: baseHeaders,
+    });
   }
 
   logout(): void {

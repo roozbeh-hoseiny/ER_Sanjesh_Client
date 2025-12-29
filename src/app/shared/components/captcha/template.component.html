@@ -1,0 +1,38 @@
+<div class="flex flex-col items-center gap-4 w-[16rem] mx-auto">
+  <div
+    class="relative bg-surface-ground rounded-xl overflow-hidden shadow shrink-0 border border-[var(--p-inputtext-border-color)] w-full aspect-[2]"
+  >
+    <img p-image id="captchaImage" [src]="captchaImageSrc" class="w-full object-contain" />
+    @if (isCaptchaLoading) {
+      <div class="!absolute inset-0 bg-surface-hover/50 flex items-center justify-center">
+        <p-progress-spinner
+          strokeWidth="4"
+          fill="transparent"
+          animationDuration="1s"
+          [style]="{ width: '48px', height: '48px' }"
+        />
+      </div>
+    } @else if (isCaptchaExpired) {
+      <div
+        class="!absolute inset-0 bg-surface-hover/70 flex items-center justify-center text-center p-2 text-sm font-medium cursor-pointer"
+        (click)="onRefreshCaptcha()"
+      >
+        <i class="pi pi-refresh !text-3xl text-gray-500"></i>
+      </div>
+    }
+  </div>
+  <p-inputgroup>
+    <input
+      pInputText
+      id="captcha"
+      type="text"
+      placeholder="کد کپچا را وارد کنید"
+      class="w-full"
+      [formControl]="control"
+    />
+
+    <p-inputgroup-addon>
+      <p-button icon="pi pi-refresh" severity="secondary" variant="text" (click)="onRefreshCaptchaImage()" />
+    </p-inputgroup-addon>
+  </p-inputgroup>
+</div>

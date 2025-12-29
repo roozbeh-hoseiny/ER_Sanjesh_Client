@@ -7,11 +7,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from 'primeng/button';
 
 @Component({
-  selector: 'app-otp-login-mobile-step',
+  selector: 'app-otp-forget-password-mobile-step',
   templateUrl: './mobile-step.component.html',
   imports: [ReactiveFormsModule, InputComponent, Button, AuthCaptchaComponent],
 })
-export class OtpLoginMobileStepComponent {
+export class OtpForgetPasswordMobileStepComponent {
   private readonly fb = inject(FormBuilder);
   private readonly store = inject(AuthStore);
 
@@ -28,7 +28,7 @@ export class OtpLoginMobileStepComponent {
   submit() {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
-    this.store.sendOtp({ mobile: this.form.value.mobile! }).subscribe({
+    this.store.sendForgetPasswordOtp({ mobile: this.form.value.mobile! }).subscribe({
       next: () => {
         this.form.markAsPristine();
       },

@@ -1,15 +1,17 @@
+import { ToastService } from '@/core/services/toast.service';
 import { MustMatch, password } from '@/core/validators';
+import { AuthCaptchaComponent } from '@/modules/auth/components/captcha.component';
 import { AuthStore } from '@/modules/auth/state';
 import { UikitFieldComponent } from '@/uikit';
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { InputOtpModule } from 'primeng/inputotp';
 import { Password } from 'primeng/password';
 
 @Component({
-  selector: 'app-otp-login-otp-step',
+  selector: 'app-otp-forget-password-otp-step',
   standalone: true,
   imports: [
     CommonModule,
@@ -18,12 +20,16 @@ import { Password } from 'primeng/password';
     ButtonDirective,
     UikitFieldComponent,
     Password,
+    AuthCaptchaComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: './otp-step.component.html',
 })
-export class OTPLoginOtpStepComponent {
+export class OTPForgetPasswordOtpStepComponent {
   private readonly store = inject(AuthStore);
   private readonly fb = inject(FormBuilder);
+  private readonly toast = inject(ToastService);
+
   form = this.fb.group(
     {
       password: this.fb.control('', { validators: [password()], nonNullable: true }),
@@ -35,9 +41,10 @@ export class OTPLoginOtpStepComponent {
   );
 
   otpCode = signal<string>('');
-  submitLoading = signal<boolean>(false);
-
   countdown = signal<number>(60 * 2); // 2 minutes
+
+  readonly pendingUserInfo = this.store.pendingUserInfo;
+  readonly loading = this.store.loading;
 
   constructor() {
     this.startCountdown();
@@ -54,12 +61,30 @@ export class OTPLoginOtpStepComponent {
   }
 
   resendOtp() {
-    // this.store.sendOtp()
-    this.countdown.set(120);
-    this.startCountdown();
+    this.store.resendForgetPasswordOtp().subscribe({
+      next: () => {
+        this.otpCode.set('');
+        this.countdown.set(120);
+        this.startCountdown();
+      },
+    });
+  }
+
+  toLogin() {
+    this.store.setAuthStep('login');
   }
 
   submit = () => {
-    this.store.loginWithOtp(this.otpCode()).subscribe();
+    if (this.otpCode().length !== 6) {
+      this.toast.error({ text: 'کد را به صورت کامل وارد کنید' });
+      return;
+    }
+    this.store
+      .resetPasswordWithOtp({
+        otp: this.otpCode(),
+        password: this.form.value.password!,
+      })
+      .subscribe();
+    // this.store.loginWithOtp(this.otpCode()).subscribe();
   };
 }

@@ -1,16 +1,12 @@
 import { CaptchaService } from '@/core/services/captcha.service';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Button } from 'primeng/button';
-import { InputGroup } from 'primeng/inputgroup';
-import { InputGroupAddon } from 'primeng/inputgroupaddon';
-import { InputText } from 'primeng/inputtext';
-import { ProgressSpinner } from 'primeng/progressspinner';
+import { CaptchaTemplateComponent } from './template.component';
 
 @Component({
   selector: 'app-shared-captcha',
   templateUrl: './captcha.component.html',
-  imports: [ProgressSpinner, InputGroup, InputText, ReactiveFormsModule, InputGroupAddon, Button],
+  imports: [ReactiveFormsModule, CaptchaTemplateComponent],
 })
 export class SharedCaptchaComponent implements OnInit {
   @Input() control!: FormControl<string>;

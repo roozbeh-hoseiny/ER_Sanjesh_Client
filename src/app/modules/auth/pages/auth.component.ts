@@ -2,6 +2,7 @@ import { TRoles } from '@/core';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import images from 'src/assets/images';
 import { AuthStore } from '../state';
+import { AuthForgetPasswordComponent } from './forgetPassword/forget-password.component';
 import { LoginComponent } from './login/login.component';
 import { ModifyLoginInfoComponent } from './modifyLoginInfo/modify-login-info.component';
 import { OTPComponent } from './otp/otp.component';
@@ -10,7 +11,13 @@ import { SignupComponent } from './signup/signup.component';
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  imports: [LoginComponent, OTPComponent, ModifyLoginInfoComponent, SignupComponent],
+  imports: [
+    LoginComponent,
+    OTPComponent,
+    ModifyLoginInfoComponent,
+    SignupComponent,
+    AuthForgetPasswordComponent,
+  ],
 })
 export class AuthComponent implements OnInit {
   @Input() redirectUrl?: string;
