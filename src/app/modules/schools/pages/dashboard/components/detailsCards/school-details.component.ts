@@ -69,6 +69,10 @@ export class SchoolDetailsComponent {
     return this.detailsStore.submitContactLoading();
   }
 
+  get teachersLoading() {
+    return this.detailsStore.submitContactLoading();
+  }
+
   refreshData() {
     this.onRefreshData.emit();
   }

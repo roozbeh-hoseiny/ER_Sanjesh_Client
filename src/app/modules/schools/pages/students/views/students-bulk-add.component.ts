@@ -1,10 +1,7 @@
 import { Maybe } from '@/core';
 import { ToastService } from '@/core/services/toast.service';
 import { SchoolsStudentsService } from '@/modules/schools/services';
-import {
-  IColumn,
-  PageDataListComponent,
-} from '@/shared/components/pageDataList/page-data-list.component';
+import { IColumn } from '@/shared/components/pageDataList/page-data-list.component';
 import { Component, signal } from '@angular/core';
 import { AccordionModule } from 'primeng/accordion';
 import { FileSelectEvent, FileUpload } from 'primeng/fileupload';
@@ -16,14 +13,7 @@ import { IStudentBulkAddResponse } from '../models';
 @Component({
   selector: 'school-students-bulk-add',
   templateUrl: './students-bulk-add.component.html',
-  imports: [
-    Message,
-    FileUpload,
-    ProgressSpinner,
-    AccordionModule,
-    PageDataListComponent,
-    TableModule,
-  ],
+  imports: [Message, FileUpload, ProgressSpinner, AccordionModule, TableModule],
 })
 export class SchoolStudentsBulkAddComponent {
   constructor(

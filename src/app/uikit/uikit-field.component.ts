@@ -14,7 +14,7 @@ type PSize = 'small' | 'normal' | 'large';
   templateUrl: './uikit-field.component.html',
 })
 export class UikitFieldComponent {
-  @Input() label!: string;
+  @Input() label: string = '';
   @Input() name!: string;
   @Input() pSize: PSize = 'normal';
   @Input() className?: string;
@@ -22,9 +22,12 @@ export class UikitFieldComponent {
   // accept a FormControl or AbstractControl to display errors for
   @Input() control?: AbstractControl | null;
 
+  @Input() showErrors: boolean = true;
+  @Input() showLabel: boolean = true;
+
   private errorsService = inject(FormErrorsService);
 
-  get showErrors(): boolean {
+  get hasError(): boolean {
     if (!this.control) return !!this.invalid;
     return !!(this.control.invalid && (this.control.touched || this.control.dirty));
   }

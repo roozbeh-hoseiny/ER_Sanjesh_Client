@@ -5,7 +5,7 @@ import { filter } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class BreadcrumbService {
-  private readonly _items = signal<MenuItem[]>([]);
+  readonly _items = signal<MenuItem[]>([]);
 
   private router = inject(Router);
 
@@ -17,12 +17,15 @@ export class BreadcrumbService {
     });
   }
 
-  get items() {
-    return this._items();
-  }
-
   setItems(items: MenuItem[]) {
-    this._items.set(items);
+    console.log('setItems', items);
+
+    this._items.set(
+      items.map((item) => ({
+        ...item,
+        label: item.title || '',
+      })),
+    );
   }
 
   clear() {

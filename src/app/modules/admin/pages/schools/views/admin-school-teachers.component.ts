@@ -1,4 +1,5 @@
 import { BreadcrumbService } from '@/core/services';
+import { ToastService } from '@/core/services/toast.service';
 import { adminNamedRoutes } from '@/modules/admin/constants';
 import { AdminSchoolsService, AdminTeachersService } from '@/modules/admin/services';
 import { LessonsTableComponent, SchoolTeacherListStore } from '@/modules/schools/pages/teachers';
@@ -11,7 +12,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
@@ -40,6 +41,8 @@ export class AdminSchoolTeachersComponent {
     private breadcrumbService: BreadcrumbService,
     private schoolTeacherListStore: SchoolTeacherListStore,
     private schoolService: AdminSchoolsService,
+    private router: Router,
+    private toastService: ToastService,
   ) {
     // this.breadcrumbService.setItems([
     //   adminSchoolNamedRoutes.schools.meta,
@@ -74,9 +77,13 @@ export class AdminSchoolTeachersComponent {
     this.schoolService.getOne(this.schoolId()).subscribe({
       next: (res) => {
         this.setBreadcrumbs(res.name);
+        this.loading.set(false);
       },
       error: () => {
-        this.getAll();
+        this.toastService.error({
+          text: 'مدرسه‌ی مورد نظر یافت نشد',
+        });
+        this.router.navigate(['admin', 'schools']);
       },
       complete: () => {
         this.getAll();
@@ -85,29 +92,39 @@ export class AdminSchoolTeachersComponent {
   }
 
   private getAll() {
-    this.services.bySchool(this.schoolId()).subscribe((teachers) => {
-      const mappedTeachers = teachers.map((teacher) => ({
-        ...teacher,
-        gender: teacher.gender === 'زن' ? false : true,
-        fullname: `${teacher.gender ? 'آقای' : 'خانم'} ${teacher.firstName} ${teacher.lastName}`,
-      }));
-      this.schoolTeacherListStore.fillInitial({
-        teachers: mappedTeachers,
-        schoolId: this.schoolId(),
-        canAddTeacher: true,
-        canAddTeacherLesson: true,
-        canApproveTeachers: true,
-      });
-      this.loading.set(false);
+    this.schoolTeacherListStore.fillInitial({
+      teachers: [],
+      schoolId: this.schoolId(),
+      canAddTeacher: true,
+      canAddTeacherLesson: true,
+      canApproveTeachers: true,
+      getTeachersLoading: true,
+    });
+    this.services.bySchool(this.schoolId()).subscribe({
+      next: (teachers) => {
+        const mappedTeachers = teachers.map((teacher) => ({
+          ...teacher,
+          gender: teacher.gender === 'زن' ? false : true,
+          fullname: `${teacher.gender ? 'آقای' : 'خانم'} ${teacher.firstName} ${teacher.lastName}`,
+        }));
+        this.schoolTeacherListStore.setState({
+          teachers: mappedTeachers,
+          getTeachersLoading: false,
+        });
+      },
+      error: (err) => {
+        this.schoolTeacherListStore.setState({ getTeachersLoading: false });
+      },
     });
   }
 
   setBreadcrumbs(schoolTitle: string) {
     this.breadcrumbService.setItems([
-      { ...adminNamedRoutes.root.meta },
-      adminNamedRoutes.schools.meta,
+      { ...adminNamedRoutes.root.meta, routerLink: ['/admin'] },
+      { ...adminNamedRoutes.schools.meta, routerLink: ['/admin', 'schools'] },
       {
         title: schoolTitle,
+        routerLink: ['/admin', 'schools', this.schoolId()],
       },
       adminNamedRoutes.schoolTeachers.meta,
     ]);

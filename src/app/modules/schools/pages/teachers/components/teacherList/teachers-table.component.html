@@ -9,7 +9,9 @@
   </ng-template>
 
   <div class="grid grid-cols-1 gap-4">
-    @if (teachers() && teachers().length === 0 && !loading) {
+    @if (loading()) {
+      <p-progressSpinner class="!w-30 !h-30"></p-progressSpinner>
+    } @else if (teachers() && teachers().length === 0 && !loading) {
       <uikit-empty-state
         icon="pi pi-users"
         title="هیچ دبیر ثبت شده‌ای وجود ندارد"
@@ -29,6 +31,7 @@
             columnResizeMode="fit"
             stripedRows
             [showFirstLastIcon]="false"
+            [loading]="loading"
           >
             <ng-template #header let-columns>
               <tr>
@@ -40,32 +43,39 @@
             <ng-template #body let-item>
               <tr>
                 @for (col of columns; track col.field) {
-                  <td>
+                  <td [style]="{ width: col.width, minWidth: col.minWidth }">
                     @if (col.field === "approved") {
                       @if (canApproveTeachers()) {
                         <div class="flex items-center gap-2">
-                          <p-confirmpopup />
-                          @if (changeStatusSchedules()[item.id]) {
-                            <p-progressSpinner
-                              strokeWidth="4"
-                              fill="transparent"
-                              animationDuration="1s"
-                              [style]="{ width: '24px', height: '24px' }"
-                            ></p-progressSpinner>
-                          } @else {
-                            <p-toggleSwitch
-                              [disabled]="changeStatusSchedules()[item.id]"
-                              [ngModel]="item.approved"
-                              (onChange)="showTeacherLessonConfirmation(item, $event.checked, $event, teacher.id)"
-                            ></p-toggleSwitch>
-                          }
+                          <div class="w-12 shrink-0 flex items-center justify-center">
+                            <p-confirmpopup />
+                            @if (changeStatusSchedules()[item.id]) {
+                              <p-progressSpinner
+                                strokeWidth="4"
+                                fill="transparent"
+                                animationDuration="1s"
+                                [style]="{ width: '24px', height: '24px' }"
+                              ></p-progressSpinner>
+                            } @else {
+                              <div class="relative flex items-center">
+                                <div
+                                  class="absolute cursor-pointer inset-0 z-10"
+                                  (click)="showTeacherLessonConfirmation(item, item.approved, $event, teacher.id)"
+                                ></div>
+                                <p-toggleSwitch
+                                  [disabled]="changeStatusSchedules()[item.id]"
+                                  [ngModel]="item.approved"
+                                ></p-toggleSwitch>
+                              </div>
+                            }
+                          </div>
 
                           <p-button
                             outlined
                             severity="secondary"
                             size="small"
                             [loading]="detachLessonsSchedules()[`${item.id}-${item.schoolId}`]"
-                            (click)="detachLesson(item, teacher.id)"
+                            (click)="showUnAssignTeacherLessonConfirmation(item, $event, teacher.id)"
                           >
                             حذف درس
                           </p-button>
@@ -83,9 +93,6 @@
                 }
               </tr>
             </ng-template>
-            <!-- <ng-template #status let-item>
-
-    </ng-template> -->
           </p-table>
         </p-panel>
       }

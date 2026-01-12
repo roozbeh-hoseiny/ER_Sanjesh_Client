@@ -130,7 +130,7 @@ export class AppLayout {
   }
 
   get showBreadcrumb(): boolean {
-    return this.breadcrumbService.items.length > 0;
+    return this.breadcrumbService._items().length > 0;
   }
 
   get isFixedContentSize(): boolean {

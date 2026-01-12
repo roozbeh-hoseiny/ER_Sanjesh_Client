@@ -132,7 +132,8 @@ export class AuthStore extends BaseStore<AuthState> {
     const loginAttempts = parseInt(localStorage.getItem(LOCAL_STORAGE_KEYS.LOGIN_ATTEMPTS) || '0');
     const lastLoginTime = parseInt(localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_LOGIN_TIME) || '0');
 
-    if (token && refreshToken && userData) {
+    // if (token && refreshToken && userData) {
+    if (token && userData) {
       try {
         const user = JSON.parse(userData) as User;
         this.patchState({ token, user, refreshToken });
@@ -601,7 +602,9 @@ export class AuthStore extends BaseStore<AuthState> {
 
     // Store in localStorage
     localStorage.setItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN, response.token);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken);
+    if (response.refreshToken) {
+      localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken);
+    }
     localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(user));
     localStorage.setItem(LOCAL_STORAGE_KEYS.LAST_LOGIN_TIME, currentTime.toString());
 
@@ -624,6 +627,7 @@ export class AuthStore extends BaseStore<AuthState> {
     if (!withoutRedirect) {
       this.redirectToDashboard();
     }
+    this.resetAuthSteps();
     this.resetCaptcha();
   }
 
@@ -702,5 +706,21 @@ export class AuthStore extends BaseStore<AuthState> {
     this._loginState.isLoggingIn = false;
     this._loginState.isRefreshing = false;
     this._loginState.loginError = null;
+  }
+
+  resetAuthSteps(): void {
+    this.patchState({
+      authStep: 'login',
+      loginType: 'PASSWORD',
+      loginStep: 'SEND_OTP',
+      captchaCode: null,
+      loginAttempts: 0,
+      lastLoginTime: null,
+      sessionExpiry: null,
+      permissions: [],
+      loading: false,
+      error: null,
+    });
+    this.resetCaptcha();
   }
 }

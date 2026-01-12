@@ -15,9 +15,9 @@ import {
   ISchoolResponse,
 } from '@/modules/schools/models';
 import { IFieldOfStudiesResponse } from '@/shared/catalog';
-import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { of } from 'rxjs';
-import { finalize, tap } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 import { ISchoolTeacherMappedData, ISchoolTeacherRawResponse } from '../../../teachers/models';
 import { SCHOOL_DETAILS_SERVICE, SchoolDetailsService } from './service.token';
 
@@ -26,6 +26,8 @@ interface ISchoolDetailsCardsState {
   showTeachersCard?: boolean;
   showBankAccountsCard?: boolean;
   showAgentCard?: boolean;
+  teachersLoading: boolean;
+  teachersLoaded: boolean;
   teachers: Maybe<ISchoolTeacherRawResponse[]>;
   teachersManagementPageRoute?: Maybe<(schoolId: string) => string>;
   showManagerValidateInlineConfirmation?: boolean;
@@ -48,6 +50,8 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   showTeachersCard: false,
   showBankAccountsCard: false,
   showAgentCard: false,
+  teachersLoading: false,
+  teachersLoaded: false,
   teachers: null,
   teachersManagementPageRoute: null,
   showManagerValidateInlineConfirmation: false,
@@ -67,17 +71,7 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
 
 @Injectable({ providedIn: 'any' })
 export class SchoolDetailsCardsStore {
-  constructor() {
-    effect(() => {
-      if (this.state$().showTeachersCard && this.getTeachers !== undefined) {
-        if (this.state$().teachers === null && this.school()?.uniqueId) {
-          this.getTeachers()!.subscribe((teachers) => {
-            this.setState({ teachers });
-          });
-        }
-      }
-    });
-  }
+  constructor() {}
 
   private state$ = signal<ISchoolDetailsCardsState>({ ...INITIAL_SCHOOL_DETAILS_CARDS_STATE });
 
@@ -94,6 +88,8 @@ export class SchoolDetailsCardsStore {
     }
     return [];
   });
+  readonly teachersLoading = computed(() => this.state$().teachersLoading);
+  readonly teachersLoaded = computed(() => this.state$().teachersLoaded);
   readonly teachersManagementPageRoute = computed(() => {
     if (this.school() && this.state$().teachersManagementPageRoute) {
       return this.state$().teachersManagementPageRoute!(this.school()!.uniqueId);
@@ -138,7 +134,28 @@ export class SchoolDetailsCardsStore {
   }
 
   getTeachers() {
-    return this.service.getTeachers!(this.school()!.uniqueId, this.school()!.id);
+    this.setState({
+      teachersLoading: true,
+    });
+    return this.service.getTeachers!(this.school()!.uniqueId, this.school()!.id).pipe(
+      map((res) => {
+        this.setState({
+          teachers: res,
+          teachersLoaded: true,
+          teachersLoading: false,
+        });
+      }),
+      tap((err) => {
+        console.log('err');
+        console.log(err);
+      }),
+      finalize(() => {
+        this.setState({
+          teachersLoaded: true,
+          teachersLoading: false,
+        });
+      }),
+    );
   }
 
   searchForAgent(uniqueId: string) {

@@ -7,7 +7,7 @@
       }
     </div>
   </ng-template>
-  <p-table [value]="teachers" [columns]="columns" [loading]="loading">
+  <p-table [value]="teachers() || []" [columns]="columns" [loading]="teachersLoading()">
     <ng-template #header let-columns>
       <tr>
         @for (col of columns; track col.header) {
@@ -42,15 +42,20 @@
       </tr>
     </ng-template>
 
-    <ng-template #empty>
-      <uikit-empty-state
-        title="دبیری یافت نشد"
-        description="در حال حاضر هیچ دبیری برای این مدرسه ثبت نشده است."
-        icon="pi pi-users"
-        ctaLabel="مدیریت دبیران"
-        (ctaClick)="toTeachersPage()"
-      >
-      </uikit-empty-state>
+    <ng-template #emptymessage>
+      <tr>
+        <td [attr.colspan]="columns.length">
+          <uikit-empty-state
+            title="دبیری یافت نشد"
+            description="در حال حاضر هیچ دبیری برای این مدرسه ثبت نشده است."
+            icon="pi pi-users"
+            ctaLabel="مدیریت دبیران"
+            class="w-full block"
+            (ctaClick)="toTeachersPage()"
+          >
+          </uikit-empty-state>
+        </td>
+      </tr>
     </ng-template>
   </p-table>
 </app-card-data>

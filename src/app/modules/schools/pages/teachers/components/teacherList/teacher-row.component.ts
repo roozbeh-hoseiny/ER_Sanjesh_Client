@@ -1,3 +1,4 @@
+import { ConfirmationDialogService } from '@/shared/components';
 import { Component, computed, EventEmitter, Input, Output, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { ISchoolTeacherMappedData } from '../../models';
@@ -17,7 +18,10 @@ export class TeacherRowSubheaderComponent {
   @Input() item!: ISchoolTeacherMappedData;
   @Output() onSubmitted = new EventEmitter<void>();
 
-  constructor(private store: SchoolTeacherListStore) {}
+  constructor(
+    private store: SchoolTeacherListStore,
+    private readonly confirmationDialogService: ConfirmationDialogService,
+  ) {}
 
   detachTeacherLoading = signal<boolean>(false);
   changeTeacherStatusLoading = signal<boolean>(false);
@@ -30,15 +34,25 @@ export class TeacherRowSubheaderComponent {
 
   // start of teacher
   detachTeacher() {
-    this.detachTeacherLoading.set(true);
-    this.store.detachTeacher(this.item.id).subscribe({
-      next: () => {
-        this.onSubmitted.emit();
-        this.detachTeacherLoading.set(false);
-      },
+    this.confirmationDialogService.confirm({
+      message: `آیا از حذف دبیر #${this.item.fullname} اطمینان دارید؟`,
+      header: 'حذف دبیر',
+      variant: 'reject',
+      acceptLabel: 'بله',
+      rejectLabel: 'خیر',
 
-      error: () => {
-        this.detachTeacherLoading.set(false);
+      accept: () => {
+        this.detachTeacherLoading.set(true);
+        this.store.detachTeacher(this.item.id).subscribe({
+          next: () => {
+            this.onSubmitted.emit();
+            this.detachTeacherLoading.set(false);
+          },
+
+          error: () => {
+            this.detachTeacherLoading.set(false);
+          },
+        });
       },
     });
   }
@@ -46,32 +60,51 @@ export class TeacherRowSubheaderComponent {
 
   // start of all lessons of a teacher
   approveAllLessons() {
-    this.changeTeacherStatusLoading.set(true);
-    this.store
-      .approveTeacher({ teacherId: this.item.id, teacherName: this.item.fullname })
-      .subscribe({
-        next: () => {
-          this.onSubmitted.emit();
-          this.changeTeacherStatusLoading.set(false);
-        },
-        error: () => {
-          this.changeTeacherStatusLoading.set(false);
-        },
-      });
+    this.confirmationDialogService.confirm({
+      message: `آیا از تایید تمامی دروس مرتبط با دبیر #${this.item.fullname} اطمینان دارید؟`,
+      header: 'تایید تمامی دروس',
+      variant: 'confirm',
+      acceptLabel: 'بله',
+      rejectLabel: 'خیر',
+      accept: () => {
+        this.changeTeacherStatusLoading.set(true);
+        this.store
+          .approveTeacher({ teacherId: this.item.id, teacherName: this.item.fullname })
+          .subscribe({
+            next: () => {
+              this.onSubmitted.emit();
+              this.changeTeacherStatusLoading.set(false);
+            },
+            error: () => {
+              this.changeTeacherStatusLoading.set(false);
+            },
+          });
+      },
+    });
   }
+
   rejectAllLessons() {
-    this.changeTeacherStatusLoading.set(true);
-    this.store
-      .rejectTeacher({ teacherId: this.item.id, teacherName: this.item.fullname })
-      .subscribe({
-        next: () => {
-          this.onSubmitted.emit();
-          this.changeTeacherStatusLoading.set(false);
-        },
-        error: () => {
-          this.changeTeacherStatusLoading.set(false);
-        },
-      });
+    this.confirmationDialogService.confirm({
+      message: `آیا از رد تمامی دروس مرتبط با دبیر #${this.item.fullname} اطمینان دارید؟`,
+      header: 'رد تمامی دروس',
+      variant: 'reject',
+      acceptLabel: 'بله',
+      rejectLabel: 'خیر',
+      accept: () => {
+        this.changeTeacherStatusLoading.set(true);
+        this.store
+          .rejectTeacher({ teacherId: this.item.id, teacherName: this.item.fullname })
+          .subscribe({
+            next: () => {
+              this.onSubmitted.emit();
+              this.changeTeacherStatusLoading.set(false);
+            },
+            error: () => {
+              this.changeTeacherStatusLoading.set(false);
+            },
+          });
+      },
+    });
   }
 
   // end of all lessons of a school

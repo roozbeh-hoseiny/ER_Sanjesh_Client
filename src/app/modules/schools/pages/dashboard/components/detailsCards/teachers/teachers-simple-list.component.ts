@@ -1,7 +1,7 @@
 import { AppCardComponent } from '@/shared/components';
 import { IColumn } from '@/shared/components/pageDataList/page-data-list.component';
 import { UikitEmptyStateComponent } from '@/uikit';
-import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ButtonDirective } from 'primeng/button';
 import { Skeleton } from 'primeng/skeleton';
@@ -14,11 +14,11 @@ import { SchoolDetailsCardsStore } from '../store';
   imports: [AppCardComponent, TableModule, ButtonDirective, UikitEmptyStateComponent, Skeleton],
 })
 export class TeachersSimpleListComponent {
-  constructor(
-    private store: SchoolDetailsCardsStore,
-    private router: Router,
-  ) {}
-  @Input() loading = false;
+  private store = inject(SchoolDetailsCardsStore);
+
+  constructor(private router: Router) {
+    this.getAll();
+  }
   @ViewChild('lessons', { static: true }) lessonsTpl!: TemplateRef<any>;
 
   columns = [
@@ -28,9 +28,9 @@ export class TeachersSimpleListComponent {
     { field: 'lessons', header: 'تعداد دروس', customDataModel: this.lessonsTpl, width: '8rem' },
   ] as IColumn[];
 
-  get teachers() {
-    return this.store.teachers() || [];
-  }
+  teachers = this.store.teachers;
+
+  teachersLoading = this.store.teachersLoading;
 
   get teachersManagementPageRoute() {
     return this.store.teachersManagementPageRoute();
@@ -40,5 +40,9 @@ export class TeachersSimpleListComponent {
     if (this.teachersManagementPageRoute) {
       this.router.navigateByUrl(this.teachersManagementPageRoute);
     }
+  }
+
+  getAll() {
+    this.store.getTeachers().subscribe();
   }
 }

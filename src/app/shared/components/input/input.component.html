@@ -1,17 +1,61 @@
-<uikit-field [label]="label" [name]="name" [control]="control">
-  <input
-    pInputText
-    [attr.id]="name"
-    [formControl]="control"
-    [attr.name]="name"
-    [attr.placeholder]="_placeholder"
-    [attr.inputmode]="inputMode"
-    [attr.maxlength]="maxLength || null"
-    [attr.type]="htmlType"
-    [attr.autocomplete]="autocomplete"
-    [class]="`${inputClass} w-full ${size === 'large' ? 'p-inputtext-lg' : size === 'small' ? 'p-inputtext-sm' : ''}`"
-    [required]="isRequired"
-    [invalid]="control.invalid && (control.touched || control.dirty)"
-    (input)="onInput($event)"
-  />
+<uikit-field [label]="label" [name]="name" [control]="control" [showLabel]="!!label" [showErrors]="showErrors">
+  @if (type === "switch") {
+    <p-toggleSwitch [formControl]="control" />
+  } @else if (type === "price") {
+    <p-inputgroup>
+      <!-- [minlength]="minlength || null" -->
+      <p-inputnumber
+        [attr.id]="name"
+        [formControl]="control"
+        [maxlength]="maxLength || null"
+        [attr.name]="name"
+        [attr.placeholder]="preparedPlaceholder"
+        [attr.type]="htmlType"
+        [attr.autocomplete]="autocomplete"
+        [class]="` w-full ${size === 'large' ? 'p-inputtext-lg' : size === 'small' ? 'p-inputtext-sm' : ''}`"
+        [required]="isRequired"
+        [invalid]="control.invalid && (control.touched || control.dirty)"
+        (input)="onInput($event)"
+        (onBlur)="blur.emit()"
+      />
+      <p-inputgroup-addon>ریال</p-inputgroup-addon>
+    </p-inputgroup>
+    <!-- } @else if (isNumeric) {
+    <p-inputnumber
+      [attr.id]="name"
+      [formControl]="control"
+      [attr.name]="name"
+      [attr.placeholder]="preparedPlaceholder"
+      [attr.inputmode]="inputMode"
+      [attr.maxlength]="maxLength || null"
+      [attr.type]="htmlType"
+      [attr.autocomplete]="autocomplete"
+      [class]="` w-full ${size === 'large' ? 'p-inputtext-lg' : size === 'small' ? 'p-inputtext-sm' : ''}`"
+      [required]="isRequired"
+      [invalid]="control.invalid && (control.touched || control.dirty)"
+      [format]=""
+      (input)="onInput($event)"
+      (onBlur)="blur.emit()"
+    /> -->
+  } @else {
+    <input
+      pInputText
+      [attr.id]="name"
+      [formControl]="control"
+      [attr.name]="name"
+      [attr.placeholder]="preparedPlaceholder"
+      [attr.inputmode]="inputMode"
+      [attr.maxlength]="maxLength || null"
+      [attr.type]="htmlType"
+      [attr.autocomplete]="autocomplete"
+      [class]="`${inputClass} w-full ${size === 'large' ? 'p-inputtext-lg' : size === 'small' ? 'p-inputtext-sm' : ''}`"
+      [required]="isRequired"
+      [invalid]="control.invalid && (control.touched || control.dirty)"
+      (input)="onInput($event)"
+      (onBlur)="blur.emit()"
+    />
+  }
+  @if (hint) {
+    <small [attr.id]="name + '-help'">{{ hint }}</small>
+  }
 </uikit-field>

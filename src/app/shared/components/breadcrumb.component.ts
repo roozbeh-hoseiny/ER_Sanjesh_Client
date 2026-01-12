@@ -1,6 +1,5 @@
 import { BreadcrumbService } from '@/core/services/breadcrumb.service';
-import { Component, inject } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { Component, computed, inject } from '@angular/core';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -13,11 +12,13 @@ import { TooltipModule } from 'primeng/tooltip';
 })
 export class BreadcrumbComponent {
   private breadcrumbService = inject(BreadcrumbService);
+  items = computed(() => {
+    return this.breadcrumbService._items();
+  });
 
-  get items(): MenuItem[] {
-    return this.breadcrumbService.items.map((item) => ({
-      ...item,
-      label: item.title || '',
-    }));
-  }
+  // get items() {
+  //   console.log('asd');
+
+  //   return this.breadcrumbService._items();
+  // }
 }

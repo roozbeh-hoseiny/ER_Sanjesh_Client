@@ -31,6 +31,7 @@ export interface IChangeStatusSchoolLessonPayload {
 }
 
 interface ISchoolTeacherListState {
+  getTeachersLoading: boolean;
   teachers: Maybe<ISchoolTeacherMappedData[]>;
   schoolId: Maybe<string>;
   showValidateInlineConfirmation?: boolean;
@@ -40,6 +41,7 @@ interface ISchoolTeacherListState {
 }
 
 export const INITIAL_TEACHER_DETAILS_CARDS_STATE: ISchoolTeacherListState = {
+  getTeachersLoading: true,
   teachers: null,
   schoolId: null,
   showValidateInlineConfirmation: false,
@@ -54,6 +56,7 @@ export class SchoolTeacherListStore {
 
   private state$ = signal<ISchoolTeacherListState>({ ...INITIAL_TEACHER_DETAILS_CARDS_STATE });
 
+  readonly getTeachersLoading = computed(() => this.state$().getTeachersLoading);
   readonly teachers = computed(() => this.state$().teachers);
   readonly schoolId = computed(() => this.state$().schoolId);
   readonly showValidateInlineConfirmation = computed(() =>

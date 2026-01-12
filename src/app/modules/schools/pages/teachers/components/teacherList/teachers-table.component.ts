@@ -7,7 +7,6 @@ import {
   Component,
   computed,
   EventEmitter,
-  Input,
   Output,
   signal,
   TemplateRef,
@@ -21,7 +20,7 @@ import { ConfirmPopup } from 'primeng/confirmpopup';
 import { PanelModule } from 'primeng/panel';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
-import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { AssignTeacherDialogComponent } from './assign-teacher-dialog.component';
 import { SchoolTeacherListStore } from './dataStore';
 import { TeacherRowSubheaderComponent } from './teacher-row.component';
@@ -48,7 +47,6 @@ import { TeacherRowSubheaderComponent } from './teacher-row.component';
   ],
 })
 export class LessonsTableComponent {
-  @Input() loading = false;
   @Output() onSubmitted = new EventEmitter<void>();
 
   constructor(
@@ -63,6 +61,7 @@ export class LessonsTableComponent {
   detachLessonsSchedules = signal<Record<string, boolean>>({});
   showLessonForm = signal(false);
 
+  loading = computed(() => this.store.getTeachersLoading() || []);
   teachers = computed(() => this.store.teachers() || []);
   schoolId = computed(() => this.store.schoolId() || '');
   canApproveTeachers = computed(() => this.store.canApproveTeachers());
@@ -92,8 +91,8 @@ export class LessonsTableComponent {
         field: 'approved',
         header: 'وضعیت',
         customDataModel: this.statusTpl,
-        width: '5rem',
-        minWidth: '5rem',
+        width: '12rem',
+        minWidth: '12rem',
       });
     }
   }
@@ -101,13 +100,12 @@ export class LessonsTableComponent {
   showTeacherLessonConfirmation(
     item: ITeacherLesson,
     checked: boolean,
-    event: ToggleSwitchChangeEvent,
+    event: MouseEvent,
     teacherId: string,
   ) {
-    this.changeStatusSchedules.update((prev) => ({ ...prev, [item.id]: true }));
     this.confirmationService.confirm({
-      target: (event.originalEvent.target as HTMLElement)?.parentNode?.parentNode!,
-      message: !checked
+      target: (event.target as HTMLElement)?.parentNode?.parentNode!,
+      message: checked
         ? 'آیا از غیرفعال کردن این درس اطمینان دارید؟'
         : 'آیا از فعال کردن این درس اطمینان دارید؟',
       header: 'تایید تغییر وضعیت',
@@ -115,29 +113,44 @@ export class LessonsTableComponent {
       acceptLabel: 'بله',
       rejectLabel: 'خیر',
       accept: () => this.toggleTeacherLessonStatus(item, checked, teacherId),
-      reject: () => {
-        this.removeLessonFromSchedule(item.id);
-      },
+    });
+  }
+
+  showUnAssignTeacherLessonConfirmation(
+    item: ITeacherLesson,
+    event: MouseEvent,
+    teacherId: string,
+  ) {
+    this.confirmationService.confirm({
+      target: (event.target as HTMLElement)?.parentNode?.parentNode!,
+      message: `آیا از حذف درس ${item.lessonTitle} اطمینان دارید؟`,
+      header: 'حذف درس',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'بله',
+      rejectLabel: 'خیر',
+      accept: () => this.detachLesson(item, teacherId),
     });
   }
 
   toggleTeacherLessonStatus(item: ITeacherLesson, checked: boolean, teacherId: string) {
+    this.changeStatusSchedules.update((prev) => ({ ...prev, [item.id]: true }));
+
     this.store
       .changeTeacherLessonStatus({
         teacherId,
         teacherLessonId: item.id,
         schoolTitle: item.schoolTitle,
         teacherLessonTitle: item.lessonTitle,
-        isActive: checked,
+        isActive: !checked,
       })
       .subscribe({
         next: () => {
-          item.approved = checked;
+          item.approved = !checked;
           this.removeLessonFromSchedule(item.id);
         },
         error: () => {
           this.removeLessonFromSchedule(item.id);
-          item.approved = !checked;
+          item.approved = checked;
         },
       });
   }
@@ -156,6 +169,9 @@ export class LessonsTableComponent {
     this.store.detachLesson({ teacherId, schoolId: item.schoolId, lessonId: item.id }).subscribe({
       next: () => {
         this.onSubmitted.emit();
+        this.removeDetachLessonFromSchedule(item);
+      },
+      error: () => {
         this.removeDetachLessonFromSchedule(item);
       },
     });
