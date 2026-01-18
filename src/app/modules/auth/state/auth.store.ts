@@ -209,11 +209,6 @@ export class AuthStore extends BaseStore<AuthState> {
         tap((response) => {
           this.handleAuthSuccess(response);
           this.resetCaptcha();
-          if (response.mustChangePassword) {
-            // @TODO: check below to fill pendingUserInfo correctly
-            this.patchState({ pendingUserInfo: { username: credentials.username } });
-            this.setAuthStep('modifyLoginInfo');
-          }
         }),
         catchError((error) => {
           this.handleAuthError(error);
@@ -593,41 +588,48 @@ export class AuthStore extends BaseStore<AuthState> {
   /**
    * Handle successful authentication
    */
-  private handleAuthSuccess(response: IAuthResponse, withoutRedirect?: boolean): void {
-    const sessionExpiry = this.getTokenExpiry(response.token);
-    const currentTime = Date.now();
-    const user = { fullName: response.fullName, role: response.role as TRoles };
+  private handleAuthSuccess(response: IAuthResponse, username?: string): void {
+    if (response.mustChangePassword) {
+      // @TODO: check below to fill pendingUserInfo correctly
+      this.patchState({ pendingUserInfo: { username } });
+      this.setAuthStep('modifyLoginInfo');
+    } else {
+      const sessionExpiry = this.getTokenExpiry(response.token);
+      const currentTime = Date.now();
+      const user = { fullName: response.fullName, role: response.role as TRoles };
 
-    // this.isLoading.set(false);
+      // this.isLoading.set(false);
 
-    // Store in localStorage
-    localStorage.setItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN, response.token);
-    if (response.refreshToken) {
-      localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken);
-    }
-    localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(user));
-    localStorage.setItem(LOCAL_STORAGE_KEYS.LAST_LOGIN_TIME, currentTime.toString());
+      // Store in localStorage
+      localStorage.setItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN, response.token);
+      if (response.refreshToken) {
+        localStorage.setItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken);
+      }
+      localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(user));
+      localStorage.setItem(LOCAL_STORAGE_KEYS.LAST_LOGIN_TIME, currentTime.toString());
 
-    // Update state
-    this.patchState({
-      user: { fullName: response.fullName, role: response.role as TRoles },
-      token: response.token,
-      refreshToken: response.refreshToken,
-      // permissions: response.user.permissions?.map((p) => `${p.resource}:${p.action}`) || [],
-      lastLoginTime: currentTime,
-      sessionExpiry,
-      pendingUserInfo: undefined,
-      loading: false,
-      error: null,
-    });
+      // Update state
+      this.patchState({
+        user: { fullName: response.fullName, role: response.role as TRoles },
+        token: response.token,
+        refreshToken: response.refreshToken,
+        // permissions: response.user.permissions?.map((p) => `${p.resource}:${p.action}`) || [],
+        lastLoginTime: currentTime,
+        sessionExpiry,
+        pendingUserInfo: undefined,
+        loading: false,
+        error: null,
+      });
 
-    // Reset login attempts on successful login
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.LOGIN_ATTEMPTS);
+      // Reset login attempts on successful login
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.LOGIN_ATTEMPTS);
 
-    if (!withoutRedirect) {
       this.redirectToDashboard();
+      this.resetAuthSteps();
     }
-    this.resetAuthSteps();
+
+    // if (!withoutRedirect) {
+    // }
     this.resetCaptcha();
   }
 

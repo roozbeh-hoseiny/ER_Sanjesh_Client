@@ -11,7 +11,7 @@
         <span class="text-lg font-bold"> به پنل امتحانات شبه نهایی سنجش خوش آمدید. </span>
       </div>
 
-      @switch (activeStep) {
+      @switch (activeStep()) {
         @case ("login") {
           <app-login class="w-full" />
         }

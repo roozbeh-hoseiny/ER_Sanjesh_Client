@@ -1,5 +1,5 @@
 import { TRoles } from '@/core';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, computed, inject, Input, OnInit } from '@angular/core';
 import images from 'src/assets/images';
 import { AuthStore } from '../state';
 import { AuthForgetPasswordComponent } from './forgetPassword/forget-password.component';
@@ -40,7 +40,7 @@ export class AuthComponent implements OnInit {
   get selectedRole() {
     return this.store.selectedRole();
   }
-  get activeStep() {
+  activeStep = computed(() => {
     return this.store.authStep();
-  }
+  });
 }
