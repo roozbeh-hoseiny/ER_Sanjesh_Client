@@ -42,6 +42,8 @@ interface ISchoolDetailsCardsState {
   canEditLoginInfo: boolean;
   canEditCategories: boolean;
   canEditFields: boolean;
+  canEditCoupon: boolean;
+  canEditCouponStatus: boolean;
   submitContactLoading: boolean;
 }
 
@@ -66,6 +68,8 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   canEditLoginInfo: false,
   canEditCategories: false,
   canEditFields: false,
+  canEditCoupon: false,
+  canEditCouponStatus: false,
   submitContactLoading: false,
 };
 
@@ -116,6 +120,8 @@ export class SchoolDetailsCardsStore {
   readonly canEditLoginInfo = computed(() => !!this.state$().canEditLoginInfo);
   readonly canEditCategories = computed(() => !!this.state$().canEditCategories);
   readonly canEditFields = computed(() => !!this.state$().canEditFields);
+  readonly canEditCoupon = computed(() => !!this.state$().canEditCoupon);
+  readonly canEditCouponStatus = computed(() => !!this.state$().canEditCouponStatus);
   readonly submitContactLoading = computed(() => !!this.state$().submitContactLoading);
 
   // simple mutators
@@ -145,10 +151,7 @@ export class SchoolDetailsCardsStore {
           teachersLoading: false,
         });
       }),
-      tap((err) => {
-        console.log('err');
-        console.log(err);
-      }),
+
       finalize(() => {
         this.setState({
           teachersLoaded: true,
@@ -259,7 +262,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.validateContactEmail === undefined) return of();
     return this.service.validateContactEmail(id).pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'آدرس ایمیل رابط با موفقیت تایید شد.' });
       }),
     );
   }
@@ -267,7 +270,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.validateContactMobile === undefined) return of();
     return this.service.validateContactMobile(id).pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'تلفن تماس رابط با موفقیت تایید شد.' });
       }),
     );
   }
@@ -276,7 +279,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.validateManagerMobile === undefined) return of();
     return this.service.validateManagerMobile(id)?.pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'آدرس ایمیل مدیریت با موفقیت تایید شد.' });
       }),
     );
   }
@@ -284,7 +287,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.validateManagerEmail === undefined) return of();
     return this.service.validateManagerEmail(id)?.pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'شماره موبایل مدیریت با موفقیت تایید شد.' });
       }),
     );
   }
@@ -293,7 +296,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.invalidateContactEmail === undefined) return of();
     return this.service.invalidateContactEmail(id).pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'تاییدیه‌ی آدرس ایمیل رابط با موفقیت لغو شد.' });
       }),
     );
   }
@@ -301,7 +304,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.invalidateContactMobile === undefined) return of();
     return this.service.invalidateContactMobile(id).pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'تاییدیه‌ی موبایل رابط با موفقیت لغو شد.' });
       }),
     );
   }
@@ -310,7 +313,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.invalidateManagerEmail === undefined) return of();
     return this.service.invalidateManagerEmail(id).pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'تاییدیه‌ی آدرس ایمیل مدیریت با موفقیت لغو شد.' });
       }),
     );
   }
@@ -318,7 +321,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.invalidateManagerMobile === undefined) return of();
     return this.service.invalidateManagerMobile(id).pipe(
       tap(() => {
-        this.toastService.success({ text: 'اطلاعات مرکز آموزشی با موفقیت به‌روزرسانی شد.' });
+        this.toastService.success({ text: 'تاییدیه‌ی موبایل مدیریت با موفقیت لغو شد.' });
       }),
     );
   }
@@ -397,7 +400,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.attachCategory === undefined) return of();
     return this.service.attachCategory({ id: this.school()!.id, categoryId: payload.id }).pipe(
       tap(() => {
-        this.toastService.success({ text: `دسته‌بندی ${payload.label} با موفقیت اضافه شد.` });
+        this.toastService.success({ text: `درس ${payload.label} با موفقیت اضافه شد.` });
       }),
     );
   }
@@ -405,7 +408,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.detachCategory === undefined) return of();
     return this.service.detachCategory({ id: this.school()!.id, categoryId }).pipe(
       tap(() => {
-        this.toastService.success({ text: 'دسته‌بندی با موفقیت حذف شد.' });
+        this.toastService.success({ text: 'درس با موفقیت حذف شد.' });
       }),
     );
   }

@@ -33,6 +33,7 @@ export class InputComponent {
     | 'email'
     | 'checkbox'
     | 'switch'
+    | 'number'
     | 'price' = 'simple';
   @Input() control!: FormControl<Maybe<any>>;
   @Input() name!: string;
@@ -42,7 +43,7 @@ export class InputComponent {
   @Input() disabled = false;
   @Input() size?: 'small' | 'large';
   @Input() autocomplete?: string = 'off';
-  @Input() showErrors = false;
+  @Input() showErrors = true;
   @Input() hint?: string;
   @Input() isLtrInput = false;
   @Output() valueChange = new EventEmitter<string | number>();
@@ -77,6 +78,7 @@ export class InputComponent {
       case 'phone':
       case 'postalCode':
       case 'price':
+      case 'number':
         return 'numeric';
       default:
         return 'text';
@@ -106,6 +108,7 @@ export class InputComponent {
       case 'mobile':
       case 'phone':
       case 'price':
+      case 'number':
         inputClass.push('ltrInput');
         break;
       case 'email':
@@ -128,6 +131,7 @@ export class InputComponent {
       case 'phone':
       case 'price':
       case 'postalCode':
+      case 'number':
         return 'number';
       case 'checkbox':
         return 'checkbox';

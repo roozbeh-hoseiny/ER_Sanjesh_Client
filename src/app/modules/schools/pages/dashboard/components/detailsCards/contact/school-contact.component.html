@@ -1,17 +1,27 @@
-<app-card-data cardTitle="اطلاعات رابط" [editable]="canEdit" [editMode]="editMode()" (onEdit)="onEdit()">
-  @if (canEdit && editMode()) {
+<app-card-data cardTitle="اطلاعات رابط" [editable]="canEdit()" [editMode]="editMode()" (onEdit)="onEdit()">
+  @if (canEdit() && editMode()) {
     <app-school-contact-form (closeForm)="closeForm()" (submitForm)="submitForm($event)" />
   } @else {
     <div class="flex flex-col gap-4">
       <div class="grid grid-cols-3 gap-4 items-center">
-        <app-key-value label="نام" [value]="contact?.firstName" />
-        <app-key-value label="نام خانوادگی" [value]="contact?.lastName" />
-        <app-key-value label="جنسیت" [value]="contact?.gender ? 'مرد' : 'زن'" />
+        <app-key-value label="نام" [value]="contact()?.firstName" />
+        <app-key-value label="نام خانوادگی" [value]="contact()?.lastName" />
+        <app-key-value label="جنسیت" [value]="contact()?.gender ? 'مرد' : 'زن'" />
         <app-key-value label="تلفن همراه">
-          <app-check-verified-info [value]="contact?.mobile" [isVerified]="contact?.mobileIsVerified" />
+          <app-check-verified-info
+            [value]="contact()?.mobile"
+            [isVerified]="contact()?.mobileIsVerified"
+            [toggleLoading]="mobileToggleLoading()"
+            (onToggleVerify)="toggleVerifyMobile($event)"
+          />
         </app-key-value>
         <app-key-value label="ایمیل">
-          <app-check-verified-info [value]="contact?.email" [isVerified]="contact?.emailIsVerified" />
+          <app-check-verified-info
+            [value]="contact()?.email"
+            [isVerified]="contact()?.emailIsVerified"
+            [toggleLoading]="emailToggleLoading()"
+            (onToggleVerify)="toggleVerifyEmail($event)"
+          />
         </app-key-value>
       </div>
     </div>

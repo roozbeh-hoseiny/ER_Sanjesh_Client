@@ -8,7 +8,7 @@ import { FileSelectEvent, FileUpload } from 'primeng/fileupload';
 import { Message } from 'primeng/message';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
-import { IStudentBulkAddResponse } from '../models';
+import { IStudentBulkAddResponse } from '../../../../../shared/components/modules/students';
 
 @Component({
   selector: 'school-students-bulk-add',

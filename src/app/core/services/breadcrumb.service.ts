@@ -18,8 +18,6 @@ export class BreadcrumbService {
   }
 
   setItems(items: MenuItem[]) {
-    console.log('setItems', items);
-
     this._items.set(
       items.map((item) => ({
         ...item,

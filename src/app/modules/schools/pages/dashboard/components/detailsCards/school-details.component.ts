@@ -1,11 +1,10 @@
 import { ISchoolContactRequest } from '@/modules/schools/models';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { SchoolAddress } from './address/school-address.component';
 import { SchoolAgentComponent } from './agent';
 import { SchoolInfoBankAccountsComponent } from './bankAccounts';
 import { SchoolContactComponent } from './contact/school-contact.component';
 import { SchoolInfoComponent } from './info/school-info.component';
-import { SchoolManagerComponent } from './manager';
 import { SchoolLoginInfoComponent } from './school-login-info.component';
 import { SchoolDetailsCardsStore } from './store';
 import { TeachersSimpleListComponent } from './teachers/teachers-simple-list.component';
@@ -16,7 +15,6 @@ import { TeachersSimpleListComponent } from './teachers/teachers-simple-list.com
   imports: [
     SchoolInfoComponent,
     SchoolAddress,
-    SchoolManagerComponent,
     SchoolContactComponent,
     TeachersSimpleListComponent,
     SchoolInfoBankAccountsComponent,
@@ -25,53 +23,23 @@ import { TeachersSimpleListComponent } from './teachers/teachers-simple-list.com
   ],
 })
 export class SchoolDetailsComponent {
-  constructor(private detailsStore: SchoolDetailsCardsStore) {}
+  private readonly detailsStore = inject(SchoolDetailsCardsStore);
+  constructor() {}
 
   @Output() onRefreshData = new EventEmitter<void>();
   @Output() onSubmitContact = new EventEmitter<ISchoolContactRequest>();
 
-  get school() {
-    return this.detailsStore.school();
-  }
-
-  get showTeachersCard() {
-    return this.detailsStore.showTeachersCard();
-  }
-
-  get showBankAccountsCard() {
-    return this.detailsStore.showBankAccountsCard();
-  }
-
-  get showContactCard() {
-    return this.detailsStore.showContactCard();
-  }
-  get showAgentCard() {
-    return this.detailsStore.showAgentCard();
-  }
-
-  get canEditInfo() {
-    return this.detailsStore.canEditInfo();
-  }
-
-  get canEditAddress() {
-    return this.detailsStore.canEditAddress();
-  }
-
-  get canEditContact() {
-    return this.detailsStore.canEditContact();
-  }
-
-  get canEditLoginInfo() {
-    return this.detailsStore.canEditLoginInfo();
-  }
-
-  get submitContactLoading() {
-    return this.detailsStore.submitContactLoading();
-  }
-
-  get teachersLoading() {
-    return this.detailsStore.submitContactLoading();
-  }
+  readonly school = this.detailsStore.school;
+  readonly showTeachersCard = this.detailsStore.showTeachersCard;
+  readonly showBankAccountsCard = this.detailsStore.showBankAccountsCard;
+  readonly showContactCard = this.detailsStore.showContactCard;
+  readonly showAgentCard = this.detailsStore.showAgentCard;
+  readonly canEditInfo = this.detailsStore.canEditInfo;
+  readonly canEditAddress = this.detailsStore.canEditAddress;
+  readonly canEditContact = this.detailsStore.canEditContact;
+  readonly canEditLoginInfo = this.detailsStore.canEditLoginInfo;
+  readonly submitContactLoading = this.detailsStore.submitContactLoading;
+  readonly teachersLoading = this.detailsStore.submitContactLoading;
 
   refreshData() {
     this.onRefreshData.emit();

@@ -9,7 +9,7 @@ import { ConfirmationService } from 'primeng/api';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { SchoolStudentListStore } from './dataStore';
+import { SchoolStudentsManagementStore } from './dataStore';
 
 @Component({
   selector: 'school-students-table',
@@ -29,7 +29,7 @@ export class StudentsTableComponent {
   @Input() loading = false;
   @Output() onSubmitted = new EventEmitter<void>();
 
-  constructor(private store: SchoolStudentListStore) {}
+  constructor(private store: SchoolStudentsManagementStore) {}
 
   columns = [] as IColumn[];
   changeStatusSchedules = signal<Record<number, boolean>>({});

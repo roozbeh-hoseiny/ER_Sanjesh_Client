@@ -1,6 +1,11 @@
 <div class="inline-flex gap-2 items-center w-full">
   <span class="text-muted-color text-base font-normal shrink-0">{{ label }}:</span>
   <ng-content>
-    <span class="text-text-color text-base font-bold grow">{{ value || "-" }}</span>
+    <div class="flex flex-col gap-1">
+      <span class="text-text-color text-base font-bold grow">{{ value || "-" }}</span>
+      @if (hint) {
+        <span class="text-muted-color text-sm font-normal">{{ hint }}</span>
+      }
+    </div>
   </ng-content>
 </div>

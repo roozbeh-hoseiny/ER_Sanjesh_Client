@@ -59,6 +59,7 @@ export class PageDataListComponent<I> {
   @Input() emptyPlaceholderTitle: string = 'موردی برای نمایش وجود ندارد';
   @Input() emptyPlaceholderDescription?: string = '';
   @Input() emptyPlaceholderCtaLabel?: string;
+  @Input() showEmptyPlaceholderCta?: boolean;
   @Input() totalRecords!: number;
   @Input() perPage?: number = 10;
   @Input() currentPage?: number = 1;
@@ -71,6 +72,7 @@ export class PageDataListComponent<I> {
 
   @ContentChild('filter', { static: true }) filter!: TemplateRef<any> | null;
   @ContentChild('caption', { static: true }) caption!: TemplateRef<any> | null;
+  @ContentChild('actions', { static: true }) actions!: TemplateRef<any> | null;
 
   @Output() onEdit = new EventEmitter<I>();
   @Output() onDelete = new EventEmitter<I>();

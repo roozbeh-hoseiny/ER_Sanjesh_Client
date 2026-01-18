@@ -5,7 +5,6 @@ import { AuthStore } from './modules/auth/state';
 @Component({
   selector: 'app-root-component',
   template: '',
-  standalone: false,
 })
 export class RootComponent {
   constructor(private router: Router) {}

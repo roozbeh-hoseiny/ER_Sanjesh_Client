@@ -1,51 +1,67 @@
+import { ToastService } from '@/core/services/toast.service';
 import { SchoolsStore } from '@/modules/schools/dataStore';
 import { SchoolsStudentsService } from '@/modules/schools/services';
+import { CatalogGenderTagComponent } from '@/shared/catalog/gender/gender-tag.component';
+import { ConfirmationDialogService } from '@/shared/components';
 import {
   IColumn,
   PageDataListComponent,
 } from '@/shared/components/pageDataList/page-data-list.component';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SchoolStudentListStore, SchoolStudentsMainFiltersComponent } from '../components';
-import { IGetSchoolStudentsRequestPayload, IStudentResponse } from '../models';
+import { ButtonDirective } from 'primeng/button';
+import { finalize } from 'rxjs';
+import {
+  IGetSchoolStudentsRequestPayload,
+  IStudentRequestPayload,
+  IStudentResponse,
+} from '../../../../../shared/components/modules/students';
+import { SchoolStudentsMainFiltersComponent, SchoolStudentsManagementStore } from '../components';
+import { AddSingleStudentFormDialogComponent } from '../components/forms/add-single-student-form-dialog.component';
 
 @Component({
   selector: 'school-students',
   templateUrl: './students.component.html',
-  imports: [SchoolStudentsMainFiltersComponent, PageDataListComponent],
+  imports: [
+    SchoolStudentsMainFiltersComponent,
+    PageDataListComponent,
+    ButtonDirective,
+    AddSingleStudentFormDialogComponent,
+    CatalogGenderTagComponent,
+  ],
 })
 export class SchoolStudentsComponent {
   private schoolsStore = inject(SchoolsStore);
-  loading = signal<boolean>(false);
+  columns!: IColumn[];
+  @ViewChild('gender', { static: true }) genderTpl!: TemplateRef<any>;
+  @ViewChild('rowActions', { static: true }) actionTpl!: TemplateRef<any>;
+
   schoolId = signal(this.schoolsStore.info()?.id!);
   openedUploadDialog = signal(false);
-  isMainFilterOpened = signal(false);
+  visibleForm = signal<boolean>(false);
+  unassignLoading = signal(false);
 
-  columns = [] as IColumn[];
-
-  get students() {
-    return this.schoolStudentListStore.students();
-  }
+  isFilterSet = computed(() => {
+    const mainFilter = this.schoolStudentsManagementStore.mainFilter();
+    return mainFilter.academicYear && mainFilter.educationalLevelId && mainFilter.fieldOfStudyId;
+  });
+  students = computed(() => this.schoolStudentsManagementStore.students());
+  loading = computed(() => this.schoolStudentsManagementStore.getStudentsLoading());
+  mainFilter = computed(() => this.schoolStudentsManagementStore.mainFilter());
 
   constructor(
-    private services: SchoolsStudentsService,
-    private schoolStudentListStore: SchoolStudentListStore,
+    private schoolStudentsManagementStore: SchoolStudentsManagementStore,
+    private service: SchoolsStudentsService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-  ) {
-    this.setColumns();
-    this.schoolStudentListStore.setService({
-      addBulk: (payload: FormData) => this.services.bulkAdd(payload),
-    });
-    const mainFilter = this.schoolStudentListStore.mainFilter();
-    if (!mainFilter.academicYear || !mainFilter.educationalLevelId || !mainFilter.fieldOfStudyId) {
-      this.isMainFilterOpened.set(true);
-    } else {
-      this.getData();
-    }
-  }
+    private confirmationDialogService: ConfirmationDialogService,
+    private toastService: ToastService,
+  ) {}
 
-  mainFilter = computed(() => this.schoolStudentListStore.mainFilter());
+  ngOnInit() {
+    this.setColumns();
+    this.getAll();
+  }
 
   setColumns() {
     this.columns = [
@@ -57,37 +73,21 @@ export class SchoolStudentsComponent {
       { field: 'fatherName', header: 'نام پدر' },
       { field: 'nationalCode', header: 'کد ملی' },
       { field: 'mobile', header: 'شماره موبایل' },
-      { field: 'isAlreadyInThisSchool', header: 'حاضر در مدرسه', type: 'boolean' },
+      { field: 'gender', header: 'جنسیت', customDataModel: this.genderTpl },
+      {
+        field: 'rowActions',
+        header: '',
+        customDataModel: this.actionTpl,
+      },
     ];
   }
 
-  private getData() {
-    this.loading.set(true);
-    this.getAll();
-  }
-
-  private getAll() {
-    const filter = this.mainFilter();
-    if (
-      filter.academicYear === undefined ||
-      filter.educationalLevelId === undefined ||
-      filter.fieldOfStudyId === undefined
-    ) {
-      // Handle missing required fields, e.g., show an error or return early
-      this.loading.set(false);
-      return;
-    }
-    this.services.getAll(filter as IGetSchoolStudentsRequestPayload).subscribe((students) => {
-      this.schoolStudentListStore.fillInitial({
-        students,
-        schoolId: this.schoolId(),
-      });
-      this.loading.set(false);
-    });
+  getAll() {
+    this.schoolStudentsManagementStore.getAll();
   }
 
   refreshData() {
-    this.getData();
+    this.getAll();
   }
 
   openUploadDialog() {
@@ -98,15 +98,52 @@ export class SchoolStudentsComponent {
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams,
-      queryParamsHandling: 'merge', // remove to replace all query params by provided
+      queryParamsHandling: 'merge',
     });
 
-    this.schoolStudentListStore.updateMainFilterState(queryParams);
-
-    this.getData();
+    this.schoolStudentsManagementStore.updateMainFilterState(queryParams);
+    this.getAll();
   }
 
   toAddBulkPage() {
     this.router.navigate(['/schools/students/bulk-add']);
+  }
+  openAddForm() {
+    this.visibleForm.set(true);
+  }
+  closeAddForm() {
+    this.visibleForm.set(false);
+  }
+
+  submitStudent(payload: IStudentRequestPayload) {
+    return this.service.create(payload);
+  }
+
+  unassignStudent(item: IStudentResponse) {
+    this.confirmationDialogService.confirm({
+      header: 'لغو عضویت دانش‌آموز',
+      message: `آیا از لغو عضویت ${item.firstName} ${item.lastName} از مدرسه مطمین هستید؟`,
+      accept: () => {
+        this.doUnassignStudent(item);
+      },
+      variant: 'reject',
+    });
+  }
+
+  doUnassignStudent(item: IStudentResponse) {
+    this.unassignLoading.set(true);
+    return this.service
+      .unassign({ studentId: item.id })
+      .pipe(
+        finalize(() => {
+          this.unassignLoading.set(false);
+        }),
+      )
+      .subscribe((res) => {
+        this.toastService.success({
+          text: `لغو عضویت دانش‌آموز ${item.firstName} ${item.lastName} با موفقیت انجام شد`,
+        });
+        this.refreshData();
+      });
   }
 }

@@ -13,4 +13,5 @@ import { Component, Input } from '@angular/core';
 export class KeyValueComponent {
   @Input() label!: string;
   @Input() value?: string = '-';
+  @Input() hint?: string;
 }

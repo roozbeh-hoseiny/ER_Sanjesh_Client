@@ -1,0 +1,14 @@
+<p-dialog
+  header="افزودن دانش‌آموز به مدرسه"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '400px' }"
+  appendTo="body"
+  [closable]="true"
+>
+  <form [formGroup]="form" class="flex flex-col gap-4" (submit)="submit()">
+    <catalog-academic-years-select [control]="form.controls.academicYear" />
+    <catalog-fields-select [control]="form.controls.fieldOfStudyId" [onlyId]="true" />
+    <app-form-footer-actions class="mt-6" [loading]="submitLoading()" (onCancel)="close()" />
+  </form>
+</p-dialog>

@@ -23,7 +23,7 @@
         </app-key-value>
         <app-key-value label="نوع اسکنر" [value]="info().scannerType || 'ندارد'" />
         <app-key-value label="تلفن تماس" [value]="info().phoneNumber" />
-        <app-key-value label="امکان ویرایش">
+        <app-key-value label="امکان ویرایش" hint="برای تغییر وضعیت بر روی سوییچ بالا کلیک کنید">
           <inline-confirmation
             [value]="info().canEdit"
             confirmedMessage="بله"

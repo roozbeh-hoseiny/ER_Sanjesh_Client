@@ -29,11 +29,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error) => {
-      console.log(error);
-
       if (error.status === 401 && !isRefreshTokenRequest(req.url)) {
-        console.log('first');
-
         return handleTokenRefresh(authStore, req, next);
       }
 
@@ -49,17 +45,12 @@ const isRefreshing = new BehaviorSubject<boolean>(false);
  * Handle token refresh logic
  */
 function handleTokenRefresh(authStore: AuthStore, req: any, next: any): Observable<any> {
-  console.log(isRefreshing.value);
-
   if (!isRefreshing.value) {
     isRefreshing.next(true);
 
     const refreshToken = authStore.refreshToken();
-    console.log(refreshToken);
 
     if (!refreshToken) {
-      console.log('first');
-
       isRefreshing.next(false);
       authStore.logout();
       return throwError(() => new Error('توکنی یافت نشد'));
@@ -83,15 +74,11 @@ function handleTokenRefresh(authStore: AuthStore, req: any, next: any): Observab
       }),
       catchError((refreshError) => {
         isRefreshing.next(false);
-        console.log('first');
-
         authStore.logout();
         return throwError(() => refreshError);
       }),
     );
   } else {
-    console.log('asdasd');
-
     // Wait for refresh to complete, then retry request
     return isRefreshing.pipe(
       filter((refreshing) => !refreshing),

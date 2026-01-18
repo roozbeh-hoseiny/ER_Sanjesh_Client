@@ -3,11 +3,10 @@ import {
   EducationalLevelsSelectComponent,
   FieldsSelectComponent,
 } from '@/shared/catalog';
-import { UikitFieldComponent } from '@/uikit';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
-import { IGetSchoolStudentsRequestPayload } from '../../models';
+import { IGetSchoolStudentsRequestPayload } from '../../../../../../shared/components/modules/students';
 
 @Component({
   selector: 'school-students-main-filters',
@@ -18,7 +17,6 @@ import { IGetSchoolStudentsRequestPayload } from '../../models';
     FieldsSelectComponent,
     AcademicYearsSelectComponent,
     ButtonDirective,
-    UikitFieldComponent,
   ],
 })
 export class SchoolStudentsMainFiltersComponent {
@@ -28,10 +26,23 @@ export class SchoolStudentsMainFiltersComponent {
   constructor() {}
 
   form = this.fb.group({
-    academicYear: [this.initialData.academicYear ?? null, Validators.required],
-    educationalLevelId: [this.initialData.educationalLevelId ?? null, Validators.required],
-    fieldOfStudyId: [this.initialData.fieldOfStudyId ?? null, Validators.required],
+    academicYear: this.fb.control(this.initialData.academicYear || null, {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    educationalLevelId: this.fb.control(this.initialData.educationalLevelId || null, {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    fieldOfStudyId: this.fb.control(this.initialData.fieldOfStudyId || null, {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
+
+  ngOnInit() {
+    this.form.patchValue(this.initialData);
+  }
 
   submit = () => {
     this.form.markAsTouched();

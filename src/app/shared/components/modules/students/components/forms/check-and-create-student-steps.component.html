@@ -1,0 +1,26 @@
+<app-student-check-exist-form-dialog
+  [(visible)]="visibleExistForm"
+  (onSubmit)="onCheckExist($event)"
+  [submitApiRoute]="checkExistServiceApiRoute"
+  (onClose)="close()"
+/>
+<!-- [submitService]="checkExistService" -->
+
+<app-signup-student-form-dialog
+  [(visible)]="visibleSignupForm"
+  [nationalCode]="nationalCodeInputValue() || ''"
+  (onSubmit)="onSignup($event)"
+  [addServiceAPIRoute]="signupServiceApiRoute"
+  (onClose)="close()"
+/>
+<!-- [addService]="signupService" -->
+
+@if (fondedStudent()) {
+  <app-assign-student-form
+    [initialValues]="{ studentId: fondedStudent()?.id || '' }"
+    [(visible)]="visibleAssignForm"
+    (onSubmit)="onAssign($event)"
+    [submitServiceAPIRoute]="assignServiceApiRoute"
+    (onClose)="close()"
+  />
+}

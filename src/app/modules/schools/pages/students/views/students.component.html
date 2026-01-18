@@ -1,15 +1,39 @@
 <app-page-data-list
   [pageTitle]="'مدیریت دانش‌آموزان'"
   [columns]="columns"
-  [items]="students || []"
+  [items]="students() || []"
   [loading]="loading()"
-  addNewCtaLabel="افزودن تجمیعی دانش‌آموزان"
-  [showAdd]="true"
-  style="height: 100cqmin"
-  class="overflow-hidden"
-  (onAdd)="toAddBulkPage()"
+  [fullHeight]="true"
+  [showEmptyPlaceholderCta]="true"
+  [emptyPlaceholderDescription]="
+    isFilterSet() ? 'دانش‌اموزی یافت نشد' : 'برای جستجو ابتدا فیلتر‌های بالای لیست را تکمیل کنید'
+  "
+  emptyPlaceholderCtaLabel="افزودن دانش‌اموز جدید"
+  (onAdd)="openAddForm()"
 >
   <ng-template #caption let-columns>
-    <school-students-main-filters (onSubmit)="onSubmitMainFilter($event)" />
+    <school-students-main-filters [initialData]="mainFilter()" (onSubmit)="onSubmitMainFilter($event)" />
+  </ng-template>
+  <ng-template #gender let-item>
+    <catalog-gender-tag [gender]="item.gender" />
+  </ng-template>
+  <ng-template #rowActions let-item>
+    <button
+      pButton
+      [loading]="unassignLoading()"
+      (click)="unassignStudent(item)"
+      icon="pi pi-user"
+      outlined
+      severity="secondary"
+    ></button>
+  </ng-template>
+
+  <ng-template #actions>
+    <button pButton (click)="openAddForm()">افزودن دانش‌اموز</button>
+    <button pButton (click)="toAddBulkPage()">افزودن تجمیعی دانش‌اموزان</button>
   </ng-template>
 </app-page-data-list>
+
+@if (visibleForm()) {
+  <app-add-single-student-form-dialog (onClose)="closeAddForm()" (onAdd)="refreshData()" />
+}

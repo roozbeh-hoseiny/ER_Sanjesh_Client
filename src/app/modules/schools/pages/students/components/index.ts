@@ -1,2 +1,2 @@
 export * from './forms';
-export * from './studentList';
+export * from './list';

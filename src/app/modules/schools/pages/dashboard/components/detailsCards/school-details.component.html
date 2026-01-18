@@ -1,17 +1,17 @@
 <div class="flex flex-col gap-6">
   <!-- <app-school-manager (onSubmitted)="refreshData()" /> -->
   <app-school-info (onSubmitted)="refreshData()" />
-  @if (showContactCard) {
-    <app-school-contact (onSubmit)="submitContact($event)" (onSubmitted)="refreshData()" />
+  @if (showContactCard()) {
+    <app-school-contact (onSubmit)="submitContact($event)" (onUpdateValidation)="refreshData()" />
   }
-  @if (showAgentCard) {
+  @if (showAgentCard()) {
     <app-school-agent (onSubmitted)="refreshData()" />
   }
   <app-school-address (onSubmitted)="refreshData()" />
-  @if (showTeachersCard) {
+  @if (showTeachersCard()) {
     <school-teachers-simple-list />
   }
-  @if (showBankAccountsCard) {
+  @if (showBankAccountsCard()) {
     <app-school-info-bank-accounts (onSubmit)="refreshData()" />
   }
   <app-school-login-info (onSubmitted)="refreshData()" />

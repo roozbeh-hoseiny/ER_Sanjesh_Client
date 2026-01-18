@@ -1,12 +1,10 @@
 <form [formGroup]="form" (submit)="submit()">
-  <div class="flex items-start gap-4">
+  <div class="flex items-end gap-4">
     <div class="grid grid-cols-3 items-center gap-4 grow-1">
       <catalog-academic-years-select [control]="form.controls.academicYear" />
       <catalog-educational-levels-select [control]="form.controls.educationalLevelId" />
       <catalog-fields-select [control]="form.controls.fieldOfStudyId" [onlyId]="true" />
     </div>
-    <uikit-field label="'" class="shrink-0">
-      <button pButton type="submit">جستجو</button>
-    </uikit-field>
+    <button pButton type="submit">جستجو</button>
   </div>
 </form>

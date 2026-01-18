@@ -13,28 +13,32 @@
     >
       @if (pageTitle || showAdd || filter || caption) {
         <ng-template pTemplate="caption">
-          <ng-container [ngTemplateOutlet]="caption">
-            <div class="flex justify-between items-center gap-4">
-              <h5 class="font-bold">{{ pageTitle }}</h5>
-              @if (showAdd || filter) {
-                <div class="flex items-center gap-2">
-                  @if (filter) {
-                    <p-button
-                      label="فیلتر"
-                      icon="pi pi-filter"
-                      variant="outlined"
-                      badgeSeverity="info"
-                      [badge]="isFiltered ? '1' : undefined"
-                      (click)="openFilter()"
-                    ></p-button>
-                  }
-                  @if (showAdd) {
-                    <p-button label="{{ addNewCtaLabel }}" icon="pi pi-plus" (click)="openAddForm()"></p-button>
-                  }
-                </div>
-              }
+          <div class="flex justify-between items-center gap-4">
+            <h5 class="font-bold">{{ pageTitle }}</h5>
+            @if (showAdd || filter || actions) {
+              <div class="flex items-center gap-2">
+                @if (filter) {
+                  <p-button
+                    label="فیلتر"
+                    icon="pi pi-filter"
+                    variant="outlined"
+                    badgeSeverity="info"
+                    [badge]="isFiltered ? '1' : undefined"
+                    (click)="openFilter()"
+                  ></p-button>
+                }
+                @if (showAdd) {
+                  <p-button label="{{ addNewCtaLabel }}" icon="pi pi-plus" (click)="openAddForm()"></p-button>
+                }
+                <ng-container [ngTemplateOutlet]="actions" />
+              </div>
+            }
+          </div>
+          @if (caption) {
+            <div class="mt-2">
+              <ng-container [ngTemplateOutlet]="caption" />
             </div>
-          </ng-container>
+          }
         </ng-template>
       }
 
@@ -89,7 +93,7 @@
               [title]="emptyPlaceholderTitle"
               [description]="emptyPlaceholderDescription"
               [ctaLabel]="emptyPlaceholderCtaLabel || addNewCtaLabel"
-              [showCTA]="showAdd"
+              [showCTA]="showAdd || showEmptyPlaceholderCta"
               (ctaClick)="openAddForm()"
             ></uikit-empty-state>
           </td>

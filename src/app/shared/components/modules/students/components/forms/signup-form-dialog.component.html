@@ -1,0 +1,39 @@
+<p-dialog
+  header="ایجاد دانش‌اموز جدید"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '600px' }"
+  appendTo="body"
+  [closable]="true"
+>
+  <form [formGroup]="form" class="flex flex-col gap-4" (submit)="submit()">
+    {{ nationalCode }}
+    <div class="grid grid-cols-2 gap-3">
+      <app-input [control]="form.controls.firstName" label="نام" />
+      <app-input [control]="form.controls.lastName" label="نام خانوادگی" />
+      <app-gender-select [control]="form.controls.gender" />
+      <uikit-datepicker [control]="form.controls.birthDate" label="تاریخ تولد" />
+      <app-input [control]="form.controls.fatherName" label="نام پدر" />
+      <div></div>
+      <app-input [control]="form.controls.nationalCode" type="number" label="کد ملی" />
+      <app-input [control]="form.controls.idCardNumber" type="number" label="شماره شناسنامه" />
+      <app-input [control]="form.controls.mobile" type="mobile" label="شماره موبایل" />
+      <app-input [control]="form.controls.email" type="email" label="آدرس ایمیل" />
+      <app-states-select [cityControl]="form.controls.cityId" [stateControl]="form.controls.provinceId" />
+      <app-input [control]="form.controls.phoneNumber" label="تلفن ثابت" type="number" />
+      <app-checkbox [control]="form.controls.isLeftHanded" label="چپ دست؟" name="isLeftHanded" />
+      <app-checkbox [control]="form.controls.isForeigner" label="ملیت غیر ایرانی؟" name="isForeigner" />
+      <app-checkbox
+        [control]="form.controls.isAlreadyInThisSchool"
+        label="در حال حاضر در این مدرسه در حال تحصیل هستند ؟"
+        name="isAlreadyInThisSchool"
+      />
+      <div></div>
+
+      <catalog-academic-years-select [control]="form.controls.academicYear" />
+      <catalog-educational-levels-select [control]="form.controls.educationalLevelId" />
+      <catalog-fields-select [control]="form.controls.fieldOfStudyId" [onlyId]="true" />
+    </div>
+    <app-form-footer-actions class="mt-6" [loading]="submitLoading()" (onCancel)="close()" />
+  </form>
+</p-dialog>
