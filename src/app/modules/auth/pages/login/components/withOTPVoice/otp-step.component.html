@@ -1,0 +1,19 @@
+<form class="flex justify-center flex-col gap-3 items-center px-6" (ngSubmit)="submit()">
+  <p-inputotp name="otp" size="large" [length]="6" [(ngModel)]="otpCode" dir="ltr" />
+  <span class="text-muted-color text-sm font-bold mt-1">
+    کد خوانده شده در تماس با شماره {{ pendingUserInfo()?.mobile }} را وارد کنید.
+  </span>
+  <div class="flex items-center justify-center">
+    @if (countdown() > 0) {
+      <span class="text-sm text-muted-color ml-2">امکان تماس مجدد در {{ countdown() }} ثانیه</span>
+    } @else {
+      <button pButton outlined (click)="resendOtp()" [loading]="submitLoading()">تماس مجدد</button>
+    }
+  </div>
+  <app-auth-captcha class="block mb-6" />
+
+  <span class="w-full text-center text-sm select-none mt-5">
+    <a class="text-primary cursor-pointer font-bold" (click)="modifyPhone()">تغییر شماره تلفن</a>
+  </span>
+  <button pButton class="w-full" [loading]="submitLoading()" [disabled]="countdown() <= 0">ورود</button>
+</form>

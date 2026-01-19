@@ -5,6 +5,8 @@
 
   @if (loginType() === "OTP") {
     <app-login-with-otp-form />
+  } @else if (loginType() === "VOICE_OTP") {
+    <app-login-with-voice-otp-form />
   } @else {
     <app-login-with-password-form />
   }

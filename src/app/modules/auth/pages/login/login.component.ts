@@ -6,6 +6,7 @@ import { AuthSelectRolesComponent } from '../../components/select-roles.componen
 import { AuthStore } from '../../state';
 import { LoginWithPasswordFormComponent } from './components/with-password-form.component';
 import { LoginWithOTPFormComponent } from './components/withOTP/with-otp-form.component';
+import { LoginWithVoiceOTPFormComponent } from './components/withOTPVoice/with-otp-form.component';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ import { LoginWithOTPFormComponent } from './components/withOTP/with-otp-form.co
     LoginWithPasswordFormComponent,
     LoginWithOTPFormComponent,
     AuthSelectRolesComponent,
+    LoginWithVoiceOTPFormComponent,
   ],
 })
 export class LoginComponent {

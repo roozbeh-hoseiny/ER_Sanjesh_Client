@@ -12,11 +12,14 @@ import {
   IAuthResponse,
   ILoginRequestPayload,
   ISendSmsOtpRequestPayload,
+  ISendVoiceOtpRequestPayload,
   ISignupRequestPayload,
   IUserLoginInfo,
   LoginOtpRequestPayload,
+  LoginVoiceOtpRequestPayload,
   ResetPasswordOtpRequestPayload,
   SendSmsOtpCredentials,
+  SendVoiceOtpCredentials,
   TRoles,
 } from '../models';
 import { CaptchaService } from './captcha.service';
@@ -56,6 +59,18 @@ export class AuthService {
 
   readonly modulesLoginWithOtpRoutes = {
     SCHOOL: SCHOOLS_API_ROUTES.loginWithSmsOtp(),
+  } as Record<TRoles, string>;
+
+  readonly modulesSendVoiceOtpRoutes = {
+    SCHOOL: SCHOOLS_API_ROUTES.sendVoiceOtpForLogin(),
+  } as Record<TRoles, string>;
+
+  readonly modulesResendVoiceOtpRoutes = {
+    SCHOOL: SCHOOLS_API_ROUTES.resendVoiceOtpForLogin(),
+  } as Record<TRoles, string>;
+
+  readonly modulesLoginWithVoiceOtpRoutes = {
+    SCHOOL: SCHOOLS_API_ROUTES.loginWithVoiceOtp(),
   } as Record<TRoles, string>;
 
   readonly modulesGetInfoRoutes = {
@@ -99,6 +114,41 @@ export class AuthService {
       headers: baseHeaders,
     });
   }
+
+  // start with voice OTP
+  sendVoiceOTP(credentials: ISendVoiceOtpRequestPayload, role: TRoles): Observable<void> {
+    const endpoint = this.modulesSendVoiceOtpRoutes[role];
+    const { mobile, captcha } = credentials;
+    const baseHeaders = this.captchaService.buildCaptchaHeaders({}, captcha);
+
+    return this.http.post<void>(
+      endpoint,
+      { mobile },
+      {
+        headers: baseHeaders,
+      },
+    );
+  }
+
+  resendVoiceOTP(credentials: SendVoiceOtpCredentials, role: TRoles): Observable<void> {
+    const endpoint = this.modulesResendVoiceOtpRoutes[role];
+    const { mobile } = credentials;
+
+    return this.http.post<void>(endpoint, { mobile });
+  }
+
+  loginWithVoiceOTP(
+    credentials: LoginVoiceOtpRequestPayload,
+    role: TRoles,
+  ): Observable<IAuthResponse> {
+    const { captcha, ...rest } = credentials;
+
+    const baseHeaders = this.captchaService.buildCaptchaHeaders({}, captcha);
+    return this.http.post<IAuthResponse>(this.modulesLoginWithVoiceOtpRoutes[role], rest, {
+      headers: baseHeaders,
+    });
+  }
+  // end with voice OTP
 
   login(credentials: ILoginRequestPayload, role: TRoles): Observable<IAuthResponse> {
     const { username, password, captcha } = credentials;

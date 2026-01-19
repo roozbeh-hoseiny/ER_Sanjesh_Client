@@ -58,6 +58,9 @@ export class LoginWithPasswordFormComponent {
   toOTPLogin() {
     this.store.setLoginType('OTP');
   }
+  toVoiceOTPLogin() {
+    this.store.setLoginType('VOICE_OTP');
+  }
   toForgetPassword() {
     this.store.setAuthStep('forgetPassword');
   }

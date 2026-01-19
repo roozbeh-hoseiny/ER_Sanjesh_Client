@@ -54,6 +54,21 @@ export interface LoginOtpRequestPayload extends LoginOtpCredentials {
   captcha: string;
 }
 
+//voiceOTP
+export interface SendVoiceOtpCredentials {
+  mobile: string;
+}
+export interface ISendVoiceOtpRequestPayload extends SendVoiceOtpCredentials {
+  captcha: string;
+}
+export interface LoginVoiceOtpCredentials {
+  otp: string;
+}
+export interface LoginVoiceOtpRequestPayload extends LoginVoiceOtpCredentials {
+  mobile: string;
+  captcha: string;
+}
+
 export interface ResetPasswordOtpCredentials {
   otp: string;
   password: string;

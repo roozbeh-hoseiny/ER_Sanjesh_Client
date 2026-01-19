@@ -1,0 +1,11 @@
+@if (selectedRole() !== "SCHOOL") {
+  <span class="w-full text-center text-sm select-none py-10">
+    متاسفانه ورود با کد یک‌بار مصرف برای این نقش کاربری فعال نیست.
+  </span>
+} @else {
+  @if (step() === "SEND_OTP") {
+    <app-voice-otp-login-mobile-step />
+  } @else {
+    <app-voice-otp-login-otp-step />
+  }
+}

@@ -4,13 +4,19 @@ import { schoolTeachersApiRoutes } from './teachers-api.const';
 const baseUrl = '/api/v1/school';
 
 export const SCHOOLS_API_ROUTES = {
+  sendVoiceOtpForLogin: () => `${baseUrl}/SendVoiceOTPForLogin`,
+  resendVoiceOtpForLogin: () => `${baseUrl}/reSendVoiceOTPForLogin`,
+  loginWithVoiceOtp: () => `${baseUrl}/loginByVoiceOTP`,
+
   sendSmsOtpForLogin: () => `${baseUrl}/SendSmsOTPForLogin`,
   resendSmsOtpForLogin: () => `${baseUrl}/reSendSmsOTPForLogin`,
   loginWithSmsOtp: () => `${baseUrl}/loginBySmsOTP`,
-  login: () => `${baseUrl}/login`,
+
   sendSmsOtpForForgetPassword: () => `${baseUrl}/SendSmsOTPForResetPassword`,
   resendSmsOtpForForgetPassword: () => `${baseUrl}/reSendSmsOTPForResetPassword`,
   resetPassword: () => `${baseUrl}/SchoolResetPasswordByMobile`,
+
+  login: () => `${baseUrl}/login`,
   me: () => `${baseUrl}/me`,
 
   // edit routes
@@ -22,8 +28,8 @@ export const SCHOOLS_API_ROUTES = {
   removeBankInfo: () => `${baseUrl}/UnassignBankAccount`,
 
   //verification routes
-  managerEmailSendOTPVerification: () => `${baseUrl}/SendEmailOTPForForManagerEmailVerification`,
-  managerPhoneSendOTPVerification: () => `${baseUrl}/SendSmsOTPForForManagerMobileVerification`,
+  managerEmailSendOTPVerification: () => `${baseUrl}/SendEmailOTPForManagerEmailVerification`,
+  managerPhoneSendOTPVerification: () => `${baseUrl}/SendSmsOTPForManagerMobileVerification`,
   sendEmailOTP: () => `${baseUrl}/SendEmailOTPForLogin`,
   sendSmsOTP: () => `${baseUrl}/SendSmsOTPForLogin`,
 

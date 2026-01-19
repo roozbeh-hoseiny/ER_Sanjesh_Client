@@ -11,9 +11,11 @@ import {
   IUserLoginInfo,
   LoginCredentials,
   LoginOtpCredentials,
+  LoginVoiceOtpCredentials,
   Maybe,
   ResetPasswordOtpCredentials,
   SendSmsOtpCredentials,
+  SendVoiceOtpCredentials,
   TRoles,
   User,
 } from '../../../core/models';
@@ -48,7 +50,7 @@ export interface LoginState {
   loginError: Maybe<string>;
 }
 export type TAuthSteps = 'login' | 'otp' | 'modifyLoginInfo' | 'signup' | 'forgetPassword';
-export type TLoginType = 'PASSWORD' | 'OTP';
+export type TLoginType = 'PASSWORD' | 'OTP' | 'VOICE_OTP';
 export type TLoginSteps = 'SEND_OTP' | 'VERIFY_OTP';
 
 /**
@@ -300,6 +302,88 @@ export class AuthStore extends BaseStore<AuthState> {
         }),
       );
   }
+
+  // start with Voice OTP
+  sendVoiceOtp(credentials: SendVoiceOtpCredentials) {
+    this._loginState.isLoggingIn = true;
+    this._loginState.loginError = null;
+    this.setLoading(true);
+    return this.service
+      .sendVoiceOTP({ ...credentials, captcha: this.captchaCode()! }, this.selectedRole())
+      .pipe(
+        tap((response) => {
+          this.patchState({ pendingUserInfo: { mobile: credentials.mobile } });
+          this.setLoginStep('VERIFY_OTP');
+          this.resetCaptcha();
+        }),
+        catchError((error) => {
+          this.handleAuthError(error);
+          return of(null);
+        }),
+        finalize(() => {
+          this._loginState.isLoggingIn = false;
+          this.setLoading(false);
+        }),
+      );
+  }
+
+  resendVoiceOtp() {
+    if (this.pendingUserInfo()?.mobile) {
+      this._loginState.isLoggingIn = true;
+      this._loginState.loginError = null;
+      this.setLoading(true);
+      return this.service
+        .resendVoiceOTP({ mobile: this.pendingUserInfo()!.mobile! }, this.selectedRole())
+        .pipe(
+          tap((response) => {
+            this.toastService.success({
+              text: 'کد تایید مجددا ارسال شد',
+            });
+            return of(response);
+          }),
+          catchError((error) => {
+            this.handleAuthError(error);
+            return of(null);
+          }),
+          finalize(() => {
+            this._loginState.isLoggingIn = false;
+            this.setLoading(false);
+          }),
+        );
+    } else {
+      return of(null);
+    }
+  }
+
+  loginWithVoiceOtp(credentials: LoginVoiceOtpCredentials) {
+    this._loginState.isLoggingIn = true;
+    this._loginState.loginError = null;
+    this.setLoading(true);
+
+    return this.service
+      .loginWithVoiceOTP(
+        {
+          otp: credentials.otp,
+          mobile: this.pendingUserInfo()?.mobile!,
+          captcha: this.captchaCode()!,
+        },
+        this.selectedRole(),
+      )
+      .pipe(
+        tap((response) => {
+          this.handleAuthSuccess(response);
+        }),
+        catchError((error) => {
+          this.handleAuthError(error);
+          return of(null);
+        }),
+        finalize(() => {
+          this._loginState.isLoggingIn = false;
+          this.setLoading(false);
+        }),
+      );
+  }
+  // end with Voice OTP
 
   sendForgetPasswordOtp(credentials: SendSmsOtpCredentials) {
     this._loginState.isLoggingIn = true;
