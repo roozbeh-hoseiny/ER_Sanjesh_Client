@@ -12,7 +12,14 @@
       <app-input label="کد شعبه" name="branchCode" [control]="form.controls.branchCode" />
       <app-input label="صاحب حساب" name="ownerName" [control]="form.controls.ownerName" />
       <app-input label="شماره حساب" name="depositeNumber" [control]="form.controls.depositeNumber" />
-      <app-input label="شماره شبا" name="sheba" [control]="form.controls.sheba" />
+      <app-input
+        label="شماره شبا"
+        name="sheba"
+        [control]="form.controls.sheba"
+        [isLtrInput]="true"
+        suffix="IR "
+        placeholder="123456789123000005985236IR"
+      />
     </div>
     <div class="flex gap-2 justify-end mt-4">
       <button pButton type="button" class="p-button-secondary" [disabled]="submitLoading()" (click)="close()">

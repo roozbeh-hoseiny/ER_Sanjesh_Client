@@ -1,4 +1,4 @@
-<app-card-data cardTitle="اطلاعات کارگزار" [editable]="canEdit" [editMode]="editMode()" (onEdit)="onEdit()">
+<app-card-data cardTitle="اطلاعات بازاریاب" [editable]="canEdit" [editMode]="editMode()" (onEdit)="onEdit()">
   <ng-template #moreAction>
     @if (agent) {
       <button
@@ -9,7 +9,7 @@
         severity="danger"
         [loading]="onRemoveLoading()"
         (click)="removeAgent()"
-        label="حذف کارگزار"
+        label="حذف بازاریاب"
       ></button>
     }
   </ng-template>
@@ -25,7 +25,7 @@
     </div>
   } @else {
     <div class="w-full flex items-center justify-center">
-      <p-message severity="warn" icon="pi pi-exclamation-triangle">کارگزاری در نظر گرفته نشده است</p-message>
+      <p-message severity="warn" icon="pi pi-exclamation-triangle">بازاریابی در نظر گرفته نشده است</p-message>
     </div>
   }
   @if (canEdit && editMode()) {

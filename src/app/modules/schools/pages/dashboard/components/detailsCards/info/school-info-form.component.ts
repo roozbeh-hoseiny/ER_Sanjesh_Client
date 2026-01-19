@@ -3,15 +3,15 @@ import { mobileValidator } from '@/core/validators/mobile.validator';
 import { ISchoolInfoRequest, ISchoolResponse } from '@/modules/schools/models';
 import { ExamApplicationTypesSelectComponent, SchoolGendersSelect } from '@/shared/catalog';
 import { InputComponent } from '@/shared/components';
+import { CheckboxComponent } from '@/uikit/checkbox/checkbox.component';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { Divider } from 'primeng/divider';
 import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddon } from 'primeng/inputgroupaddon';
 import { InputText } from 'primeng/inputtext';
-import { ToggleSwitch } from 'primeng/toggleswitch';
 import { SchoolPersonFormComponent } from '../school-person-form.component';
 import { SchoolDetailsCardsStore } from '../store';
 
@@ -26,11 +26,11 @@ import { SchoolDetailsCardsStore } from '../store';
     SchoolGendersSelect,
     SchoolPersonFormComponent,
     InputComponent,
-    ToggleSwitch,
     ExamApplicationTypesSelectComponent,
     InputGroup,
     InputGroupAddon,
     InputText,
+    CheckboxComponent,
   ],
 })
 export class SchoolInfoFormComponent {
@@ -56,7 +56,9 @@ export class SchoolInfoFormComponent {
       number: ['', [Validators.maxLength(8)]],
     }),
     examApplicantType: [0, Validators.required],
+    hasScanner: [false],
     scannerType: [''],
+    scannerName: [''],
 
     managerInfo: this.fb.group({
       firstName: ['', [Validators.required]],
@@ -70,7 +72,6 @@ export class SchoolInfoFormComponent {
   ngOnInit() {
     const cur = this.detailsStore.school();
     if (cur) {
-      // Transform phoneNumber from string to object if necessary
       const phoneNumberObj =
         typeof cur.phoneNumber === 'string'
           ? {
@@ -86,6 +87,23 @@ export class SchoolInfoFormComponent {
       this.form.controls.examApplicantType.setValue(cur.examApplicantTypeId);
       this.form.controls.conductExam.setValue(cur.conductExam);
       this.form.controls.scannerType.setValue(cur.scannerType);
+      this.form.controls.hasScanner.valueChanges.subscribe((res) => {
+        if (res) {
+          this.form.addControl(
+            'scannerName',
+            new FormControl('', { validators: [Validators.required] }),
+          );
+          this.form.addControl(
+            'scannerType',
+            new FormControl('', { validators: [Validators.required] }),
+          );
+        } else {
+          // @ts-ignore
+          this.form.removeControl('scannerName');
+          // @ts-ignore
+          this.form.removeControl('scannerType');
+        }
+      });
     }
   }
 

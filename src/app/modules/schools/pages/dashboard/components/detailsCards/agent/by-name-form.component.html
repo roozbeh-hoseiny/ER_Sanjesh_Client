@@ -1,6 +1,6 @@
 <app-page-data-list [columns]="columns" [items]="agents()" [loading]="loading()" class="overflow-hidden">
   <ng-template #caption>
-    <input pInputText [formControl]="searchTerm" placeholder="نام کارگزار مورد نظر را بنویسید" class="w-xs" />
+    <input pInputText [formControl]="searchTerm" placeholder="نام بازاریاب مورد نظر را بنویسید" class="w-xs" />
   </ng-template>
   <ng-template #gender let-item>
     <catalog-gender-tag [gender]="item.gender" />

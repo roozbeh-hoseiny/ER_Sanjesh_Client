@@ -2,12 +2,12 @@
   <p-message severity="info" icon="pi pi-info-circle" class="mb-5">
     یکی از فیلتر‌ها در لحظه قابل انتخاب هستند
   </p-message>
-  <uikit-field label="بر اساس نام کارگزار" name="search" class="w-full">
+  <uikit-field label="بر اساس نام بازاریاب" name="search" class="w-full">
     <p-inputgroup class="w-full">
       <input
         pInputText
         [(ngModel)]="search"
-        placeholder="جستجوی نام کارگزار"
+        placeholder="جستجوی نام بازاریاب"
         (ngModelChange)="onFilterChange($event)"
       />
       <p-inputgroup-addon>

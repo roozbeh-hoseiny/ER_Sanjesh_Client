@@ -1,0 +1,20 @@
+<app-card-data cardTitle="اطلاعات ورود" [editable]="canEdit()" [editMode]="editMode()" class="" (onEdit)="onEdit()">
+  @if (canEdit() && editMode()) {
+    <school-login-info-form
+      [initialValues]="{
+        username: username() || '',
+        email: manager()?.email || '',
+        mobile: manager()?.mobile || '',
+        password: '',
+      }"
+    />
+  } @else {
+    <div class="flex flex-col gap-4">
+      <div class="grid grid-cols-3 gap-4">
+        <app-key-value label="نام کاربری" [value]="username() || '-'" />
+        <app-key-value label="تلفن همراه" [value]="manager()?.mobile" />
+        <app-key-value label="ایمیل" [value]="manager()?.email" />
+      </div>
+    </div>
+  }
+</app-card-data>

@@ -55,7 +55,7 @@ export class SchoolAgentByUniqueIdFormComponent {
     return this.store.searchForAgent(id);
   }
   foundedMessage(agent: Maybe<IAdminAgentResponse>) {
-    return agent ? `کارگزار با نام ${agent.fullname} یافت شد.` : '';
+    return agent ? `بازاریاب با نام ${agent.fullname} یافت شد.` : '';
   }
 
   close() {

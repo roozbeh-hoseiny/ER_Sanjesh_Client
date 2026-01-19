@@ -5,7 +5,7 @@ import { SchoolAgentComponent } from './agent';
 import { SchoolInfoBankAccountsComponent } from './bankAccounts';
 import { SchoolContactComponent } from './contact/school-contact.component';
 import { SchoolInfoComponent } from './info/school-info.component';
-import { SchoolLoginInfoComponent } from './school-login-info.component';
+import { SchoolLoginInfoComponent } from './loginInfo/login-info.component';
 import { SchoolDetailsCardsStore } from './store';
 import { TeachersSimpleListComponent } from './teachers/teachers-simple-list.component';
 

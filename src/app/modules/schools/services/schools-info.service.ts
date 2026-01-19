@@ -10,6 +10,7 @@ import {
   ISchoolBankInfoRemoveRequestPayload,
   ISchoolInfoRequest,
   ISchoolLoginInfoRequest,
+  ISchoolLoginInfoRequestResponse,
 } from '../models';
 
 @Injectable({ providedIn: 'root' })
@@ -25,8 +26,8 @@ export class SchoolsInfoService {
     return this.http.post<boolean>(this.apiRoutes.editAddress(), request);
   }
 
-  editLoginInfo(request: ISchoolLoginInfoRequest): Observable<boolean> {
-    return this.http.post<boolean>(this.apiRoutes.editLoginInfo(), request);
+  editLoginInfo(request: ISchoolLoginInfoRequest): Observable<ISchoolLoginInfoRequestResponse> {
+    return this.http.post<ISchoolLoginInfoRequestResponse>(this.apiRoutes.editLoginInfo(), request);
   }
 
   editInfo(request: ISchoolInfoRequest): Observable<boolean> {

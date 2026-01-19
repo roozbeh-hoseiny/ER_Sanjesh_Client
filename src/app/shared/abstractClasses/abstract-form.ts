@@ -8,8 +8,8 @@ import { Subscribable } from 'rxjs';
   template: '',
   imports: [ReactiveFormsModule],
 })
-export abstract class AbstractForm<Request, Response> {
-  @Input() initialValues?: Response;
+export abstract class AbstractForm<Request, Response, InitialValue = Response> {
+  @Input() initialValues?: InitialValue;
 
   @Output() onSubmit = new EventEmitter<Response>();
   @Output() onClose = new EventEmitter<void>();
@@ -26,6 +26,9 @@ export abstract class AbstractForm<Request, Response> {
 
   submit() {
     this.form.markAllAsTouched();
+    console.log(this.form);
+    console.log(this.form.value);
+
     if (this.form.valid) {
       this.form.disable();
       this.submitLoading.set(true);

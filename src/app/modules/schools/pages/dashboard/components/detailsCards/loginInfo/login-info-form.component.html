@@ -1,0 +1,42 @@
+<form [formGroup]="form" (submit)="submit()">
+  <div class="grid grid-cols-3 gap-4">
+    <app-input [control]="form.controls.username" label="نام کاربری" [isLtrInput]="true" />
+    <app-input [control]="form.controls.mobile" label="تلفن همراه" type="mobile" />
+    <app-input [control]="form.controls.email" label="ایمیل" type="email" />
+    <uikit-field label="رمز عبور" pSize="large" class="" [control]="form.controls.password">
+      <p-password
+        id="password1"
+        size="large"
+        name="password"
+        formControlName="password"
+        autocomplete="password"
+        [toggleMask]="true"
+        [fluid]="true"
+        [feedback]="false"
+        [invalid]="form.get('password')?.touched && form.get('password')?.invalid"
+      />
+      <span class="text-xs mt-2 text-muted-color">
+        رمز باید حداقل ۸ کاراکتر بوده و شامل حداقل یک حرف بزرگ، یک حرف کوچک، یک عدد و یک کاراکتر ویژه باشد.
+      </span>
+    </uikit-field>
+
+    <uikit-field label="تکرار رمز عبور" pSize="large" class="" [control]="form.get('confirmPassword')">
+      <p-password
+        id="confirmPassword"
+        size="large"
+        name="confirmPassword"
+        formControlName="confirmPassword"
+        autocomplete="new-password"
+        [toggleMask]="true"
+        [fluid]="true"
+        [feedback]="false"
+        [invalid]="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid"
+      />
+    </uikit-field>
+  </div>
+  <app-form-footer-actions cancelLabel="انصراف" submitLabel="ذخیره" [loading]="submitLoading()" (onCancel)="close()" />
+  <!-- <div class="flex gap-2 justify-end mt-4">
+    <button pButton type="button" class="p-button-secondary" (click)="close()">انصراف</button>
+    <button pButton type="submit" class="p-button-primary" [loading]="submitLoading()">ذخیره</button>
+  </div> -->
+</form>

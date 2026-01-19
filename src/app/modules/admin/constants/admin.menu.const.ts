@@ -18,7 +18,7 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
         routerLink: [adminNamedRoutes.teachers.path],
       },
       {
-        label: 'مدیریت کارگزاران',
+        label: 'مدیریت بازاریابان',
         customIcon: TeacherIcon,
         routerLink: [adminNamedRoutes.agents.path],
       },

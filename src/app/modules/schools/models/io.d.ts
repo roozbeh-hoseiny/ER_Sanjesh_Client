@@ -19,7 +19,8 @@ export interface ISchoolInfoRequest {
   boyOrGirl: number;
   conductExam: boolean;
   examApplicantTypeId: number;
-  scannerType: string;
+  scannerType?: string;
+  scannerName?: string;
   examHallCapacity: number;
 }
 
@@ -38,6 +39,8 @@ export interface ISchoolLoginInfoRequest {
   email: string;
   mobile: string;
 }
+
+export interface ISchoolLoginInfoRequestResponse {}
 
 export interface IVerifyRequest {
   otp: string;
@@ -66,6 +69,8 @@ export interface ISchoolRawResponse {
   conductExam: boolean;
   examApplicantTypeId: number;
   examApplicantTypeTitle: number;
+  hasScanner: boolean;
+  scannerName: string;
   scannerType: string;
   categories: ISchoolCategory[];
   fieldOfStudies: SchoolsFieldOfStudyRaw[];

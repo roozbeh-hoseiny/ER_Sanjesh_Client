@@ -3,21 +3,22 @@
     <app-input label="نام مرکز آموزشی" name="name" [control]="form.controls.name" />
     <app-school-genders-select [control]="form.controls.boyOrGirl" />
 
-    <uikit-field label="مایل به برگزاری آزمون هستید؟" name="conductExam" [control]="form.controls.conductExam">
-      <p-toggleSwitch formControlName="conductExam" />
-    </uikit-field>
-    <app-input label="ظرفیت" name="examHallCapacity" [control]="form.controls.examHallCapacity" />
+    <app-checkbox
+      label="مایل به برگزاری آزمون برای داوطلبان ثبت نامی در محل مرکز آموزشی خود هستید؟"
+      name="conductExam"
+      [control]="form.controls.conductExam"
+    />
+    <app-input
+      label="ظرفیت مرکز آموزشی"
+      name="examHallCapacity"
+      [control]="form.controls.examHallCapacity"
+      suffix="نفر"
+    />
     <catalog-exam-application-types-select
       [control]="form.controls.examApplicantType"
       placeholder="نوع متقاضیان آزمون را انتخاب کنید"
     />
-    <app-input
-      label="نوع اسکنر"
-      name="scannerType"
-      [control]="form.controls.scannerType"
-      customPlaceholder="در صورت داشتن اسکنر نوع آن‌را وارد کنید"
-    />
-    <uikit-field label="شماره تماس" name="phoneNumber" class="w-full">
+    <uikit-field label="شماره تماس ثابت مرکز" name="phoneNumber" class="w-full">
       <p-inputgroup class="w-full" dir="ltr">
         <p-inputgroup-addon>
           <input
@@ -37,6 +38,12 @@
         />
       </p-inputgroup>
     </uikit-field>
+
+    <app-checkbox label="مرکز آموزشی اسکنر دارد؟" name="scannerType" [control]="form.controls.hasScanner" />
+    @if (form.controls.hasScanner.value) {
+      <app-input label="مدل اسکنر" name="scannerType" [control]="form.controls.scannerType" />
+      <app-input label="نام اسکنر" name="scannerName" [control]="form.controls.scannerName" />
+    }
 
     <!-- <app-input label="شماره تماس" name="phoneNumber" [control]="form.controls.phoneNumber" /> -->
   </div>

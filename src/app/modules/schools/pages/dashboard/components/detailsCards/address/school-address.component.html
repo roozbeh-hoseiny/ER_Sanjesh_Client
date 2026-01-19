@@ -1,4 +1,10 @@
-<app-card-data cardTitle="اطلاعات آدرس" [editable]="canEdit" [editMode]="editMode()" (onEdit)="onEdit()" class="">
+<app-card-data
+  cardTitle="اطلاعات آدرس مرکز آموزشی"
+  [editable]="canEdit"
+  [editMode]="editMode()"
+  (onEdit)="onEdit()"
+  class=""
+>
   @if (canEdit && editMode()) {
     <app-school-address-form (closeForm)="closeForm()" (submitForm)="submitForm()" />
   } @else {

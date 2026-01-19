@@ -40,6 +40,7 @@ export class SchoolsDashboardComponent {
       removeBankInfo: (payload) => this.schoolService.removeBankInfo(payload),
       validateManagerMobile: (id: string) => this.openConfirmationMobileModal(id),
       validateManagerEmail: (id: string) => this.openConfirmationEmailModal(id),
+      updateLoginInfo: (payload) => this.schoolService.editLoginInfo(payload),
     });
 
     effect(() => {
@@ -56,7 +57,7 @@ export class SchoolsDashboardComponent {
           canEditAddress: info.canEdit,
           canEditBankAccounts: info.canEdit,
           canEditInfo: info.canEdit,
-          canEditLoginInfo: info.canEdit,
+          canEditLoginInfo: true,
         });
       }
     });

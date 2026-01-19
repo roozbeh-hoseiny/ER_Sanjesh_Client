@@ -8,7 +8,7 @@ export const adminAgentsNamedRoutes: NamedRoutes<TAdminAgentsRouteNames> = {
     loadComponent: () =>
       import('../../pages/agents/views/agents.component').then((m) => m.AdminAgentsComponent),
     meta: {
-      title: 'کارگزاران',
+      title: 'بازاریابان',
     },
   },
 };

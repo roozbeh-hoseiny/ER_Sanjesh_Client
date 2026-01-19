@@ -1,9 +1,9 @@
 <div class="flex flex-col gap-4">
   <uikit-search-field
-    label="جستجوی کارگزار"
-    placeholder="شناسه‌ی کارگزار را وارد کنید..."
+    label="جستجوی بازاریاب"
+    placeholder="شناسه‌ی بازاریاب را وارد کنید..."
     [search]="searchForAgent.bind(this)"
-    [notFoundMessage]="'کارگزار با این شناسه یافت نشد.'"
+    [notFoundMessage]="'بازاریاب با این شناسه یافت نشد.'"
     [foundedMessage]="foundedMessage"
     class="max-w-xs w-full mx-auto"
     (searchResult)="setSearchResult($event)"

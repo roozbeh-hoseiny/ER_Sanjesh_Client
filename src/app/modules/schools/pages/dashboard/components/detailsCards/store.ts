@@ -12,6 +12,7 @@ import {
   ISchoolBankInfoRemoveRequestPayload,
   ISchoolContactRequest,
   ISchoolInfoRequest,
+  ISchoolLoginInfoRequest,
   ISchoolResponse,
 } from '@/modules/schools/models';
 import { IFieldOfStudiesResponse } from '@/shared/catalog';
@@ -233,6 +234,19 @@ export class SchoolDetailsCardsStore {
     return of();
   }
 
+  updateLoginInfo(payload: ISchoolLoginInfoRequest) {
+    if (this.service.updateLoginInfo) {
+      return this.service.updateLoginInfo(payload).pipe(
+        tap((ok) => {
+          if (ok) {
+            this.toastService.success({ text: 'اطلاعات ورود با موفقیت به‌روزرسانی شد.' });
+          }
+        }),
+      );
+    }
+    return of();
+  }
+
   addBankInfo(payload: ISchoolBankInfoAddRequestPayload) {
     if (this.service.addBankInfo === undefined) return of();
     return this.service.addBankInfo(payload).pipe(
@@ -366,7 +380,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.attachAgent === undefined) return of();
     return this.service.attachAgent({ id: this.school()!.id, agentId: payload.agentId }).pipe(
       tap(() => {
-        this.toastService.success({ text: `کارگزار با موفقیت اضافه شد.` });
+        this.toastService.success({ text: `بازاریاب با موفقیت اضافه شد.` });
       }),
     );
   }
@@ -374,7 +388,7 @@ export class SchoolDetailsCardsStore {
     if (this.service.detachAgent === undefined) return of();
     return this.service.detachAgent({ id: this.school()!.id, agentId }).pipe(
       tap(() => {
-        this.toastService.success({ text: 'کارگزار با موفقیت حذف شد.' });
+        this.toastService.success({ text: 'بازاریاب با موفقیت حذف شد.' });
       }),
     );
   }

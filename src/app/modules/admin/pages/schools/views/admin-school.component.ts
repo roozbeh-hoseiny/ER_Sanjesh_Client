@@ -96,7 +96,6 @@ export class AdminSchoolComponent {
           canEditAddress: true,
           canEditInfo: true,
           canEditAgent: true,
-          canEditLoginInfo: true,
           showBankAccountsCard: true,
           canEditBankAccounts: true,
           canEditContact: true,

@@ -1,5 +1,5 @@
+export * from './loginInfo/login-info.component';
 export * from './school-details.component';
-export * from './school-login-info.component';
 export * from './school-person-form.component';
 
 export * from './address';

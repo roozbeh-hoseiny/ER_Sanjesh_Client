@@ -14,6 +14,8 @@ import {
   ISchoolBankInfoRemoveRequestPayload,
   ISchoolContactRequest,
   ISchoolInfoRequest,
+  ISchoolLoginInfoRequest,
+  ISchoolLoginInfoRequestResponse,
 } from '@/modules/schools/models';
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -29,6 +31,7 @@ export interface SchoolDetailsService {
   editBankInfo(request: ISchoolBankInfoEditRequestPayload): Observable<boolean>;
   removeBankInfo(request: ISchoolBankInfoRemoveRequestPayload): Observable<boolean>;
   updateContact(payload: ISchoolContactRequest): Observable<boolean>;
+  updateLoginInfo(payload: ISchoolLoginInfoRequest): Observable<ISchoolLoginInfoRequestResponse>;
 
   enableCanEdit(schoolId: string): Observable<boolean>;
   disableCanEdit(schoolId: string): Observable<boolean>;

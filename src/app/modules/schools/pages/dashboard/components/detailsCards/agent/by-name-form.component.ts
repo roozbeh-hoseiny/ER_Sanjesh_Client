@@ -76,7 +76,7 @@ export class SchoolAgentByNameFormComponent implements OnDestroy {
     this.columns = [
       {
         field: 'fullname',
-        header: 'نام کارگزار',
+        header: 'نام بازاریاب',
         minWidth: '15rem',
       },
       {
@@ -140,7 +140,7 @@ export class SchoolAgentByNameFormComponent implements OnDestroy {
   }
 
   foundedMessage(agent: Maybe<IAdminAgentResponse>) {
-    return agent ? `کارگزار با نام ${agent.fullname} یافت شد.` : '';
+    return agent ? `بازاریاب با نام ${agent.fullname} یافت شد.` : '';
   }
 
   close() {

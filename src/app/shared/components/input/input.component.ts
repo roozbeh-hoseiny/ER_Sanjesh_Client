@@ -1,7 +1,7 @@
 import { Maybe } from '@/core';
 import { UikitFieldComponent } from '@/uikit/uikit-field.component';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, computed, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddon } from 'primeng/inputgroupaddon';
@@ -46,6 +46,7 @@ export class InputComponent {
   @Input() showErrors = true;
   @Input() hint?: string;
   @Input() isLtrInput = false;
+  @Input() suffix: string = '';
   @Output() valueChange = new EventEmitter<string | number>();
   @Output() blur = new EventEmitter<void>();
 
@@ -53,6 +54,12 @@ export class InputComponent {
     const v = (ev.target as HTMLInputElement).value;
     this.valueChange.emit(this.type === 'price' ? parseFloat(v) : v);
   }
+
+  preparedSuffix = computed(() => {
+    if (this.type === 'price') {
+      return 'ریال';
+    } else return this.suffix;
+  });
 
   get preparedPlaceholder(): string | null {
     if (this.placeholder) return this.placeholder;

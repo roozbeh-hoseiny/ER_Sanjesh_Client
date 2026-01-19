@@ -14,7 +14,6 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { ProgressSpinner } from 'primeng/progressspinner';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import {
   IAttachLessonToTeacherRequest,
@@ -30,7 +29,6 @@ import {
     ToggleSwitchModule,
     ButtonModule,
     FormsModule,
-    ProgressSpinner,
     LessonsTableComponent,
   ],
 })

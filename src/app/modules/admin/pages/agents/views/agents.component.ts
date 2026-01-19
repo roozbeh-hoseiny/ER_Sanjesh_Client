@@ -78,7 +78,7 @@ export class AdminAgentsComponent {
     this.columns = [
       {
         field: 'fullname',
-        header: 'نام کارگزار',
+        header: 'نام بازاریاب',
         minWidth: '15rem',
       },
       {

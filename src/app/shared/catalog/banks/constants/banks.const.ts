@@ -43,11 +43,6 @@ export interface IBank {
 
 export const BankList: IBank[] = [
   {
-    id: 1,
-    title: 'آینده',
-    value: BANKS.AYANDEH,
-  },
-  {
     id: 2,
     title: 'ایران زمین',
     value: BANKS.IRANZAMIN,
@@ -57,11 +52,7 @@ export const BankList: IBank[] = [
     title: 'اقتصاد نوین',
     value: BANKS.EGHTESADNOVIN,
   },
-  {
-    id: 4,
-    title: 'انصار',
-    value: BANKS.ANSAR,
-  },
+
   {
     id: 5,
     title: 'پاسارگاد',
@@ -93,11 +84,6 @@ export const BankList: IBank[] = [
     value: BANKS.TOSSEESADERAT,
   },
   {
-    id: 11,
-    title: 'حکمت ایرانیان',
-    value: BANKS.HEKMATIRANIAN,
-  },
-  {
     id: 12,
     title: 'رفاه کارگران',
     value: BANKS.REFAHKARGARAN,
@@ -113,19 +99,9 @@ export const BankList: IBank[] = [
     value: BANKS.GHARZALHESANEMEHIRIRAN,
   },
   {
-    id: 15,
-    title: 'قوامین',
-    value: BANKS.GHAVAMIN,
-  },
-  {
     id: 16,
     title: 'کشاورزی',
     value: BANKS.KESHAVARZI,
-  },
-  {
-    id: 17,
-    title: 'کوثر',
-    value: BANKS.KOSAR,
   },
   {
     id: 18,
@@ -168,11 +144,6 @@ export const BankList: IBank[] = [
     value: BANKS.SAMAN,
   },
   {
-    id: 26,
-    title: 'مرکزی',
-    value: BANKS.MARKAZI,
-  },
-  {
     id: 27,
     title: 'مسکن',
     value: BANKS.MASKAN,
@@ -196,11 +167,6 @@ export const BankList: IBank[] = [
     id: 31,
     title: 'کارآفرین',
     value: BANKS.KARAFARIN,
-  },
-  {
-    id: 32,
-    title: 'تات',
-    value: BANKS.TAT,
   },
 ];
 

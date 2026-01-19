@@ -105,7 +105,7 @@ export class AdminAgentFormDialogComponent {
     }).subscribe({
       next: () => {
         this.toastService.success({
-          text: `کارگزار ${payload.firstName} ${payload.lastName} با موفقیت ${this.editMode() ? 'ویرایش' : 'اضافه'} شد.`,
+          text: `بازاریاب ${payload.firstName} ${payload.lastName} با موفقیت ${this.editMode() ? 'ویرایش' : 'اضافه'} شد.`,
         });
         this.save.emit(payload);
         this.close();
