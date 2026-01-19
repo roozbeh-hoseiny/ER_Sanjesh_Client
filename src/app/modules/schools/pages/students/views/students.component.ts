@@ -1,7 +1,6 @@
 import { ToastService } from '@/core/services/toast.service';
 import { SchoolsStore } from '@/modules/schools/dataStore';
 import { SchoolsStudentsService } from '@/modules/schools/services';
-import { CatalogGenderTagComponent } from '@/shared/catalog/gender/gender-tag.component';
 import { ConfirmationDialogService } from '@/shared/components';
 import {
   IColumn,
@@ -27,13 +26,12 @@ import { AddSingleStudentFormDialogComponent } from '../components/forms/add-sin
     PageDataListComponent,
     ButtonDirective,
     AddSingleStudentFormDialogComponent,
-    CatalogGenderTagComponent,
   ],
 })
 export class SchoolStudentsComponent {
   private schoolsStore = inject(SchoolsStore);
   columns!: IColumn[];
-  @ViewChild('gender', { static: true }) genderTpl!: TemplateRef<any>;
+  @ViewChild('name', { static: true }) nameTpl!: TemplateRef<any>;
   @ViewChild('rowActions', { static: true }) actionTpl!: TemplateRef<any>;
 
   schoolId = signal(this.schoolsStore.info()?.id!);
@@ -63,21 +61,26 @@ export class SchoolStudentsComponent {
     this.getAll();
   }
 
+  ngOnDestroy() {
+    this.schoolStudentsManagementStore.reset();
+  }
+
   setColumns() {
     this.columns = [
       {
         field: 'firstName',
         header: 'نام',
-        customDataModel: (item: IStudentResponse) => `${item.firstName} ${item.lastName}`,
+        customDataModel: this.nameTpl,
       },
       { field: 'fatherName', header: 'نام پدر' },
       { field: 'nationalCode', header: 'کد ملی' },
       { field: 'mobile', header: 'شماره موبایل' },
-      { field: 'gender', header: 'جنسیت', customDataModel: this.genderTpl },
       {
         field: 'rowActions',
         header: '',
         customDataModel: this.actionTpl,
+        width: '5rem',
+        minWidth: '5rem',
       },
     ];
   }

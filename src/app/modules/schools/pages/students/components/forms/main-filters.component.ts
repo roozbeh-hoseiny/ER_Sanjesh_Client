@@ -3,6 +3,7 @@ import {
   EducationalLevelsSelectComponent,
   FieldsSelectComponent,
 } from '@/shared/catalog';
+import { CheckboxComponent } from '@/uikit/checkbox/checkbox.component';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
@@ -17,6 +18,7 @@ import { IGetSchoolStudentsRequestPayload } from '../../../../../../shared/compo
     FieldsSelectComponent,
     AcademicYearsSelectComponent,
     ButtonDirective,
+    CheckboxComponent,
   ],
 })
 export class SchoolStudentsMainFiltersComponent {
@@ -38,6 +40,7 @@ export class SchoolStudentsMainFiltersComponent {
       nonNullable: true,
       validators: [Validators.required],
     }),
+    alreadyInSchool: this.fb.control(this.initialData.alreadyInSchool || false),
   });
 
   ngOnInit() {

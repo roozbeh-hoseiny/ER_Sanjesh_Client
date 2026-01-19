@@ -1,10 +1,20 @@
 <form [formGroup]="form" (submit)="submit()">
   <div class="flex items-end gap-4">
-    <div class="grid grid-cols-3 items-center gap-4 grow-1">
-      <catalog-academic-years-select [control]="form.controls.academicYear" />
-      <catalog-educational-levels-select [control]="form.controls.educationalLevelId" />
-      <catalog-fields-select [control]="form.controls.fieldOfStudyId" [onlyId]="true" />
+    <div class="flex gap-4 flex-1">
+      <div class="grid grid-cols-3 items-center gap-4 grow-1 flex-1">
+        <catalog-academic-years-select [control]="form.controls.academicYear" />
+        <catalog-educational-levels-select [control]="form.controls.educationalLevelId" />
+        <catalog-fields-select [control]="form.controls.fieldOfStudyId" [onlyId]="true" />
+      </div>
+      <div class="shrink-0">
+        <app-checkbox
+          [control]="form.controls.alreadyInSchool"
+          [withLabelSpacing]="true"
+          name="alreadyInSchool"
+          label="فقط نمایش دانش‌آموزان حاضر"
+        />
+      </div>
     </div>
-    <button pButton type="submit">جستجو</button>
+    <button pButton type="submit" class="shrink-0">جستجو</button>
   </div>
 </form>

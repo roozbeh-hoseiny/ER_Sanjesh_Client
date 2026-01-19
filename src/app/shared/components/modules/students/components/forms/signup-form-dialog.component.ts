@@ -140,7 +140,7 @@ export class SignupStudentFormDialogComponent extends AbstractFormDialog<
   override submit(): void {
     this.form.markAllAsTouched();
 
-    if (!this.form.valid) {
+    if (this.form.valid) {
       const formValue = this.form.value;
       this.form.disable();
       this.submitLoading.set(true);

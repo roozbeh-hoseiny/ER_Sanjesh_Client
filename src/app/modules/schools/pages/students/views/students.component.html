@@ -14,8 +14,15 @@
   <ng-template #caption let-columns>
     <school-students-main-filters [initialData]="mainFilter()" (onSubmit)="onSubmitMainFilter($event)" />
   </ng-template>
-  <ng-template #gender let-item>
-    <catalog-gender-tag [gender]="item.gender" />
+  <ng-template #name let-item>
+    <div class="flex items-center gap-2">
+      {{ item.gender ? "آقای" : "خانم" }} {{ item.firstName }} {{ item.lastName }}
+      @if (item.isAlreadyExists) {
+        <i class="pi pi-check text-green-500"></i>
+      } @else {
+        <i class="pi pi-times text-red-500"></i>
+      }
+    </div>
   </ng-template>
   <ng-template #rowActions let-item>
     <button
@@ -24,6 +31,7 @@
       (click)="unassignStudent(item)"
       icon="pi pi-user"
       outlined
+      [disabled]="!item.isAlreadyExists"
       severity="secondary"
     ></button>
   </ng-template>

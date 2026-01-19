@@ -1,4 +1,5 @@
 import { PaginatorComponent, UikitCopyComponent, UikitEmptyStateComponent } from '@/uikit';
+import { formatWithCurrency } from '@/utils';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -25,7 +26,8 @@ export interface IColumn<T = any> {
   width?: string;
   minWidth?: string;
   canCopy?: boolean;
-  type?: 'text' | 'price' | 'boolean' | 'date';
+  type?: 'text' | 'price' | 'boolean' | 'date' | 'nested' | 'index';
+  nestedPath?: string;
   customDataModel?: TemplateRef<any> | ((item: T) => string | number | boolean);
 }
 
@@ -124,10 +126,35 @@ export class PageDataListComponent<I> {
     if (!item || !column) return '';
     try {
       const { field } = column;
+
       if (column.customDataModel) {
         return this.renderCustom(column, item);
       }
-      const data = item[field];
+      const data = item[String(field)];
+      switch (column.type) {
+        // case 'date':
+        //   if (!data) return '-';
+        //   return formatJalali(data);
+        case 'boolean':
+          return data ? 'بله' : 'خیر';
+        case 'price':
+          return formatWithCurrency(data, false, 'ریال');
+        case 'nested': {
+          const path = column.nestedPath;
+          if (!path) return '-';
+          const nestedData = path
+            .split('.')
+            .reduce(
+              (obj, key) => (obj && obj[key] !== undefined ? obj[key] : null),
+              item[String(field)],
+            );
+
+          return nestedData || '-';
+        }
+        default:
+          break;
+      }
+
       if (data === undefined || data === null) {
         return '-';
       }

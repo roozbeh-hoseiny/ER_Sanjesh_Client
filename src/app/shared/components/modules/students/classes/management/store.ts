@@ -36,10 +36,6 @@ export abstract class AbstractSharedSchoolStudentsManagementStore {
   protected abstract getAllService: (
     payload: IGetSchoolStudentsRequestPayload,
   ) => Observable<IStudentRawResponse[]>;
-  // protected abstract bulkAddService?: (payload: FormData) => Observable<IStudentBulkAddResponse[]>;
-  // protected abstract addService?: (
-  //   payload: IStudentRequestPayload,
-  // ) => Observable<IStudentRequestResponse>;
 
   private state$ = signal<ISharedSchoolStudentsManagementState>(
     INITIAL_SHARED_SCHOOL_STUDENTS_MANAGEMENT_STATE,
@@ -60,6 +56,9 @@ export abstract class AbstractSharedSchoolStudentsManagementStore {
         fieldOfStudyId: this.initialQueryParams['fieldOfStudyId']
           ? Number(this.initialQueryParams['fieldOfStudyId'])
           : undefined,
+        alreadyInSchool: this.initialQueryParams['alreadyInSchool']
+          ? this.initialQueryParams['alreadyInSchool'] === 'true'
+          : false,
       };
       this.updateMainFilterState(mainFilter);
     }
@@ -88,21 +87,6 @@ export abstract class AbstractSharedSchoolStudentsManagementStore {
   fillInitial(data: Partial<ISharedSchoolStudentsManagementState>) {
     this.state$.set({ ...INITIAL_SHARED_SCHOOL_STUDENTS_MANAGEMENT_STATE, ...data });
   }
-
-  // addBulk(payload: FormData) {
-  //   return this.bulkAddService?.(payload).subscribe();
-  // }
-
-  // createStudent(payload: IStudentRequestPayload) {
-  //   return this.addService?.(payload).subscribe({
-  //     next: () => {
-  //       this.toastService.success({
-  //         text: 'دانش‌آموز با موفقیت ایجاد شد',
-  //       });
-  //       this.getAll();
-  //     },
-  //   });
-  // }
 
   getAll() {
     const filter = this.mainFilter();

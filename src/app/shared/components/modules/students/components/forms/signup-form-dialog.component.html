@@ -4,10 +4,9 @@
   [modal]="true"
   [style]="{ width: '600px' }"
   appendTo="body"
-  [closable]="true"
+  [closable]="false"
 >
   <form [formGroup]="form" class="flex flex-col gap-4" (submit)="submit()">
-    {{ nationalCode }}
     <div class="grid grid-cols-2 gap-3">
       <app-input [control]="form.controls.firstName" label="نام" />
       <app-input [control]="form.controls.lastName" label="نام خانوادگی" />
