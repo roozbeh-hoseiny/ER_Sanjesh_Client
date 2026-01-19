@@ -112,7 +112,9 @@ export class AuthStore extends BaseStore<AuthState> {
   readonly loginStep = computed(() => this._state().loginStep);
   readonly captchaCode = computed(() => this._state().captchaCode);
   readonly pendingUserInfo = computed(() => this._state().pendingUserInfo);
-  readonly canChangeRole = computed(() => this.selectedRole() !== 'ADMIN');
+  readonly canChangeRole = computed(
+    () => this.selectedRole() !== 'ADMIN' && this._state().loginStep !== 'VERIFY_OTP',
+  );
 
   // Login state selectors
   readonly isLoggingIn = computed(() => this._loginState.isLoggingIn);
