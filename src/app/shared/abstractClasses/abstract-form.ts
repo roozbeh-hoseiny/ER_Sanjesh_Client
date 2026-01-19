@@ -1,7 +1,7 @@
 import { ToastService } from '@/core/services/toast.service';
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { Subscribable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 
 @Component({
   selector: 'abstract-form-dialog',
@@ -18,40 +18,37 @@ export abstract class AbstractForm<Request, Response, InitialValue = Response> {
   constructor(private toastService: ToastService) {}
 
   abstract form: ReturnType<FormBuilder['group']>;
+  private showSuccessMessage: boolean = false;
+  private readonly successMessage = 'عملیات با موفقیت انجام شد';
   defaultValues: Partial<Request> = {};
 
-  abstract submitForm(payload: Request): Subscribable<Response> | void;
+  abstract submitForm(payload: Request): Observable<Response> | void;
 
   submitLoading = signal(false);
 
   submit() {
     this.form.markAllAsTouched();
-    console.log(this.form);
-    console.log(this.form.value);
 
     if (this.form.valid) {
       this.form.disable();
       this.submitLoading.set(true);
 
-      this.submitForm(this.form.value as Request)?.subscribe({
-        next: (res) => {
-          this.toastService.success({
-            text: `با موفقیت ایجاد شد`,
-          });
-          this.submitLoading.set(false);
-          this.form.enable();
+      this.submitForm(this.form.value as Request)
+        ?.pipe(
+          finalize(() => {
+            this.submitLoading.set(false);
+            this.form.enable();
+          }),
+        )
+        .subscribe((res) => {
+          if (this.showSuccessMessage) {
+            this.toastService.success({
+              text: this.successMessage,
+            });
+          }
           this.form.reset();
           this.onSubmit.emit(res);
-        },
-        error: () => {
-          this.submitLoading.set(false);
-          this.form.enable();
-        },
-        complete: () => {
-          this.submitLoading.set(false);
-          this.form.enable();
-        },
-      });
+        });
     }
   }
 

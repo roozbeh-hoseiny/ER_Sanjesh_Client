@@ -6,4 +6,5 @@ export * from './address';
 export * from './bankAccounts';
 export * from './contact';
 export * from './info';
+export * from './loginInfo';
 export * from './teachers';

@@ -6,7 +6,6 @@ import { FormFooterActionsComponent } from '@/shared/components/formFooterAction
 import { UikitFieldComponent } from '@/uikit';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonDirective } from 'primeng/button';
 import { Password } from 'primeng/password';
 import { SchoolDetailsCardsStore } from '../store';
 
@@ -15,7 +14,6 @@ import { SchoolDetailsCardsStore } from '../store';
   templateUrl: './login-info-form.component.html',
   imports: [
     ReactiveFormsModule,
-    ButtonDirective,
     InputComponent,
     UikitFieldComponent,
     Password,

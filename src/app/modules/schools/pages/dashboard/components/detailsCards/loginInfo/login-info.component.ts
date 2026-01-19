@@ -1,7 +1,7 @@
 import { ISchoolManagerInfo } from '@/modules/schools/models';
 import { AppCardComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Output, signal } from '@angular/core';
 import { SchoolDetailsCardsStore } from '../store';
 import { SchoolLoginInfoFormComponent } from './login-info-form.component';
 
@@ -11,6 +11,7 @@ import { SchoolLoginInfoFormComponent } from './login-info-form.component';
   templateUrl: './login-info.component.html',
 })
 export class SchoolLoginInfoComponent {
+  @Output() onSubmit = new EventEmitter();
   private detailsStore = inject(SchoolDetailsCardsStore);
 
   editMode = signal<boolean>(false);
@@ -35,4 +36,9 @@ export class SchoolLoginInfoComponent {
   canEdit = computed(() => {
     return this.detailsStore.canEditLoginInfo();
   });
+
+  submitted() {
+    this.onSubmit.emit();
+    this.closeForm();
+  }
 }

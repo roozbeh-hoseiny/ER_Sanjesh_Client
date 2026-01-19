@@ -40,7 +40,9 @@ export interface ISchoolLoginInfoRequest {
   mobile: string;
 }
 
-export interface ISchoolLoginInfoRequestResponse {}
+export interface ISchoolLoginInfoRequestResponse {
+  done: boolean;
+}
 
 export interface IVerifyRequest {
   otp: string;

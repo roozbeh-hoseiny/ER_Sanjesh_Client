@@ -1,3 +1,11 @@
 .p-toast {
   z-index: 11020 !important;
 }
+
+@media print {
+  @page {
+    size: landscape;
+    size: "A4";
+    margin: "0";
+  }
+}
