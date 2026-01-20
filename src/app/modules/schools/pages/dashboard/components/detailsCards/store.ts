@@ -35,7 +35,6 @@ interface ISchoolDetailsCardsState {
   showContactValidateInlineConfirmation?: boolean;
   showContactCard?: boolean;
   canEditInfo: boolean;
-  canEditEditStatus: boolean;
   canEditBankAccounts: boolean;
   canEditAddress: boolean;
   canEditContact: boolean;
@@ -44,6 +43,7 @@ interface ISchoolDetailsCardsState {
   canEditCategories: boolean;
   canEditFields: boolean;
   canEditCoupon: boolean;
+  caEditEditable: boolean;
   canEditCouponStatus: boolean;
   submitContactLoading: boolean;
 }
@@ -61,7 +61,6 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   showContactValidateInlineConfirmation: false,
   showContactCard: false,
   canEditInfo: false,
-  canEditEditStatus: false,
   canEditBankAccounts: false,
   canEditAddress: false,
   canEditContact: false,
@@ -71,6 +70,7 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   canEditFields: false,
   canEditCoupon: false,
   canEditCouponStatus: false,
+  caEditEditable: false,
   submitContactLoading: false,
 };
 
@@ -113,7 +113,6 @@ export class SchoolDetailsCardsStore {
   readonly showContactCard = computed(() => Boolean(this.state$().showContactCard));
   readonly showAgentCard = computed(() => Boolean(this.state$().showAgentCard));
   readonly canEditInfo = computed(() => !!this.state$().canEditInfo);
-  readonly canEditEditStatus = computed(() => !!this.state$().canEditEditStatus);
   readonly canEditBankAccounts = computed(() => !!this.state$().canEditBankAccounts);
   readonly canEditAddress = computed(() => !!this.state$().canEditAddress);
   readonly canEditContact = computed(() => !!this.state$().canEditContact);
@@ -122,6 +121,7 @@ export class SchoolDetailsCardsStore {
   readonly canEditCategories = computed(() => !!this.state$().canEditCategories);
   readonly canEditFields = computed(() => !!this.state$().canEditFields);
   readonly canEditCoupon = computed(() => !!this.state$().canEditCoupon);
+  readonly caEditEditable = computed(() => !!this.state$().caEditEditable);
   readonly canEditCouponStatus = computed(() => !!this.state$().canEditCouponStatus);
   readonly submitContactLoading = computed(() => !!this.state$().submitContactLoading);
 

@@ -18,8 +18,8 @@ export abstract class AbstractForm<Request, Response, InitialValue = Response> {
   constructor(private toastService: ToastService) {}
 
   abstract form: ReturnType<FormBuilder['group']>;
-  private showSuccessMessage: boolean = false;
-  private readonly successMessage = 'عملیات با موفقیت انجام شد';
+  showSuccessMessage: boolean = false;
+  successMessage = 'عملیات با موفقیت انجام شد';
   defaultValues: Partial<Request> = {};
 
   abstract submitForm(payload: Request): Observable<Response> | void;
@@ -27,6 +27,8 @@ export abstract class AbstractForm<Request, Response, InitialValue = Response> {
   submitLoading = signal(false);
 
   submit() {
+    console.log('submit');
+
     this.form.markAllAsTouched();
 
     if (this.form.valid) {

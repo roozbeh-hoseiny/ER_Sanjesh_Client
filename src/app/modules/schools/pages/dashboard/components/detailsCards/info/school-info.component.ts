@@ -44,6 +44,7 @@ export class SchoolInfoComponent {
   canEdit = computed(() => this.detailsStore.canEditInfo());
   canEditCategories = computed(() => this.detailsStore.canEditCategories());
   canEditFields = computed(() => this.detailsStore.canEditFields());
+  caEditEditable = computed(() => this.detailsStore.caEditEditable());
 
   showInlineConfirmation = computed(() =>
     this.detailsStore.showManagerValidateInlineConfirmation(),

@@ -33,8 +33,12 @@
     </div>
 
     <div class="">
-      <p-menu #menu [model]="profileMenuItems" [popup]="true" />
+      <p-menu #menu [model]="profileMenuItems()" [popup]="true" />
       <p-button (click)="menu.toggle($event)" icon="pi pi-user" text severity="contrast" size="large" />
     </div>
   </div>
 </div>
+
+@if (visibleChangePasswordDialog() && role()) {
+  <change-password-form-dialog [(visible)]="visibleChangePasswordDialog" [activeRole]="role()!" />
+}

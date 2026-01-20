@@ -9,6 +9,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from 'primeng/button';
 import { Password } from 'primeng/password';
+import { ChangeLoginTypeActionsComponent } from './change-login-type-actions.component';
 
 @Component({
   selector: 'app-login-with-password-form',
@@ -20,6 +21,7 @@ import { Password } from 'primeng/password';
     Password,
     Button,
     AuthCaptchaComponent,
+    ChangeLoginTypeActionsComponent,
   ],
 })
 export class LoginWithPasswordFormComponent {

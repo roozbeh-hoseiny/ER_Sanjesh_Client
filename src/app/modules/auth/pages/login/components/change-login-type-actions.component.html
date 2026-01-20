@@ -1,0 +1,22 @@
+<div class="grid grid-cols-1 gap-3">
+  @if (loginType() !== "PASSWORD") {
+    <span class="w-full text-center text-sm select-none">
+      <a class="text-primary cursor-pointer font-bold" tabindex="-1" (click)="toPasswordLogin()"> ورود با گذرواژه </a>
+    </span>
+  }
+  @if (loginType() !== "OTP") {
+    <span class="w-full text-center text-sm select-none">
+      <a class="text-primary cursor-pointer font-bold" tabindex="-1" (click)="toOTPLogin()">
+        ورود با کد یک‌بار مصرف پیامکی
+      </a>
+    </span>
+  }
+
+  @if (loginType() !== "VOICE_OTP") {
+    <span class="w-full text-center text-sm select-none">
+      <a class="text-primary cursor-pointer font-bold" tabindex="-1" (click)="toVoiceOTPLogin()">
+        ورود با کد یک‌بار مصرف تلفنی
+      </a>
+    </span>
+  }
+</div>

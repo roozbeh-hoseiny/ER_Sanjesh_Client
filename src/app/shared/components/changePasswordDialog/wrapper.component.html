@@ -1,0 +1,18 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  header="تغییر گذرواژه"
+  [style]="{ width: '400px' }"
+  (onHide)="visibleChange.emit(false)"
+  [closable]="true"
+>
+  @if (activeStep() === "sendCode") {
+    <change-password-send-code-step [apiRoute]="sendOtpApiRoute()" (onSubmit)="toOtp()" />
+  } @else {
+    <change-password-otp-step
+      [apiRoute]="changePasswordApiRoute()"
+      [resendOTPApiRoute]="resendOtpApiRoute()"
+      (onSubmit)="onPasswordChange()"
+    />
+  }
+</p-dialog>

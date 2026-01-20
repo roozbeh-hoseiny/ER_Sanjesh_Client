@@ -4,7 +4,7 @@
   } @else {
     <div class="flex flex-col gap-4">
       <div class="grid grid-cols-3 gap-4 items-center">
-        <app-key-value label="نام مرکز آموزشی" [value]="info().name" />
+        <app-key-value label="عنوان مرکز آموزشی" [value]="info().name" />
         <app-key-value label="جنسیت">
           <app-school-genders-tag [genderId]="info().boyOrGirl" />
         </app-key-value>
@@ -12,7 +12,7 @@
           <p-badge [value]="info().isActive ? 'فعال' : 'غیرفعال'" [severity]="info().isActive ? 'success' : 'danger'" />
         </app-key-value>
         <app-key-value
-          label="مایل به برگزاری آزمون برای داوطلبان ثبت نامی در محل مرکز آموزشی خود می باشم"
+          label="مایل به برگزاری آزمون برای داوطلبان ثبت نامی در محل مرکز آموزشی خود می‌باشم"
           class="col-span-2"
         >
           <p-badge
@@ -26,18 +26,28 @@
         </app-key-value>
 
         <app-key-value label="شماره تماس ثابت مرکز" [value]="info().phoneNumber" />
-        <app-key-value label="امکان ویرایش" hint="برای تغییر وضعیت بر روی سوییچ بالا کلیک کنید">
-          <inline-confirmation
-            [value]="info().canEdit"
-            confirmedMessage="بله"
-            rejectedMessage="خیر"
-            confirmationHeader="آیا مطمینید؟"
-            [onConfirmMessage]="'آیا از دادن امکان ویرایش به این مدرسه مطمینید؟'"
-            [onRejectMessage]="'آیا از لغو امکان ویرایش این مدرسه مطمینید؟'"
-            (onConfirm)="updateCanEdit(true)"
-            (onReject)="updateCanEdit(false)"
-          />
-        </app-key-value>
+        @if (caEditEditable()) {
+          <app-key-value label="امکان ویرایش" hint="برای تغییر وضعیت بر روی سوییچ بالا کلیک کنید">
+            <inline-confirmation
+              [value]="info().canEdit"
+              confirmedMessage="بله"
+              rejectedMessage="خیر"
+              confirmationHeader="آیا مطمینید؟"
+              [onConfirmMessage]="'آیا از دادن امکان ویرایش به این مدرسه مطمینید؟'"
+              [onRejectMessage]="'آیا از لغو امکان ویرایش این مدرسه مطمینید؟'"
+              (onConfirm)="updateCanEdit(true)"
+              (onReject)="updateCanEdit(false)"
+            />
+          </app-key-value>
+        } @else {
+          <app-key-value label="امکان ویرایش">
+            <p-badge
+              [value]="caEditEditable() ? 'فعال' : 'غیرفعال'"
+              [severity]="caEditEditable() ? 'success' : 'danger'"
+            />
+          </app-key-value>
+        }
+
         <app-key-value label="امکان ثبت‌نام در آزمون">
           <p-badge
             [value]="info().canRegisterToExam ? 'دارد' : 'ندارد'"
@@ -45,11 +55,13 @@
           />
         </app-key-value>
         <app-key-value label="دارای اسکنر می‌باشد؟">
-          <p-badge
-            [value]="info().scannerType ? 'بلی' : 'خیر'"
-            [severity]="info().scannerType ? 'success' : 'danger'"
-          />
+          <p-badge [value]="info().hasScanner ? 'بلی' : 'خیر'" [severity]="info().hasScanner ? 'success' : 'danger'" />
         </app-key-value>
+        @if (info().hasScanner) {
+          <app-key-value label="عنوان اسکنر">
+            {{ info().scannerName }} <small class="text-muted-color">(مدل {{ info().scannerType }})</small>
+          </app-key-value>
+        }
       </div>
       <p-divider> دسته‌بندی مدرسه </p-divider>
       <app-school-info-categories

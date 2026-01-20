@@ -7,7 +7,7 @@
     @if (countdown() > 0) {
       <span class="text-sm text-muted-color ml-2">امکان تماس مجدد در {{ countdown() }} ثانیه</span>
     } @else {
-      <button pButton outlined (click)="resendOtp()" [loading]="submitLoading()">تماس مجدد</button>
+      <button pButton outlined (click)="resendOtp()" [loading]="submitLoading()" type="button">تماس مجدد</button>
     }
   </div>
   <app-auth-captcha class="block mb-6" />

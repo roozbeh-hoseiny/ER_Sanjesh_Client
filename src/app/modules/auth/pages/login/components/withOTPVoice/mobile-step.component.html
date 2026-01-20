@@ -15,9 +15,7 @@
         برای ثبت نام در سامانه <a class="text-primary cursor-pointer" (click)="toSignup()">اینجا</a> کلیک کنید.
       </span>
     }
-    <span class="w-full text-center text-sm select-none">
-      <a class="text-primary cursor-pointer font-bold" (click)="toPasswordLogin()">ورود با گذرواژه</a>
-    </span>
+    <change-login-type-actions />
     <p-button label="ارسال کد" styleClass="w-full" size="large" [loading]="loading()" type="submit"></p-button>
   </div>
 </form>

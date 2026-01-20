@@ -51,7 +51,7 @@ export interface IGetSchoolStudentsRequestPayload {
   academicYear: number;
   educationalLevelId: number;
   fieldOfStudyId: number;
-  alreadyInSchool: boolean;
+  onlyInSchool: boolean;
 }
 
 export interface IStudentBulkAddResponse extends Omit<IStudentRawResponse, 'id'> {

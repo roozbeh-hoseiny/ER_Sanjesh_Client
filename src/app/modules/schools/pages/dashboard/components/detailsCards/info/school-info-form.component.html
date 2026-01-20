@@ -39,7 +39,12 @@
       </p-inputgroup>
     </uikit-field>
 
-    <app-checkbox label="مرکز آموزشی اسکنر دارد؟" name="scannerType" [control]="form.controls.hasScanner" />
+    <app-checkbox
+      label="مرکز آموزشی اسکنر دارد؟"
+      name="scannerType"
+      [control]="form.controls.hasScanner"
+      [withLabelSpacing]="true"
+    />
     @if (form.controls.hasScanner.value) {
       <app-input label="مدل اسکنر" name="scannerType" [control]="form.controls.scannerType" />
       <app-input label="نام اسکنر" name="scannerName" [control]="form.controls.scannerName" />

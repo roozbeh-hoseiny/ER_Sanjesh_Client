@@ -55,7 +55,7 @@ export class VoiceOTPLoginOtpStepComponent {
     if (this.otpCode().length !== 6) {
       this.toast.error({ text: 'کد را به صورت کامل وارد کنید' });
     } else {
-      this.store.loginWithOtp({ otp: this.otpCode() }).subscribe({});
+      this.store.loginWithVoiceOtp({ otp: this.otpCode() }).subscribe({});
     }
   };
 }

@@ -1,0 +1,155 @@
+import { ToastService } from '@/core/services/toast.service';
+import { SchoolsStore } from '@/modules/schools/dataStore';
+import {
+  SchoolStudentsMainFiltersComponent,
+  SchoolStudentsManagementStore,
+} from '@/modules/schools/pages/students';
+import { AddSingleStudentFormDialogComponent } from '@/modules/schools/pages/students/components/forms/add-single-student-form-dialog.component';
+import { SchoolsStudentsService } from '@/modules/schools/services';
+import { ConfirmationDialogService } from '@/shared/components';
+import {
+  IGetSchoolStudentsRequestPayload,
+  IStudentRequestPayload,
+  IStudentResponse,
+} from '@/shared/components/modules';
+import {
+  IColumn,
+  PageDataListComponent,
+} from '@/shared/components/pageDataList/page-data-list.component';
+import { Component, computed, inject, signal, TemplateRef, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ButtonDirective } from 'primeng/button';
+import { finalize } from 'rxjs';
+
+@Component({
+  selector: 'school-student-list',
+  templateUrl: './list.component.html',
+  imports: [
+    SchoolStudentsMainFiltersComponent,
+    PageDataListComponent,
+    ButtonDirective,
+    AddSingleStudentFormDialogComponent,
+  ],
+})
+export class SchoolStudentListComponent {
+  private schoolsStore = inject(SchoolsStore);
+  columns!: IColumn[];
+  @ViewChild('name', { static: true }) nameTpl!: TemplateRef<any>;
+  @ViewChild('rowActions', { static: true }) actionTpl!: TemplateRef<any>;
+
+  schoolId = signal(this.schoolsStore.info()?.id!);
+  openedUploadDialog = signal(false);
+  visibleForm = signal<boolean>(false);
+  unassignLoading = signal(false);
+
+  isFilterSet = computed(() => {
+    const mainFilter = this.schoolStudentsManagementStore.mainFilter();
+    return mainFilter.academicYear && mainFilter.educationalLevelId && mainFilter.fieldOfStudyId;
+  });
+  students = computed(() => this.schoolStudentsManagementStore.students());
+  loading = computed(() => this.schoolStudentsManagementStore.getStudentsLoading());
+  mainFilter = computed(() => this.schoolStudentsManagementStore.mainFilter());
+
+  constructor(
+    private schoolStudentsManagementStore: SchoolStudentsManagementStore,
+    private service: SchoolsStudentsService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private confirmationDialogService: ConfirmationDialogService,
+    private toastService: ToastService,
+  ) {}
+
+  ngOnInit() {
+    this.setColumns();
+    this.getAll();
+  }
+
+  ngOnDestroy() {
+    this.schoolStudentsManagementStore.reset();
+  }
+
+  setColumns() {
+    this.columns = [
+      {
+        field: 'firstName',
+        header: 'نام',
+        customDataModel: this.nameTpl,
+      },
+      { field: 'fatherName', header: 'نام پدر' },
+      { field: 'nationalCode', header: 'کد ملی' },
+      { field: 'mobile', header: 'شماره موبایل' },
+      {
+        field: 'rowActions',
+        header: '',
+        customDataModel: this.actionTpl,
+        width: '5rem',
+        minWidth: '5rem',
+      },
+    ];
+  }
+
+  getAll() {
+    this.schoolStudentsManagementStore.getAll();
+  }
+
+  refreshData() {
+    this.getAll();
+  }
+
+  openUploadDialog() {
+    this.openedUploadDialog.set(true);
+  }
+
+  onSubmitMainFilter(queryParams: IGetSchoolStudentsRequestPayload) {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams,
+      queryParamsHandling: 'merge',
+    });
+
+    this.schoolStudentsManagementStore.updateMainFilterState(queryParams);
+    this.getAll();
+  }
+
+  toAddBulkPage() {
+    this.router.navigate(['/schools/students/bulk-add']);
+  }
+  openAddForm() {
+    this.visibleForm.set(true);
+  }
+  closeAddForm() {
+    this.visibleForm.set(false);
+  }
+
+  submitStudent(payload: IStudentRequestPayload) {
+    return this.service.create(payload);
+  }
+
+  unassignStudent(item: IStudentResponse) {
+    this.confirmationDialogService.confirm({
+      header: 'لغو عضویت دانش‌آموز',
+      message: `آیا از لغو عضویت ${item.firstName} ${item.lastName} از مدرسه مطمین هستید؟`,
+      accept: () => {
+        this.doUnassignStudent(item);
+      },
+      variant: 'reject',
+    });
+  }
+
+  doUnassignStudent(item: IStudentResponse) {
+    this.unassignLoading.set(true);
+    return this.service
+      .unassign({ studentId: item.id })
+      .pipe(
+        finalize(() => {
+          this.unassignLoading.set(false);
+        }),
+      )
+      .subscribe((res) => {
+        this.toastService.success({
+          text: `لغو عضویت دانش‌آموز ${item.firstName} ${item.lastName} با موفقیت انجام شد`,
+        });
+        this.refreshData();
+      });
+  }
+}

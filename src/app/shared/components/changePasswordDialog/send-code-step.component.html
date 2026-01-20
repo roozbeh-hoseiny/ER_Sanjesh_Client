@@ -1,0 +1,7 @@
+<form [formGroup]="form" (submit)="submit()">
+  <span class="text-center w-full">برای ارسال کد پیامکی، کپچا را وارد کنید.</span>
+  <div class="my-6">
+    <app-shared-captcha [control]="form.controls.captchaCode" (OnChangeCaptchaId)="setCaptchaId($event)" />
+  </div>
+  <app-form-footer-actions [loading]="submitLoading()" submitLabel="ارسال کد" (onCancel)="close()" />
+</form>

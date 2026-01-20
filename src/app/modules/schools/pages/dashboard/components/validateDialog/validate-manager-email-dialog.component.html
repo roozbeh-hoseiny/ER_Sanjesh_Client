@@ -1,12 +1,21 @@
 <p-dialog header="تایید ایمیل" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
-  <form (submit)="submit()">
-    <div class="flex flex-col gap-4 mb-6 items-center">
-      <span>برای تایید، کد ارسالی به ایمیل خود را وارد کنید</span>
-      <p-inputOtp [(ngModel)]="code" name="code" [length]="6" size="large" dir="ltr" />
+  @if (initialLoading()) {
+    <div class="flex flex-col gap-4 items-center">
+      <span> در حال ارسال کد ... </span>
+      <p-progressSpinner
+        strokeWidth="4"
+        fill="transparent"
+        animationDuration="1s"
+        [style]="{ width: '24px', height: '24px' }"
+      />
     </div>
-    <div class="flex justify-end gap-2">
-      <p-button label="لغو" severity="secondary" (click)="close()" />
-      <p-button label="تایید" [loading]="submitLoading()" (onClick)="submit()" />
-    </div>
-  </form>
+  } @else {
+    <form (submit)="submit()">
+      <div class="flex flex-col gap-4 mb-6 items-center">
+        <span>برای تایید، کد ارسالی به ایمیل خود را وارد کنید</span>
+        <p-inputOtp [(ngModel)]="code" name="code" [length]="6" size="large" dir="ltr" />
+      </div>
+      <app-form-footer-actions [loading]="submitLoading()" (onCancel)="close()" />
+    </form>
+  }
 </p-dialog>

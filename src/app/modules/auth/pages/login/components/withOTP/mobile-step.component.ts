@@ -5,11 +5,18 @@ import { InputComponent } from '@/shared/components';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from 'primeng/button';
+import { ChangeLoginTypeActionsComponent } from '../change-login-type-actions.component';
 
 @Component({
   selector: 'app-otp-login-mobile-step',
   templateUrl: './mobile-step.component.html',
-  imports: [ReactiveFormsModule, InputComponent, Button, AuthCaptchaComponent],
+  imports: [
+    ReactiveFormsModule,
+    InputComponent,
+    Button,
+    AuthCaptchaComponent,
+    ChangeLoginTypeActionsComponent,
+  ],
 })
 export class OtpLoginMobileStepComponent {
   private readonly fb = inject(FormBuilder);

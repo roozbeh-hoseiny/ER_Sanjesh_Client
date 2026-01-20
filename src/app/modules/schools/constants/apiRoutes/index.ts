@@ -16,6 +16,10 @@ export const SCHOOLS_API_ROUTES = {
   resendSmsOtpForForgetPassword: () => `${baseUrl}/reSendSmsOTPForResetPassword`,
   resetPassword: () => `${baseUrl}/SchoolResetPasswordByMobile`,
 
+  sendSmsOtpForChangePassword: () => `${baseUrl}/SendSmsOTPForChangePassword`,
+  resendSmsOtpForChangePassword: () => `${baseUrl}/ResendSmsOTPForChangePassword`,
+  changePassword: () => `${baseUrl}/SchoolChangePassword`,
+
   login: () => `${baseUrl}/login`,
   me: () => `${baseUrl}/me`,
 
@@ -28,7 +32,7 @@ export const SCHOOLS_API_ROUTES = {
   removeBankInfo: () => `${baseUrl}/UnassignBankAccount`,
 
   //verification routes
-  managerEmailSendOTPVerification: () => `${baseUrl}/SendEmailOTPForManagerEmailVerification`,
+  managerEmailSendOTPVerification: () => `${baseUrl}/SendEmailOTPForForManagerEmailVerification`,
   managerPhoneSendOTPVerification: () => `${baseUrl}/SendSmsOTPForManagerMobileVerification`,
   sendEmailOTP: () => `${baseUrl}/SendEmailOTPForLogin`,
   sendSmsOTP: () => `${baseUrl}/SendSmsOTPForLogin`,

@@ -48,19 +48,27 @@
         </ng-template>
 
         <ng-template #body let-item>
-          <tr [class]="item.hasError ? '!bg-red-400' : '!bg-green-400'">
+          <tr>
             @for (col of columns; track col.field) {
               <td>
                 @if (col.field === "errorMessages") {
                   @if (item.hasError) {
                     <ul class="list-disc list-inside">
                       @for (msg of item.errorMessages; track msg) {
-                        <li class="list-disc list-inside">{{ msg }}</li>
+                        <li class="list-disc list-inside text-red-400">{{ msg }}</li>
                       }
                     </ul>
                   } @else {
                     <span> - </span>
                   }
+                } @else if (col.field === "status") {
+                  <i
+                    [class]="
+                      item.hasError
+                        ? 'text-2xl! pi pi-exclamation-triangle text-red-400'
+                        : 'text-2xl! pi pi-check text-green-400'
+                    "
+                  ></i>
                 } @else {
                   <span>
                     {{ item[col.field] || "-" }}

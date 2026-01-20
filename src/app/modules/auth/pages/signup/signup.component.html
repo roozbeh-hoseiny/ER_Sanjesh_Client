@@ -36,6 +36,11 @@
       [fluid]="true"
       [feedback]="false"
       [invalid]="form.controls.password.touched && form.controls.password.invalid"
+      [inputStyle]="{
+        direction: 'ltr',
+        'padding-inline-start': 'calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size))',
+        'padding-inline-end': 'var(--p-inputtext-lg-padding-x)',
+      }"
     />
     <span class="text-xs mt-2 text-muted-color">
       رمز باید حداقل ۸ کاراکتر بوده و شامل حداقل یک حرف بزرگ، یک حرف کوچک، یک عدد و یک کاراکتر ویژه باشد.
@@ -53,6 +58,11 @@
       [fluid]="true"
       [feedback]="false"
       [invalid]="form.controls.confirmPassword.touched && form.controls.confirmPassword.invalid"
+      [inputStyle]="{
+        direction: 'ltr',
+        'padding-inline-start': 'calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size))',
+        'padding-inline-end': 'var(--p-inputtext-lg-padding-x)',
+      }"
     />
   </uikit-field>
 

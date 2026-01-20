@@ -21,7 +21,6 @@ import { AppTopbar } from './app.topbar.component';
 
 @Component({
   selector: 'app-layout',
-  standalone: true,
   imports: [
     CommonModule,
     AppTopbar,

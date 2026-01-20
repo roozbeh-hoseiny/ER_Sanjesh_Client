@@ -56,8 +56,8 @@ export abstract class AbstractSharedSchoolStudentsManagementStore {
         fieldOfStudyId: this.initialQueryParams['fieldOfStudyId']
           ? Number(this.initialQueryParams['fieldOfStudyId'])
           : undefined,
-        alreadyInSchool: this.initialQueryParams['alreadyInSchool']
-          ? this.initialQueryParams['alreadyInSchool'] === 'true'
+        onlyInSchool: this.initialQueryParams['onlyInSchool']
+          ? this.initialQueryParams['onlyInSchool'] === 'true'
           : false,
       };
       this.updateMainFilterState(mainFilter);

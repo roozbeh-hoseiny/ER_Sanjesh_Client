@@ -1,15 +1,17 @@
 import { ToastService } from '@/core/services/toast.service';
 import { SchoolsAuthService } from '@/modules/schools/services';
+import { FormFooterActionsComponent } from '@/shared/components/formFooterActions/form-footer-actions.component';
 import { Component, effect, EventEmitter, Input, Output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Button } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputOtp } from 'primeng/inputotp';
+import { ProgressSpinner } from 'primeng/progressspinner';
+import { catchError, finalize, throwError } from 'rxjs';
 
 @Component({
   selector: 'school-validate-manager-mobile-dialog',
   templateUrl: './validate-manager-mobile-dialog.component.html',
-  imports: [DialogModule, Button, InputOtp, FormsModule],
+  imports: [DialogModule, InputOtp, FormsModule, FormFooterActionsComponent, ProgressSpinner],
 })
 export class ValidateManagerMobileDialogComponent {
   private visibleSignal = signal(false);
@@ -42,16 +44,20 @@ export class ValidateManagerMobileDialogComponent {
   }
 
   sendSMSRequest() {
-    this.authService.sendOTPSmsForManagerMobile().subscribe({
-      next: () => {
-        this.initialLoading.set(false);
-      },
-      error: () => {
-        this.initialLoading.set(false);
-        this.toastService.warn({ text: 'متاسفانه مشکلی پیش آمده' });
-        this.close();
-      },
-    });
+    this.initialLoading.set(true);
+    this.authService
+      .sendOTPSmsForManagerMobile()
+      .pipe(
+        catchError((err) => {
+          this.toastService.warn({ text: 'متاسفانه مشکلی پیش آمده' });
+          this.close();
+          return throwError(err);
+        }),
+        finalize(() => {
+          this.initialLoading.set(false);
+        }),
+      )
+      .subscribe(() => this.toastService.success({ text: 'کد تاییدیه برای شما ارسال شد.' }));
   }
 
   close() {
@@ -64,15 +70,16 @@ export class ValidateManagerMobileDialogComponent {
       .verifyManagerMobile({
         otp: this.code(),
       })
+      .pipe(
+        finalize(() => {
+          this.submitLoading.set(false);
+        }),
+      )
       .subscribe({
         next: () => {
-          this.submitLoading.set(false);
           this.toastService.success({ text: 'شماره تلفن مدیریت با موفقیت تایید شد.' });
           this.onSubmit.emit();
           this.close();
-        },
-        error: () => {
-          this.submitLoading.set(false);
         },
       });
   }

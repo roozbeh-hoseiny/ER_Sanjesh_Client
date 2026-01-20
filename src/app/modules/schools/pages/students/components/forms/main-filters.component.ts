@@ -40,7 +40,7 @@ export class SchoolStudentsMainFiltersComponent {
       nonNullable: true,
       validators: [Validators.required],
     }),
-    alreadyInSchool: this.fb.control(this.initialData.alreadyInSchool || false),
+    onlyInSchool: this.fb.control(this.initialData.onlyInSchool || false),
   });
 
   ngOnInit() {

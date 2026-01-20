@@ -3,17 +3,16 @@ import {
   PageDataListComponent,
 } from '@/shared/components/pageDataList/page-data-list.component';
 import { CommonModule } from '@angular/common';
-import { Component, computed, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { SchoolStudentsManagementStore } from './dataStore';
 
 @Component({
-  selector: 'school-students-table',
-  templateUrl: './students-table.component.html',
+  selector: 'school-students-list',
+  templateUrl: './list.component.html',
   standalone: true,
   providers: [ConfirmationService],
   imports: [
@@ -25,19 +24,16 @@ import { SchoolStudentsManagementStore } from './dataStore';
     PageDataListComponent,
   ],
 })
-export class StudentsTableComponent {
+export class SchoolStudentsListComponent {
   @Input() loading = false;
+  @Input() students!: any;
+  @Input() schoolId!: string;
   @Output() onSubmitted = new EventEmitter<void>();
-
-  constructor(private store: SchoolStudentsManagementStore) {}
 
   columns = [] as IColumn[];
   changeStatusSchedules = signal<Record<number, boolean>>({});
   detachLessonsSchedules = signal<Record<string, boolean>>({});
   showLessonForm = signal(false);
-
-  students = computed(() => this.store.students() || []);
-  schoolId = computed(() => this.store.schoolId() || '');
 
   ngOnInit() {
     this.setColumns();

@@ -100,6 +100,7 @@ export class AdminSchoolComponent {
           canEditBankAccounts: true,
           canEditContact: true,
           canEditCategories: true,
+          caEditEditable: true,
           showContactValidateInlineConfirmation: true,
           showManagerValidateInlineConfirmation: true,
           showTeachersCard: true,

@@ -23,6 +23,12 @@ export class SchoolStudentsBulkAddComponent {
 
   columns = [
     {
+      field: 'status',
+      header: '',
+      minWidth: '60px',
+      width: '60px',
+    },
+    {
       field: 'firstName',
       header: 'نام',
       minWidth: '120px',

@@ -1,5 +1,5 @@
 <div class="flex justify-center flex-col gap-3 items-center px-6">
-  <form [formGroup]="form" class="flex justify-center flex-col gap-3 items-center" (ngSubmit)="submit()">
+  <form [formGroup]="form" class="flex justify-center flex-col gap-3 items-center" (submit)="submit()">
     <uikit-field label="رمز عبور" name="password" pSize="large" class="w-full" [control]="form.controls.password">
       <p-password
         id="password1"
@@ -48,21 +48,15 @@
     </uikit-field>
   </form>
 
-  <span class="text-muted-color text-sm font-bold mt-3">
-    کد ارسال شده برای شماره {{ pendingUserInfo()?.mobile }} را وارد کنید.
-  </span>
+  <span class="text-muted-color text-sm font-bold mt-3"> کد ارسال شده برای شماره خود را وارد کنید. </span>
   <p-inputotp name="otp" size="large" [length]="6" [(ngModel)]="otpCode" dir="ltr" />
   <div class="flex items-center justify-center">
     @if (countdown() > 0) {
       <span class="text-sm text-muted-color ml-2">ارسال مجدد کد در {{ countdown() }} ثانیه</span>
     } @else {
-      <button pButton outlined (click)="resendOtp()" [loading]="loading()" type="button">ارسال مجدد کد</button>
+      <button pButton outlined (click)="resendOtp()" [loading]="resendLoading()" type="button">ارسال مجدد کد</button>
     }
   </div>
-  <app-auth-captcha class="block mb-6" />
 
-  <span class="w-full text-center text-sm select-none mt-5">
-    <a class="text-primary cursor-pointer font-bold" (click)="toLogin()">بازگشت به صفحه‌ی ورود</a>
-  </span>
-  <button pButton class="w-full" [loading]="loading()" [disabled]="countdown() <= 0" (click)="submit()">ورود</button>
+  <app-form-footer-actions [loading]="submitLoading()" (onCancel)="close()" (onSubmit)="submit()" />
 </div>
