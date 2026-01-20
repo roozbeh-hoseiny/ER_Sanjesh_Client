@@ -61,7 +61,7 @@ export class LessonsTableComponent {
   detachLessonsSchedules = signal<Record<string, boolean>>({});
   showLessonForm = signal(false);
 
-  loading = computed(() => this.store.getTeachersLoading() || []);
+  loading = computed(() => this.store.getTeachersLoading() || false);
   teachers = computed(() => this.store.teachers() || []);
   schoolId = computed(() => this.store.schoolId() || '');
   canApproveTeachers = computed(() => this.store.canApproveTeachers());

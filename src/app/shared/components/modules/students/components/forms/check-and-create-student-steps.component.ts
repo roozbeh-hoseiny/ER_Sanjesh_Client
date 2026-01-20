@@ -62,7 +62,6 @@ export class CheckAndCreateStudentStepsComponent {
         title: 'دانش‌آموزی با این کد ملی یافت نشد',
         text: 'برای افزودن دانش‌آموز فرم را تکمیل کنید',
       });
-      console.log(response);
 
       this.updateActiveStep('signup');
       this.nationalCodeInputValue.set(response.studentInfo.nationalCode);

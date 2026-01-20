@@ -27,8 +27,6 @@ export abstract class AbstractForm<Request, Response, InitialValue = Response> {
   submitLoading = signal(false);
 
   submit() {
-    console.log('submit');
-
     this.form.markAllAsTouched();
 
     if (this.form.valid) {

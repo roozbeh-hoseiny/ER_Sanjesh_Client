@@ -49,9 +49,6 @@ export class StudentCheckExistFormDialogComponent extends AbstractFormDialog<
           }),
         )
         .subscribe((res) => {
-          console.log('res');
-          console.log(res);
-
           this.onSubmit.emit({
             ...res,
             studentInfo: {

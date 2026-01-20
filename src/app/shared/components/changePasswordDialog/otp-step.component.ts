@@ -80,8 +80,6 @@ export class ChangePasswordOtpStepComponent extends AbstractForm<
   }
 
   submitForm(payload: IChangePasswordRequestPayload) {
-    console.log(payload);
-
     return this.http.post(this.apiRoute, { password: payload.password, otp: this.otpCode() });
   }
 

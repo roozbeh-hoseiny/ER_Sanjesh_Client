@@ -65,8 +65,6 @@ export class AssignStudentFormComponent extends AbstractFormDialog<
     if (this.form.valid) {
       this.form.disable();
       this.submitLoading.set(true);
-      console.log(this.submitForm);
-
       // @ts-ignore
       this.submitForm(this.form.value!)
         .pipe(

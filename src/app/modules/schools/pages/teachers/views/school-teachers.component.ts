@@ -9,7 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { map } from 'rxjs';
+import { finalize, map } from 'rxjs';
 import { LessonsTableComponent, SchoolTeacherListStore } from '../components';
 
 @Component({
@@ -62,6 +62,7 @@ export class SchoolTeachersComponent {
 
       detachTeacher: (payload) => this.teachersLessonsService.removeTeacher(payload.teacherId),
     });
+
     this.getData();
   }
 
@@ -74,15 +75,21 @@ export class SchoolTeachersComponent {
   }
 
   private getAll() {
-    this.services.getAllMappedData(this.schoolId()).subscribe((teachers) => {
-      this.schoolTeacherListStore.fillInitial({
-        teachers,
-        canAddTeacher: true,
-        canAddTeacherLesson: true,
-        canApproveTeachers: true,
+    this.services
+      .getAllMappedData(this.schoolId())
+      .pipe(
+        finalize(() => {
+          this.loading.set(false);
+        }),
+      )
+      .subscribe((teachers) => {
+        this.schoolTeacherListStore.fillInitial({
+          teachers,
+          canAddTeacher: true,
+          canAddTeacherLesson: true,
+          canApproveTeachers: true,
+        });
       });
-      this.loading.set(false);
-    });
   }
 
   refreshData() {

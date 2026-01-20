@@ -49,8 +49,6 @@ export class SignupStudentFormDialogComponent extends AbstractFormDialog<
     private readonly toast: ToastService,
   ) {
     super();
-    console.log(this.nationalCode);
-
     this.setNationalCode();
   }
 
@@ -171,9 +169,6 @@ export class SignupStudentFormDialogComponent extends AbstractFormDialog<
   }
 
   setNationalCode() {
-    console.log('first');
-    console.log(this.nationalCode);
-
     if (this.nationalCode) {
       this.form.controls.nationalCode.patchValue(this.nationalCode);
       this.form.controls.nationalCode.disable();
