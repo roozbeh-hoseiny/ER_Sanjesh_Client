@@ -34,6 +34,7 @@ interface ISchoolDetailsCardsState {
   showManagerValidateInlineConfirmation?: boolean;
   showContactValidateInlineConfirmation?: boolean;
   showContactCard?: boolean;
+  showCategories?: boolean;
   canEditInfo: boolean;
   canEditBankAccounts: boolean;
   canEditAddress: boolean;
@@ -42,10 +43,18 @@ interface ISchoolDetailsCardsState {
   canEditLoginInfo: boolean;
   canEditCategories: boolean;
   canEditFields: boolean;
-  canEditCoupon: boolean;
   caEditEditable: boolean;
+  canEditCoupon: boolean;
   canEditCouponStatus: boolean;
+  canEditCredit: boolean;
+  canEditCreditStatus: boolean;
   submitContactLoading: boolean;
+  increaseCreditSubmitUrl: string;
+  decreaseCreditSubmitUrl: string;
+  editCreditSubmitUrl: string;
+  increaseCouponSubmitUrl: string;
+  decreaseCouponSubmitUrl: string;
+  editCouponSubmitUrl: string;
 }
 
 export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
@@ -60,6 +69,7 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   showManagerValidateInlineConfirmation: false,
   showContactValidateInlineConfirmation: false,
   showContactCard: false,
+  showCategories: false,
   canEditInfo: false,
   canEditBankAccounts: false,
   canEditAddress: false,
@@ -70,8 +80,16 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   canEditFields: false,
   canEditCoupon: false,
   canEditCouponStatus: false,
+  canEditCredit: false,
+  canEditCreditStatus: false,
   caEditEditable: false,
   submitContactLoading: false,
+  increaseCreditSubmitUrl: '',
+  decreaseCreditSubmitUrl: '',
+  editCreditSubmitUrl: '',
+  increaseCouponSubmitUrl: '',
+  decreaseCouponSubmitUrl: '',
+  editCouponSubmitUrl: '',
 };
 
 @Injectable({ providedIn: 'any' })
@@ -84,6 +102,7 @@ export class SchoolDetailsCardsStore {
   readonly school = computed(() => this.state$().school as Maybe<ISchoolResponse>);
   readonly showTeachersCard = computed(() => this.state$().showTeachersCard);
   readonly showBankAccountsCard = computed(() => this.state$().showBankAccountsCard);
+  readonly showCategories = computed(() => this.state$().showCategories);
   readonly teachers = computed(() => {
     if (this.state$().teachers) {
       return [...(this.state$().teachers || [])].map((teacher) => ({
@@ -120,9 +139,17 @@ export class SchoolDetailsCardsStore {
   readonly canEditLoginInfo = computed(() => !!this.state$().canEditLoginInfo);
   readonly canEditCategories = computed(() => !!this.state$().canEditCategories);
   readonly canEditFields = computed(() => !!this.state$().canEditFields);
-  readonly canEditCoupon = computed(() => !!this.state$().canEditCoupon);
   readonly caEditEditable = computed(() => !!this.state$().caEditEditable);
+  readonly canEditCredit = computed(() => !!this.state$().canEditCredit);
+  readonly canEditCreditStatus = computed(() => !!this.state$().canEditCreditStatus);
+  readonly increaseCreditSubmitUrl = computed(() => this.state$().increaseCreditSubmitUrl);
+  readonly decreaseCreditSubmitUrl = computed(() => this.state$().decreaseCreditSubmitUrl);
+  readonly editCreditSubmitUrl = computed(() => this.state$().editCreditSubmitUrl);
+  readonly canEditCoupon = computed(() => !!this.state$().canEditCoupon);
   readonly canEditCouponStatus = computed(() => !!this.state$().canEditCouponStatus);
+  readonly increaseCouponSubmitUrl = computed(() => this.state$().increaseCouponSubmitUrl);
+  readonly decreaseCouponSubmitUrl = computed(() => this.state$().decreaseCouponSubmitUrl);
+  readonly editCouponSubmitUrl = computed(() => this.state$().editCouponSubmitUrl);
   readonly submitContactLoading = computed(() => !!this.state$().submitContactLoading);
 
   // simple mutators
@@ -371,6 +398,24 @@ export class SchoolDetailsCardsStore {
       return this.service.disableCanPurchaseByCredit(schoolId).pipe(
         tap(() => {
           this.toastService.success({ text: 'امکان خرید اعتباری با موفقیت غیر فعال شد.' });
+        }),
+      );
+    }
+  }
+
+  updateCanPurchaseByCoupon(schoolId: string, status: boolean) {
+    if (status) {
+      if (this.service.enableCanPurchaseByCoupon === undefined) return of();
+      return this.service.enableCanPurchaseByCoupon(schoolId).pipe(
+        tap(() => {
+          this.toastService.success({ text: 'امکان خرید با کوپن با موفقیت فعال شد.' });
+        }),
+      );
+    } else {
+      if (this.service.disableCanPurchaseByCoupon === undefined) return of();
+      return this.service.disableCanPurchaseByCoupon(schoolId).pipe(
+        tap(() => {
+          this.toastService.success({ text: 'امکان خرید با کوپن با موفقیت غیر فعال شد.' });
         }),
       );
     }

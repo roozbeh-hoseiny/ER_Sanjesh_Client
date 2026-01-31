@@ -1,0 +1,17 @@
+<p-dialog
+  [(visible)]="visible"
+  [header]="dialogHeader()"
+  modal
+  closable
+  [style]="{ width: '400px' }"
+  (onHide)="close()"
+>
+  <ng-content></ng-content>
+
+  @if (showChangeText()) {
+    <span class="block mt-2 text-muted-color text-sm">
+      موجودی {{ this.label }} پس از اعمال تغییر به <b [appPriceMask]="newAmount"></b> {{ preparedLabel() }} پیدا می‌کند.
+    </span>
+  }
+  <app-form-footer-actions [loading]="loading" class="mt-4 block" (onCancel)="close()" (onSubmit)="submit()" />
+</p-dialog>

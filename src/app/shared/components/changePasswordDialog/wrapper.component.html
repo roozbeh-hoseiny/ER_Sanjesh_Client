@@ -7,12 +7,13 @@
   [closable]="true"
 >
   @if (activeStep() === "sendCode") {
-    <change-password-send-code-step [apiRoute]="sendOtpApiRoute()" (onSubmit)="toOtp()" />
+    <change-password-send-code-step [apiRoute]="sendOtpApiRoute()" (onSubmit)="toOtp()" (onClose)="close()" />
   } @else {
     <change-password-otp-step
       [apiRoute]="changePasswordApiRoute()"
       [resendOTPApiRoute]="resendOtpApiRoute()"
       (onSubmit)="onPasswordChange()"
+      (onClose)="close()"
     />
   }
 </p-dialog>

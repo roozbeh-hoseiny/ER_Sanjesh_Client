@@ -21,8 +21,6 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     updateAddress: () => `${schoolsBaseUrl}/ChangeAddress`,
     enableEdit: () => `${schoolsBaseUrl}/EnableEdit`,
     disableEdit: () => `${schoolsBaseUrl}/DisableEdit`,
-    enablePurchaseOnCredit: () => `${schoolsBaseUrl}/EnablePurchaseOnCredit`,
-    disablePurchaseOnCredit: () => `${schoolsBaseUrl}/DisablePurchaseOnCredit`,
 
     updateContact: () => `${schoolsBaseUrl}/ChangeContactInfo`,
     attachAgent: () => `${schoolsBaseUrl}/AssignAgent`,
@@ -51,6 +49,25 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     invalidateContactMobile: () => `${schoolsBaseUrl}/InvalidateContactMobile`,
     invalidateManagerEmail: () => `${schoolsBaseUrl}/InvalidateManagerEmail`,
     invalidateManagerMobile: () => `${schoolsBaseUrl}/InvalidateManagerMobile`,
+
+    //
+
+    //credits and coupons
+    enablePurchaseOnCredit: () => `${schoolsBaseUrl}/EnablePurchaseOnCredit`,
+    disablePurchaseOnCredit: () => `${schoolsBaseUrl}/DisablePurchaseOnCredit`,
+    increaseCredit: () => `${schoolsBaseUrl}/IncreaseCredit`,
+    decreaseCredit: () => `${schoolsBaseUrl}/WithdrawCredit`,
+    editCredit: () => `${schoolsBaseUrl}/SetRemainedCredit`,
+    activateCredit: () => `${schoolsBaseUrl}/EnablePurchaseOnCredit`,
+    deactivateCredit: () => `${schoolsBaseUrl}/DisablePurchaseOnCredit`,
+
+    enablePurchaseOnCoupon: () => `${schoolsBaseUrl}/EnablePurchaseOnCoupon`,
+    disablePurchaseOnCoupon: () => `${schoolsBaseUrl}/DisablePurchaseOnCoupon`,
+    increaseCoupon: () => `${schoolsBaseUrl}/IncreaseCoupon`,
+    decreaseCoupon: () => `${schoolsBaseUrl}/WithdrawCoupon`,
+    editCoupon: () => `${schoolsBaseUrl}/SetRemainedCoupon`,
+    activateCoupon: () => `${schoolsBaseUrl}/EnablePurchaseOnCoupon`,
+    deactivateCoupon: () => `${schoolsBaseUrl}/DisablePurchaseOnCoupon`,
 
     //
   };

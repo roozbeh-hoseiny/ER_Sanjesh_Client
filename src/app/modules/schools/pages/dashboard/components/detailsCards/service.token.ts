@@ -39,6 +39,9 @@ export interface SchoolDetailsService {
   enableCanPurchaseByCredit(schoolId: string): Observable<boolean>;
   disableCanPurchaseByCredit(schoolId: string): Observable<boolean>;
 
+  enableCanPurchaseByCoupon(schoolId: string): Observable<boolean>;
+  disableCanPurchaseByCoupon(schoolId: string): Observable<boolean>;
+
   validateContactEmail(id: string): Observable<boolean>;
   validateContactMobile(id: string): Observable<boolean>;
   validateManagerEmail(id: string): Observable<boolean> | void;

@@ -1,0 +1,15 @@
+<credits-dialog-layout
+  [(visible)]="visible"
+  [label]="label"
+  [newAmount]="newAmount"
+  variant="increase"
+  [loading]="submitLoading()"
+  (onSubmit)="submit()"
+  (onClose)="close()"
+>
+  <form [formGroup]="form" (submit)="submit()">
+    @if (visible) {
+      <app-input [control]="form.controls.value" name="value" label="مقدار مورد نظر برای افزایش" [type]="type" />
+    }
+  </form>
+</credits-dialog-layout>

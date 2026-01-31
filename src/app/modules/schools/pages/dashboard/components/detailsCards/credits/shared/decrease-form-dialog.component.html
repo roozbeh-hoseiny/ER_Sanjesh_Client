@@ -1,0 +1,13 @@
+<credits-dialog-layout
+  [(visible)]="visible"
+  [label]="label"
+  [newAmount]="newAmount"
+  variant="decrease"
+  [loading]="submitLoading()"
+  (onSubmit)="submit()"
+  (onClose)="close()"
+>
+  <form [formGroup]="form" (submit)="submit()">
+    <app-input [control]="form.controls.value" name="value" label="مقدار مورد نظر برای کاهش" [type]="type" />
+  </form>
+</credits-dialog-layout>

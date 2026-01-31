@@ -2,42 +2,51 @@
   <ng-template #header>
     <div class="flex items-center gap-4 justify-between">
       اطلاعات بانکی
-      <button pButton icon="pi pi-cog" outlined (click)="onAdd()">ایجاد حساب بانکی جدید</button>
+      <button pButton icon="pi pi-plus" outlined (click)="onAdd()">ایجاد حساب بانکی جدید</button>
     </div>
   </ng-template>
   <div class="flex flex-col gap-4">
-    @for (bankAccount of bankAccounts; track bankAccount.id) {
-      <p-divider align="center">
-        {{ `بانک ${bankAccount.bankName} - ‌‌شعبه‌ی ${bankAccount.branchName}` }}
-      </p-divider>
-      <div class="grid grid-cols-3 gap-4 items-center">
-        <app-key-value label="کد شعبه" [value]="bankAccount.branchCode" />
-        <app-key-value label="صاحب حساب" [value]="bankAccount.ownerName" />
-        <app-key-value label="شماره شبا" [value]="bankAccount.sheba" />
-      </div>
-      @if (canEdit) {
-        <div class="flex items-center gap-3 justify-center">
-          <button
-            pButton
-            type="button"
-            label="ویرایش"
-            icon="pi pi-pencil"
-            size="small"
-            [disabled]="removeLoading()"
-            (click)="onEdit(bankAccount)"
-          ></button>
-          <button
-            pButton
-            type="button"
-            label="حذف"
-            icon="pi pi-trash"
-            outlined
-            severity="danger"
-            size="small"
-            [disabled]="removeLoading()"
-            (click)="onRemove(bankAccount)"
-          ></button>
+    @if (!bankAccounts?.length) {
+      <uikit-empty-state
+        title="حساب بانکی یافت نشد"
+        description="تا به حال هیچ حساب بانکی‌ای برای این مرکز آموزشی تعریف نشده‌ است."
+        ctaLabel="ایجاد حساب بانکی جدید"
+        (ctaClick)="onAdd()"
+      />
+    } @else {
+      @for (bankAccount of bankAccounts; track bankAccount.id) {
+        <p-divider align="center">
+          {{ `بانک ${bankAccount.bankName} - ‌‌شعبه‌ی ${bankAccount.branchName}` }}
+        </p-divider>
+        <div class="grid grid-cols-3 gap-4 items-center">
+          <app-key-value label="کد شعبه" [value]="bankAccount.branchCode" />
+          <app-key-value label="صاحب حساب" [value]="bankAccount.ownerName" />
+          <app-key-value label="شماره شبا" [value]="bankAccount.sheba" />
         </div>
+        @if (canEdit) {
+          <div class="flex items-center gap-3 justify-center">
+            <button
+              pButton
+              type="button"
+              label="ویرایش"
+              icon="pi pi-pencil"
+              size="small"
+              [disabled]="removeLoading()"
+              (click)="onEdit(bankAccount)"
+            ></button>
+            <button
+              pButton
+              type="button"
+              label="حذف"
+              icon="pi pi-trash"
+              outlined
+              severity="danger"
+              size="small"
+              [disabled]="removeLoading()"
+              (click)="onRemove(bankAccount)"
+            ></button>
+          </div>
+        }
       }
     }
   </div>

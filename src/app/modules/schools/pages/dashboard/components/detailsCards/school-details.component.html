@@ -1,6 +1,7 @@
 <div class="flex flex-col gap-6">
   <!-- <app-school-manager (onSubmitted)="refreshData()" /> -->
   <app-school-info (onSubmitted)="refreshData()" />
+  <school-info-credits (onSubmitted)="refreshData()" />
   @if (showContactCard()) {
     <app-school-contact (onSubmit)="submitContact($event)" (onUpdateValidation)="refreshData()" />
   }

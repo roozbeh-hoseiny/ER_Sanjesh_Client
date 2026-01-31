@@ -8,21 +8,34 @@ import { finalize, Observable } from 'rxjs';
   template: '',
   imports: [ReactiveFormsModule],
 })
-export abstract class AbstractForm<Request, Response, InitialValue = Response> {
+export abstract class AbstractForm<
+  FormInterface,
+  Response,
+  InitialValue = Response,
+  RequestPayload extends FormInterface = FormInterface,
+> {
   @Input() initialValues?: InitialValue;
 
   @Output() onSubmit = new EventEmitter<Response>();
   @Output() onClose = new EventEmitter<void>();
 
   protected readonly fb = inject(FormBuilder);
-  constructor(private toastService: ToastService) {}
+  private readonly toastService = inject(ToastService);
+  constructor() {}
 
   abstract form: ReturnType<FormBuilder['group']>;
   showSuccessMessage: boolean = false;
   successMessage = 'عملیات با موفقیت انجام شد';
-  defaultValues: Partial<Request> = {};
+  defaultValues: Partial<FormInterface> = {};
 
-  abstract submitForm(payload: Request): Observable<Response> | void;
+  abstract submitForm(payload: FormInterface): Observable<Response> | void;
+
+  prepareRequestPayload(payload: FormInterface): RequestPayload {
+    // @ts-ignore
+    return payload;
+  }
+
+  onSuccess(response: Response): void {}
 
   submitLoading = signal(false);
 
@@ -30,24 +43,25 @@ export abstract class AbstractForm<Request, Response, InitialValue = Response> {
     this.form.markAllAsTouched();
 
     if (this.form.valid) {
-      this.form.disable();
+      // this.form.disable();
       this.submitLoading.set(true);
 
-      this.submitForm(this.form.value as Request)
+      this.submitForm(this.prepareRequestPayload(this.form.value))
         ?.pipe(
           finalize(() => {
             this.submitLoading.set(false);
-            this.form.enable();
+            // this.form.enable();
           }),
         )
         .subscribe((res) => {
+          this.onSuccess(res);
           if (this.showSuccessMessage) {
             this.toastService.success({
               text: this.successMessage,
             });
           }
-          this.form.reset();
           this.onSubmit.emit(res);
+          // this.form.reset();
         });
     }
   }

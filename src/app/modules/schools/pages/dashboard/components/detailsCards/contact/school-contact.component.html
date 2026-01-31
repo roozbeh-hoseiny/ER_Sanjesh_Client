@@ -6,7 +6,10 @@
       <div class="grid grid-cols-3 gap-4 items-center">
         <app-key-value label="نام" [value]="contact()?.firstName" />
         <app-key-value label="نام خانوادگی" [value]="contact()?.lastName" />
-        <app-key-value label="جنسیت" [value]="contact()?.gender ? 'مرد' : 'زن'" />
+        <app-key-value
+          label="جنسیت"
+          [value]="contact()?.gender === false ? 'زن' : contact()?.gender === true ? 'مرد' : ' - '"
+        />
         <app-key-value label="تلفن همراه">
           <app-check-verified-info
             [value]="contact()?.mobile"

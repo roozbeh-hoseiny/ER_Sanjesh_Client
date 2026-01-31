@@ -51,7 +51,6 @@ export class SchoolsDashboardComponent {
           showTeachersCard: true,
           teachersManagementPageRoute: () =>
             schoolsTeachersNamedRoutes.teachers.meta.pagePath!(this.schoolStore.info()?.id),
-          showContactCard: false,
           showAgentCard: false,
           showBankAccountsCard: true,
           canEditAddress: info.canEdit,

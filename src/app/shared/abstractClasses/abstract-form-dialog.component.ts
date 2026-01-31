@@ -1,5 +1,4 @@
-import { ToastService } from '@/core/services/toast.service';
-import { Component, effect, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { Component, effect, EventEmitter, Input, Output, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AbstractForm } from './abstract-form';
 
@@ -25,14 +24,15 @@ export abstract class AbstractFormDialog<Request, Response> extends AbstractForm
   @Output() visibleChange = new EventEmitter<boolean>();
 
   constructor() {
-    super(inject(ToastService));
+    super();
     effect(() => {
       const v = this.visibleSignal();
       if (!v) this.form.reset(this.defaultValues);
     });
-    this.submit.bind(() => {
-      this.close();
-    });
+  }
+
+  override onSuccess(response: Response): void {
+    this.close();
   }
 
   override close() {

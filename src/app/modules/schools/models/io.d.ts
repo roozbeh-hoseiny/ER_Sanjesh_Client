@@ -78,8 +78,10 @@ export interface ISchoolRawResponse {
   fieldOfStudies: SchoolsFieldOfStudyRaw[];
   bankAccounts: ISchoolBankInfo[];
   canBuyExamByCredit: boolean;
+  canBuyExamByCoupon: boolean;
   agentInfo: Maybe<any>;
-  remainedCredit: string;
+  remainedCredit: number;
+  remainedCoupon: number;
   canEdit: boolean;
   canRegisterToExam: boolean;
 }

@@ -39,6 +39,7 @@ export class SchoolInfoComponent {
   editMode = signal<boolean>(false);
 
   info = computed(() => this.detailsStore.school()!);
+  showCategories = computed(() => this.detailsStore.showCategories());
   categories = computed(() => this.detailsStore.schoolCategories());
 
   canEdit = computed(() => this.detailsStore.canEditInfo());

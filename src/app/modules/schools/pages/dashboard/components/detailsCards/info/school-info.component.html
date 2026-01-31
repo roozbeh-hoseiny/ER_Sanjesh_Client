@@ -8,18 +8,13 @@
         <app-key-value label="جنسیت">
           <app-school-genders-tag [genderId]="info().boyOrGirl" />
         </app-key-value>
-        <app-key-value label="وضعیت">
-          <p-badge [value]="info().isActive ? 'فعال' : 'غیرفعال'" [severity]="info().isActive ? 'success' : 'danger'" />
-        </app-key-value>
+        <app-key-value label="وضعیت" [value]="info().isActive" type="active" />
         <app-key-value
           label="مایل به برگزاری آزمون برای داوطلبان ثبت نامی در محل مرکز آموزشی خود می‌باشم"
           class="col-span-2"
-        >
-          <p-badge
-            [value]="info().conductExam ? 'بلی' : 'خیر'"
-            [severity]="info().conductExam ? 'success' : 'danger'"
-          />
-        </app-key-value>
+          [value]="info().conductExam"
+          type="has"
+        />
         <app-key-value label="ظرفیت مرکز آموزشی" [value]="info().examHallCapacity.toString() + ' نفر'" />
         <app-key-value label="متقاضی آزمون‌های">
           <catalog-exam-application-types-tag [id]="info().examApplicantTypeId" />
@@ -40,12 +35,7 @@
             />
           </app-key-value>
         } @else {
-          <app-key-value label="امکان ویرایش">
-            <p-badge
-              [value]="caEditEditable() ? 'فعال' : 'غیرفعال'"
-              [severity]="caEditEditable() ? 'success' : 'danger'"
-            />
-          </app-key-value>
+          <app-key-value label="امکان ویرایش" [value]="caEditEditable()" type="active" />
         }
 
         <app-key-value label="امکان ثبت‌نام در آزمون">
@@ -54,21 +44,21 @@
             [severity]="info().canRegisterToExam ? 'success' : 'danger'"
           />
         </app-key-value>
-        <app-key-value label="دارای اسکنر می‌باشد؟">
-          <p-badge [value]="info().hasScanner ? 'بلی' : 'خیر'" [severity]="info().hasScanner ? 'success' : 'danger'" />
-        </app-key-value>
+        <app-key-value label="دارای اسکنر می‌باشد؟" [value]="info().hasScanner" type="has" />
         @if (info().hasScanner) {
           <app-key-value label="عنوان اسکنر">
             {{ info().scannerName }} <small class="text-muted-color">(مدل {{ info().scannerType }})</small>
           </app-key-value>
         }
       </div>
-      <p-divider> دسته‌بندی مدرسه </p-divider>
-      <app-school-info-categories
-        [categories]="categories()"
-        [editable]="canEditCategories()"
-        (onUpdate)="submitForm()"
-      />
+      @if (showCategories()) {
+        <p-divider> دسته‌بندی مدرسه </p-divider>
+        <app-school-info-categories
+          [categories]="categories()"
+          [editable]="canEditCategories()"
+          (onUpdate)="submitForm()"
+        />
+      }
       <p-divider> لیست دروس </p-divider>
       <app-school-info-fields
         [fields]="info().fieldOfStudies"
@@ -99,7 +89,6 @@
       </div>
       @if (info().canBuyExamByCredit) {
         <p-divider> اطلاعات اعتباری </p-divider>
-        <app-key-value label="اعتبار باقی‌مانده" [value]="`${info().remainedCredit} تومان`" />
       }
     </div>
   }

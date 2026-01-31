@@ -1,7 +1,7 @@
 import { BreadcrumbService } from '@/core/services';
 import { ToastService } from '@/core/services/toast.service';
 import { LayoutService } from '@/layout/service/layout.service';
-import { adminNamedRoutes } from '@/modules/admin/constants';
+import { ADMIN_API_ROUTES, adminNamedRoutes } from '@/modules/admin/constants';
 import { adminSchoolNamedRoutes } from '@/modules/admin/constants/routes';
 import { AdminSchoolsService } from '@/modules/admin/services';
 import { AdminAgentsService } from '@/modules/admin/services/admin-agents.service';
@@ -85,6 +85,14 @@ export class AdminSchoolComponent {
       invalidateContactMobile: (id: string) => this.schoolService.invalidateContactMobile(id),
       invalidateManagerEmail: (id: string) => this.schoolService.invalidateManagerEmail(id),
       invalidateManagerMobile: (id: string) => this.schoolService.invalidateManagerMobile(id),
+
+      enableCanPurchaseByCredit: (schoolId) => this.schoolService.enablePurchaseOnCredit(schoolId),
+      disableCanPurchaseByCredit: (schoolId) =>
+        this.schoolService.disablePurchaseOnCredit(schoolId),
+
+      enableCanPurchaseByCoupon: (schoolId) => this.schoolService.enablePurchaseOnCoupon(schoolId),
+      disableCanPurchaseByCoupon: (schoolId) =>
+        this.schoolService.disablePurchaseOnCoupon(schoolId),
     });
     effect(() => {
       const info = this.school();
@@ -93,6 +101,9 @@ export class AdminSchoolComponent {
           school: info,
           showContactCard: true,
           showAgentCard: true,
+          showCategories: true,
+          canEditCoupon: true,
+          canEditCouponStatus: true,
           canEditAddress: true,
           canEditInfo: true,
           canEditAgent: true,
@@ -101,9 +112,18 @@ export class AdminSchoolComponent {
           canEditContact: true,
           canEditCategories: true,
           caEditEditable: true,
+          canEditCredit: true,
+          canEditCreditStatus: true,
           showContactValidateInlineConfirmation: true,
           showManagerValidateInlineConfirmation: true,
           showTeachersCard: true,
+          increaseCreditSubmitUrl: ADMIN_API_ROUTES.schools.increaseCredit(),
+          decreaseCreditSubmitUrl: ADMIN_API_ROUTES.schools.decreaseCredit(),
+          editCreditSubmitUrl: ADMIN_API_ROUTES.schools.editCredit(),
+
+          increaseCouponSubmitUrl: ADMIN_API_ROUTES.schools.increaseCoupon(),
+          decreaseCouponSubmitUrl: ADMIN_API_ROUTES.schools.decreaseCoupon(),
+          editCouponSubmitUrl: ADMIN_API_ROUTES.schools.editCoupon(),
           teachersManagementPageRoute: () =>
             adminSchoolNamedRoutes.schoolTeachers.meta.pagePath!(this.schoolId()),
         });

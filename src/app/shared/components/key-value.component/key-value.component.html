@@ -3,7 +3,21 @@
     <span class="text-muted-color text-base font-normal flex-auto grow-0">{{ label }}:</span>
     <div class="shrink-0 grow">
       <ng-content>
-        <span class="text-text-color text-base font-bold grow">{{ value || "-" }}</span>
+        @if (valueType() === "badge") {
+          <p-badge [value]="valueToShow()?.toString()" [severity]="value ? 'success' : 'danger'" />
+        } @else {
+          @switch (type) {
+            @case ("price") {
+              <span
+                class="text-text-color text-base font-bold grow"
+                [appPriceMask]="typeof value === 'string' ? value : ''"
+              ></span>
+            }
+            @default {
+              <span class="text-text-color text-base font-bold grow">{{ value || "-" }}</span>
+            }
+          }
+        }
       </ng-content>
     </div>
   </div>

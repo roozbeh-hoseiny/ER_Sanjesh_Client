@@ -2,6 +2,7 @@ import { Maybe } from '@/core';
 import { ISchoolBankInfo } from '@/modules/schools/models';
 import { AppCardComponent } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
+import { UikitEmptyStateComponent } from '@/uikit';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
 import { Divider } from 'primeng/divider';
@@ -17,6 +18,7 @@ import { SchoolBankFormDialogComponent } from './school-bank-form-dialog.compone
     Divider,
     ButtonDirective,
     SchoolBankFormDialogComponent,
+    UikitEmptyStateComponent,
   ],
 })
 export class SchoolInfoBankAccountsComponent {

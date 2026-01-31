@@ -189,6 +189,17 @@ export class AdminSchoolsService {
     });
   }
 
+  enablePurchaseOnCoupon(schoolId: string) {
+    return this.http.post<boolean>(this.apiRoutes.schools.enablePurchaseOnCoupon(), {
+      id: schoolId,
+    });
+  }
+  disablePurchaseOnCoupon(schoolId: string) {
+    return this.http.post<boolean>(this.apiRoutes.schools.disablePurchaseOnCoupon(), {
+      id: schoolId,
+    });
+  }
+
   // bank info methods
   addBankInfo(payload: ISchoolBankInfoAddRequestPayload) {
     return this.http.post<boolean>(this.apiRoutes.schools.addBankInfo(), payload);

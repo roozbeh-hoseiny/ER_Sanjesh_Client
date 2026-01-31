@@ -3,18 +3,28 @@ import {
   ElementRef,
   HostListener,
   Input,
+  OnChanges,
   OnInit,
   Optional,
   Renderer2,
   Self,
+  SimpleChanges,
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
+import {
+  cleanNumericString,
+  formatNumber,
+  formatWithCurrency,
+  normalizeToNumber,
+} from '../../utils/price-mask.utils';
 
 @Directive({
   selector: '[appPriceMask]',
   standalone: true,
 })
-export class PriceMaskDirective implements OnInit {
+export class PriceMaskDirective implements OnInit, OnChanges {
+  /** Optional value to render/format when bound like [appPriceMask]="price" */
+  @Input('appPriceMask') priceValue: number | string | null | undefined;
   @Input('appPriceMaskLocale') locale: string = 'fa-IR';
   @Input('appPriceMaskFraction') fraction = 0;
   /**
@@ -22,6 +32,8 @@ export class PriceMaskDirective implements OnInit {
    * If false, uses the provided `appPriceMaskLocale`.
    */
   @Input('appPriceMaskUseComma') useComma = false;
+  /** Optional currency code to append for non-input hosts (e.g., "ریال" | "تومان") */
+  @Input('appPriceMaskCurrency') currency: string | null = 'ریال';
 
   private inputEl!: HTMLInputElement | null;
 
@@ -38,60 +50,26 @@ export class PriceMaskDirective implements OnInit {
       host.tagName.toLowerCase() === 'input'
         ? (host as HTMLInputElement)
         : host.querySelector('input');
-  }
 
-  private toArabicDigitsAwareNumber(str: string): string {
-    if (!str) return '';
-    // Map Arabic-Indic and Extended Arabic-Indic digits to ASCII digits
-    const map: Record<string, string> = {
-      '٠': '0',
-      '١': '1',
-      '٢': '2',
-      '٣': '3',
-      '٤': '4',
-      '٥': '5',
-      '٦': '6',
-      '٧': '7',
-      '٨': '8',
-      '٩': '9',
-      '۰': '0',
-      '۱': '1',
-      '۲': '2',
-      '۳': '3',
-      '۴': '4',
-      '۵': '5',
-      '۶': '6',
-      '۷': '7',
-      '۸': '8',
-      '۹': '9',
-    };
-    return str.replace(/[٠-٩۰-۹]/g, (d) => map[d] ?? d);
-  }
-
-  private cleanNumericString(raw: string): string {
-    // Convert localized digits to ASCII, then remove everything except digits, dot and minus
-    const ascii = this.toArabicDigitsAwareNumber(raw);
-    return ascii.replace(/[^0-9.\-]/g, '');
-  }
-
-  private formatNumber(value: number): string {
-    try {
-      const fmtLocale = this.useComma ? 'en-US' : this.locale;
-      return new Intl.NumberFormat(fmtLocale, {
-        maximumFractionDigits: this.fraction,
-        minimumFractionDigits: 0,
-        useGrouping: true,
-      }).format(value);
-    } catch (e) {
-      return String(value);
+    // If a value is bound initially (e.g., span with [appPriceMask]), render it
+    if (this.priceValue !== undefined) {
+      this.renderFromBoundValue();
     }
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['priceValue'] && this.priceValue !== undefined) {
+      this.renderFromBoundValue();
+    }
+  }
+
+  // Numeric parsing/formatting helpers moved to utils/price-mask.utils.ts
 
   @HostListener('input', ['$event'])
   onInput(ev: Event) {
     if (!this.inputEl) return;
     const raw = (ev.target as HTMLInputElement).value || this.inputEl.value || '';
-    const cleaned = this.cleanNumericString(raw);
+    const cleaned = cleanNumericString(raw);
     if (cleaned === '') {
       // clear control
       if (this.ngControl?.control) this.ngControl.control.setValue(null);
@@ -100,7 +78,11 @@ export class PriceMaskDirective implements OnInit {
     const asNumber = Number(cleaned);
     if (isNaN(asNumber)) return;
 
-    const formatted = this.formatNumber(asNumber);
+    const formatted = formatNumber(asNumber, {
+      locale: this.locale,
+      useComma: this.useComma,
+      fraction: this.fraction,
+    });
 
     // preserve caret position roughly: compute delta and adjust
     const prevPos = this.inputEl.selectionStart ?? raw.length;
@@ -127,5 +109,37 @@ export class PriceMaskDirective implements OnInit {
     } catch (err) {
       // ignore selection errors
     }
+  }
+
+  /** Render when bound via [appPriceMask] on non-input hosts (e.g., span) or to set initial value. */
+  private renderFromBoundValue() {
+    const num = normalizeToNumber(this.priceValue);
+
+    // If host has an input element, set both control value (if any) and displayed value
+    if (this.inputEl) {
+      if (this.ngControl?.control) {
+        try {
+          this.ngControl.control.setValue(num, { emitEvent: false });
+        } catch (err) {
+          // ignore
+        }
+      }
+
+      const formatted = formatWithCurrency(num, true, this.currency, {
+        locale: this.locale,
+        useComma: this.useComma,
+        fraction: this.fraction,
+      });
+      this.renderer.setProperty(this.inputEl, 'value', formatted);
+      return;
+    }
+
+    // Otherwise, render to host text (e.g., span/div)
+    const formatted = formatWithCurrency(num, false, this.currency, {
+      locale: this.locale,
+      useComma: this.useComma,
+      fraction: this.fraction,
+    });
+    this.renderer.setProperty(this.el.nativeElement, 'textContent', formatted);
   }
 }

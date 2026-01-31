@@ -5,8 +5,10 @@ import { Component, computed, EventEmitter, Input, Output } from '@angular/core'
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddon } from 'primeng/inputgroupaddon';
+import { InputMaskModule } from 'primeng/inputmask';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
+import { KeyFilterModule } from 'primeng/keyfilter';
 import { ToggleSwitch } from 'primeng/toggleswitch';
 
 @Component({
@@ -21,6 +23,8 @@ import { ToggleSwitch } from 'primeng/toggleswitch';
     ToggleSwitch,
     InputGroupAddon,
     InputNumberModule,
+    KeyFilterModule,
+    InputMaskModule,
   ],
   templateUrl: './input.component.html',
 })
@@ -50,10 +54,12 @@ export class InputComponent {
   @Output() valueChange = new EventEmitter<string | number>();
   @Output() blur = new EventEmitter<void>();
 
-  onInput(ev: Event) {
-    const v = (ev.target as HTMLInputElement).value;
-    this.valueChange.emit(this.type === 'price' ? parseFloat(v) : v);
-  }
+  // onInput(ev: Event) {
+  //   const v = (ev.target as HTMLInputElement).value;
+
+  //   const newLocal = v || v == '0';
+  //   // this.valueChange.emit(this.type === 'price' && newLocal ? parseFloat(v) : v);
+  // }
 
   preparedSuffix = computed(() => {
     if (this.type === 'price') {

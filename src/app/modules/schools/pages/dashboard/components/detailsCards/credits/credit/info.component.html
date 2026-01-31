@@ -1,0 +1,33 @@
+<div class="grid grid-cols-3 gap-4">
+  @if (canEditStatus()) {
+    <app-key-value label="امکان استفاده از اعتبار" hint="برای تغییر وضعیت بر روی سوییچ بالا کلیک کنید">
+      <inline-confirmation
+        [value]="!!canBuyExamByCredit()"
+        confirmedMessage="بله"
+        rejectedMessage="خیر"
+        confirmationHeader="آیا مطمینید؟"
+        [onConfirmMessage]="'آیا از دادن امکان استفاده از اعتبار به این مدرسه مطمینید؟'"
+        [onRejectMessage]="'آیا از لغو امکان استفاده از اعتبار این مدرسه مطمینید؟'"
+        (onConfirm)="updateCanEdit(true)"
+        (onReject)="updateCanEdit(false)"
+      />
+    </app-key-value>
+  } @else {
+    <app-key-value label="امکان استفاده از اعتبار" [value]="canBuyExamByCredit()" type="boolean" />
+  }
+  <div class="col-span-2 flex items-center gap-3">
+    <app-key-value label="اعتبار باقی‌مانده" [value]="remainedCredit()" type="price" class="w-auto! grow-0 block" />
+    @if (canEdit()) {
+      <credits-action-cta
+        label="اعتبار"
+        type="price"
+        [schoolId]="schoolId()!"
+        [currentValue]="remainedCredit()"
+        [increaseSubmitUrl]="increaseCreditSubmitUrl()!"
+        [decreaseSubmitUrl]="decreaseCreditSubmitUrl()!"
+        [editSubmitUrl]="editCreditSubmitUrl()!"
+        (onSubmitted)="refresh()"
+      />
+    }
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<credits-dialog-layout
+  [(visible)]="visible"
+  [label]="label"
+  variant="edit"
+  [loading]="submitLoading()"
+  (onSubmit)="submit()"
+  (onClose)="close()"
+>
+  <form [formGroup]="form" (submit)="submit()">
+    <app-input [control]="form.controls.value" name="value" label="مقدار مورد نظر برای ویرایش" [type]="type" />
+  </form>
+</credits-dialog-layout>

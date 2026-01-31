@@ -1,0 +1,38 @@
+<div class="">
+  <p-menu #menu [model]="actions()" [popup]="true" dir="rtl" />
+  <p-button (click)="menu.toggle($event)" icon="pi pi-ellipsis-v" [outlined]="true" severity="contrast" size="small" />
+</div>
+@if (visibleDecreaseForm()) {
+  <credits-decrease-form-dialog
+    [(visible)]="visibleDecreaseForm"
+    [schoolId]="schoolId"
+    [label]="label"
+    [submitUrl]="decreaseSubmitUrl"
+    [currentValue]="currentValue"
+    [type]="type"
+    (onSubmit)="submitted()"
+  />
+}
+
+@if (visibleIncreaseForm()) {
+  <credits-increase-form-dialog
+    [(visible)]="visibleIncreaseForm"
+    [schoolId]="schoolId"
+    [label]="label"
+    [submitUrl]="increaseSubmitUrl"
+    [currentValue]="currentValue"
+    [type]="type"
+    (onSubmit)="submitted()"
+  />
+}
+@if (visibleEditForm()) {
+  <credits-edit-form-dialog
+    [(visible)]="visibleEditForm"
+    [schoolId]="schoolId"
+    [label]="label"
+    [submitUrl]="editSubmitUrl"
+    [currentValue]="currentValue"
+    [type]="type"
+    (onSubmit)="submitted()"
+  />
+}

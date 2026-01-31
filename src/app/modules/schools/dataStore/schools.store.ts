@@ -37,7 +37,6 @@ export class SchoolsStore {
         this.info$.set(res);
       },
       error: (err) => {
-        console.error('[SchoolsStore] getInfo error', err);
         this.info$.set(null);
       },
       complete: () => {

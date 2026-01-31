@@ -16,9 +16,9 @@
           [class]="` w-full ${size === 'large' ? 'p-inputtext-lg' : size === 'small' ? 'p-inputtext-sm' : ''}`"
           [required]="isRequired"
           [invalid]="control.invalid && (control.touched || control.dirty)"
-          (input)="onInput($event)"
           (onBlur)="blur.emit()"
         />
+        <!-- (input)="onInput($event)" -->
       } @else {
         <input
           pInputText
@@ -35,11 +35,11 @@
           "
           [required]="isRequired"
           [invalid]="control.invalid && (control.touched || control.dirty)"
-          (input)="onInput($event)"
           (onBlur)="blur.emit()"
         />
+        <!-- (input)="onInput($event)" -->
       }
-      @if (suffix) {
+      @if (preparedSuffix()) {
         <p-inputgroup-addon>{{ preparedSuffix() }}</p-inputgroup-addon>
       }
     </p-inputgroup>
