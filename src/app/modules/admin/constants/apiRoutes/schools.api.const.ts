@@ -1,3 +1,5 @@
+import { adminSchoolStudentsApiRoutes } from './school-students.api.const';
+
 export const adminSchoolsApiRoutes = (baseUrl: string) => {
   const schoolsBaseUrl = `${baseUrl}/school`;
   return {
@@ -69,6 +71,7 @@ export const adminSchoolsApiRoutes = (baseUrl: string) => {
     activateCoupon: () => `${schoolsBaseUrl}/EnablePurchaseOnCoupon`,
     deactivateCoupon: () => `${schoolsBaseUrl}/DisablePurchaseOnCoupon`,
 
+    students: adminSchoolStudentsApiRoutes(schoolsBaseUrl),
     //
   };
 };

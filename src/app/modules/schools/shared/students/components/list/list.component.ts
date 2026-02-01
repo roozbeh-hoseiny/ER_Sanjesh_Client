@@ -1,28 +1,20 @@
-import { ToastService } from '@/core/services/toast.service';
-import { SchoolsStore } from '@/modules/schools/dataStore';
 import {
   SchoolStudentsMainFiltersComponent,
   SchoolStudentsManagementStore,
-} from '@/modules/schools/pages/students';
+} from '@/modules/schools/pages/students/components';
 import { AddSingleStudentFormDialogComponent } from '@/modules/schools/pages/students/components/forms/add-single-student-form-dialog.component';
-import { SchoolsStudentsService } from '@/modules/schools/services';
 import { ConfirmationDialogService } from '@/shared/components';
-import {
-  IGetSchoolStudentsRequestPayload,
-  IStudentRequestPayload,
-  IStudentResponse,
-} from '@/shared/components/modules';
+import { IGetSchoolStudentsRequestPayload, IStudentResponse } from '@/shared/components/modules';
 import {
   IColumn,
   PageDataListComponent,
 } from '@/shared/components/pageDataList/page-data-list.component';
-import { Component, computed, inject, signal, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, computed, signal, TemplateRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { ButtonDirective } from 'primeng/button';
-import { finalize } from 'rxjs';
 
 @Component({
-  selector: 'school-student-list',
+  selector: 'shared-school-students',
   templateUrl: './list.component.html',
   imports: [
     SchoolStudentsMainFiltersComponent,
@@ -31,16 +23,13 @@ import { finalize } from 'rxjs';
     AddSingleStudentFormDialogComponent,
   ],
 })
-export class SchoolStudentListComponent {
-  private schoolsStore = inject(SchoolsStore);
+export class SharedSchoolStudentsComponent {
   columns!: IColumn[];
   @ViewChild('name', { static: true }) nameTpl!: TemplateRef<any>;
   @ViewChild('rowActions', { static: true }) actionTpl!: TemplateRef<any>;
 
-  schoolId = signal(this.schoolsStore.info()?.id!);
   openedUploadDialog = signal(false);
   visibleForm = signal<boolean>(false);
-  unassignLoading = signal(false);
 
   isFilterSet = computed(() => {
     const mainFilter = this.schoolStudentsManagementStore.mainFilter();
@@ -49,19 +38,19 @@ export class SchoolStudentListComponent {
   students = computed(() => this.schoolStudentsManagementStore.students());
   loading = computed(() => this.schoolStudentsManagementStore.getStudentsLoading());
   mainFilter = computed(() => this.schoolStudentsManagementStore.mainFilter());
+  unassignLoading = computed(() => this.schoolStudentsManagementStore.unassignLoading());
+  canAddStudent = computed(() => this.schoolStudentsManagementStore.canAddStudent());
+  canAddBulkStudents = computed(() => this.schoolStudentsManagementStore.canAddBulkStudents());
 
   constructor(
     private schoolStudentsManagementStore: SchoolStudentsManagementStore,
-    private service: SchoolsStudentsService,
-    private activatedRoute: ActivatedRoute,
     private router: Router,
     private confirmationDialogService: ConfirmationDialogService,
-    private toastService: ToastService,
   ) {}
 
   ngOnInit() {
     this.setColumns();
-    this.getAll();
+    this.schoolStudentsManagementStore.getAll();
   }
 
   ngOnDestroy() {
@@ -88,32 +77,18 @@ export class SchoolStudentListComponent {
     ];
   }
 
-  getAll() {
-    this.schoolStudentsManagementStore.getAll();
-  }
-
-  refreshData() {
-    this.getAll();
-  }
-
   openUploadDialog() {
     this.openedUploadDialog.set(true);
   }
 
   onSubmitMainFilter(queryParams: IGetSchoolStudentsRequestPayload) {
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams,
-      queryParamsHandling: 'merge',
-    });
-
-    this.schoolStudentsManagementStore.updateMainFilterState(queryParams);
-    this.getAll();
+    this.schoolStudentsManagementStore.onSubmitMainFilter(queryParams);
   }
 
   toAddBulkPage() {
     this.router.navigate(['/schools/students/bulk-add']);
   }
+
   openAddForm() {
     this.visibleForm.set(true);
   }
@@ -121,35 +96,17 @@ export class SchoolStudentListComponent {
     this.visibleForm.set(false);
   }
 
-  submitStudent(payload: IStudentRequestPayload) {
-    return this.service.create(payload);
-  }
-
   unassignStudent(item: IStudentResponse) {
     this.confirmationDialogService.confirm({
       header: 'لغو عضویت دانش‌آموز',
       message: `آیا از لغو عضویت ${item.firstName} ${item.lastName} از مدرسه مطمین هستید؟`,
       accept: () => {
-        this.doUnassignStudent(item);
+        this.schoolStudentsManagementStore.doUnassignStudent(item);
       },
       variant: 'reject',
     });
   }
-
-  doUnassignStudent(item: IStudentResponse) {
-    this.unassignLoading.set(true);
-    return this.service
-      .unassign({ studentId: item.id })
-      .pipe(
-        finalize(() => {
-          this.unassignLoading.set(false);
-        }),
-      )
-      .subscribe((res) => {
-        this.toastService.success({
-          text: `لغو عضویت دانش‌آموز ${item.firstName} ${item.lastName} با موفقیت انجام شد`,
-        });
-        this.refreshData();
-      });
+  refreshData() {
+    this.schoolStudentsManagementStore.refreshData();
   }
 }

@@ -84,6 +84,7 @@ export class SchoolTeachersComponent {
       )
       .subscribe((teachers) => {
         this.schoolTeacherListStore.fillInitial({
+          getTeachersLoading: false,
           teachers,
           canAddTeacher: true,
           canAddTeacherLesson: true,

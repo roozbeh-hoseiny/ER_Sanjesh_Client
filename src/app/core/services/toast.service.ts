@@ -36,4 +36,11 @@ export class ToastService {
     const { title = 'خطا', text } = message;
     this.add({ ...message, summary: title, detail: text, severity: 'error' });
   }
+
+  notAccessLocal() {
+    this.error({
+      text: 'شما به این عملکرد دسترسی ندارید',
+      title: 'خطا',
+    });
+  }
 }

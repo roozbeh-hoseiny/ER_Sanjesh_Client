@@ -1,7 +1,7 @@
 import { LayoutService } from '@/layout/service/layout.service';
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { schoolsTeachersNamedRoutes } from '../../constants/routes';
+import { schoolsStudentsNamedRoutes, schoolsTeachersNamedRoutes } from '../../constants/routes';
 import { SchoolsStore } from '../../dataStore';
 import { SchoolsInfoService } from '../../services';
 import { SchoolsTeachersService } from '../../services/schools-teachers.service';
@@ -32,7 +32,7 @@ export class SchoolsDashboardComponent {
   ) {
     this.layoutService.changeIsFixedContentSize(true);
     this.detailsStore.setService({
-      getTeachers: (schoolUniqueId: string) => this.teachersService.getAll(schoolUniqueId),
+      // getTeachers: (schoolUniqueId: string) => this.teachersService.getAll(schoolUniqueId),
       editInfo: (req: any) => this.schoolService.editInfo(req),
       editAddress: (req: any) => this.schoolService.editAddress(req),
       addBankInfo: (payload) => this.schoolService.addBankInfo(payload),
@@ -48,9 +48,11 @@ export class SchoolsDashboardComponent {
       if (info) {
         this.detailsStore.fillInitial({
           school: info,
-          showTeachersCard: true,
+          // showTeachersCard: true,
           teachersManagementPageRoute: () =>
             schoolsTeachersNamedRoutes.teachers.meta.pagePath!(this.schoolStore.info()?.id),
+          studentsManagementPageRoute: () =>
+            schoolsStudentsNamedRoutes.students.meta.pagePath!(this.schoolStore.info()?.id),
           showAgentCard: false,
           showBankAccountsCard: true,
           canEditAddress: info.canEdit,

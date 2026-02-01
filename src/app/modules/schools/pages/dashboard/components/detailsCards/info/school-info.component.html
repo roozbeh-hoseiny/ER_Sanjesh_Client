@@ -1,4 +1,12 @@
 <app-card-data cardTitle="اطلاعات مرکز آموزشی" [editable]="canEdit()" [editMode]="editMode()" (onEdit)="onEdit()">
+  <ng-template #moreAction>
+    @if (teachersManagementPageRoute()) {
+      <button pButton icon="pi pi-cog" outlined (click)="toTeachersPage()">مدیریت دبیران</button>
+    }
+    @if (studentsManagementPageRoute()) {
+      <button pButton icon="pi pi-cog" outlined (click)="toStudentsPage()">مدیریت دانش‌آموزان</button>
+    }
+  </ng-template>
   @if (canEdit() && editMode()) {
     <app-school-info-form (closeForm)="closeForm()" (submitForm)="submitForm()" />
   } @else {

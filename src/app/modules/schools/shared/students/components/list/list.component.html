@@ -8,7 +8,7 @@
   [emptyPlaceholderDescription]="
     isFilterSet() ? 'دانش‌اموزی یافت نشد' : 'برای جستجو ابتدا فیلتر‌های بالای لیست را تکمیل کنید'
   "
-  emptyPlaceholderCtaLabel="افزودن دانش‌اموز جدید"
+  [emptyPlaceholderCtaLabel]="canAddStudent() ? 'افزودن دانش‌اموز جدید' : ''"
   (onAdd)="openAddForm()"
 >
   <ng-template #caption let-columns>
@@ -37,8 +37,12 @@
   </ng-template>
 
   <ng-template #actions>
-    <button pButton (click)="openAddForm()">افزودن دانش‌اموز</button>
-    <button pButton (click)="toAddBulkPage()">افزودن تجمیعی دانش‌اموزان</button>
+    @if (canAddStudent()) {
+      <button pButton (click)="openAddForm()">افزودن دانش‌اموز</button>
+    }
+    @if (canAddBulkStudents()) {
+      <button pButton (click)="toAddBulkPage()">افزودن تجمیعی دانش‌اموزان</button>
+    }
   </ng-template>
 </app-page-data-list>
 

@@ -25,7 +25,6 @@ export class SchoolStudentsMainFiltersComponent {
   @Input() initialData: Partial<IGetSchoolStudentsRequestPayload> = {};
   @Output() onSubmit = new EventEmitter<IGetSchoolStudentsRequestPayload>();
   private fb = inject(FormBuilder);
-  constructor() {}
 
   form = this.fb.group({
     academicYear: this.fb.control(this.initialData.academicYear || null, {

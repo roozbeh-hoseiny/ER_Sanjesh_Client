@@ -1,1 +1,1 @@
-export * from './dataStore';
+export * from '../../../../shared/students/dataStore';

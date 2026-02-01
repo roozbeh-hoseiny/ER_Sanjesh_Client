@@ -4,6 +4,7 @@ import {
   ISchoolMeRawResponse,
   ISchoolResponse,
 } from '@/modules/schools/models';
+import { IGetSchoolStudentsRequestPayload } from '@/shared/components/modules';
 
 export interface IAdminSchoolRawResponse extends ISchoolMeRawResponse {}
 export interface IAdminSchoolResponse extends ISchoolResponse {}
@@ -56,3 +57,7 @@ export interface IAttachFieldToSchoolRequestPayload {
   fieldOfStudyId: number;
 }
 export interface IDetachFieldToSchoolRequestPayload extends IAttachFieldToSchoolRequestPayload {}
+
+export interface IGetAdminSchoolStudentsRequestPayload extends IGetSchoolStudentsRequestPayload {
+  id: string;
+}

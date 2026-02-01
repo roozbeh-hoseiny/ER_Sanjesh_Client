@@ -7,7 +7,9 @@ import {
 } from '@/shared/components';
 import { KeyValueComponent } from '@/shared/components/key-value.component/key-value.component';
 import { Component, computed, EventEmitter, inject, Output, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { Badge } from 'primeng/badge';
+import { ButtonDirective } from 'primeng/button';
 import { Divider } from 'primeng/divider';
 import { SchoolDetailsCardsStore } from '../store';
 import { SchoolInfoCategoriesComponent } from './school-info-categories.component';
@@ -28,11 +30,13 @@ import { SchoolInfoFormComponent } from './school-info-form.component';
     SchoolInfoFieldsComponent,
     ExamApplicationTypesTagComponent,
     InlineConfirmationComponent,
+    ButtonDirective,
   ],
   templateUrl: './school-info.component.html',
 })
 export class SchoolInfoComponent {
   private detailsStore = inject(SchoolDetailsCardsStore);
+  private readonly router = inject(Router);
 
   @Output() onSubmitted = new EventEmitter<void>();
 
@@ -46,10 +50,23 @@ export class SchoolInfoComponent {
   canEditCategories = computed(() => this.detailsStore.canEditCategories());
   canEditFields = computed(() => this.detailsStore.canEditFields());
   caEditEditable = computed(() => this.detailsStore.caEditEditable());
+  teachersManagementPageRoute = computed(() => this.detailsStore.teachersManagementPageRoute());
+  studentsManagementPageRoute = computed(() => this.detailsStore.studentsManagementPageRoute());
 
   showInlineConfirmation = computed(() =>
     this.detailsStore.showManagerValidateInlineConfirmation(),
   );
+
+  toTeachersPage() {
+    if (this.teachersManagementPageRoute()) {
+      this.router.navigateByUrl(this.teachersManagementPageRoute()!);
+    }
+  }
+  toStudentsPage() {
+    if (this.studentsManagementPageRoute()) {
+      this.router.navigateByUrl(this.studentsManagementPageRoute()!);
+    }
+  }
 
   onEdit() {
     this.editMode.update((prev) => !prev);

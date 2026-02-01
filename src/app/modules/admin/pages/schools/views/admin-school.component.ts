@@ -46,8 +46,8 @@ export class AdminSchoolComponent {
     this.layoutService.changeIsFixedContentSize(true);
 
     this.schoolDetailsStore.setService({
-      getTeachers: (schoolUniqueId: string, schoolId: string) =>
-        this.schoolsInfoService.getTeachers(schoolId),
+      // getTeachers: (schoolUniqueId: string, schoolId: string) =>
+      //   this.schoolsInfoService.getTeachers(schoolId),
       searchForAgent: (uniqueId: string) => this.agentsService.getByUniqueId(uniqueId),
       searchForAgentByName: (name: string) =>
         this.agentsService.searchByName(name, { pageSize: 100, lastSeen: 0 }),
@@ -116,7 +116,7 @@ export class AdminSchoolComponent {
           canEditCreditStatus: true,
           showContactValidateInlineConfirmation: true,
           showManagerValidateInlineConfirmation: true,
-          showTeachersCard: true,
+          // showTeachersCard: true,
           increaseCreditSubmitUrl: ADMIN_API_ROUTES.schools.increaseCredit(),
           decreaseCreditSubmitUrl: ADMIN_API_ROUTES.schools.decreaseCredit(),
           editCreditSubmitUrl: ADMIN_API_ROUTES.schools.editCredit(),
@@ -126,6 +126,8 @@ export class AdminSchoolComponent {
           editCouponSubmitUrl: ADMIN_API_ROUTES.schools.editCoupon(),
           teachersManagementPageRoute: () =>
             adminSchoolNamedRoutes.schoolTeachers.meta.pagePath!(this.schoolId()),
+          studentsManagementPageRoute: () =>
+            adminSchoolNamedRoutes.schoolStudents.meta.pagePath!(this.schoolId()),
         });
       }
     });

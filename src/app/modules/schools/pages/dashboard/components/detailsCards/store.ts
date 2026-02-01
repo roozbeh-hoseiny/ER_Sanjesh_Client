@@ -31,6 +31,7 @@ interface ISchoolDetailsCardsState {
   teachersLoaded: boolean;
   teachers: Maybe<ISchoolTeacherRawResponse[]>;
   teachersManagementPageRoute?: Maybe<(schoolId: string) => string>;
+  studentsManagementPageRoute?: Maybe<(schoolId: string) => string>;
   showManagerValidateInlineConfirmation?: boolean;
   showContactValidateInlineConfirmation?: boolean;
   showContactCard?: boolean;
@@ -66,6 +67,7 @@ export const INITIAL_SCHOOL_DETAILS_CARDS_STATE: ISchoolDetailsCardsState = {
   teachersLoaded: false,
   teachers: null,
   teachersManagementPageRoute: null,
+  studentsManagementPageRoute: null,
   showManagerValidateInlineConfirmation: false,
   showContactValidateInlineConfirmation: false,
   showContactCard: false,
@@ -120,6 +122,13 @@ export class SchoolDetailsCardsStore {
     }
     return null;
   });
+  readonly studentsManagementPageRoute = computed(() => {
+    if (this.school() && this.state$().studentsManagementPageRoute) {
+      return this.state$().studentsManagementPageRoute!(this.school()!.uniqueId);
+    }
+    return null;
+  });
+
   readonly schoolCategories = computed(
     () => (this.state$().school?.categories || []) as ICategoryFullTreeResponse[],
   );
