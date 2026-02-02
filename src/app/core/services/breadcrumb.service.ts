@@ -10,14 +10,22 @@ export class BreadcrumbService {
   private router = inject(Router);
 
   constructor() {
-    // Clear breadcrumb items on navigation start so previous page items don't persist.
-    // Components for the new route can set their own items in their lifecycle (e.g. ngOnInit).
-    this.router.events.pipe(filter((e) => e instanceof NavigationStart)).subscribe(() => {
-      this.clear();
+    // Clear breadcrumb items only when the path changes (not on query string changes)
+    let lastPath = '';
+    this.router.events.pipe(filter((e) => e instanceof NavigationStart)).subscribe((e) => {
+      const nav = e as NavigationStart;
+      const urlPath = nav.url.split('?')[0];
+
+      if (lastPath && urlPath !== lastPath) {
+        this.clear();
+      }
+      lastPath = urlPath;
     });
   }
 
   setItems(items: MenuItem[]) {
+    console.log(items);
+
     this._items.set(
       items.map((item) => ({
         ...item,
