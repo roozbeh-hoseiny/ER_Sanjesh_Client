@@ -53,27 +53,28 @@ export class StatesSelectComponent {
       this.getStatesLoading.set(false);
       const selectedCityId = this.cityControl?.value;
       const selectedZoneId = this.zoneControl?.value;
-      if (selectedZoneId && !this.cityControl?.value) {
-        const selectedCity = states
-          .flatMap((state) => state.children || [])
-          .find((city) => city.children?.some((zone) => zone.id === selectedZoneId));
-        if (selectedCity) {
-          const selectedState = states.find((state) =>
-            state.children?.some((city) => city.id === selectedCity.id),
-          );
-          if (selectedState) {
-            this.cities.set(selectedState.children || []);
-            this.zones.set(selectedCity.children || []);
-            this.stateControl.setValue(selectedState.id);
-            this.cityControl?.setValue(selectedCity.id);
-            this.zoneControl?.setValue(selectedZoneId);
-          }
-        } else {
-          this.cities.set(null);
-          this.zones.set(null);
-          this.cityControl?.setValue(null);
-        }
-      } else if (selectedCityId && !this.stateControl?.value) {
+      // if (selectedZoneId && !this.cityControl?.value) {
+      //   const selectedCity = states
+      //     .flatMap((state) => state.children || [])
+      //     .find((city) => city.children?.some((zone) => zone.id === selectedZoneId));
+      //   if (selectedCity) {
+      //     const selectedState = states.find((state) =>
+      //       state.children?.some((city) => city.id === selectedCity.id),
+      //     );
+      //     if (selectedState) {
+      //       this.cities.set(selectedState.children || []);
+      //       // this.zones.set(selectedCity.children || []);
+      //       this.stateControl.setValue(selectedState.id);
+      //       this.cityControl?.setValue(selectedCity.id);
+      //       this.zoneControl?.setValue(selectedZoneId);
+      //     }
+      //   } else {
+      //     this.cities.set(null);
+      //     this.zones.set(null);
+      //     this.cityControl?.setValue(null);
+      //   }
+      // } else
+      if (selectedCityId && !this.stateControl?.value) {
         const selectedState = states.find((state) =>
           state.children?.some((city) => city.id === selectedCityId),
         );
@@ -85,6 +86,11 @@ export class StatesSelectComponent {
           this.cities.set(null);
           this.cityControl?.setValue(null);
         }
+
+        console.log('selectedZoneId');
+        console.log(selectedZoneId);
+
+        this.zoneControl?.setValue(selectedZoneId);
       }
     });
   }
@@ -100,12 +106,21 @@ export class StatesSelectComponent {
   };
 
   onCitySelect = (cityId: number) => {
+    console.log('this.onCitySelect', cityId);
+
     if (this.zoneControl) {
-      this.zoneControl.setValue(null);
+      this.zoneControl.setValue(0);
     }
 
-    const zones = this.cities()?.find((city) => city.id === cityId)?.children || [];
-
-    this.zones.set(zones);
+    if (cityId === 119) {
+      this.zones.set(
+        Array.from(
+          { length: 22 },
+          (_, i) => ({ id: i + 1, title: `منطقه ${i + 1}`, regionType: 4, parentId: 119 }) as IZone,
+        ),
+      );
+      this.zoneControl?.setValue(this.zoneControl);
+      return;
+    }
   };
 }

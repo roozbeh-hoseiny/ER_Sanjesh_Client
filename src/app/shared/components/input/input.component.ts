@@ -140,10 +140,10 @@ export class InputComponent {
     switch (this.type) {
       case 'email':
         return 'email';
-      case 'mobile':
-      case 'phone':
-      case 'price':
-      case 'postalCode':
+      // case 'mobile':
+      // case 'phone':
+      // case 'price':
+      // case 'postalCode':
       case 'number':
         return 'number';
       case 'checkbox':

@@ -20,13 +20,13 @@
     />
     <uikit-field label="شماره تماس ثابت مرکز" name="phoneNumber" class="w-full">
       <p-inputgroup class="w-full" dir="ltr">
-        <p-inputgroup-addon>
+        <p-inputgroup-addon class="min-w-auto p-0!">
           <input
             p-inputText
             [formControl]="form.controls.phoneNumber.controls.code"
             placeholder="021"
             maxlength="3"
-            class="w-7 text-left ltrInput"
+            class="w-12 text-center! ltrInput h-full text-text-color placeholder:text-muted-color"
           />
         </p-inputgroup-addon>
         <input

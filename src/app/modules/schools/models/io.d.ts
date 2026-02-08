@@ -113,6 +113,7 @@ export interface ISchoolAddress {
   countryName: string;
   stateName: string;
   cityName: string;
+  cityRegion: number;
   districtName: string;
   regionType: number;
 }

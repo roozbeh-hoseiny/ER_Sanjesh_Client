@@ -27,11 +27,11 @@
       </uikit-field>
     </ng-container>
   }
-  @if (zoneControl) {
+  @if (zoneControl && isSelectedCity() && cityControl?.value === 119) {
     <ng-container>
-      <uikit-field label="منطقه" name="zone" [control]="zoneControl">
+      <uikit-field label="منطقه" name="cityRegion" [control]="zoneControl">
         <p-select
-          name="zone"
+          name="cityRegion"
           optionLabel="title"
           optionValue="id"
           [options]="zones() || []"
