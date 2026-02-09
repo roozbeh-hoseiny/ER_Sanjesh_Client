@@ -68,11 +68,7 @@
         />
       }
       <p-divider> لیست دروس </p-divider>
-      <app-school-info-fields
-        [fields]="info().fieldOfStudies"
-        [editable]="canEditCategories()"
-        (onUpdate)="submitForm()"
-      />
+      <app-school-info-fields [fields]="info().fieldOfStudies" [editable]="canEditFields()" (onUpdate)="submitForm()" />
       <p-divider> مدیریت </p-divider>
       <div class="grid grid-cols-3 gap-4 items-center">
         <app-key-value label="نام" [value]="info().managerInfo.firstName" />

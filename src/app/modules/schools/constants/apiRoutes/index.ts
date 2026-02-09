@@ -52,6 +52,10 @@ export const SCHOOLS_API_ROUTES = {
   approveLesson: () => `${baseUrl}/ApproveTeacherById`,
   rejectLesson: () => `${baseUrl}/RejectTeacherById`,
 
+  // field of studies
+  assignField: () => `${baseUrl}/AssignFieldOfStudy`,
+  unassignField: () => `${baseUrl}/UnassignFieldOfStudy`,
+
   teachers: schoolTeachersApiRoutes(baseUrl),
   students: schoolStudentsApiRoutes(baseUrl),
 };

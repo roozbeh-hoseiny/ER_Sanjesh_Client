@@ -187,3 +187,8 @@ export interface ISchoolBankInfoRemoveRequestPayload {
   id: string;
   bankAccountId: number;
 }
+
+export interface IAttachFieldToSchoolRequestPayload {
+  fieldOfStudyId: number;
+}
+export interface IDetachFieldToSchoolRequestPayload extends IAttachFieldToSchoolRequestPayload {}

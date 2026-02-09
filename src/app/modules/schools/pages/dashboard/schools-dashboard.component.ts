@@ -41,6 +41,8 @@ export class SchoolsDashboardComponent {
       validateManagerMobile: (id: string) => this.openConfirmationMobileModal(id),
       validateManagerEmail: (id: string) => this.openConfirmationEmailModal(id),
       updateLoginInfo: (payload) => this.schoolService.editLoginInfo(payload),
+      attachField: (payload) => this.schoolService.assignFieldOfStudy(payload),
+      detachField: (payload) => this.schoolService.unassignFieldOfStudy(payload),
     });
 
     effect(() => {
@@ -59,6 +61,7 @@ export class SchoolsDashboardComponent {
           canEditBankAccounts: info.canEdit,
           canEditInfo: info.canEdit,
           canEditLoginInfo: true,
+          canEditFields: info.canEdit,
         });
       }
     });

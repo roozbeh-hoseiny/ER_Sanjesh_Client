@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SCHOOLS_API_ROUTES } from '../constants/apiRoutes';
 import {
+  IAttachFieldToSchoolRequestPayload,
+  IDetachFieldToSchoolRequestPayload,
   ISchoolAddressRequestPayload,
   ISchoolBankInfoAddRequestPayload,
   ISchoolBankInfoEditRequestPayload,
@@ -42,6 +44,13 @@ export class SchoolsInfoService {
   }
   removeBankInfo(request: ISchoolBankInfoRemoveRequestPayload): Observable<boolean> {
     return this.http.post<boolean>(this.apiRoutes.removeBankInfo(), request);
+  }
+
+  assignFieldOfStudy(request: IAttachFieldToSchoolRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.assignField(), request);
+  }
+  unassignFieldOfStudy(request: IDetachFieldToSchoolRequestPayload): Observable<boolean> {
+    return this.http.post<boolean>(this.apiRoutes.unassignField(), request);
   }
 
   getTeachers(schoolId: string): Observable<any> {
