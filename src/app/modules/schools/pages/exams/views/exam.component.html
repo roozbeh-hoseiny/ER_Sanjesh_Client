@@ -1,0 +1,27 @@
+@if (initLoading() || loading()) {
+  <p-progressSpinner />
+} @else {
+  <div class="flex flex-col gap-6">
+    <app-card-data cardTitle="اطلاعات آزمون">
+      <div class="flex flex-col gap-4">
+        <div class="grid grid-cols-3 gap-4 items-center">
+          <app-key-value label="مقطع تحصیلی" [value]="exam()?.educationalLevelTitle" />
+          <app-key-value label="رشته تحصیلی" [value]="exam()?.fieldOfStudyTitle" />
+          <app-key-value label="آزمون در شهر مدرسه" [value]="exam()?.isExamInSchoolCity" type="boolean" />
+          <app-key-value label="نمره آزمون" [value]="exam()?.examScore" />
+          <app-key-value label="تاریخ برگزاری آزمون" [value]="exam()?.examTime" type="dateTime" />
+          <app-key-value label="مدت زمان آزمون" [value]="exam()?.examDuration" type="duration" />
+        </div>
+        <div class="grid grid-cols-3 gap-4 items-center">
+          <app-key-value label="وضعیت ثبت نام" [value]="exam()?.examStatusTitle" />
+          <app-key-value label="تاریخ پایان ثبت نام" [value]="exam()?.registrationEndTime" type="dateTime" />
+          <app-key-value label="تاریخ شروع ثبت نام" [value]="exam()?.registrationStartTime" type="dateTime" />
+        </div>
+      </div>
+    </app-card-data>
+
+    @if (examId()) {
+      <school_exam-students [examId]="examId()" />
+    }
+  </div>
+}

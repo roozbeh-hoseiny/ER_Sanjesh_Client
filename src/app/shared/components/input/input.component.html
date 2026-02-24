@@ -8,7 +8,7 @@
         <p-inputnumber
           [attr.id]="name"
           [formControl]="control"
-          [maxlength]="maxLength || null"
+          [maxlength]="preparedMaxLength || null"
           [attr.name]="name"
           [attr.placeholder]="preparedPlaceholder"
           [attr.type]="htmlType"
@@ -27,7 +27,7 @@
           [attr.name]="name"
           [attr.placeholder]="preparedPlaceholder"
           [attr.inputmode]="inputMode"
-          [attr.maxlength]="maxLength || null"
+          [attr.maxlength]="preparedMaxLength || null"
           [attr.type]="htmlType"
           [attr.autocomplete]="autocomplete"
           [class]="

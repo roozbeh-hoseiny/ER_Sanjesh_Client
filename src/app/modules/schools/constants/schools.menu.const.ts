@@ -19,6 +19,11 @@ export const SCHOOLS_MENU_ITEMS: MenuItem[] = [
         icon: 'pi pi-fw pi-users',
         routerLink: schoolsNamedRoutes.students.path,
       },
+      {
+        label: 'آزمون‌ها',
+        icon: 'pi pi-fw pi-file',
+        routerLink: schoolsNamedRoutes.exams.path,
+      },
     ],
   },
 ];

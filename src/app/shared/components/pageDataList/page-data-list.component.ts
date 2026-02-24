@@ -1,5 +1,10 @@
 import { PaginatorComponent, UikitCopyComponent, UikitEmptyStateComponent } from '@/uikit';
-import { formatWithCurrency } from '@/utils';
+import {
+  formatDurationToText,
+  formatJalali,
+  formatWithCurrency,
+  JALALI_DATE_FORMATS,
+} from '@/utils';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -26,7 +31,7 @@ export interface IColumn<T = any> {
   width?: string;
   minWidth?: string;
   canCopy?: boolean;
-  type?: 'text' | 'price' | 'boolean' | 'date' | 'nested' | 'index';
+  type?: 'text' | 'price' | 'boolean' | 'date' | 'dateTime' | 'nested' | 'duration' | 'index';
   nestedPath?: string;
   customDataModel?: TemplateRef<any> | ((item: T) => string | number | boolean);
 }
@@ -132,13 +137,18 @@ export class PageDataListComponent<I> {
       }
       const data = item[String(field)];
       switch (column.type) {
-        // case 'date':
-        //   if (!data) return '-';
-        //   return formatJalali(data);
+        case 'date':
+          if (!data) return '-';
+          return formatJalali(data);
+        case 'dateTime':
+          if (!data) return '-';
+          return formatJalali(data, JALALI_DATE_FORMATS.NUMERIC_WITH_TIME);
         case 'boolean':
           return data ? 'بله' : 'خیر';
         case 'price':
           return formatWithCurrency(data, false, 'ریال');
+        case 'duration':
+          return formatDurationToText(data);
         case 'nested': {
           const path = column.nestedPath;
           if (!path) return '-';

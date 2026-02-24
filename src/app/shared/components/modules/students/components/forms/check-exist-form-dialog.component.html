@@ -7,7 +7,7 @@
   [closable]="false"
 >
   <form [formGroup]="form" class="flex flex-col gap-4" (submit)="submit()">
-    <app-input [control]="form.controls.nationalCode" type="number" label="کد ملی" />
+    <app-input [control]="form.controls.nationalCode" type="number" label="کد ملی" [maxLength]="10" />
     <app-form-footer-actions class="mt-6" [loading]="submitLoading()" (onCancel)="close()" />
   </form>
 </p-dialog>

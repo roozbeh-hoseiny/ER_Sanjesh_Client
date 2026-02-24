@@ -1,0 +1,17 @@
+@if (initLoading()) {
+  <p-progressSpinner />
+} @else {
+  <app-page-data-list
+    pageTitle="لیست آزمون‌ها"
+    [columns]="columns"
+    [items]="exams() || []"
+    [loading]="loading()"
+    [fullHeight]="true"
+    emptyPlaceholderTitle="در حال حاضر آزمونی در دسترس نیست."
+    [showEmptyPlaceholderCta]="false"
+    [showAdd]="false"
+    [showDetails]="true"
+    (onDetails)="toDetails($event)"
+  >
+  </app-page-data-list>
+}

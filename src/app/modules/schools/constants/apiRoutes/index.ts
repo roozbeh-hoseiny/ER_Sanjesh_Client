@@ -1,3 +1,4 @@
+import { schoolExamsApiRoutes } from './exams-api.const';
 import { schoolStudentsApiRoutes } from './students-api.const';
 import { schoolTeachersApiRoutes } from './teachers-api.const';
 
@@ -58,4 +59,5 @@ export const SCHOOLS_API_ROUTES = {
 
   teachers: schoolTeachersApiRoutes(baseUrl),
   students: schoolStudentsApiRoutes(baseUrl),
+  exams: schoolExamsApiRoutes(baseUrl),
 };

@@ -6,17 +6,7 @@
         @if (valueType() === "badge") {
           <p-badge [value]="valueToShow()?.toString()" [severity]="value ? 'success' : 'danger'" />
         } @else {
-          @switch (type) {
-            @case ("price") {
-              <span
-                class="text-text-color text-base font-bold grow"
-                [appPriceMask]="typeof value === 'string' ? value : ''"
-              ></span>
-            }
-            @default {
-              <span class="text-text-color text-base font-bold grow">{{ value || "-" }}</span>
-            }
-          }
+          <span class="text-text-color text-base font-bold grow"> {{ valueToShow() }}</span>
         }
       </ng-content>
     </div>

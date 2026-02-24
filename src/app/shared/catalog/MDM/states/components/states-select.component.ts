@@ -87,9 +87,6 @@ export class StatesSelectComponent {
           this.cityControl?.setValue(null);
         }
 
-        console.log('selectedZoneId');
-        console.log(selectedZoneId);
-
         this.zoneControl?.setValue(selectedZoneId);
       }
     });
@@ -106,8 +103,6 @@ export class StatesSelectComponent {
   };
 
   onCitySelect = (cityId: number) => {
-    console.log('this.onCitySelect', cityId);
-
     if (this.zoneControl) {
       this.zoneControl.setValue(0);
     }

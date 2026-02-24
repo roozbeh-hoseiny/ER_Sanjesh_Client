@@ -41,9 +41,15 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.1.11
         version: 4.1.14
+      '@zoomit/dayjs-jalali-plugin':
+        specifier: ^0.1.11
+        version: 0.1.11
       chart.js:
         specifier: 4.4.2
         version: 4.4.2
+      dayjs:
+        specifier: ^1.11.19
+        version: 1.11.19
       flatpickr:
         specifier: ^4.6.13
         version: 4.6.13
@@ -2433,6 +2439,9 @@ packages:
   '@yarnpkg/lockfile@1.1.0':
     resolution: {integrity: sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==}
 
+  '@zoomit/dayjs-jalali-plugin@0.1.11':
+    resolution: {integrity: sha512-xqbrBPRoBhbaAWeLbqq9QERZwj+h2KuJMehpOQrlT4y980oA+rdiF/YzXlzVaIvc845UYDrsTp8IDwttWyV/xg==}
+
   abbrev@3.0.1:
     resolution: {integrity: sha512-AO2ac6pjRB3SJmGJo+v5/aK6Omggp6fsLrs6wN9bd35ulu4cCwaAU9+7ZhXjeqHVkaHThLuzH0nZr0YpCDhygg==}
     engines: {node: ^18.17.0 || >=20.5.0}
@@ -2966,6 +2975,9 @@ packages:
   date-format@4.0.14:
     resolution: {integrity: sha512-39BOQLs9ZjKh0/patS9nrT8wc3ioX3/eA/zgbKNopnF2wCqJEoxywwwElATYvRsXdnOxA/OQeQoFZ3rFjVajhg==}
     engines: {node: '>=4.0'}
+
+  dayjs@1.11.19:
+    resolution: {integrity: sha512-t5EcLVS6QPBNqM2z8fakk/NKel+Xzshgt8FFKAn+qwlD1pzZWxh0nVCrvFK7ZDb6XucZeF9z8C7CBWTRIVApAw==}
 
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -8463,6 +8475,8 @@ snapshots:
 
   '@yarnpkg/lockfile@1.1.0': {}
 
+  '@zoomit/dayjs-jalali-plugin@0.1.11': {}
+
   abbrev@3.0.1: {}
 
   abort-controller@3.0.0:
@@ -9085,6 +9099,8 @@ snapshots:
       is-data-view: 1.0.2
 
   date-format@4.0.14: {}
+
+  dayjs@1.11.19: {}
 
   debug@2.6.9:
     dependencies:

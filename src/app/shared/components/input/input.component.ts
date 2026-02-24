@@ -51,6 +51,7 @@ export class InputComponent {
   @Input() hint?: string;
   @Input() isLtrInput = false;
   @Input() suffix: string = '';
+  @Input() maxLength?: number;
   @Output() valueChange = new EventEmitter<string | number>();
   @Output() blur = new EventEmitter<void>();
 
@@ -102,7 +103,7 @@ export class InputComponent {
     return this.inputMode === 'numeric';
   }
 
-  get maxLength(): number | null {
+  get preparedMaxLength(): number | null {
     switch (this.type) {
       case 'mobile':
         return 11;
@@ -111,7 +112,7 @@ export class InputComponent {
       case 'phone':
         return 11;
       default:
-        return null;
+        return this.maxLength || null;
     }
   }
 

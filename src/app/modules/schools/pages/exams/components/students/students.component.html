@@ -1,0 +1,11 @@
+<app-page-data-list
+  pageTitle="لیست دانش آموزان"
+  [columns]="columns"
+  [items]="students() || []"
+  [loading]="loading()"
+  [fullHeight]="true"
+  emptyPlaceholderTitle="در حال حاضر دانش‌آموزی در دسترس نیست."
+  [showEmptyPlaceholderCta]="false"
+  [showAdd]="false"
+>
+</app-page-data-list>
