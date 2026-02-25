@@ -1,0 +1,12 @@
+<div class="flex flex-col gap-6">
+  <span class="text-base font-bold">در صورت داشتن اعتبار به مقدار لازم می‌توانید از این طریق اقدام کنید :</span>
+  <app-key-value label="مقدار اعتبار‌ شما" [value]="examInfo()?.remainedCredit" type="price" />
+
+  <p-divider></p-divider>
+  <app-form-footer-actions
+    [submitLabel]="'ثبت‌نام با اعتبار'"
+    [loading]="registerByCreditLoading()"
+    (onSubmit)="onSubmit()"
+    (onCancel)="cancel()"
+  />
+</div>

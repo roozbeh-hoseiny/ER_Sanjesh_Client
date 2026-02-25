@@ -42,7 +42,6 @@ export class SchoolAddressFormComponent {
     const cur = this.detailsStore.school();
 
     if (cur && cur.address) {
-      console.log(cur.address);
       this.form.patchValue(cur.address as ISchoolAddress);
       // if (cur.address.regionType === 4) {
       //   this.form.controls.cityRegion.setValue(cur.address.regionId);

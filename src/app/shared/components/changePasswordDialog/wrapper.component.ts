@@ -62,7 +62,7 @@ export class ChangePasswordFormDialogComponent extends AbstractDialog {
     this.visibleChange.emit();
   }
 
-  close() {
+  override close() {
     this.visibleChange.emit();
   }
 }

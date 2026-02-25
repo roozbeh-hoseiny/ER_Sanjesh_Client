@@ -1,0 +1,12 @@
+<div class="flex flex-col gap-6">
+  <span class="text-base font-bold">در صورت داشتن کوپن به مقدار لازم می‌توانید از این طریق اقدام کنید :</span>
+  <app-key-value label="تعداد کوپن‌های شما" [value]="`${examInfo()?.remainedCoupon} عدد`" />
+
+  <p-divider></p-divider>
+  <app-form-footer-actions
+    [submitLabel]="'ثبت‌نام با کوپن'"
+    [loading]="registerByCouponLoading()"
+    (onSubmit)="onSubmit()"
+    (onCancel)="cancel()"
+  />
+</div>

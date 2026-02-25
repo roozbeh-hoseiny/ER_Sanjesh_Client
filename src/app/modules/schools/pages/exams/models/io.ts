@@ -48,7 +48,12 @@ export interface ISchoolExamDetailsRawResponse {
   fieldOfStudyId: number;
 }
 
-export interface ISchoolExamDetailsResponse extends ISchoolExamDetailsRawResponse {}
+export interface ISchoolExamDetailsResponse
+  extends Omit<ISchoolExamDetailsRawResponse, 'discountValue' | 'discountPercent'> {
+  hasDiscount: boolean;
+  discountValue: number;
+  discountPercent: number;
+}
 
 export interface ISchoolStudentWithExamsInfoRawResponse {
   registeredInExam: boolean;
@@ -59,3 +64,12 @@ export interface ISchoolStudentWithExamsInfoRawResponse {
 }
 export interface ISchoolStudentWithExamsInfoResponse
   extends ISchoolStudentWithExamsInfoRawResponse {}
+
+export interface IExamRegisterByCouponRequestPayload {
+  examId: string;
+  studentIds: string[];
+}
+export interface IExamRegisterByCreditRequestPayload {
+  examId: string;
+  studentIds: string[];
+}

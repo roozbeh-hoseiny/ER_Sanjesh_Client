@@ -1,11 +1,61 @@
-<app-page-data-list
-  pageTitle="لیست دانش آموزان"
-  [columns]="columns"
-  [items]="students() || []"
-  [loading]="loading()"
-  [fullHeight]="true"
-  emptyPlaceholderTitle="در حال حاضر دانش‌آموزی در دسترس نیست."
-  [showEmptyPlaceholderCta]="false"
-  [showAdd]="false"
->
-</app-page-data-list>
+<div class="">
+  <p-table
+    [value]="students()"
+    [(selection)]="selectedStudents"
+    dataKey="studentInfo.nationalCode"
+    columnResizeMode="fit"
+    stripedRows
+    [showFirstLastIcon]="false"
+    class="grow !flex flex-col overflow-auto max-h-svh rounded-lg"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex justify-between items-center gap-4 py-1">
+        <h5 class="text-xl font-bold">لیست دانش آموزان</h5>
+        <div class="flex items-center gap-3">
+          <p-button label="ثبت نام در آزمون" icon="pi pi-check" (click)="registerSelectedStudents()"></p-button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #header>
+      <tr>
+        <!-- <th style="width: 4rem"><p-tableHeaderCheckbox /></th> -->
+        <th style="width: 4rem"></th>
+        @for (col of columns; track col.header) {
+          <th [style]="{ width: col.width, minWidth: col.minWidth }">{{ col.header }}</th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template #body let-studentInfo>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="studentInfo" [disabled]="studentInfo.registeredInExam" />
+        </td>
+        <td>
+          {{ studentInfo.studentInfo.gender ? "آقای " : "خانم " }}{{ studentInfo.studentInfo.firstName }}
+          {{ studentInfo.studentInfo.lastName }}
+        </td>
+        <td>{{ studentInfo.studentInfo.nationalCode }}</td>
+        <td>{{ studentInfo.studentInfo.mobile }}</td>
+        <td>
+          <p-badge
+            [value]="studentInfo.registeredInExam ? 'ثبت نام شده' : 'ثبت نام نشده'"
+            [severity]="studentInfo.registeredInExam ? 'success' : 'warn'"
+          />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr class="h-full">
+        <td [colSpan]="columns.length.toString()" class="w-full">
+          <uikit-empty-state title="در حال حاضر دانش‌آموزی در دسترس نیست."></uikit-empty-state>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <school-exam-registration-dialog
+    [(visible)]="visibleRegistration"
+    [selectedStudentIds]="selectedStudentsIds()"
+    (onRegistrationSuccess)="onRegistrationSuccess()"
+  />
+</div>

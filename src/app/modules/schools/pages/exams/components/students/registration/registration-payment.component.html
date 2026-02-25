@@ -1,0 +1,10 @@
+<div class="flex flex-col gap-6">
+  <span class="text-base font-bold">برای ادامه‌ی ثبت‌نام بر روی یکی از درگاه‌هی بانکی زیر کلیک کنید:</span>
+  <div class="grid grid-cols-3 gap-4">
+    @for (bank of banks; track bank.id) {
+      <p-card class="cursor-pointer" (click)="onSelectBank(bank.id)">
+        <p>{{ bank.name }}</p>
+      </p-card>
+    }
+  </div>
+</div>

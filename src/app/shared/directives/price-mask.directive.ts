@@ -7,7 +7,6 @@ import {
   OnInit,
   Optional,
   Renderer2,
-  Self,
   SimpleChanges,
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
@@ -40,7 +39,7 @@ export class PriceMaskDirective implements OnInit, OnChanges {
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
-    @Optional() @Self() private ngControl: NgControl | null,
+    @Optional() private ngControl: NgControl | null,
   ) {}
 
   ngOnInit(): void {

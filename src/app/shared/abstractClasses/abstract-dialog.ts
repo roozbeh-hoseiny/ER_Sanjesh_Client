@@ -15,5 +15,9 @@ export abstract class AbstractDialog {
   }
   private visibleSignal = signal(false);
 
+  close() {
+    this.visible = false;
+  }
+
   @Output() visibleChange = new EventEmitter<boolean>();
 }

@@ -24,7 +24,7 @@ export class CreditsDialogLayoutComponent extends AbstractDialog {
   dialogHeader = computed(() => `${this.preparedLabel()} ${this.label}`);
   showChangeText = computed(() => this.variant !== 'edit');
 
-  close() {
+  override close() {
     this.onClose.emit();
   }
 

@@ -1,27 +1,43 @@
 import { ToastService } from '@/core/services/toast.service';
 import { SchoolExamsService } from '@/modules/schools/services/exams.service';
-import {
-  IColumn,
-  PageDataListComponent,
-} from '@/shared/components/pageDataList/page-data-list.component';
-import { Component, inject, Input, signal } from '@angular/core';
+import { IColumn } from '@/shared/components/pageDataList/page-data-list.component';
+import { UikitEmptyStateComponent } from '@/uikit';
+import { Component, computed, inject, Input, signal } from '@angular/core';
+import { Badge } from 'primeng/badge';
+import { Button } from 'primeng/button';
+import { TableModule } from 'primeng/table';
 import { catchError, finalize, throwError } from 'rxjs';
+import { SchoolExamStore } from '../../dataStore';
 import { ISchoolStudentWithExamsInfoResponse } from '../../models';
+import { SchoolExamRegistrationDialogComponent } from './registration/registration-dialog.component';
 
 @Component({
   selector: 'school_exam-students',
   templateUrl: './students.component.html',
-  imports: [PageDataListComponent],
+  imports: [
+    TableModule,
+    Badge,
+    UikitEmptyStateComponent,
+    Button,
+    SchoolExamRegistrationDialogComponent,
+  ],
 })
 export class SchoolExamStudentsComponent {
   @Input() examId!: string;
+
   columns!: IColumn[];
 
   private service = inject(SchoolExamsService);
   private toastService = inject(ToastService);
+  private store = inject(SchoolExamStore);
 
   students = signal<ISchoolStudentWithExamsInfoResponse[]>([]);
   loading = signal(true);
+
+  visibleRegistration = signal(false);
+  selectedStudents = signal<ISchoolStudentWithExamsInfoResponse[]>([]);
+
+  selectedStudentsIds = computed(() => this.selectedStudents().map((s) => s.studentInfo.id));
 
   constructor() {}
 
@@ -31,7 +47,6 @@ export class SchoolExamStudentsComponent {
   }
 
   getStudents(): void {
-    console.log(this.examId);
     this.loading.set(true);
     this.service
       .getStudents(this.examId)
@@ -57,22 +72,36 @@ export class SchoolExamStudentsComponent {
   setColumns() {
     this.columns = [
       {
-        field: 'title',
-        header: 'عنوان آزمون',
+        field: 'studentInfo',
+        header: 'نام دانش آموز',
+        type: 'nested',
+        nestedPath: 'firstName',
+        customDataModel: (item) =>
+          `${item.studentInfo.gender ? 'آقای ' : 'خانم '}${item.studentInfo.firstName} ${item.studentInfo.lastName}`,
       },
-      { field: 'price', header: 'هزینه', type: 'price' },
-      { field: 'duration', header: 'مدت زمان', type: 'duration' },
-      { field: 'statusTitle', header: 'وضعیت' },
+      { field: 'studentInfo', header: 'کد ملی', type: 'nested', nestedPath: 'nationalCode' },
+      { field: 'studentInfo', header: 'شماره موبایل', type: 'nested', nestedPath: 'mobile' },
       {
-        field: 'registrationStartTime',
-        header: 'شروع ثبت نام',
-        type: 'dateTime',
-      },
-      {
-        field: 'registrationEndTime',
-        header: 'پایان ثبت نام',
-        type: 'dateTime',
+        field: 'registeredInExam',
+        header: ' در آزمون ثبت نام شده؟',
+        type: 'boolean',
       },
     ];
+  }
+
+  registerSelectedStudents() {
+    if (this.selectedStudents().length === 0) {
+      this.toastService.warn({
+        text: 'لطفا حداقل یک دانش آموز را انتخاب کنید.',
+      });
+      return;
+    }
+
+    this.visibleRegistration.set(true);
+  }
+
+  onRegistrationSuccess() {
+    this.store.getInfo().subscribe();
+    this.getStudents();
   }
 }

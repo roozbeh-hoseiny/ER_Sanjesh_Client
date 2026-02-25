@@ -17,6 +17,44 @@
           <app-key-value label="تاریخ پایان ثبت نام" [value]="exam()?.registrationEndTime" type="dateTime" />
           <app-key-value label="تاریخ شروع ثبت نام" [value]="exam()?.registrationStartTime" type="dateTime" />
         </div>
+
+        <div class="">
+          <p-divider> اعتبارات </p-divider>
+          <div class="grid grid-cols-3 gap-4 items-center">
+            <app-key-value label="هزینه‌ی ثبت‌نام">
+              @if (exam()?.hasDiscount) {
+                <div
+                  class="flex flex-col grow"
+                  [pTooltip]="
+                    exam()?.hasDiscount
+                      ? exam()?.discountPercent
+                        ? exam()?.discountPercent + ' % تخفیف'
+                        : exam()?.discountValue + ' ریال تخفیف'
+                      : ''
+                  "
+                >
+                  <span [appPriceMask]="exam()?.examPrice" class="text-muted-color line-through text-xs block"></span>
+                  <span [appPriceMask]="exam()?.netPrice" class="text-base font-bold"></span>
+                </div>
+              } @else {
+                <span [appPriceMask]="exam()?.examPrice" class="text-text-color text-base font-bold grow"></span>
+              }
+            </app-key-value>
+            <app-key-value label="امکان خرید اعتباری" [value]="exam()?.canUseCredit" variant="badge" type="boolean" />
+            @if (exam()?.canUseCredit) {
+              <app-key-value label="اعتبار باقی‌مانده‌ی شما" [value]="exam()?.remainedCredit" type="price" />
+            }
+          </div>
+        </div>
+        <div class="">
+          <p-divider> کوپن </p-divider>
+          <div class="grid grid-cols-3 gap-4 items-center">
+            <app-key-value label="امکان خرید با کوپن" [value]="exam()?.canUseCoupon" variant="badge" type="boolean" />
+            @if (exam()?.canUseCoupon) {
+              <app-key-value label="تعداد کوپن‌های شما" [value]="`${exam()?.remainedCoupon} عدد`" />
+            }
+          </div>
+        </div>
       </div>
     </app-card-data>
 
